@@ -1,0 +1,13 @@
+{
+  "name": "framework",
+  "version": "2021.00.01",
+  "description": "Discord bot framework built on Discord.js and interactions, made for CRBT.",
+  "scripts": {
+    "start": "tsc && node dist/index"
+  },
+  "author": "CRBT Developers",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "discord.js": "^13.2.0"
+  }
+}
