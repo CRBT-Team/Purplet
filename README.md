@@ -1,2 +1,2 @@
-# Framework
- Discord bot framework built on Discord.js and interactions, made for CRBT.
+# CRBT Framework
+Toolkit for building discord bots that easily leverage interactions, used by CRBT
