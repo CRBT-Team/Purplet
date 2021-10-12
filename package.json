@@ -1,5 +1,5 @@
 {
-  "name": "framework",
+  "name": "crbt-framework",
   "version": "2021.00.01",
   "description": "Discord bot framework built on Discord.js and interactions, made for CRBT.",
   "scripts": {
