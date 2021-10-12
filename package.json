@@ -3,11 +3,20 @@
   "version": "2021.00.01",
   "description": "Discord bot framework built on Discord.js and interactions, made for CRBT.",
   "scripts": {
-    "start": "tsc && node dist/index"
+    "watch": "node ./scripts/watch.js"
   },
-  "author": "CRBT Developers",
+  "main": "./dist",
+  "author": {
+    "name": "CRBT Developers",
+    "url": "https://github.com/CRBT-Team"
+  },
   "license": "Apache-2.0",
   "dependencies": {
-    "discord.js": "^13.2.0"
+    "chalk": "^4.1.2",
+    "chokidar": "^3.5.2",
+    "discord.js": "^13.2.0",
+    "esbuild": "^0.13.4",
+    "esbuild-plugin-d.ts": "^1.0.6",
+    "typescript": "^4.4.3"
   }
 }
