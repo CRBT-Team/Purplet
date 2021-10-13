@@ -1,7 +1,7 @@
 {
   "name": "crbt-framework",
-  "version": "2021.00.01",
-  "description": "Discord bot framework built on Discord.js and interactions, made for CRBT.",
+  "version": "2021.00.03",
+  "description": "Toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
   "scripts": {
     "start": "node scripts/build && node dist/index.mjs --root=sample",
     "build": "node scripts/build",
@@ -9,8 +9,15 @@
   },
   "main": "./dist",
   "author": {
-    "name": "CRBT Developers",
+    "name": "CRBT-Team",
     "url": "https://github.com/CRBT-Team"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CRBT-Team/Framework"
+  },
+  "bugs": {
+    "url": "https://github.com/CRBT-Team/Framework/issues"
   },
   "license": "Apache-2.0",
   "dependencies": {
