@@ -43,6 +43,7 @@ import { defineConfig } from "crbt-framework";
 var bot_config_default = defineConfig({});
 
 // dist/entry.ts
+import "dotenv/config";
 var bot = new Framework(bot_config_exports);
 bot.addModules(all_modules_exports);
 bot.init();

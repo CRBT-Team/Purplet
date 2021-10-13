@@ -35,6 +35,7 @@ export async function build(args: Args) {
       import { Framework } from 'crbt-framework';
       import * as modules from './all-modules.ts';
       import * as config from '${configFile.replace(/\\/g, "\\\\")}';
+      import "dotenv/config";
 
       const bot = new Framework(config);
       bot.addModules(modules);
@@ -49,6 +50,6 @@ export async function build(args: Args) {
     platform: "node",
     target: "node16",
     format: "esm",
-    external: ["crbt-framework", "discord.js"],
+    external: ["crbt-framework", "discord.js", "dotenv"],
   });
 }

@@ -1,4 +1,11 @@
 /node_modules
 /dist
+
+/sample/dist
+
 .vscode/
-test/
+
+*.env
+*.env.*
+sample/*.env
+sample/*.env.*
