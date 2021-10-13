@@ -14,7 +14,6 @@ const args = yargs(hideBin(process.argv))
     type: "string",
     default: "./",
   })
-  .demandCommand(1, "You need at least one command before moving on")
   .help()
   .parseSync();
 
@@ -24,7 +23,7 @@ const command = args._[0];
 
 args.root = path.join(process.cwd(), args.root);
 
-if (command === "dev") {
+if (!command || command === "dev") {
   dev(args);
 } else if (command === "build") {
   build(args);

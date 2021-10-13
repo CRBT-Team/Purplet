@@ -3,11 +3,12 @@ import { build as esbuild } from "esbuild";
 import path from "path";
 import { getTempFolder } from "./temp";
 import { remove } from "fs-extra";
+import { Config } from "../Config";
 
 export async function loadConfig(args: Args) {
   const outfile = path.join(await getTempFolder(), "config.mjs");
 
-  const out = await esbuild({
+  await esbuild({
     entryPoints: [path.resolve(args.root, "bot.config.ts")],
     external: ["crbt-framework"],
     bundle: true,
@@ -19,5 +20,5 @@ export async function loadConfig(args: Args) {
 
   await remove(outfile);
 
-  return imported;
+  return imported as Config;
 }

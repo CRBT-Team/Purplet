@@ -1,10 +1,19 @@
-export interface Config {}
+import { ClientOptions } from "discord.js";
+
+export interface Config {
+  /** Declare compilation options */
+  compiler?: {
+    /** Specify the modules path, default "./modules"  */
+    modulesPath?: string;
+  };
+  discordOptions?: Partial<ClientOptions>;
+}
 
 export async function defineConfig(
-  config: Config | Promise<Config> | (() => Promise<Config> | Config)
+  config: Config | (() => Promise<Config> | Config)
 ): Promise<Config> {
   if (typeof config === "function") {
-    config = config();
+    return config();
   }
   return config;
 }

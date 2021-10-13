@@ -13,5 +13,7 @@ export default ChatCommand({
     ] as const,
     false
   ),
-  handle(x) {},
+  handle(x) {
+    this.reply(`Hello ${x.animal ?? "world"}`);
+  },
 });

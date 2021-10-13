@@ -3,7 +3,9 @@
   "version": "2021.00.01",
   "description": "Discord bot framework built on Discord.js and interactions, made for CRBT.",
   "scripts": {
-    "build": "node scripts/build"
+    "start": "node scripts/build && node dist/index.mjs --root=sample",
+    "build": "node scripts/build",
+    "watch": "node scripts/watch"
   },
   "main": "./dist",
   "author": {
