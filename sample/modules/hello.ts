@@ -1,7 +1,7 @@
 import { ChatCommand, OptionBuilder } from "crbt-framework";
 
 export default ChatCommand({
-  name: "hello",
+  name: "daveping",
   description: "A cool command",
   options: new OptionBuilder().enum(
     "animal",

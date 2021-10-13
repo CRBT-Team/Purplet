@@ -21,6 +21,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@discordjs/rest": "^0.1.0-canary.0",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
     "discord.js": "^13.2.0",

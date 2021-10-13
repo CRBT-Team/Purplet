@@ -40,7 +40,7 @@ class OptionsBuilderClass {
         type,
         name,
         description,
-        required,
+        required: !!required,
       });
       return this;
     };
@@ -55,12 +55,13 @@ class OptionsBuilderClass {
   role = this.createOption("ROLE");
   number = this.createOption("NUMBER");
 
-  enum(name: string, description: string, required?: boolean) {
+  enum(name: string, description: string, choices: Choice[], required?: boolean) {
     this[OPTIONS].push({
       type: "STRING",
       name,
       description,
-      required,
+      choices,
+      required: !!required,
     });
     return this;
   }

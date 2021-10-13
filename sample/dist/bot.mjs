@@ -7,12 +7,22 @@ var __export = (target, all) => {
 };
 
 // dist/entry.ts
-import { Framework } from "crbt-framework";
+import "dotenv/config";
+import { Framework, Handler } from "crbt-framework";
 
-// dist/all-modules.ts
-var all_modules_exports = {};
-__export(all_modules_exports, {
-  module_hello: () => hello_exports
+// sample/bot.config.ts
+import { ChatCommandHandler, defineConfig } from "crbt-framework";
+var bot_config_default = defineConfig({
+  compiler: {
+    alias: {
+      $lib: "./lib"
+    }
+  },
+  handlers: [
+    new ChatCommandHandler({
+      guilds: ["782584672298729473"]
+    })
+  ]
 });
 
 // sample/modules/hello.ts
@@ -22,7 +32,7 @@ __export(hello_exports, {
 });
 import { ChatCommand, OptionBuilder } from "crbt-framework";
 var hello_default = ChatCommand({
-  name: "hello",
+  name: "daveping",
   description: "A cool command",
   options: new OptionBuilder().enum("animal", "The type of animal", [
     { name: "Dog", value: "animal_dog" },
@@ -34,16 +44,15 @@ var hello_default = ChatCommand({
   }
 });
 
-// sample/bot.config.ts
-var bot_config_exports = {};
-__export(bot_config_exports, {
-  default: () => bot_config_default
-});
-import { defineConfig } from "crbt-framework";
-var bot_config_default = defineConfig({});
-
 // dist/entry.ts
-import "dotenv/config";
-var bot = new Framework(bot_config_exports);
-bot.addModules(all_modules_exports);
-bot.init();
+var modules = {
+  m0: hello_exports
+};
+var handlers = [].flatMap((x) => Object.values(x)).filter((x) => x.constructor instanceof Handler.constructor).map((x) => new x());
+(async () => {
+  const conf = await bot_config_default;
+  bot_config_default.handlers = (bot_config_default.handlers ?? []).concat(...handlers);
+  const bot = new Framework(conf);
+  bot.addModules(modules);
+  bot.init();
+})();

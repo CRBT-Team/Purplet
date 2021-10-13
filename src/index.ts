@@ -1,5 +1,5 @@
-export * from "./OptionBuilder";
-export * from "./ChatCommand";
+export * from "./util/OptionBuilder";
+export * from "./handlers/ChatCommand";
 export * from "./Config";
 export * from "./Handler";
 export * from "./Framework";
