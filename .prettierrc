@@ -1,3 +1,11 @@
 {
-  "printWidth": 1000
+  "printWidth": 100,
+  "overrides": [
+    {
+      "files": "src/OptionBuilder.ts",
+      "options": {
+        "printWidth": 1000
+      }
+    }
+  ]
 }

@@ -3,7 +3,7 @@
   "version": "2021.00.01",
   "description": "Discord bot framework built on Discord.js and interactions, made for CRBT.",
   "scripts": {
-    "watch": "node ./scripts/watch.js"
+    "build": "node scripts/build"
   },
   "main": "./dist",
   "author": {
@@ -17,10 +17,12 @@
     "discord.js": "^13.2.0",
     "esbuild": "^0.13.4",
     "esbuild-plugin-d.ts": "^1.0.6",
+    "fs-extra": "^10.0.0",
     "typescript": "^4.4.3",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
     "@types/yargs": "^17.0.3"
   }
 }
