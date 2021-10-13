@@ -15,7 +15,7 @@ export class Framework {
   }
 
   public async init() {
-    await this.client.login(process.env.TOKEN);
+    await this.client.login(process.env.DISCORD_TOKEN ?? process.env.TOKEN);
   }
 
   public async addModules(modules: Record<string, Record<string, unknown>>) {
