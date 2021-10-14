@@ -7,7 +7,8 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "emitDeclarationOnly": true,
+    "declaration": true
   },
   "include": ["src"],
   "exclude": ["dist", "node_modules", "sample"]

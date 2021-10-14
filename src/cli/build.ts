@@ -1,3 +1,4 @@
+import dedent from 'dedent';
 import { build as esbuild } from 'esbuild';
 import fs, { pathExists } from 'fs-extra';
 import path from 'path';
@@ -32,53 +33,67 @@ export async function build(args: Args) {
       ].find((x) => fs.existsSync(x));
   const handlerList = handlerPath ? await readDirRecursive(handlerPath) : [];
 
-  const entryGeneratedFile = path.join(await getTempFolder(), 'entry.ts');
+  const entryGeneratedFile = path.join(await getTempFolder(), 'entry.mjs');
 
   await fs.writeFile(
     entryGeneratedFile,
-    `import "dotenv/config";
-     import { Framework, Handler } from 'purplet';
-     import config from '${configFile.replace(/\\/g, '\\\\')}';
-    ` +
-      moduleList
-        .map((module) => {
-          const relativePath = path.relative(modulePath, module);
-          const moduleId = relativePath.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
-          const moduleFile = module.replace(/\\/g, '\\\\').replace(/\.[tj]s/g, '');
-          return `import * as module_${moduleId} from "${moduleFile}";`;
-        })
-        .join('\n') +
-      `const modules = {
-          ${moduleList
-            .map((module, i) => {
-              const relativePath = path.relative(modulePath, module);
-              const moduleId = relativePath.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
-              return `m${i}: module_${moduleId}`;
-            })
-            .join(',\n')}
-        };` +
+    [
+      dedent`
+        import { Purplet, Handler, setupEnv } from 'purplet';
+        setupEnv();
+
+        import config from '${configFile.replace(/\\/g, '\\\\').replace(/\.[^.]+$/, '')}';
+      `,
+      '',
+      ...moduleList.map((module) => {
+        const relativePath = path.relative(modulePath, module);
+        const moduleId = relativePath.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
+        const moduleFile = module.replace(/\\/g, '\\\\').replace(/\.[tj]s/g, '');
+        return `import * as module_${moduleId} from "${moduleFile}";`;
+      }),
+      '',
+      ...handlerList.map((module) => {
+        const relativePath = path.relative(modulePath, module);
+        const moduleId = relativePath.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
+        const moduleFile = module.replace(/\\/g, '\\\\').replace(/\.[tj]s/g, '');
+        return `import * as handler_${moduleId} from "${moduleFile}";`;
+      }),
+      '',
+      `const modules = {`,
+      ...moduleList.map((module, i) => {
+        const relativePath = path.relative(modulePath, module);
+        const moduleId = relativePath.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
+        return `  m${i}: module_${moduleId}`;
+      }),
+      `};`,
+      '',
+      dedent`
+        function filterHandlers(handlers) {
+          return handlers
+            .flatMap(x => Object.values(x))
+            .filter(x => x.constructor instanceof Handler.constructor)
+            .map(x => new x());
+        }
+      `,
+      '',
+      `const handlers = filterHandlers([`,
       handlerList
-        .map((module) => {
-          const relativePath = path.relative(modulePath, module);
-          const moduleId = relativePath.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
-          const moduleFile = module.replace(/\\/g, '\\\\').replace(/\.[tj]s/g, '');
-          return `import * as handler_${moduleId} from "${moduleFile}";`;
-        })
-        .join('\n') +
-      `const handlers = [${handlerList
         .map(() => {
-          return `handler_${handlerList.length}`;
+          return `  handler_${handlerList.length}`;
         })
-        .join(',\n')}].flatMap(x => Object.values(x))
-        .filter(x => x.constructor instanceof Handler.constructor)
-        .map(x => new x());
+        .join(',\n'),
+      `]);`,
+      '',
+      dedent`
         (async() => {
           const conf = await config;
           config.handlers = (config.handlers ?? []).concat(...handlers);
-          const bot = new Framework(conf);
+          const bot = new Purplet(conf);
           bot.addModules(modules);
           bot.init();
-        })()`
+        })();
+      `,
+    ].join('\n')
   );
 
   const pkg = await fs.readJSON(path.resolve(args.root, 'package.json'));
@@ -100,6 +115,7 @@ export async function build(args: Args) {
     platform: 'node',
     target: 'node16',
     format: 'esm',
+    sourcemap: true,
     external: ['purplet', 'discord.js', '@discordjs/rest', 'dotenv'].concat(deps),
     ...(config.compiler?.esbuildOptions ?? {}),
     plugins: [
@@ -108,5 +124,9 @@ export async function build(args: Args) {
     ],
   });
 
-  console.log('Purplet Built Built!');
+  if (!args['keep-tmp']) {
+    await fs.remove(entryGeneratedFile);
+  }
+
+  console.log('Purplet Built!');
 }

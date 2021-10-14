@@ -39,7 +39,7 @@ export class Purplet implements IPurplet {
       handler.client = this.client;
       handler.rest = this.rest;
       handler.config = config;
-      handler.framework = this;
+      handler.purplet = this;
       handler.setup();
     }
   }

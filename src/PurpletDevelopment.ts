@@ -1,7 +1,8 @@
 import { REST } from '@discordjs/rest';
 import { Client, ClientOptions, Intents } from 'discord.js';
-import { Handler, IPurplet } from '.';
 import { Config } from './Config';
+import { Handler } from './Handler';
+import { IPurplet } from './Purplet';
 
 export class PurpletDevelopment implements IPurplet {
   client: Client;

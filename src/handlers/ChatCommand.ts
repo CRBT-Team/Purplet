@@ -17,7 +17,6 @@ export class ChatCommandHandler extends Handler<ChatCommandData> {
   commands = new Map<string, ChatCommandData>();
 
   handleInteraction = (interaction: Interaction) => {
-    console.log(interaction);
     if (interaction.isCommand()) {
       const cmdData = this.commands.get(interaction.commandName);
       if (cmdData) {

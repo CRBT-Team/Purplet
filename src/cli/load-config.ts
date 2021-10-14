@@ -1,11 +1,12 @@
 import { build as esbuild } from 'esbuild';
+import { remove } from 'fs-extra';
 import path from 'path';
-import { Args } from '.';
+import type { Args } from '.';
 import { Config } from '../Config';
 import { getTempFolder } from './temp';
 
 export async function loadConfig(args: Args) {
-  const outfile = path.join(await getTempFolder(), 'config.mjs');
+  const outfile = path.join(await getTempFolder(), 'purplet.config.mjs');
 
   await esbuild({
     entryPoints: [path.resolve(args.root, 'purplet.config.ts')],
@@ -16,6 +17,10 @@ export async function loadConfig(args: Args) {
   });
 
   const imported = await (await import('file://' + outfile)).default;
+
+  if (!args['keep-tmp']) {
+    remove(outfile);
+  }
 
   return imported as Config;
 }

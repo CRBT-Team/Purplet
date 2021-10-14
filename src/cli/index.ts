@@ -14,6 +14,12 @@ const args = yargs(hideBin(process.argv))
     type: 'string',
     default: './',
   })
+  .options('keep-tmp', {
+    alias: 'k',
+    describe: 'keep temporary files from compilation',
+    type: 'boolean',
+    default: process.env.NODE_ENV === 'development',
+  })
   .help()
   .parseSync();
 

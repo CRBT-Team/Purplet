@@ -1,6 +1,7 @@
 import { REST } from '@discordjs/rest';
 import { ApplicationCommandData, Client } from 'discord.js';
-import { Config, Purplet } from '.';
+import { Config } from './Config';
+import { Purplet } from './Purplet';
 import { Class } from './util/types';
 
 const IS_HANDLER_INSTANCE = Symbol('IS_HANDLER_INSTANCE');
@@ -15,7 +16,7 @@ export abstract class Handler<T = unknown> {
   config!: Config;
   client!: Client;
   rest!: REST;
-  framework!: Purplet;
+  purplet!: Purplet;
 
   /**
    * Called before modules are registered and the bot is logged on, but the rest client is

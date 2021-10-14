@@ -1,8 +1,8 @@
 import { RESTOptions } from '@discordjs/rest';
 import { ClientOptions } from 'discord.js';
 import { BuildOptions } from 'esbuild';
-import { Handler } from '.';
-import { Resolvable } from './util/resolvesTo';
+import { Handler } from './Handler';
+import { Resolvable } from './util/resolvable';
 import { RecursivePartial } from './util/types';
 
 export interface Config {
