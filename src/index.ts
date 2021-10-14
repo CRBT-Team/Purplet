@@ -2,7 +2,7 @@ export * from "./util/OptionBuilder";
 export * from "./handlers/ChatCommand";
 export * from "./Config";
 export * from "./Handler";
-export * from "./Framework";
+export * from "./Purplet";
 
 // run the cli module if this is run directly
 

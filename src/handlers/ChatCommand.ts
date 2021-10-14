@@ -1,9 +1,4 @@
-import {
-  ApplicationCommandManager,
-  CommandInteraction,
-  GuildApplicationCommandManager,
-  Interaction,
-} from "discord.js";
+import { ApplicationCommandData, CommandInteraction, Interaction } from "discord.js";
 import { Handler, createInstance } from "../Handler";
 import { getOptionsFromBuilder } from "../util/OptionBuilder";
 import { IOptionBuilder, GetOptionsFromBuilder } from "../util/OptionBuilder";
@@ -15,22 +10,8 @@ export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
   handle: (this: CommandInteraction, options: GetOptionsFromBuilder<O>) => void;
 }
 
-export interface ChatCommandHandlerOptions {
-  guilds?: string[];
-}
-
-type CommandSource = GuildApplicationCommandManager | ApplicationCommandManager;
-
 export class ChatCommandHandler extends Handler<ChatCommandData> {
   commands = new Map<string, ChatCommandData>();
-  guilds: string[];
-  commandSources: CommandSource[] = [];
-
-  constructor(readonly options: ChatCommandHandlerOptions) {
-    super();
-
-    this.guilds = this.options.guilds ?? [];
-  }
 
   handleInteraction = (interaction: Interaction) => {
     console.log(interaction);
@@ -48,57 +29,36 @@ export class ChatCommandHandler extends Handler<ChatCommandData> {
     }
   };
 
-  preInit(): void {
+  setup() {
     this.client.on("interactionCreate", this.handleInteraction);
   }
-  destroy(): void {
+
+  cleanup() {
     this.client.off("interactionCreate", this.handleInteraction);
   }
 
-  async init() {
-    this.commandSources = (
-      this.guilds.length
-        ? (await Promise.all(this.guilds.map((guild) => this.client.guilds.fetch(guild))))
-            .map((x) => x.commands)
-            .filter(Boolean)
-        : [this.client.application?.commands].filter(Boolean)
-    ) as CommandSource[];
-
-    if (this.guilds.length > 0) {
-      await this.client.application?.commands.set([]);
-    }
-
-    for (const source of this.commandSources) {
-      source.set(
-        [...this.commands.values()].map((cmd) => {
-          return {
-            name: cmd.name,
-            description: cmd.description,
-            type: "CHAT_INPUT",
-            options: getOptionsFromBuilder(cmd.options),
-          };
-        })
-      );
-    }
-  }
-
-  register(id: string, instance: ChatCommandData): void | Promise<void> {
+  register(id: string, instance: ChatCommandData) {
     if (this.commands.has(instance.name)) {
+      // If register() throws, the framework will handle this and print
+      // a nice message about a duplicate handler instance.
       throw new Error(`Command ${instance.name} already exists`);
     }
     this.commands.set(instance.name, instance);
   }
 
-  unregister(id: string, instance: ChatCommandData): void | Promise<void> {
+  unregister(id: string, instance: ChatCommandData) {
     this.commands.delete(instance.name);
   }
 
-  hmrReload(id: string, instance: ChatCommandData): void | Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
-  hmrDestroy(id: string, instance: ChatCommandData): void | Promise<void> {
-    throw new Error("Method not implemented.");
+  getApplicationCommands(): ApplicationCommandData[] {
+    return [...this.commands.values()].map((cmd) => {
+      return {
+        name: cmd.name,
+        description: cmd.description,
+        type: "CHAT_INPUT",
+        options: getOptionsFromBuilder(cmd.options),
+      };
+    });
   }
 }
 

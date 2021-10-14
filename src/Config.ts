@@ -1,16 +1,16 @@
-import { RESTOptions } from "@discordjs/rest";
-import { ClientOptions } from "discord.js";
-import { RecursivePartial } from "./util/types";
-import { BuildOptions } from "esbuild";
-import { Handler } from ".";
-import { ResolvesTo } from "./util/resolvesTo";
+import { RESTOptions } from '@discordjs/rest';
+import { ClientOptions } from 'discord.js';
+import { BuildOptions } from 'esbuild';
+import { Handler } from '.';
+import { Resolvable } from './util/resolvesTo';
+import { RecursivePartial } from './util/types';
 
 export interface Config {
-  /** compilation options */
+  /** Compilation options */
   compiler: {
-    /** Specify the modules path, default "./modules"  */
+    /** Specify the modules path, default "./modules" */
     modulesPath: string;
-    /** Specify the handlers path, default "./handlers"  */
+    /** Specify the handlers path, default "./handlers" */
     handlersPath: string;
     /** Specify the output path, default "./dist/bot.mjs" */
     outputPath: string;
@@ -19,33 +19,38 @@ export interface Config {
       [key: string]: string;
     };
     /** Specify esbuild plugins */
-    esbuildPlugins: BuildOptions["plugins"];
+    esbuildPlugins: BuildOptions['plugins'];
     /** Specify esbuild options */
-    esbuildOptions: Omit<BuildOptions, "bundle" | "outdir" | "entryPoints" | "watch" | "plugins">;
+    esbuildOptions: Omit<BuildOptions, 'bundle' | 'outdir' | 'entryPoints' | 'watch' | 'plugins'>;
   };
-  /** options related to how discord.js is used */
+  /** Options related to how discord.js is used */
   discord: {
-    /** options passed to `discord.js` */
+    /** Options passed to `discord.js` */
     clientOptions: ClientOptions;
-    /** options passed to `@discordjs/rest` */
+    /** Options passed to `@discordjs/rest` */
     restOptions: RESTOptions;
     /**
-     * token passed to `discord.Client.login`, defaults to searching process.env for one of these variables
-     *  - DISCORD_TOKEN
-     *  - BOT_TOKEN
-     *  - TOKEN
-     * if none of these are found, an error will be thrown
+     * List of guilds to post application commands to. if an empty array, posts commands to the
+     * global application. In development mode, having global app commands is not allowed.
      */
-    token: ResolvesTo<string>;
+    commandGuilds: string[];
+    /**
+     * Token passed to `discord.Client.login`, defaults to searching process.env for one of these variables
+     *
+     * - DISCORD_TOKEN
+     * - BOT_TOKEN
+     * - TOKEN if none of these are found, an error will be thrown
+     */
+    token: Resolvable<string>;
   };
-  /** options related to different handler types */
-  handlers: Handler<any>[];
+  /** Options related to different handler types */
+  handlers: Handler[];
 }
 
 export type PartialConfig = RecursivePartial<Config>;
 
-export async function defineConfig(config: ResolvesTo<PartialConfig>): Promise<PartialConfig> {
-  if (typeof config === "function") {
+export async function defineConfig(config: Resolvable<PartialConfig>): Promise<PartialConfig> {
+  if (typeof config === 'function') {
     return config();
   }
   return config;

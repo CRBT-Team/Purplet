@@ -6,52 +6,52 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// dist/entry.ts
+// .purplet/entry.ts
 import "dotenv/config";
-import { Framework, Handler } from "crbt-framework";
+import { Framework, Handler } from "purplet";
 
-// sample/bot.config.ts
-import { ChatCommandHandler, defineConfig } from "crbt-framework";
-var bot_config_default = defineConfig({
-  compiler: {
-    alias: {
-      $lib: "./lib"
-    }
+// sample/purplet.config.ts
+import { ChatCommandHandler, defineConfig } from "purplet";
+var purplet_config_default = defineConfig({
+  discord: {
+    commandGuilds: ["782584672298729473"]
   },
-  handlers: [
-    new ChatCommandHandler({
-      guilds: ["782584672298729473"]
-    })
-  ]
+  handlers: [new ChatCommandHandler()]
 });
 
-// sample/modules/hello.ts
+// sample/src/modules/hello.ts
 var hello_exports = {};
 __export(hello_exports, {
   default: () => hello_default
 });
-import { ChatCommand, OptionBuilder } from "crbt-framework";
+import { ChatCommand, OptionBuilder } from "purplet";
+
+// sample/src/lib/index.ts
+import { MessageEmbed } from "discord.js";
+function formatMessage(text) {
+  return new MessageEmbed().setDescription(text).setColor("BLURPLE");
+}
+
+// sample/src/modules/hello.ts
 var hello_default = ChatCommand({
-  name: "daveping",
+  name: "hello",
   description: "A cool command",
-  options: new OptionBuilder().enum("animal", "The type of animal", [
-    { name: "Dog", value: "animal_dog" },
-    { name: "Cat", value: "animal_cat" },
-    { name: "Penguin", value: "animal_penguin" }
-  ], false),
-  handle(x) {
-    this.reply(`Hello ${x.animal ?? "world"}`);
+  options: new OptionBuilder().string("who", "Say hello to who?", false),
+  handle({ who }) {
+    this.reply({
+      embeds: [formatMessage(`Hello ${who ?? "World"}}!`)]
+    });
   }
 });
 
-// dist/entry.ts
+// .purplet/entry.ts
 var modules = {
   m0: hello_exports
 };
 var handlers = [].flatMap((x) => Object.values(x)).filter((x) => x.constructor instanceof Handler.constructor).map((x) => new x());
 (async () => {
-  const conf = await bot_config_default;
-  bot_config_default.handlers = (bot_config_default.handlers ?? []).concat(...handlers);
+  const conf = await purplet_config_default;
+  purplet_config_default.handlers = (purplet_config_default.handlers ?? []).concat(...handlers);
   const bot = new Framework(conf);
   bot.addModules(modules);
   bot.init();

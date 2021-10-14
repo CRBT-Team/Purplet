@@ -1,7 +1,8 @@
+import path from "path";
+import fs from "fs-extra";
+
 export async function getTempFolder(): Promise<string> {
-  const envTemp = process.env.TEMP_FOLDER || process.env.TEMP || process.env.TMP;
-  if (!envTemp) {
-    throw new Error("TEMP environment variable not set");
-  }
-  return envTemp;
+  const dir = path.join(process.cwd(), ".purplet");
+  await fs.ensureDir(dir);
+  return dir;
 }

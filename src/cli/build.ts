@@ -8,23 +8,36 @@ import { build as esbuild } from "esbuild";
 
 export async function build(args: Args) {
   console.log("Building bot");
-  const configFile = path.resolve(args.root, "bot.config.ts");
+  const configFile = path.resolve(args.root, "purplet.config.ts");
   const config = await loadConfig(args);
 
-  const modulePath = path.resolve(args.root, config.compiler?.modulesPath ?? "modules");
+  const modulePath = config.compiler?.modulesPath
+    ? path.resolve(args.root, config.compiler?.modulesPath)
+    : [
+        //
+        path.resolve(args.root, "src", "modules"),
+        path.resolve(args.root, "modules"),
+      ].find((x) => fs.existsSync(x));
+  if (!modulePath) {
+    throw new Error("No modules path found. Create a directory at ./src/modules");
+  }
   const moduleList = (await pathExists(modulePath)) ? await readDirRecursive(modulePath) : [];
 
-  const handlerPath = path.resolve(args.root, config.compiler?.handlersPath ?? "handlers");
-  const handlerList = (await pathExists(handlerPath)) ? await readDirRecursive(handlerPath) : [];
+  const handlerPath = config.compiler?.handlersPath
+    ? path.resolve(args.root, config.compiler?.handlersPath)
+    : [
+        //
+        path.resolve(args.root, "src", "handlers"),
+        path.resolve(args.root, "handlers"),
+      ].find((x) => fs.existsSync(x));
+  const handlerList = handlerPath ? await readDirRecursive(handlerPath) : [];
 
-  const moduleGeneratedFile = path.join(await getTempFolder(), "all-modules.ts");
-  const handlerGeneratedFile = path.join(await getTempFolder(), "all-handlers.ts");
   const entryGeneratedFile = path.join(await getTempFolder(), "entry.ts");
 
   await fs.writeFile(
     entryGeneratedFile,
     `import "dotenv/config";
-     import { Framework, Handler } from 'crbt-framework';
+     import { Framework, Handler } from 'purplet';
      import config from '${configFile.replace(/\\/g, "\\\\")}';
     ` +
       moduleList
@@ -68,6 +81,18 @@ export async function build(args: Args) {
         })()`
   );
 
+  const pkg = await fs.readJSON(path.resolve(args.root, "package.json"));
+
+  const deps = Object.keys(pkg.dependencies ?? {})
+    .concat(Object.keys(pkg.devDependencies ?? {}))
+    .concat(Object.keys(pkg.peerDependencies ?? {}));
+
+  const libAlias = [
+    //
+    path.resolve(args.root, "src", "lib"),
+    path.resolve(args.root, "lib"),
+  ].find((x) => fs.existsSync(x));
+
   await esbuild({
     entryPoints: [entryGeneratedFile],
     outfile: path.join(args.root, "dist", "bot.mjs"),
@@ -75,8 +100,13 @@ export async function build(args: Args) {
     platform: "node",
     target: "node16",
     format: "esm",
-    external: ["crbt-framework", "discord.js", "dotenv"],
+    external: ["purplet", "discord.js", "@discordjs/rest", "dotenv"].concat(deps),
+    ...(config.compiler?.esbuildOptions ?? {}),
+    plugins: [
+      // add plugins here
+      ...(config.compiler?.esbuildPlugins ?? []),
+    ],
   });
 
-  console.log("Done");
+  console.log("Purplet Built Built!");
 }

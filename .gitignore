@@ -3,9 +3,9 @@
 
 /sample/dist
 
-.vscode/
-
 *.env
 *.env.*
 sample/*.env
 sample/*.env.*
+
+.purplet

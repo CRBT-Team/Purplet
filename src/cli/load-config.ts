@@ -9,16 +9,14 @@ export async function loadConfig(args: Args) {
   const outfile = path.join(await getTempFolder(), "config.mjs");
 
   await esbuild({
-    entryPoints: [path.resolve(args.root, "bot.config.ts")],
-    external: ["crbt-framework"],
+    entryPoints: [path.resolve(args.root, "purplet.config.ts")],
+    external: ["purplet"],
     bundle: true,
     format: "esm",
     outfile,
   });
 
   const imported = await (await import("file://" + outfile)).default;
-
-  await remove(outfile);
 
   return imported as Config;
 }

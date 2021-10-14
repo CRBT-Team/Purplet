@@ -1,0 +1,10 @@
+{
+  "name": "purplet-sample",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "dev": "purplet dev",
+    "build": "purplet build"
+  },
+  "dependencies": {}
+}

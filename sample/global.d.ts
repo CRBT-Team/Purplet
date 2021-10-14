@@ -1,4 +1,4 @@
-declare module "crbt-framework" {
+declare module "purplet" {
   const crbt: typeof import("../src");
   export = crbt;
 }

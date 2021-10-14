@@ -1,10 +1,23 @@
-import { Client, ClientOptions, Intents } from "discord.js";
+import {
+  ApplicationCommandManager,
+  Client,
+  ClientOptions,
+  GuildApplicationCommandManager,
+  Intents,
+} from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Handler, isHandlerInstance } from ".";
 import { Config } from "./Config";
-import { resolve } from "./util/resolvesTo";
 
-export class Framework {
+export type CommandSource = GuildApplicationCommandManager | ApplicationCommandManager;
+
+export interface IPurplet {
+  client: Client;
+  rest: REST;
+  handlers: Handler[];
+}
+
+export class Purplet implements IPurplet {
   client: Client;
   rest: REST;
   handlers: Handler[] = [];
@@ -27,11 +40,12 @@ export class Framework {
       handler.rest = this.rest;
       handler.config = config;
       handler.framework = this;
-      handler.preInit();
+      handler.setup();
     }
   }
 
   public async init() {
+    console.log(`Initializing Discord Bot`);
     const tokenUnresolved =
       this.config.discord?.token ??
       process.env.DISCORD_TOKEN ??
@@ -56,7 +70,27 @@ export class Framework {
       await handler.init();
     }
 
-    console.log("Bot Ready");
+    const guilds = this.config.discord?.commandGuilds ?? [];
+
+    const applicationCommands = (
+      await Promise.all(this.handlers.map((handler) => handler.getApplicationCommands()))
+    ).flat();
+
+    let commandSources: CommandSource[];
+
+    if (guilds.length > 0) {
+      const allGuilds = await Promise.all(guilds.map((id) => this.client.guilds.fetch(id)));
+      commandSources = allGuilds.map((x) => x.commands).filter(Boolean);
+      await this.client.application.commands.set([]);
+    } else {
+      commandSources = [this.client.application.commands];
+    }
+
+    for (const src of commandSources) {
+      src.set(applicationCommands);
+    }
+
+    console.log(`Logged in as ${this.client.user.tag}`);
   }
 
   public async addModules(modules: Record<string, Record<string, unknown>>) {
