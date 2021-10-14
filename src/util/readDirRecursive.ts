@@ -1,5 +1,5 @@
-import fs from "fs-extra";
-import path from "path";
+import fs from 'fs-extra';
+import path from 'path';
 
 export async function readDirRecursive(dir: string): Promise<string[]> {
   const files = await fs.readdir(dir);

@@ -6,7 +6,7 @@
     "purplet": "node scripts/build && node dist/index.mjs --root=sample",
     "lint": "prettier . --write && eslint . && tsc -p .",
     "tsc": "eslint types",
-    "prettier": "prettier --check .",
+    "prettier": "prettier --write .",
     "eslint": "eslint .",
     "build": "node scripts/build",
     "watch": "node scripts/watch"

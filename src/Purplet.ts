@@ -1,13 +1,13 @@
+import { REST } from '@discordjs/rest';
 import {
   ApplicationCommandManager,
   Client,
   ClientOptions,
   GuildApplicationCommandManager,
   Intents,
-} from "discord.js";
-import { REST } from "@discordjs/rest";
-import { Handler, isHandlerInstance } from ".";
-import { Config } from "./Config";
+} from 'discord.js';
+import { Handler, isHandlerInstance } from '.';
+import { Config } from './Config';
 
 export type CommandSource = GuildApplicationCommandManager | ApplicationCommandManager;
 
@@ -33,7 +33,7 @@ export class Purplet implements IPurplet {
     }
 
     this.client = new Client(clientOptions as ClientOptions);
-    this.rest = new REST({ ...restOptions, version: "9" });
+    this.rest = new REST({ ...restOptions, version: '9' });
 
     for (const handler of this.handlers) {
       handler.client = this.client;
@@ -51,7 +51,7 @@ export class Purplet implements IPurplet {
       process.env.DISCORD_TOKEN ??
       process.env.BOT_TOKEN ??
       process.env.TOKEN;
-    const token = await (typeof tokenUnresolved === "function"
+    const token = await (typeof tokenUnresolved === 'function'
       ? tokenUnresolved()
       : tokenUnresolved);
 
@@ -62,7 +62,7 @@ export class Purplet implements IPurplet {
 
     if (!this.client.isReady()) {
       await new Promise((resolve) => {
-        this.client.once("ready", resolve);
+        this.client.once('ready', resolve);
       });
     }
 

@@ -1,6 +1,6 @@
-import { Channel, Role, User, ApplicationCommandOptionData, ApplicationCommandOptionType } from "discord.js";
+import { ApplicationCommandOptionData, ApplicationCommandOptionType, Channel, Role, User } from 'discord.js';
 
-const OPTIONS = Symbol("OPTIONS");
+const OPTIONS = Symbol('OPTIONS');
 
 export interface Choice<Value extends string = string> {
   name: string;
@@ -46,18 +46,18 @@ class OptionsBuilderClass {
     };
   }
 
-  string = this.createOption("STRING");
-  integer = this.createOption("INTEGER");
-  boolean = this.createOption("BOOLEAN");
-  channel = this.createOption("CHANNEL");
-  user = this.createOption("USER");
-  mentionable = this.createOption("MENTIONABLE");
-  role = this.createOption("ROLE");
-  number = this.createOption("NUMBER");
+  string = this.createOption('STRING');
+  integer = this.createOption('INTEGER');
+  boolean = this.createOption('BOOLEAN');
+  channel = this.createOption('CHANNEL');
+  user = this.createOption('USER');
+  mentionable = this.createOption('MENTIONABLE');
+  role = this.createOption('ROLE');
+  number = this.createOption('NUMBER');
 
   enum(name: string, description: string, choices: Choice[], required?: boolean) {
     this[OPTIONS].push({
-      type: "STRING",
+      type: 'STRING',
       name,
       description,
       choices,

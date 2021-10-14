@@ -1,7 +1,7 @@
-import { Client, ClientOptions, Intents } from "discord.js";
-import { REST } from "@discordjs/rest";
-import { Handler, IPurplet } from ".";
-import { Config } from "./Config";
+import { REST } from '@discordjs/rest';
+import { Client, ClientOptions, Intents } from 'discord.js';
+import { Handler, IPurplet } from '.';
+import { Config } from './Config';
 
 export class PurpletDevelopment implements IPurplet {
   client: Client;
@@ -17,6 +17,6 @@ export class PurpletDevelopment implements IPurplet {
     }
 
     this.client = new Client(clientOptions as ClientOptions);
-    this.rest = new REST({ ...restOptions, version: "9" });
+    this.rest = new REST({ ...restOptions, version: '9' });
   }
 }

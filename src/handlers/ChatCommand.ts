@@ -1,7 +1,10 @@
-import { ApplicationCommandData, CommandInteraction, Interaction } from "discord.js";
-import { Handler, createInstance } from "../Handler";
-import { getOptionsFromBuilder } from "../util/OptionBuilder";
-import { IOptionBuilder, GetOptionsFromBuilder } from "../util/OptionBuilder";
+import { ApplicationCommandData, CommandInteraction, Interaction } from 'discord.js';
+import { createInstance, Handler } from '../Handler';
+import {
+  getOptionsFromBuilder,
+  GetOptionsFromBuilder,
+  IOptionBuilder,
+} from '../util/OptionBuilder';
 
 export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
   name: string;
@@ -30,11 +33,11 @@ export class ChatCommandHandler extends Handler<ChatCommandData> {
   };
 
   setup() {
-    this.client.on("interactionCreate", this.handleInteraction);
+    this.client.on('interactionCreate', this.handleInteraction);
   }
 
   cleanup() {
-    this.client.off("interactionCreate", this.handleInteraction);
+    this.client.off('interactionCreate', this.handleInteraction);
   }
 
   register(id: string, instance: ChatCommandData) {
@@ -55,7 +58,7 @@ export class ChatCommandHandler extends Handler<ChatCommandData> {
       return {
         name: cmd.name,
         description: cmd.description,
-        type: "CHAT_INPUT",
+        type: 'CHAT_INPUT',
         options: getOptionsFromBuilder(cmd.options),
       };
     });
