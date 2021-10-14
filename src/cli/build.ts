@@ -24,15 +24,6 @@ export async function build(args: Args) {
   }
   const moduleList = (await pathExists(modulePath)) ? await readDirRecursive(modulePath) : [];
 
-  const handlerPath = config.compiler?.handlersPath
-    ? path.resolve(args.root, config.compiler?.handlersPath)
-    : [
-        //
-        path.resolve(args.root, 'src', 'handlers'),
-        path.resolve(args.root, 'handlers'),
-      ].find((x) => fs.existsSync(x));
-  const handlerList = handlerPath ? await readDirRecursive(handlerPath) : [];
-
   const entryGeneratedFile = path.join(await getTempFolder(), 'entry.mjs');
 
   await fs.writeFile(
@@ -52,18 +43,11 @@ export async function build(args: Args) {
         return `import * as module_${moduleId} from "${moduleFile}";`;
       }),
       '',
-      ...handlerList.map((module) => {
-        const relativePath = path.relative(modulePath, module);
-        const moduleId = relativePath.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
-        const moduleFile = module.replace(/\\/g, '\\\\').replace(/\.[tj]s/g, '');
-        return `import * as handler_${moduleId} from "${moduleFile}";`;
-      }),
-      '',
       `const modules = {`,
       ...moduleList.map((module, i) => {
         const relativePath = path.relative(modulePath, module);
         const moduleId = relativePath.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
-        return `  m${i}: module_${moduleId}`;
+        return `  m${i}: module_${moduleId},`;
       }),
       `};`,
       '',
@@ -76,18 +60,9 @@ export async function build(args: Args) {
         }
       `,
       '',
-      `const handlers = filterHandlers([`,
-      handlerList
-        .map(() => {
-          return `  handler_${handlerList.length}`;
-        })
-        .join(',\n'),
-      `]);`,
-      '',
       dedent`
         (async() => {
           const conf = await config;
-          config.handlers = (config.handlers ?? []).concat(...handlers);
           const bot = new Purplet(conf);
           bot.addModules(modules);
           bot.init();
@@ -102,15 +77,9 @@ export async function build(args: Args) {
     .concat(Object.keys(pkg.devDependencies ?? {}))
     .concat(Object.keys(pkg.peerDependencies ?? {}));
 
-  const libAlias = [
-    //
-    path.resolve(args.root, 'src', 'lib'),
-    path.resolve(args.root, 'lib'),
-  ].find((x) => fs.existsSync(x));
-
   await esbuild({
     entryPoints: [entryGeneratedFile],
-    outfile: path.join(args.root, 'dist', 'bot.mjs'),
+    outfile: path.resolve(args.root, config?.compiler?.outputPath ?? 'dist/bot.mjs'),
     bundle: true,
     platform: 'node',
     target: 'node16',

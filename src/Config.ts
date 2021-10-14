@@ -10,8 +10,6 @@ export interface Config {
   compiler: {
     /** Specify the modules path, default "./modules" */
     modulesPath: string;
-    /** Specify the handlers path, default "./handlers" */
-    handlersPath: string;
     /** Specify the output path, default "./dist/bot.mjs" */
     outputPath: string;
     /** Specify aliases */
