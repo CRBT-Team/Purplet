@@ -20,5 +20,5 @@ build({
   },
 });
 
-// const x = generateDtsBundle([{ filePath: './src/index.ts' }]);
-// fs.writeFileSync('./dist/purplet.d.ts', x[0]);
+const x = generateDtsBundle([{ filePath: './src/index.ts' }]);
+fs.writeFileSync('./dist/purplet.d.ts', x[0]);
