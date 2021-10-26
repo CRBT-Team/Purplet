@@ -7,6 +7,8 @@ export interface Choice<Value extends string = string> {
   value: Value;
 }
 
+export type ChoiceObject<Enum extends string> = Record<Enum, string>;
+
 /** Underlying interface for the Option Builder */
 export interface IOptionBuilder<Options = Record<string, unknown>> {
   [OPTIONS]: ApplicationCommandOptionData[];
@@ -29,6 +31,12 @@ export interface IOptionBuilder<Options = Record<string, unknown>> {
   role<Name extends string>(name: Name, description: string, required?: false): IOptionBuilder<Options & { [K in Name]?: Role }>;
   enum<Name extends string, Enum extends string>(name: Name, description: string, choices: ReadonlyArray<Choice<Enum>>, required: true): IOptionBuilder<Options & { [K in Name]: Enum }>;
   enum<Name extends string, Enum extends string>(name: Name, description: string, choices: ReadonlyArray<Choice<Enum>>, required?: false): IOptionBuilder<Options & { [K in Name]?: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, required: true, choices: ReadonlyArray<Choice<Enum>>): IOptionBuilder<Options & { [K in Name]: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, required: false, choices: ReadonlyArray<Choice<Enum>>): IOptionBuilder<Options & { [K in Name]?: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, choices: ChoiceObject<Enum>, required: true): IOptionBuilder<Options & { [K in Name]: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, choices: ChoiceObject<Enum>, required?: false): IOptionBuilder<Options & { [K in Name]?: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, required: true, choices: ChoiceObject<Enum>): IOptionBuilder<Options & { [K in Name]: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, required: false, choices: ChoiceObject<Enum>): IOptionBuilder<Options & { [K in Name]?: Enum }>;
 }
 
 class OptionsBuilderClass {
