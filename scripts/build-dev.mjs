@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import fs from 'fs';
+import fs from 'fs-extra';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
 const dependencies = Object.keys(pkg.dependencies);
