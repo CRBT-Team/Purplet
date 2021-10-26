@@ -11,7 +11,9 @@ export * from './util/OptionBuilder';
 import fs from 'fs-extra';
 import path from 'path';
 
-const thisFile = fs.realpathSync(path.resolve(import.meta.url.replace(/file:\/+/, '')));
+const thisFile = fs.realpathSync(
+  path.resolve(import.meta.url.replace(/file:\/\//, '').replace(/^\/([A-Z]:\/)/, '$1'))
+);
 const runFile = fs.realpathSync(process.argv[1]);
 if (thisFile === runFile) {
   import('./cli');
