@@ -8,7 +8,7 @@ import { loadConfig } from './load-config';
 import { getTempFolder } from './temp';
 
 export async function build(args: Args) {
-  console.log('Building bot');
+  console.log('Building bot...');
   const configFile = path.resolve(args.root, 'purplet.config.ts');
   const config = await loadConfig(args);
 
@@ -97,5 +97,5 @@ export async function build(args: Args) {
     await fs.remove(entryGeneratedFile);
   }
 
-  console.log('Purplet Built!');
+  console.log('\x1b[32m%s\x1b[0m', '✓', 'Build successful.');
 }
