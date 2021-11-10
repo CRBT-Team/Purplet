@@ -9,7 +9,7 @@ import {
 export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
   name: string;
   description: string;
-  options: O;
+  options?: O;
   handle: (this: CommandInteraction, options: GetOptionsFromBuilder<O>) => void;
 }
 

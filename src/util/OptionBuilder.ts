@@ -75,8 +75,8 @@ class OptionsBuilderClass {
   }
 }
 
-export function getOptionsFromBuilder(builder: IOptionBuilder) {
-  return builder[OPTIONS];
+export function getOptionsFromBuilder(builder: IOptionBuilder | undefined) {
+  return builder ? builder[OPTIONS] : [];
 }
 
 export const OptionBuilder = OptionsBuilderClass as unknown as { new (): IOptionBuilder };
