@@ -9,3 +9,5 @@ sample/*.env
 sample/*.env.*
 
 .purplet
+
+.yarn-integrity

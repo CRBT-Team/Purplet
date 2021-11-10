@@ -7,6 +7,8 @@ export interface Choice<Value extends string = string> {
   value: Value;
 }
 
+export type ChoiceObject<Enum extends string> = Record<Enum, string>;
+
 /** Underlying interface for the Option Builder */
 export interface IOptionBuilder<Options = Record<string, unknown>> {
   [OPTIONS]: ApplicationCommandOptionData[];
@@ -29,6 +31,12 @@ export interface IOptionBuilder<Options = Record<string, unknown>> {
   role<Name extends string>(name: Name, description: string, required?: false): IOptionBuilder<Options & { [K in Name]?: Role }>;
   enum<Name extends string, Enum extends string>(name: Name, description: string, choices: ReadonlyArray<Choice<Enum>>, required: true): IOptionBuilder<Options & { [K in Name]: Enum }>;
   enum<Name extends string, Enum extends string>(name: Name, description: string, choices: ReadonlyArray<Choice<Enum>>, required?: false): IOptionBuilder<Options & { [K in Name]?: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, required: true, choices: ReadonlyArray<Choice<Enum>>): IOptionBuilder<Options & { [K in Name]: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, required: false, choices: ReadonlyArray<Choice<Enum>>): IOptionBuilder<Options & { [K in Name]?: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, choices: ChoiceObject<Enum>, required: true): IOptionBuilder<Options & { [K in Name]: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, choices: ChoiceObject<Enum>, required?: false): IOptionBuilder<Options & { [K in Name]?: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, required: true, choices: ChoiceObject<Enum>): IOptionBuilder<Options & { [K in Name]: Enum }>;
+  enum<Name extends string, Enum extends string>(name: Name, description: string, required: false, choices: ChoiceObject<Enum>): IOptionBuilder<Options & { [K in Name]?: Enum }>;
 }
 
 class OptionsBuilderClass {
@@ -55,20 +63,32 @@ class OptionsBuilderClass {
   role = this.createOption('ROLE');
   number = this.createOption('NUMBER');
 
-  enum(name: string, description: string, choices: Choice[], required?: boolean) {
+  enum(name: string, description: string, a: Choice[] | Record<string, string> | boolean, b: boolean | Choice[] | Record<string, string> | undefined) {
+    const choices: Choice[] | Record<string, string> | undefined = typeof a !== 'boolean' ? a : typeof b !== 'boolean' ? b : undefined;
+    const required: boolean = typeof a === 'boolean' ? a : typeof b === 'boolean' ? b : false;
+
     this[OPTIONS].push({
       type: 'STRING',
       name,
       description,
-      choices,
+      choices: choices
+        ? Array.isArray(choices)
+          ? choices
+          : Object.keys(choices).map((x) => {
+              return {
+                name: choices[x],
+                value: x,
+              };
+            })
+        : [],
       required: !!required,
     });
     return this;
   }
 }
 
-export function getOptionsFromBuilder(builder: IOptionBuilder) {
-  return builder[OPTIONS];
+export function getOptionsFromBuilder(builder: IOptionBuilder | undefined) {
+  return builder ? builder[OPTIONS] : [];
 }
 
 export const OptionBuilder = OptionsBuilderClass as unknown as { new (): IOptionBuilder };
