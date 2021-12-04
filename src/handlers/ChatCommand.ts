@@ -1,4 +1,11 @@
-import { ApplicationCommandData, CommandInteraction, Interaction } from 'discord.js';
+import {
+  ApplicationCommandData,
+  Client,
+  CommandInteraction,
+  CommandInteractionOption,
+  Guild,
+  Interaction,
+} from 'discord.js';
 import { createInstance, Handler } from '../Handler';
 import {
   getOptionsFromBuilder,
@@ -13,18 +20,43 @@ export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
   handle: (this: CommandInteraction, options: GetOptionsFromBuilder<O>) => void;
 }
 
+async function resolveOptionValue(
+  client: Client,
+  guild: Guild | null,
+  opt: CommandInteractionOption
+) {
+  const value = opt.value;
+  if (typeof value === 'string') {
+    switch (opt.type) {
+      case 'CHANNEL':
+        return client.channels.resolve(value);
+      case 'USER':
+        return client.users.resolve(value);
+      case 'ROLE':
+        return guild?.roles.resolve(value);
+      case 'MENTIONABLE':
+        return client.users.resolve(value) || guild?.roles.resolve(value);
+      default:
+        return opt.value;
+    }
+  }
+  return opt.value;
+}
+
 export class ChatCommandHandler extends Handler<ChatCommandData> {
   commands = new Map<string, ChatCommandData>();
 
-  handleInteraction = (interaction: Interaction) => {
+  handleInteraction = async (interaction: Interaction) => {
     if (interaction.isCommand()) {
       const cmdData = this.commands.get(interaction.commandName);
       if (cmdData) {
         const options = Object.fromEntries(
-          interaction.options.data.map((opt) => [
-            opt.name,
-            opt.value ?? opt.user ?? opt.role ?? opt.channel,
-          ])
+          await Promise.all(
+            interaction.options.data.map(async (opt) => [
+              opt.name,
+              await resolveOptionValue(this.client, interaction.guild, opt),
+            ])
+          )
         );
         cmdData.handle.call(interaction, options);
       }

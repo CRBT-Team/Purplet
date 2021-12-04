@@ -1,4 +1,4 @@
-import { defineConfig, TextCommandHandler } from 'purplet';
+import { ChatCommandHandler, defineConfig } from 'purplet';
 
 export default defineConfig({
   discord: {
@@ -6,8 +6,6 @@ export default defineConfig({
   },
   handlers: [
     //
-    new TextCommandHandler({
-      prefix: '!',
-    }),
+    new ChatCommandHandler(),
   ],
 });
