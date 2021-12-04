@@ -19,6 +19,7 @@ export const help = TextCommand({
     const commands = getAllTextCommands();
 
     const text = [...commands.entries()].map(([name, command]) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return `${name} - ${(command.meta as any).description}`;
     });
 
