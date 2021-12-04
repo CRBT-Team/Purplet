@@ -1,8 +1,13 @@
-import { ChatCommandHandler, defineConfig } from 'purplet';
+import { defineConfig, TextCommandHandler } from 'purplet';
 
 export default defineConfig({
   discord: {
     commandGuilds: ['782584672298729473'],
   },
-  handlers: [new ChatCommandHandler()],
+  handlers: [
+    //
+    new TextCommandHandler({
+      prefix: '!',
+    }),
+  ],
 });

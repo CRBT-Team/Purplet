@@ -1,5 +1,5 @@
 import { REST } from '@discordjs/rest';
-import { ApplicationCommandData, Client } from 'discord.js';
+import { ApplicationCommandData, Client, IntentsString } from 'discord.js';
 import { Config } from './Config';
 import { Purplet } from './Purplet';
 import { Class } from './util/types';
@@ -35,6 +35,10 @@ export abstract class Handler<T = unknown> {
   getApplicationCommands(): ApplicationCommandData[] {
     return [];
   }
+
+  getIntents(): IntentsString[] {
+    return [];
+  }
 }
 
 export function createInstance<T>(handlerClass: Class<Handler<T>>, data: T): HandlerInstance<T> {
@@ -47,4 +51,14 @@ export function createInstance<T>(handlerClass: Class<Handler<T>>, data: T): Han
 
 export function isHandlerInstance(x: unknown): x is HandlerInstance<unknown> {
   return typeof x === 'object' && x !== null && IS_HANDLER_INSTANCE in x;
+}
+
+export function getHandlerSingleton<X extends Handler>(cls: Class<X>): X | undefined {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const purplet = (global as any).purplet as Purplet;
+  if (!purplet) {
+    return undefined;
+  }
+
+  return purplet.handlers.find((x) => x.constructor === cls) as X;
 }

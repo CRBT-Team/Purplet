@@ -63,9 +63,9 @@ export async function build(args: Args) {
       dedent`
         (async() => {
           const conf = await config;
-          const bot = new Purplet(conf);
-          bot.addModules(modules);
-          bot.init();
+          global.purplet = new Purplet(conf);
+          purplet.addModules(modules);
+          purplet.init();
         })();
       `,
     ].join('\n')
