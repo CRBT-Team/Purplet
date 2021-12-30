@@ -1,5 +1,8 @@
 import { build } from 'esbuild';
 import fs from 'fs-extra';
+import ora from 'ora';
+
+const spinner = ora('building purplet framework (dev)');
 
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
 const dependencies = Object.keys(pkg.dependencies);
@@ -29,4 +32,6 @@ build({
   banner: {
     js: '#!/usr/bin/env node',
   },
+}).then(() => {
+  spinner.succeed('built purplet framework');
 });

@@ -13,6 +13,9 @@ export * from './util/OptionBuilder';
 
 import fs from 'fs-extra';
 import path from 'path';
+import pkg from '../package.json';
+
+process.versions.purplet = pkg.version;
 
 const thisFile = fs.realpathSync(
   path.resolve(import.meta.url.replace(/file:\/\//, '').replace(/^\/([A-Z]:\/)/, '$1'))

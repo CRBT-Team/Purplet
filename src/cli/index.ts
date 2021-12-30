@@ -3,11 +3,13 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { build } from './build';
 import { dev } from './dev';
+import { run } from './run';
 
 const args = yargs(hideBin(process.argv))
   .usage('$0 <command> [options]')
-  .command('dev', 'development mode')
-  .command('build', 'build coolness')
+  .command('dev', 'run development mode')
+  .command('build', 'build purplet bot')
+  .command('run', 'build + run')
   .option('root', {
     alias: 'r',
     describe: 'root directory',
@@ -29,10 +31,12 @@ const command = args._[0];
 
 args.root = path.join(process.cwd(), args.root);
 
-if (!command || command === 'dev') {
+if (command === 'dev') {
   dev(args);
 } else if (command === 'build') {
   build(args);
+} else if (!command || command === 'run') {
+  run(args);
 } else {
   console.log('unknown command');
 }

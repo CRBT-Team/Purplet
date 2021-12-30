@@ -1,10 +1,14 @@
+import ora from 'ora';
 import type { Args } from '.';
 import { PurpletDevelopment } from '../PurpletDevelopment';
 import { loadConfig } from './load-config';
 
 export async function dev(args: Args) {
-  const config = await loadConfig(args);
+  const spinner = ora('starting purplet development mode').start();
 
-  console.log('Development mode is unfinished, and does not fully work.');
+  const config = await loadConfig(args);
   const framework = new PurpletDevelopment(config);
+
+  spinner.fail();
+  console.log('not implemented, use `purplet build` instead');
 }

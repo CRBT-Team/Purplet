@@ -8,7 +8,8 @@
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "emitDeclarationOnly": true,
-    "declaration": true
+    "declaration": true,
+    "resolveJsonModule": true
   },
   "include": ["src"],
   "exclude": ["dist", "node_modules", "sample"]

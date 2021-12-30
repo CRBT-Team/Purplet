@@ -53,12 +53,35 @@ export function isHandlerInstance(x: unknown): x is HandlerInstance<unknown> {
   return typeof x === 'object' && x !== null && IS_HANDLER_INSTANCE in x;
 }
 
-export function getHandlerSingleton<X extends Handler>(cls: Class<X>): X | undefined {
+export function getPurplet() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const purplet = (global as any).purplet as Purplet;
   if (!purplet) {
     return undefined;
   }
+  return purplet;
+}
 
+export function getHandlerSingleton<X extends Handler>(cls: Class<X>): X | undefined {
+  const purplet = getPurplet();
+  if (!purplet) {
+    return undefined;
+  }
   return purplet.handlers.find((x) => x.constructor === cls) as X;
+}
+
+export function getDiscordClient() {
+  const purplet = getPurplet();
+  if (!purplet) {
+    return undefined;
+  }
+  return purplet.client;
+}
+
+export function getRestClient() {
+  const purplet = getPurplet();
+  if (!purplet) {
+    return undefined;
+  }
+  return purplet.rest;
 }

@@ -1,6 +1,7 @@
 import dedent from 'dedent';
 import { build as esbuild } from 'esbuild';
 import fs, { pathExists } from 'fs-extra';
+import ora from 'ora';
 import path from 'path';
 import type { Args } from '.';
 import { readDirRecursive } from '../util/readDirRecursive';
@@ -8,7 +9,8 @@ import { loadConfig } from './load-config';
 import { getTempFolder } from './temp';
 
 export async function build(args: Args) {
-  console.log('Building bot...');
+  const spinner = ora('building purplet bot...').start();
+
   const configFile = path.resolve(args.root, 'purplet.config.ts');
   const config = await loadConfig(args);
 
@@ -77,9 +79,11 @@ export async function build(args: Args) {
     .concat(Object.keys(pkg.devDependencies ?? {}))
     .concat(Object.keys(pkg.peerDependencies ?? {}));
 
+  const outfile = path.resolve(args.root, config?.compiler?.outputPath ?? 'dist/bot.mjs');
+
   await esbuild({
     entryPoints: [entryGeneratedFile],
-    outfile: path.resolve(args.root, config?.compiler?.outputPath ?? 'dist/bot.mjs'),
+    outfile,
     bundle: true,
     platform: 'node',
     target: 'node16',
@@ -97,5 +101,7 @@ export async function build(args: Args) {
     await fs.remove(entryGeneratedFile);
   }
 
-  console.log('\x1b[32m%s\x1b[0m', '✓', 'Build successful.');
+  spinner.succeed('built purplet bot');
+
+  return outfile;
 }
