@@ -18,7 +18,9 @@ build({
   define: {
     'process.env.NODE_ENV': JSON.stringify('production'),
   },
-  banner: '#!/usr/bin/env node',
+  banner: {
+    js: '#!/usr/bin/env node',
+  },
 });
 
 const x = generateDtsBundle([{ filePath: './src/index.ts' }]);

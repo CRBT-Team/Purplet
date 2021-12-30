@@ -26,5 +26,7 @@ build({
   define: {
     'process.env.NODE_ENV': JSON.stringify('development'),
   },
-  banner: '#!/usr/bin/env node',
+  banner: {
+    js: '#!/usr/bin/env node',
+  },
 });

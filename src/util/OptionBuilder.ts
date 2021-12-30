@@ -56,7 +56,7 @@ class OptionsBuilderClass {
         name,
         description,
         required: !!required,
-      });
+      } as any);
       return this;
     };
   }

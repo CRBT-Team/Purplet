@@ -169,7 +169,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
               type: 'SUB_COMMAND',
               name: splitName[1],
               description: subcommand.data.description,
-              options: getOptionsFromBuilder(subcommand.data.options),
+              options: getOptionsFromBuilder(subcommand.data.options) as any,
             });
           } else if (splitName.length === 3) {
             let option = discordCommand.options!.find((opt) => opt.name === splitName[1]) as any;
