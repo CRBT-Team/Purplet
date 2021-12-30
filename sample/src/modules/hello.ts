@@ -1,4 +1,4 @@
-import { ChatCommand, OptionBuilder } from 'purplet';
+import { ActivityProvider, ChatCommand, OptionBuilder } from 'purplet';
 
 let number = 0;
 
@@ -17,5 +17,15 @@ export const test_set = ChatCommand({
   handle({ value }) {
     this.reply(`setting value to ${value}`);
     number = value;
+  },
+});
+
+export const activities = ActivityProvider({
+  interval: 1000 * 60,
+  getActivity() {
+    return {
+      type: 'WATCHING',
+      name: `${this.client.guilds.cache.size} servers`,
+    };
   },
 });

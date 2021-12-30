@@ -17,17 +17,36 @@ import {
 } from '../util/OptionBuilder';
 
 export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
+  /**
+   * The name of the command, not including the "/" character. You can include spaces to create
+   * subcommands and subcommand groups, and Purplet will automatically combine commands for you.
+   */
   name: string;
+  /** The description of the command. This will be shown under the command name in Discord */
   description: string;
+  /** The options for the command. Pass an instance of OptionBuilder to create a command with options. */
   options?: O;
+  /**
+   * The function to execute when the command is called. The interaction is bound to `this` and the
+   * resolved options are passed as the first argument.
+   */
   handle: (this: CommandInteraction, options: GetOptionsFromBuilder<O>) => void;
 }
 
 export interface ChatCommandGroupData {
+  /** The name of the command group, not including the "/" character. */
   name: string;
+  /**
+   * The description of the command group. This *should* be shown under the command group name in
+   * Discord, but doesn't go anywhere as of right now.
+   */
   description: string;
 }
 
+/**
+ * An internal type containing the user-provided data but some extra metadata. This could be done a
+ * nicer way, but it's done like this to allow the same handler taking in two data types.
+ */
 type ChatCommandHandlerData =
   | {
       type: 'command';
@@ -36,6 +55,7 @@ type ChatCommandHandlerData =
     }
   | { type: 'group'; data: ChatCommandGroupData };
 
+/** Helper function for resolving a CommandInteractionOption to it's actual value (users and roles) */
 async function resolveOptionValue(
   client: Client,
   guild: Guild | null,
@@ -59,62 +79,60 @@ async function resolveOptionValue(
   return opt.value;
 }
 
+/**
+ * Handler for registering and responding to CHAT_INPUT Application Commands, aka "Slash Commands",
+ * see ChatCommand() for creating handler modules.
+ */
 export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
   commands = new Map<string, ChatCommandHandlerData>();
 
   handleInteraction = async (interaction: Interaction) => {
+    // Two interaction types are listened for: command executions and autocomplete requests.
+    // These are handled very similarly, so a lot of the logic is shared.
+    if (!interaction.isCommand() && !interaction.isAutocomplete()) return;
+
+    // Get the full command name and it's module
+    const name = [
+      interaction.commandName,
+      interaction.options.getSubcommandGroup(false),
+      interaction.options.getSubcommand(false),
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    const module = this.commands.get(name);
+    if (!module || module.type !== 'command') return;
+
+    // when subcommands are used, options contain stuff like { name: "<subcommand>", options: [] }
+    // these must be flattened to get the real options
+    const flattenedOptions = interaction.options.data
+      .flatMap((x) => (x.type === 'SUB_COMMAND_GROUP' ? x.options ?? [] : [x]))
+      .flatMap((x) => (x.type === 'SUB_COMMAND' ? x.options ?? [] : [x]));
+
     if (interaction.isCommand()) {
-      const name = [
-        interaction.commandName,
-        interaction.options.getSubcommandGroup(false),
-        interaction.options.getSubcommand(false),
-      ]
-        .filter(Boolean)
-        .join(' ');
+      // option partials may be useful, but for DX reasons they are always automatically resolved
+      const resolvedOptions = Object.fromEntries(
+        await Promise.all(
+          flattenedOptions.map(async (opt) => [
+            opt.name,
+            await resolveOptionValue(this.client, interaction.guild, opt),
+          ])
+        )
+      );
 
-      const module = this.commands.get(name);
-      if (module && module.type === 'command') {
-        const options = Object.fromEntries(
-          await Promise.all(
-            interaction.options.data
-              .flatMap((x) => (x.type === 'SUB_COMMAND_GROUP' ? x.options || [] : [x]))
-              .flatMap((x) => (x.type === 'SUB_COMMAND' ? x.options || [] : [x]))
-              .map(async (opt) => [
-                opt.name,
-                await resolveOptionValue(this.client, interaction.guild, opt),
-              ])
-          )
-        );
-        module.data.handle.call(interaction, options);
-      }
-    } else if (interaction.isAutocomplete()) {
-      const name = [
-        interaction.commandName,
-        interaction.options.getSubcommandGroup(false),
-        interaction.options.getSubcommand(false),
-      ]
-        .filter(Boolean)
-        .join(' ');
+      module.data.handle.call(interaction, resolvedOptions);
+    } else {
+      // for autocomplete, we do not *fully* resolve the options
+      const resolvedOptions = Object.fromEntries(
+        await Promise.all(flattenedOptions.map(async (opt) => [opt.name, opt.value]))
+      );
 
-      const module = this.commands.get(name);
-      if (module && module.type === 'command') {
-        const autocompleteData = module.autocompleteData;
-        const options = interaction.options.data
-          .flatMap((x) => (x.type === 'SUB_COMMAND_GROUP' ? x.options || [] : [x]))
-          .flatMap((x) => (x.type === 'SUB_COMMAND' ? x.options || [] : [x]));
-        const focused = options.find((x) => x.focused);
-        const handler = autocompleteData[focused!.name];
-        const optionsObj = Object.fromEntries(
-          await Promise.all(
-            options.map(async (opt) => [
-              opt.name,
-              await resolveOptionValue(this.client, interaction.guild, opt),
-            ])
-          )
-        );
-        const choices = await handler(optionsObj);
-        interaction.respond(choices.slice(0, 25));
-      }
+      const focused = flattenedOptions.find((x) => x.focused);
+      const handler = module.autocompleteData[focused!.name];
+      const choices = await handler(resolvedOptions);
+
+      // discord limits to 25 choices max, so we will limit the choices to that in case the dev forgot
+      interaction.respond(choices.slice(0, 25));
     }
   };
 
@@ -234,6 +252,10 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
   }
 }
 
+/**
+ * Creates a "ChatCommand" module, allowing an easy way to create slash commands, see
+ * ChatCommandData for options.
+ */
 export function ChatCommand<O extends IOptionBuilder>(data: ChatCommandData<O>) {
   return createInstance(ChatCommandHandler, {
     type: 'command',
@@ -242,6 +264,13 @@ export function ChatCommand<O extends IOptionBuilder>(data: ChatCommandData<O>) 
   });
 }
 
+/**
+ * Creates a "ChatCommandGroup" module, allowing an easy way to create slash command groups, see
+ * ChatCommandGroupData for options.
+ *
+ * Note: Groups aren't technically required, since all they do is provide descriptions for the
+ * finalized command structure, and the current version of discord doesn't show them.
+ */
 export function ChatCommandGroup(data: ChatCommandGroupData) {
   return createInstance(ChatCommandHandler, {
     type: 'group',
