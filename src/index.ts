@@ -1,6 +1,7 @@
 export * from './Config';
 export * from './Handler';
 export * from './handlers/ChatCommand';
+export * from './handlers/ContextCommand';
 export * from './handlers/OnEvent';
 export * from './handlers/PresenceProvider';
 export * from './handlers/TextCommand';

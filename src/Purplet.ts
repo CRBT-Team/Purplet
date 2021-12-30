@@ -90,6 +90,7 @@ export class Purplet implements IPurplet {
       commandSources = [this.client.application.commands];
     }
 
+    console.log(applicationCommands);
     for (const src of commandSources) {
       src.set(applicationCommands);
     }
@@ -101,12 +102,17 @@ export class Purplet implements IPurplet {
     for (const [moduleName, module] of Object.entries(modules)) {
       for (const [exportName, instance] of Object.entries(module)) {
         if (isHandlerInstance(instance)) {
-          const handler = this.handlers.find((h) => h.constructor === instance.handlerClass);
-          if (handler) {
-            handler.register(`${moduleName}_${exportName}`, instance.data);
-          } else {
-            console.warn(`Could not find handler for handler#${moduleName}_${exportName}`);
+          let handler = this.handlers.find((h) => h.constructor === instance.handlerClass);
+          if (!handler) {
+            handler = new instance.handlerClass(this);
+            handler.client = this.client;
+            handler.rest = this.rest;
+            handler.config = this.config;
+            handler.purplet = this;
+            handler.setup();
+            this.handlers.push(handler);
           }
+          handler.register(`${moduleName}_${exportName}`, instance.data);
         }
       }
     }
