@@ -6,11 +6,14 @@ const dependencies = Object.keys(pkg.dependencies);
 
 fs.ensureDirSync('node_modules/purplet');
 fs.writeFileSync('node_modules/purplet/index.mjs', 'export * from "../../dist/index.mjs"');
-fs.writeFileSync('node_modules/purplet/package.json', JSON.stringify({
-  ...pkg,
-  module: 'index.mjs',
-  main: 'index.mjs',
-}));
+fs.writeFileSync(
+  'node_modules/purplet/package.json',
+  JSON.stringify({
+    ...pkg,
+    module: 'index.mjs',
+    main: 'index.mjs',
+  })
+);
 
 build({
   entryPoints: ['./src/index.ts'],
@@ -23,4 +26,5 @@ build({
   define: {
     'process.env.NODE_ENV': JSON.stringify('development'),
   },
+  banner: '#!/usr/bin/env node',
 });

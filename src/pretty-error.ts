@@ -34,7 +34,7 @@ function cleanStackTraces(any: unknown) {
                 function getModuleName() {
                   const thisFile = import.meta.url.replace(/^file:\/+/, '');
                   if (thisFile === file) {
-                    return `(${chalk.magentaBright('purplet')}:${line})`;
+                    return `(${chalk.magentaBright('purplet')})`;
                   }
                   if (file.startsWith('node:')) {
                     return `(${chalk.white('node.js')})`;
