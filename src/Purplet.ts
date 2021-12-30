@@ -28,12 +28,13 @@ export class Purplet implements IPurplet {
 
     this.handlers = config.handlers ?? [];
 
-    if (clientOptions.intents === undefined) {
-      clientOptions.intents = [Intents.FLAGS.GUILDS];
-    }
+    if (!clientOptions.intents) clientOptions.intents = [];
 
     const extraIntents = this.handlers.map((handler) => handler.getIntents());
-    clientOptions.intents = new Intents(clientOptions.intents).add(...extraIntents);
+    clientOptions.intents = new Intents(clientOptions.intents).add(
+      ...extraIntents,
+      Intents.FLAGS.GUILDS
+    );
 
     this.client = new Client(clientOptions as ClientOptions);
     this.rest = new REST({ ...restOptions, version: '9' });
