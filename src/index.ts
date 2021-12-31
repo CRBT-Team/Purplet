@@ -3,7 +3,7 @@ export * from './Handler';
 export * from './handlers/ChatCommand';
 export * from './handlers/Component';
 export * from './handlers/ContextCommand';
-export * from './handlers/Global';
+// export * from './handlers/Global';
 export * from './handlers/OnEvent';
 export * from './handlers/PresenceProvider';
 export * from './handlers/Service';

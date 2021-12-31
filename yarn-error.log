@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\davec\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js remove @davecode/serialize
+  C:\Program Files\nodejs\node.exe C:\Users\davec\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js publish
 
 PATH: 
   C:\Program Files\WindowsApps\Microsoft.PowerShell_7.2.1.0_x64__8wekyb3d8bbwe;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Python310\Scripts\;C:\Program Files\Python310\;C:\Python310\Scripts\;C:\Python310\;C:\Program Files\ImageMagick-7.1.0-Q16-HDRI;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\ProgramData\Strawberry\c\bin;C:\ProgramData\Strawberry\perl\site\bin;C:\ProgramData\Strawberry\perl\bin;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\Google\Cloud SDK\google-cloud-sdk\bin;C:\ProgramData\chocolatey\lib\gsudo\bin\;C:\Users\davec\AppData\Local\Microsoft\WindowsApps;C:\Users\davec\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\davec\.dotnet\tools;C:\ProgramData\Strawberry\perl\bin;C:\Users\davec\AppData\Roaming\npm
@@ -14,12 +14,22 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EBUSY: resource busy or locked, rmdir 'C:\Code\Purplet\node_modules\@davecode\serialize'
+  Error: canceled
+      at Interface.<anonymous> (C:\Users\davec\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:137143:13)
+      at Interface.emit (node:events:390:28)
+      at Interface._ttyWrite (node:readline:1081:16)
+      at ReadStream.onkeypress (node:readline:288:10)
+      at ReadStream.emit (node:events:390:28)
+      at emitKeys (node:internal/readline/utils:358:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (node:internal/readline/emitKeypressEvents:61:36)
+      at ReadStream.emit (node:events:390:28)
+      at addChunk (node:internal/streams/readable:315:12)
 
 npm manifest: 
   {
     "name": "purplet",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "description": "A toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
     "scripts": {
       "purplet": "node scripts/build-dev.mjs && node dist/index.mjs --root=sample",
@@ -46,7 +56,6 @@ npm manifest:
       "fs-extra": "^10.0.0",
       "ora": "^6.0.1",
       "source-map-support": "^0.5.20",
-      "tslog": "^3.2.2",
       "typescript": "^4.4.3",
       "yargs": "^17.2.1"
     },
@@ -109,11 +118,6 @@ Lockfile:
       "@babel/helper-validator-identifier" "^7.15.7"
       chalk "^2.0.0"
       js-tokens "^4.0.0"
-  
-  "@davecode/serialize@^0.1.0":
-    version "0.1.0"
-    resolved "https://registry.yarnpkg.com/@davecode/serialize/-/serialize-0.1.0.tgz#9644160a6ffc0fd09b69c25caee50d3fdd3935a7"
-    integrity sha512-UQ5Si3D3Vujt4PijQgSlhTelsY91KF7IJBjTeAplQLM8tKqlBdK54UiqH9mmIJPYxOuROf6jOFoCfxMsg2rnWw==
   
   "@discordjs/builders@^0.11.0":
     version "0.11.0"
@@ -1941,7 +1945,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
     integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
   
-  source-map-support@^0.5.20, source-map-support@^0.5.21:
+  source-map-support@^0.5.20:
     version "0.5.21"
     resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.21.tgz#04fe7c7f9e1ed2d662233c28cb2b35b9f63f6e4f"
     integrity sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==
@@ -2087,13 +2091,6 @@ Lockfile:
     version "2.3.1"
     resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
     integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
-  
-  tslog@^3.2.2:
-    version "3.3.1"
-    resolved "https://registry.yarnpkg.com/tslog/-/tslog-3.3.1.tgz#cf5b236772c05c59e183dc1d088e4dbf5bcd8f85"
-    integrity sha512-An3uyXX95uU/X7v5H6G9OKW6ip/gVOpvsERGJ/nR4Or5TP5GwoI9nUjhNWEc8mJOWC7uhPMg2UzkrVDUtadELg==
-    dependencies:
-      source-map-support "^0.5.21"
   
   tsup@^5.11.1:
     version "5.11.9"

@@ -45,7 +45,7 @@ export abstract class Handler<T = unknown> {
    * Purplet handles registering application commands by having handlers define and return them
    * here. This function is called after registration.
    */
-  getApplicationCommands(): PurpletApplicationCommandData[] {
+  getApplicationCommands(): ApplicationCommandData[] {
     return [];
   }
 
