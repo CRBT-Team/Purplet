@@ -1,5 +1,4 @@
 import {
-  ApplicationCommandData,
   Awaitable,
   ContextMenuInteraction,
   Interaction,
@@ -7,7 +6,7 @@ import {
   TextChannel,
   User,
 } from 'discord.js';
-import { createInstance } from '..';
+import { createInstance, PurpletApplicationCommandData } from '..';
 import { Handler } from '../Handler';
 
 interface ContextMenuTypes {
@@ -62,7 +61,7 @@ export class ContextCommandHandler extends Handler<ContextCommandData> {
     command.handle.call(interaction, target);
   };
 
-  setup(): void | Promise<void> {
+  init(): void | Promise<void> {
     this.client.on('interactionCreate', this.handleInteraction);
   }
 
@@ -85,7 +84,7 @@ export class ContextCommandHandler extends Handler<ContextCommandData> {
     this.commands.delete(key);
   }
 
-  getApplicationCommands(): ApplicationCommandData[] {
+  getApplicationCommands(): PurpletApplicationCommandData[] {
     return [...this.commands.values()].map((command) => ({
       name: command.name,
       description: '',

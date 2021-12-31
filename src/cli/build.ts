@@ -66,7 +66,9 @@ export async function build(args: Args) {
         (async() => {
           const conf = await config;
           global.purplet = new Purplet(conf);
-          purplet.addModules(modules);
+          for (const [moduleName, module] of Object.entries(modules)) {
+            purplet.registerModule(moduleName, module);
+          }
           purplet.init();
         })();
       `,

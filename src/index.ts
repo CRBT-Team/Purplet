@@ -3,8 +3,10 @@ export * from './Handler';
 export * from './handlers/ChatCommand';
 export * from './handlers/Component';
 export * from './handlers/ContextCommand';
+export * from './handlers/Global';
 export * from './handlers/OnEvent';
 export * from './handlers/PresenceProvider';
+export * from './handlers/Service';
 export * from './handlers/TextCommand';
 export * from './Purplet';
 export * from './setupEnv';
@@ -17,17 +19,6 @@ export * from './util/OptionBuilder';
 import fs from 'fs-extra';
 import path from 'path';
 import pkg from '../package.json';
-import { GenericSerializer } from './serialize';
-
-const data = {
-  test: 2,
-  boolean: false,
-  obj: [false, null, true, null, null],
-  string: 'string',
-  number: true,
-};
-
-console.log(GenericSerializer.deserialize(GenericSerializer.serialize(data).seek(0)));
 
 process.versions.purplet = `${pkg.version}${process.env.NODE_ENV === 'development' ? '-dev' : ''}`;
 

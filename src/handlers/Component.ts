@@ -74,7 +74,7 @@ export class ComponentHandler extends Handler<ComponentData> {
     component.handle.call(interaction, data);
   };
 
-  setup() {
+  init() {
     this.client.on('interactionCreate', this.handleInteraction);
   }
 
@@ -85,7 +85,6 @@ export class ComponentHandler extends Handler<ComponentData> {
   register(id: string, instance: ComponentData) {
     this.components.set(id, instance);
     instance.baseId = id;
-    console.log(`Registered component ${id}`);
   }
 
   unregister(id: string) {

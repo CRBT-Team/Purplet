@@ -19,6 +19,10 @@ export class TextCommandHandler extends Handler<TextCommandData> {
   commands = new Map<string, TextCommandData>();
 
   constructor(public options: TextCommandHandlerOptions) {
+    if (!options.prefix) {
+      throw new Error('TextCommandHandler requires a prefix');
+    }
+
     options.prefix = Array.isArray(options.prefix) ? options.prefix : [options.prefix];
     super();
   }
@@ -39,7 +43,7 @@ export class TextCommandHandler extends Handler<TextCommandData> {
     }
   };
 
-  setup() {
+  init() {
     this.client.on('messageCreate', this.handleMessage);
   }
 

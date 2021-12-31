@@ -32,8 +32,6 @@ export default ChatCommand({
 
 export const GameButton = ButtonComponent({
   async handle(ctx: GameButtonContext) {
-    console.log(ctx);
-
     const { id, game } = ctx;
     if (game.board[id] !== null) {
       return this.update();
