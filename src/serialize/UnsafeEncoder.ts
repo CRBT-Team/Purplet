@@ -43,7 +43,7 @@ export const UnsafeUnicodeEncoder: Encoder = {
     let ending = null;
     let half = null;
     for (const item of arr) {
-      const codepoint = item.codePointAt(0);
+      const codepoint = item.codePointAt(0)!;
 
       const thisHalf = codepoint & 0xf;
       if (ending === null) {
@@ -59,7 +59,7 @@ export const UnsafeUnicodeEncoder: Encoder = {
       result.push((codepoint >> 4) & 0xff);
     }
 
-    for (let i = 0; i < ending; i++) {
+    for (let i = 0; i < (ending ?? 0); i++) {
       result.pop();
     }
 

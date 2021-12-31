@@ -249,7 +249,7 @@ export const GenericObjectSerializer: Serializer<Record<string, GenericValue>> =
     const result = {};
     for (let i = 0; i < length; i++) {
       const key = StringSerializer.deserialize(value);
-      result[key] = GenericSerializer.deserialize(value);
+      (result as any)[key] = GenericSerializer.deserialize(value);
     }
     return result;
   },
