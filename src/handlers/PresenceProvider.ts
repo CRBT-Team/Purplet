@@ -49,7 +49,10 @@ export class PresenceProviderHandler extends Handler<PresenceProviderData> {
   calculateAllPresences = async () => {
     const promises = [];
     for (const [id, instance] of this.providers) {
-      if ((this.lastRecalculation.get(id) ?? 0) + instance.interval! < Date.now()) {
+      if (
+        !this.providedPresences.has(id) ||
+        (this.lastRecalculation.get(id) ?? 0) + instance.interval! < Date.now()
+      ) {
         promises.push(this.calculatePresence(id));
       }
     }
@@ -103,7 +106,10 @@ export class PresenceProviderHandler extends Handler<PresenceProviderData> {
 }
 
 export function PresenceProvider(data: PresenceProviderData) {
-  return createInstance(PresenceProviderHandler, data);
+  return createInstance(PresenceProviderHandler, {
+    ...data,
+    interval: data.interval ?? 1000 * 60 * 5,
+  });
 }
 
 export function ActivityProvider(data: ActivityProviderData) {

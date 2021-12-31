@@ -90,7 +90,6 @@ export class Purplet implements IPurplet {
       commandSources = [this.client.application.commands];
     }
 
-    console.log(applicationCommands);
     for (const src of commandSources) {
       src.set(applicationCommands);
     }

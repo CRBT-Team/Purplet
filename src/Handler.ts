@@ -50,7 +50,7 @@ export function createInstance<T>(handlerClass: Class<Handler<T>>, data: T): Han
 }
 
 export function isHandlerInstance(x: unknown): x is HandlerInstance<unknown> {
-  return typeof x === 'object' && x !== null && IS_HANDLER_INSTANCE in x;
+  return !!x && (x as HandlerInstance<unknown>)[IS_HANDLER_INSTANCE] === true;
 }
 
 export function getPurplet() {
