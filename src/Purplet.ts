@@ -69,7 +69,9 @@ export class Purplet implements IPurplet {
       await handler.init();
     }
 
-    const guilds = this.config.discord?.commandGuilds ?? [];
+    const guilds = (this.config.discord?.commandGuilds ?? []).concat(
+      (process.env.PURPLET_COMMAND_GUILDS ?? '').split(',').filter(Boolean)
+    );
 
     const applicationCommands = (
       await Promise.all(this.handlers.map((handler) => handler.getApplicationCommands()))

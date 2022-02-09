@@ -136,7 +136,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
     }
   };
 
-  setup() {
+  init() {
     this.client.on('interactionCreate', this.handleInteraction);
   }
 
