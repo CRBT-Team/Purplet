@@ -19,6 +19,8 @@ export interface IPurplet {
 
 /** Production purplet runtime */
 export class Purplet implements IPurplet {
+  running = false;
+
   client: Client;
   rest: REST;
   handlers: Handler[] = [];
@@ -27,16 +29,7 @@ export class Purplet implements IPurplet {
     const clientOptions = config.discord?.clientOptions ?? {};
     const restOptions = config.discord?.restOptions ?? {};
 
-    this.handlers = config.handlers ?? [];
-
     if (!clientOptions.intents) clientOptions.intents = [];
-
-    const extraIntents = this.handlers.map((handler) => handler.getIntents());
-
-    clientOptions.intents = new Intents(clientOptions.intents).add(
-      ...extraIntents,
-      Intents.FLAGS.GUILDS
-    );
 
     this.client = new Client(clientOptions as ClientOptions);
     this.rest = new REST({ ...restOptions, version: '9' });
@@ -44,6 +37,8 @@ export class Purplet implements IPurplet {
 
   public async init() {
     console.log(`Initializing Discord Bot`);
+
+    await Promise.all(this.config.handlers.map((handler) => this.registerHandler(handler)));
 
     const tokenUnresolved =
       this.config.discord?.token ??
@@ -58,15 +53,18 @@ export class Purplet implements IPurplet {
     this.client.token = token;
     this.rest.setToken(token);
 
+    const extraIntents = this.handlers.map((handler) => handler.getIntents());
+
+    this.client.options.intents = new Intents(this.client.options.intents).add(
+      ...extraIntents,
+      Intents.FLAGS.GUILDS
+    );
+
     await this.client.login();
     if (!this.client.isReady()) {
       await new Promise((resolve) => {
         this.client.once('ready', resolve);
       });
-    }
-
-    for (const handler of this.handlers) {
-      await handler.init();
     }
 
     const guilds = (this.config.discord?.commandGuilds ?? []).concat(
@@ -94,7 +92,7 @@ export class Purplet implements IPurplet {
     console.log(`Logged in as ${this.client.user.tag}`);
   }
 
-  public registerHandler(handler: Handler) {
+  public async registerHandler(handler: Handler) {
     if (handler.purplet) {
       throw new Error('Handler already added to a purplet.');
     }
@@ -103,14 +101,15 @@ export class Purplet implements IPurplet {
     handler.rest = this.rest;
     handler.config = this.config;
     handler.purplet = this;
+    await handler.init();
     this.handlers.push(handler);
   }
 
   public async registerInstance(id: string, instance: HandlerInstance<unknown>) {
     let handler = this.handlers.find((h) => h.constructor === instance.handlerClass);
     if (!handler) {
-      handler = new instance.handlerClass(this);
-      this.registerHandler(handler);
+      handler = new instance.handlerClass();
+      await this.registerHandler(handler);
     }
     handler.register(id, instance.data);
   }
@@ -118,7 +117,7 @@ export class Purplet implements IPurplet {
   public async registerModule(name: string, module: Record<string, unknown>) {
     for (const [exportName, instance] of Object.entries(module)) {
       if (isHandlerInstance(instance)) {
-        this.registerInstance(`${name}_${exportName}`, instance);
+        await this.registerInstance(`${name}_${exportName}`, instance);
       }
     }
   }
