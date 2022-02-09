@@ -1,6 +1,6 @@
 {
   "name": "purplet",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
   "scripts": {
     "purplet": "node scripts/build-dev.mjs && node dist/index.mjs --root=sample",
@@ -39,6 +39,7 @@
     "@types/yargs": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "discord.js": "^13.5.0",
     "dts-bundle-generator": "^5.9.0",
     "esbuild-plugin-d.ts": "^1.0.6",
     "eslint": "^8.0.0",
