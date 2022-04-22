@@ -129,7 +129,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
 
       const focused = flattenedOptions.find((x) => x.focused);
       const handler = module.autocompleteData[focused!.name];
-      const choices = await handler(resolvedOptions);
+      const choices = await handler.call(interaction, resolvedOptions);
 
       // discord limits to 25 choices max, so we will limit the choices to that in case the dev forgot
       interaction.respond(choices.slice(0, 25));
