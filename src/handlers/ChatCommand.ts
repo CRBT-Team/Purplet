@@ -1,6 +1,6 @@
 import {
   ApplicationCommandData,
-  ApplicationCommandOptionChoice,
+  ApplicationCommandOptionChoiceData,
   ChatInputApplicationCommandData,
   Client,
   CommandInteraction,
@@ -92,11 +92,12 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
     // These are handled very similarly, so a lot of the logic is shared.
     if (!interaction.isCommand() && !interaction.isAutocomplete()) return;
 
+    console.log(interaction.options.data);
     // Get the full command name and it's module
     const name = [
       interaction.commandName,
-      interaction.options.getSubcommandGroup(false),
-      interaction.options.getSubcommand(false),
+      interaction.options.data.find((x) => x.type === 'SUB_COMMAND_GROUP')?.name,
+      interaction.options.data.find((x) => x.type === 'SUB_COMMAND')?.name,
     ]
       .filter(Boolean)
       .join(' ');
@@ -133,7 +134,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
       const choices = await handler.call(interaction, resolvedOptions);
 
       // discord limits to 25 choices max, so we will limit the choices to that in case the dev forgot
-      interaction.respond(choices.slice(0, 25) as ApplicationCommandOptionChoice[]);
+      interaction.respond(choices.slice(0, 25) as ApplicationCommandOptionChoiceData[]);
     }
   };
 
