@@ -1,3 +1,7 @@
+## 1.2.8
+
+- Changed OptionBuilder to use an option object for extra properties.
+
 ## 1.0.4
 
 - Fix: mentionable options resolving in a snowflake instead of the option object

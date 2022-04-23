@@ -1,5 +1,6 @@
 import {
   ApplicationCommandData,
+  ApplicationCommandOptionChoice,
   ChatInputApplicationCommandData,
   Client,
   CommandInteraction,
@@ -132,7 +133,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
       const choices = await handler.call(interaction, resolvedOptions);
 
       // discord limits to 25 choices max, so we will limit the choices to that in case the dev forgot
-      interaction.respond(choices.slice(0, 25));
+      interaction.respond(choices.slice(0, 25) as ApplicationCommandOptionChoice[]);
     }
   };
 
@@ -256,7 +257,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
  * Creates a "ChatCommand" module, allowing an easy way to create slash commands, see
  * ChatCommandData for options.
  */
-export function ChatCommand<O extends IOptionBuilder>(data: ChatCommandData<O>) {
+export function ChatCommand<O extends OptionBuilder>(data: ChatCommandData<O>) {
   return createInstance(ChatCommandHandler, {
     type: 'command',
     autocompleteData: getAutoCompleteHandlersFromBuilder(data.options),

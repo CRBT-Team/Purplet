@@ -8,13 +8,5 @@
   "jsxSingleQuote": true,
   "printWidth": 100,
   "tabWidth": 2,
-  "trailingComma": "es5",
-  "overrides": [
-    {
-      "files": "src/util/OptionBuilder.ts",
-      "options": {
-        "printWidth": 1000
-      }
-    }
-  ]
+  "trailingComma": "es5"
 }

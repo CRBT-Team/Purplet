@@ -17,7 +17,7 @@ interface GameButtonContext {
 export default ChatCommand({
   name: 'play tictactoe',
   description: 'Play TicTacToe powered by Purplet Components',
-  options: new OptionBuilder().user('with', 'The user to play with', true),
+  options: new OptionBuilder().user('with', 'The user to play with'),
   async handle(opts) {
     const game: Game = {
       p1: this.user.id,

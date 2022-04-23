@@ -9,7 +9,7 @@ function main() {
   fs.emptyDirSync('dist');
 
   const pkg = JSON.parse(fs.readFileSync('./package.json'));
-  const dependencies = Object.keys(pkg.dependencies);
+  const dependencies = Object.keys(pkg.dependencies).concat(Object.keys(pkg.peerDependencies));
 
   buildSync({
     entryPoints: ['./src/index.ts'],

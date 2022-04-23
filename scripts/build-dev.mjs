@@ -5,7 +5,7 @@ import ora from 'ora';
 const spinner = ora('building purplet framework (dev)');
 
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
-const dependencies = Object.keys(pkg.dependencies);
+const dependencies = Object.keys(pkg.dependencies).concat(Object.keys(pkg.peerDependencies));
 
 fs.ensureDirSync('node_modules/purplet');
 fs.writeFileSync('node_modules/purplet/index.mjs', 'export * from "../../dist/index.mjs"');

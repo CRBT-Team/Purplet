@@ -1,6 +1,6 @@
 {
   "name": "purplet",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "A toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
   "scripts": {
     "purplet": "node scripts/build-dev.mjs && node dist/index.mjs --root=sample",
@@ -17,11 +17,9 @@
   "bin": "./dist/index.mjs",
   "dependencies": {
     "@babel/code-frame": "^7.15.8",
-    "@discordjs/rest": "^0.2.0-canary.0",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
     "dedent": "^0.7.0",
-    "discord.js": "^13.6.0",
     "dotenv": "^10.0.0",
     "esbuild": "^0.13.4",
     "fs-extra": "^10.0.0",
@@ -31,6 +29,7 @@
     "yargs": "^17.2.1"
   },
   "devDependencies": {
+    "@discordjs/rest": "^0.4.1",
     "@types/babel__code-frame": "^7.0.3",
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^9.0.13",
@@ -39,7 +38,7 @@
     "@types/yargs": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "discord.js": "^13.5.0",
+    "discord.js": "^13.6.0",
     "dts-bundle-generator": "^5.9.0",
     "esbuild-plugin-d.ts": "^1.0.6",
     "eslint": "^8.0.0",
@@ -47,6 +46,10 @@
     "prettier": "^2.4.1",
     "prettier-plugin-jsdoc": "^0.3.24",
     "prettier-plugin-organize-imports": "^2.3.4"
+  },
+  "peerDependencies": {
+    "@discordjs/rest": "^0.4.1",
+    "discord.js": "^13.6.0"
   },
   "author": {
     "name": "CRBT-Team",
