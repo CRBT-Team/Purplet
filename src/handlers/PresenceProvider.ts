@@ -47,7 +47,7 @@ export class PresenceProviderHandler extends Handler<PresenceProviderData> {
   providedPresences = new Map<string, PresenceData>();
 
   calculateAllPresences = async () => {
-    const promises = [];
+    const promises: Promise<any>[] = [];
     for (const [id, instance] of this.providers) {
       if (
         !this.providedPresences.has(id) ||
