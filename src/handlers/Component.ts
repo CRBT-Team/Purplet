@@ -5,6 +5,8 @@ import {
   MessageComponent,
   MessageComponentInteraction,
   MessageSelectMenu,
+  Modal,
+  ModalSubmitInteraction,
   SelectMenuInteraction,
 } from 'discord.js';
 import { createInstance, HandlerInstance } from '..';
@@ -14,33 +16,41 @@ import { BasicEncoder, BitArray, GenericSerializer, GenericValue } from '../seri
 type Context = any;
 
 export interface ComponentDataInput<
-  I extends MessageComponentInteraction = MessageComponentInteraction,
+  I extends MessageComponentInteraction | ModalSubmitInteraction =
+    | MessageComponentInteraction
+    | ModalSubmitInteraction,
   T extends Context = Context
 > {
   handle(this: I, ctx: T): void;
 }
 
 export interface ComponentDataInputNoContext<
-  I extends MessageComponentInteraction = MessageComponentInteraction
+  I extends MessageComponentInteraction | ModalSubmitInteraction =
+    | MessageComponentInteraction
+    | ModalSubmitInteraction
 > {
   handle(this: I): void;
 }
 
 export interface ComponentData<
-  I extends MessageComponentInteraction = MessageComponentInteraction,
+  I extends MessageComponentInteraction | ModalSubmitInteraction =
+    | MessageComponentInteraction
+    | ModalSubmitInteraction,
   T extends Context = Context
 > extends ComponentDataInput<I, T> {
   baseId: string;
 }
 
-export interface ComponentInstance<I extends MessageComponentInteraction, T extends Context>
-  extends HandlerInstance<ComponentData<I, T>> {
+export interface ComponentInstance<
+  I extends MessageComponentInteraction | ModalSubmitInteraction,
+  T extends Context
+> extends HandlerInstance<ComponentData<I, T>> {
   generateId(data: T): string;
 }
 
 export type ComponentInstanceTemplate<
-  I extends MessageComponentInteraction,
-  C extends MessageComponent,
+  I extends MessageComponentInteraction | ModalSubmitInteraction,
+  C extends MessageComponent | Modal,
   T extends Context
 > = ComponentInstance<I, T> & (T extends undefined ? { new (): C } : { new (ctx: T): C });
 
@@ -56,11 +66,17 @@ export type SelectMenuComponentInstance<T extends Context> = ComponentInstanceTe
   T
 >;
 
+export type ModalComponentInstance<T extends Context> = ComponentInstanceTemplate<
+  ModalSubmitInteraction,
+  Modal,
+  T
+>;
+
 export class ComponentHandler extends Handler<ComponentData> {
   components = new Map<string, ComponentData>();
 
   handleInteraction = (interaction: Interaction) => {
-    if (!interaction.isMessageComponent()) return;
+    if (!interaction.isMessageComponent() && !interaction.isModalSubmit()) return;
 
     const array = GenericSerializer.deserialize(
       BitArray.fromUint8Array(BasicEncoder.decode(interaction.customId))
@@ -93,7 +109,7 @@ export class ComponentHandler extends Handler<ComponentData> {
 }
 
 function GenerateId<T extends Context>(
-  this: ComponentInstance<MessageComponentInteraction, T>,
+  this: ComponentInstance<MessageComponentInteraction | ModalSubmitInteraction, T>,
   data: T
 ) {
   const array = GenericSerializer.serialize([
@@ -109,9 +125,10 @@ function GenerateId<T extends Context>(
   return encoded;
 }
 
-export function BaseComponent<I extends MessageComponentInteraction, T extends Context>(
-  data: ComponentDataInput<I, T>
-) {
+export function BaseComponent<
+  I extends MessageComponentInteraction | ModalSubmitInteraction,
+  T extends Context
+>(data: ComponentDataInput<I, T>) {
   const instance = createInstance(ComponentHandler, {
     baseId: 'unknown',
     handle: data.handle,
@@ -157,6 +174,26 @@ export function SelectMenuComponent<T extends Context>(data: ComponentDataInput)
       construct(target, [data]) {
         const selectMenu = new MessageSelectMenu().setCustomId(instance.generateId(data));
         return selectMenu;
+      },
+    }
+  ) as unknown;
+}
+
+export function ModalComponent<T extends Context>(
+  data: ComponentDataInputNoContext<ModalSubmitInteraction>
+): ModalComponentInstance<T>;
+export function ModalComponent<T extends Context>(
+  data: ComponentDataInput<ModalSubmitInteraction, T>
+): ModalComponentInstance<T>;
+export function ModalComponent<T extends Context>(data: ComponentDataInput) {
+  const instance = BaseComponent<ModalSubmitInteraction, T>(data);
+
+  return new Proxy(
+    Object.assign(function () {}, instance),
+    {
+      construct(target, [data]) {
+        const modal = new Modal().setCustomId(instance.generateId(data));
+        return modal;
       },
     }
   ) as unknown;

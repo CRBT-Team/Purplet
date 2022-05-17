@@ -8,15 +8,20 @@ import {
   MessageComponentOptions,
   MessageSelectMenu,
   MessageSelectMenuOptions,
+  ModalActionRowComponentResolvable,
 } from 'discord.js';
 
 export type ComponentResolvable = MessageComponent | MessageComponentOptions;
 
-export function row(...components: MessageActionRowComponentResolvable[]) {
-  return new MessageActionRow().addComponents(components);
+export function row(
+  ...components: (MessageActionRowComponentResolvable | ModalActionRowComponentResolvable | null)[]
+): MessageActionRow<any> {
+  return new MessageActionRow().addComponents(
+    components.filter(Boolean) as MessageActionRowComponentResolvable[]
+  );
 }
 
-export function components(...components: ComponentResolvable[]) {
+export function components(...components: ComponentResolvable[]): any[] {
   return components.map((x) => {
     if (x.type === 'ACTION_ROW') {
       return new MessageActionRow(x as MessageActionRowOptions);

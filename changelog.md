@@ -1,3 +1,10 @@
+## 1.3.0
+
+- Added ModalComponent and bumped D.js to v13.7.
+- Improved README.md.
+- `create-purplet` package to initialize a new Purplet project.
+- Added support for attachments in OptionBuilder
+
 ## 1.2.8
 
 - Changed OptionBuilder to use an option object for extra properties.

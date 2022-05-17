@@ -37,7 +37,9 @@ export interface Config {
      *
      * - DISCORD_TOKEN
      * - BOT_TOKEN
-     * - TOKEN if none of these are found, an error will be thrown
+     * - TOKEN
+     *
+     * If none of these are found, an error will be thrown
      */
     token: Resolvable<string>;
   };

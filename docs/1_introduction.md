@@ -20,15 +20,16 @@ export default ChatCommand({
   name: 'hello',
   description: 'A cool command',
   handle(args) {
-    this.reply("Hello World");
+    this.reply('Hello World');
   },
 });
 ```
 
 The three key things about this:
+
 - The code is placed in the modules folder
 - The ChatCommand module is being exported (either the default export, or any named export)
 - In the case of ChatCommand, the Interaction object is bound to `this`.
 
-What purplet does, is handles the linking of the chat command modules to the chat command handler,
+Purplet handles the linking of the Chat Command modules to the Chat Command handler,
 and it also allows us to compile the bot down so there aren't dynamic requires or anything weird.

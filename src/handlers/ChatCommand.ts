@@ -1,3 +1,4 @@
+import { LocalizationMap } from 'discord-api-types/payloads/common';
 import {
   ApplicationCommandData,
   ApplicationCommandOptionChoiceData,
@@ -19,14 +20,36 @@ import {
 
 export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
   /**
-   * The name of the command, not including the "/" character. You can include spaces to create
+   * A 1-32 name for the command, not including the "/" character. You can include spaces to create
    * subcommands and subcommand groups, and Purplet will automatically combine commands for you.
    */
   name: string;
-  /** The description of the command. This will be shown under the command name in Discord */
+  /** A 1-100 character description for the command. This will be shown under the command name in Discord. */
   description: string;
+  /**
+   * Localization dictionary for the command's description, which follows the same restrictions.
+   * This will be rendered on the client-side depending on the user's Discord locale.
+   *
+   * @example
+   *   export default ChatCommand({
+   *     name: 'coinflip',
+   *     description: 'Flips a coin.',
+   *     descriptionLocalizations: {
+   *       fr: 'Lance une pièce.', // French
+   *     },
+   *   });
+   *
+   * @link https://discord.com/developers/docs/reference#locales
+   */
+  descriptionLocalizations?: LocalizationMap;
   /** The options for the command. Pass an instance of OptionBuilder to create a command with options. */
   options?: O;
+  /**
+   * Whether the command is enabled by default when the app is added to a guild.
+   *
+   * @default true
+   */
+  defaultPermission?: boolean;
   /**
    * The function to execute when the command is called. The interaction is bound to `this` and the
    * resolved options are passed as the first argument.
@@ -52,7 +75,7 @@ type ChatCommandHandlerData =
   | {
       type: 'command';
       data: ChatCommandData;
-      autocompleteData: Record<string, Autocomplete<unknown, unknown>>;
+      autocompleteData: Record<string, Autocomplete>;
     }
   | { type: 'group'; data: ChatCommandGroupData };
 
@@ -73,6 +96,8 @@ async function resolveOptionValue(
         return guild?.roles.resolve(value);
       case 'MENTIONABLE':
         return client.users.resolve(value) || guild?.roles.resolve(value);
+      case 'ATTACHMENT':
+        return opt.attachment;
       default:
         return opt.value;
     }
@@ -92,7 +117,6 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
     // These are handled very similarly, so a lot of the logic is shared.
     if (!interaction.isCommand() && !interaction.isAutocomplete()) return;
 
-    console.log(interaction.options.data);
     // Get the full command name and it's module
     const name = [
       interaction.commandName,
@@ -258,7 +282,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
  * Creates a "ChatCommand" module, allowing an easy way to create slash commands, see
  * ChatCommandData for options.
  */
-export function ChatCommand<O extends OptionBuilder>(data: ChatCommandData<O>) {
+export function ChatCommand<O extends IOptionBuilder>(data: ChatCommandData<O>) {
   return createInstance(ChatCommandHandler, {
     type: 'command',
     autocompleteData: getAutoCompleteHandlersFromBuilder(data.options),

@@ -45,8 +45,7 @@ export const GameButton = ButtonComponent({
     game.board[id] = game.turn;
     game.turn = !game.turn;
 
-    const result = await render(this, game);
-    this.update(result);
+    this.update(await render(this, game));
   },
 });
 

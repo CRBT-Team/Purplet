@@ -51,7 +51,7 @@ export class OptionBuilder {
   mentionable = this.#createOption('MENTIONABLE');
   role = this.#createOption('ROLE');
   number = this.#createOption('NUMBER');
-  attachment = this.#createOption('NUMBER');
+  attachment = this.#createOption('ATTACHMENT');
 }
 
 export function getOptionsFromBuilder(builder) {

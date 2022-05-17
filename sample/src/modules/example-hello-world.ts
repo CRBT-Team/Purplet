@@ -1,30 +1,67 @@
-import { ChatCommand, OptionBuilder } from 'purplet';
+import { TextInputComponent } from 'discord.js';
+import { ChatCommand, ModalComponent, OptionBuilder, row } from 'purplet';
 
 export default ChatCommand({
   name: 'hello',
   description: 'Says hello',
+  descriptionLocalizations: {
+    fr: 'Dit bonjour',
+  },
+  defaultPermission: true,
   options: new OptionBuilder()
-    .string('name', 'The name to say hello to', {
+    // .string('name', 'The name to say hello to', {
+    //   async autocomplete({ name }) {
+    //     return [
+    //       {
+    //         name: name ?? 'nice',
+    //         value: this.user.id,
+    //       },
+    //     ];
+    //   },
+    // })
+    // .string('word', 'How to say hello', {
+    //   choices: {
+    //     hello: 'Hello',
+    //     goodbye: 'Goodbye',
+    //     afternoon: 'Good Afternoon',
+    //   },
+    // })
+    // .channel('category', 'The channel to say hello to', {
+    //   channelTypes: [ChannelType.GuildCategory],
+    // })
+    // .number('times', 'How many times to say hello', {
+    //   minValue: 1,
+    //   maxValue: 3,
+    // })
+    .attachment('file', 'A file to say hello to', {
       required: false,
-    })
-    .boolean('greeting', 'Whether to say a greeting')
-    .integer('age', 'The age of the person to greet')
-    .role('role', 'The role to mention')
-    .user('user', 'The user to mention')
-    .mentionable('mentionable', 'The mentionable to mention')
-    .string('word', 'what to say', {
-      choices: {
-        hello: 'Hello',
-        goodbye: 'Goodbye',
-        afternoon: 'Good Afternoon',
-      },
-    })
-    .channel('channel', 'The channel to say hello to', { required: false })
-    .channel('category', 'The channel to say hello to', {
-      channelTypes: [4],
-    })
-    .number('number', 'The number to say hello to'),
-  async handle(opts) {
-    this.reply('lol');
+    }),
+  async handle({ file }) {
+    const modal = new Modal(null)
+      .setTitle('Hello')
+      .addComponents(
+        row(
+          new TextInputComponent()
+            .setCustomId('name')
+            .setLabel('Name')
+            .setPlaceholder('Name')
+            .setStyle('SHORT')
+        ),
+        row(
+          new TextInputComponent()
+            .setCustomId('cool')
+            .setLabel('Came')
+            .setPlaceholder('yeah')
+            .setStyle('SHORT')
+        )
+      );
+
+    this.showModal(modal);
+  },
+});
+
+export const Modal = ModalComponent({
+  handle() {
+    this.reply(this.fields.getTextInputValue('cool'));
   },
 });

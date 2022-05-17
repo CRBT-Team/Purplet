@@ -1,43 +1,52 @@
+import { LocalizationMap } from 'discord-api-types/payloads/common';
 import {
-  ApplicationCommandOption,
   AutocompleteInteraction,
   Channel,
   ChannelTypes,
-  LocalizationMap,
   MessageAttachment,
   Role,
   User,
 } from 'discord.js';
 import { Class, MaybePromise } from './types';
 
-// The reason we are passing ExistingOptions around is just for `autocomplete`
+/** Maps `type` to the option data object you pass in. */
 export interface OptionTypes<ThisKey = string, ExistingOptions = null> {
-  string: EnumOption<ThisKey, ExistingOptions, string>;
+  string: EnumOption<ThisKey, ExistingOptions>;
   integer: NumericOption<ThisKey, ExistingOptions>;
-  boolean: BaseOption<boolean>;
+  boolean: BaseOption;
   channel: ChannelOption;
-  user: BaseOption<User>;
-  mentionable: BaseOption<User | Role>;
-  role: BaseOption<Role>;
+  user: BaseOption;
+  mentionable: BaseOption;
+  role: BaseOption;
   number: NumericOption<ThisKey, ExistingOptions>;
-  attachment: BaseOption<MessageAttachment>;
+  attachment: BaseOption;
 }
 
-type HIDDEN = unique symbol;
+/** Maps `type` to the resolved option */
+export interface OptionTypeValues {
+  string: string;
+  integer: number;
+  boolean: boolean;
+  channel: Channel;
+  user: User;
+  mentionable: User | Role;
+  role: Role;
+  number: number;
+  attachment: MessageAttachment;
+}
 
-interface BaseOption<T> {
-  [HIDDEN]?: T;
+interface BaseOption {
   nameLocalizations?: LocalizationMap;
   descriptionLocalizations?: LocalizationMap;
 }
 
-interface AutocompleteOption<ThisKey, ExistingOptions, T> extends BaseOption<T> {
+interface AutocompleteOption<ThisKey, ExistingOptions> extends BaseOption {
   autocomplete?: Autocomplete<Partial<ExistingOptions> & Record<ThisKey, T>, T>;
 }
 
-type EnumOption<ThisKey, ExistingOptions, T extends PropertyKey> =
-  | AutocompleteOption<ThisKey, ExistingOptions, T>
-  | (BaseOption<T> & {
+type EnumOption<ThisKey, ExistingOptions> =
+  | AutocompleteOption<ThisKey, ExistingOptions>
+  | (BaseOption & {
       choices: Record<T, string>;
       choiceLocalizations?: Record<T, Record<string, string>>;
     });
@@ -48,7 +57,7 @@ interface NumericOption<ThisKey, ExistingOptions>
   maxValue?: number;
 }
 
-interface ChannelOption extends BaseOption<Channel> {
+interface ChannelOption extends BaseOption {
   channelTypes?: ChannelTypes[];
 }
 
@@ -57,16 +66,6 @@ export interface Choice<T> {
   nameLocalizations?: LocalizationMap;
   value: T;
 }
-
-type GetOptionType<Option> = Option extends ChannelOption
-  ? Channel
-  : Option extends BaseOption<infer T>
-  ? T extends string | number | boolean | Channel | User | Role
-    ? T
-    : Option extends EnumOption<infer K, infer E, infer T>
-    ? T
-    : never
-  : never;
 
 /** Function representing an autocomplete handler. */
 export type Autocomplete<ExistingOptions = Record<string, never>, Type = unknown> = (
@@ -87,7 +86,7 @@ type OptionBuilderMethod<Options, Type extends keyof OptionTypes> = <
   key: Key,
   desc: string,
   opts?: OptionOptions & { required?: IsRequired }
-) => IOptionBuilder<Options & RequiredIf<IsRequired, Record<Key, GetOptionType<OptionOptions>>>>;
+) => IOptionBuilder<Options & RequiredIf<IsRequired, Record<Key, OptionTypeValues[Type]>>>;
 
 type RequiredIf<If, Then> = If extends true ? Then : Partial<Then>;
 
@@ -97,7 +96,7 @@ export const OptionBuilder: Class<IOptionBuilder>;
 /** Extract the ApplicationCommandOption[] out of an OptionBuilder */
 export function getOptionsFromBuilder(
   builder: IOptionBuilder | undefined
-): ApplicationCommandOption[];
+): ApplicationCommandOptionData[];
 
 /** Extract the Record<string, Autocomplete> out of an OptionBuilder */
 export function getAutoCompleteHandlersFromBuilder(

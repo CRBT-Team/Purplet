@@ -6,9 +6,11 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
+    "noImplicitAny": false,
     "skipLibCheck": true,
     "emitDeclarationOnly": true,
     "declaration": true,
+    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
   },
   "include": ["src"],
