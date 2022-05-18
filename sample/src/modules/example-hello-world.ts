@@ -1,3 +1,4 @@
+import { ChannelType } from 'discord-api-types/v10';
 import { TextInputComponent } from 'discord.js';
 import { ChatCommand, ModalComponent, OptionBuilder, row } from 'purplet';
 
@@ -9,35 +10,33 @@ export default ChatCommand({
   },
   defaultPermission: true,
   options: new OptionBuilder()
-    // .string('name', 'The name to say hello to', {
-    //   async autocomplete({ name }) {
-    //     return [
-    //       {
-    //         name: name ?? 'nice',
-    //         value: this.user.id,
-    //       },
-    //     ];
-    //   },
-    // })
-    // .string('word', 'How to say hello', {
-    //   choices: {
-    //     hello: 'Hello',
-    //     goodbye: 'Goodbye',
-    //     afternoon: 'Good Afternoon',
-    //   },
-    // })
-    // .channel('category', 'The channel to say hello to', {
-    //   channelTypes: [ChannelType.GuildCategory],
-    // })
-    // .number('times', 'How many times to say hello', {
-    //   minValue: 1,
-    //   maxValue: 3,
-    // })
-    .attachment('file', 'A file to say hello to', {
-      required: false,
-    }),
+    .string('name', 'The name to say hello to', {
+      async autocomplete({ name }) {
+        return [
+          {
+            name: name ?? 'nice',
+            value: this.user.id,
+          },
+        ];
+      },
+    })
+    .string('word', 'How to say hello', {
+      choices: {
+        hello: 'Hello',
+        goodbye: 'Goodbye',
+        afternoon: 'Good Afternoon',
+      },
+    })
+    .channel('category', 'The category to say hello to', {
+      channelTypes: [ChannelType.GuildCategory],
+    })
+    .number('times', 'How many times to say hello', {
+      minValue: 1,
+      maxValue: 3,
+    })
+    .attachment('file', 'A category to say hello to'),
   async handle({ file }) {
-    const modal = new Modal(null)
+    const modal = new Modal()
       .setTitle('Hello')
       .addComponents(
         row(
@@ -61,7 +60,7 @@ export default ChatCommand({
 });
 
 export const Modal = ModalComponent({
-  handle() {
+  handle(ctx: undefined) {
     this.reply(this.fields.getTextInputValue('cool'));
   },
 });

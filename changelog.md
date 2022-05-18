@@ -1,3 +1,7 @@
+## 1.3.1
+
+- Reverse `required` to default to false
+
 ## 1.3.0
 
 - Added ModalComponent and bumped D.js to v13.7.

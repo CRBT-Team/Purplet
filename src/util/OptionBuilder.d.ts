@@ -81,14 +81,14 @@ type IOptionBuilder<Options = Record<string, never>> = {
 type OptionBuilderMethod<Options, Type extends keyof OptionTypes> = <
   Key extends string,
   OptionOptions extends OptionTypes<Key, Options>[Type],
-  IsRequired extends boolean = true
+  IsRequired extends boolean = boolean
 >(
   key: Key,
   desc: string,
   opts?: OptionOptions & { required?: IsRequired }
 ) => IOptionBuilder<Options & RequiredIf<IsRequired, Record<Key, OptionTypeValues[Type]>>>;
 
-type RequiredIf<If, Then> = If extends true ? Then : Partial<Then>;
+type RequiredIf<If, Then> = If extends false ? Then : Partial<Then>;
 
 /** A builder for creating options. */
 export const OptionBuilder: Class<IOptionBuilder>;

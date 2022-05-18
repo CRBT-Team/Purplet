@@ -14,7 +14,7 @@ export class OptionBuilder {
       };
 
       if (obj.required === undefined) {
-        obj.required = true;
+        obj.required = false;
       }
 
       if (opts.autocomplete) {
