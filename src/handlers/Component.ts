@@ -161,10 +161,10 @@ export function ButtonComponent<T extends Context>(data: ComponentDataInput) {
 
 export function SelectMenuComponent<T extends Context>(
   data: ComponentDataInputNoContext<SelectMenuInteraction>
-): ComponentInstance<SelectMenuInteraction, T>;
+): SelectMenuComponentInstance<T>;
 export function SelectMenuComponent<T extends Context>(
   data: ComponentDataInput<SelectMenuInteraction, T>
-): ComponentInstance<SelectMenuInteraction, T>;
+): SelectMenuComponentInstance<T>;
 export function SelectMenuComponent<T extends Context>(data: ComponentDataInput) {
   const instance = BaseComponent<SelectMenuInteraction, T>(data);
 
