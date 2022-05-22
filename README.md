@@ -1,6 +1,8 @@
 <div align="center">
   <img alt="Purplet" src="https://user-images.githubusercontent.com/67973777/169643730-2b03ecb8-3510-471f-8e3d-2c2485750962.png">
 
+  <h4>A simple framework to build modern Discord apps.</h4>
+  
   <div>
     <img src="https://img.shields.io/npm/v/purplet?color=F27187&label=version" alt="Version">
     <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=F27187" alt="License">
@@ -11,15 +13,12 @@
 
 ## About Purplet
 
-Purplet is a toolkit for building Discord applications that easily leverage interactions.
-
 Built with [TypeScript](https://typescriptlang.org) and [Discord.js](https://discord.js.org/), this framework provides an easy way to build Discord applications that leverage Discord's interaction API.
 
-> ⚠️ Purplet is still in development, so you may expect bugs and missing features.
->
-> Encountered any? Open an [issue](https://github.com/CRBT-Team/Purplet/issues) or a pull request.
+⚠️ Purplet is still in development, so you may expect bugs and missing features.
+Encountered any? Open an [issue](https://github.com/CRBT-Team/Purplet/issues) or a pull request.
 
-Purplet is not affiliated with Discord or Discord.js.
+> Purplet is not affiliated with Discord or Discord.js.
 
 ## Development
 
