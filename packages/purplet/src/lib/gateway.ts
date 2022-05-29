@@ -1,5 +1,12 @@
 import type * as DJS from 'discord.js';
-import { featureRequiresDJS, InternalFeature } from './feature';
+import {
+  DJSClientEvent,
+  FeatureEvent,
+  featureRequiresDJS,
+  InternalFeature,
+  LifecycleHookNames,
+} from './feature';
+import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 
 interface CleanupHandlers {
@@ -19,6 +26,9 @@ export class GatewayBot {
   constructor() {}
 
   private setCleanupHandler(feature: InternalFeature, id: keyof CleanupHandlers, handler: Cleanup) {
+    if (!handler) {
+      return;
+    }
     if (!this.cleanupHandlers.has(feature)) {
       this.cleanupHandlers.set(feature, {});
     }
@@ -35,68 +45,70 @@ export class GatewayBot {
     }
   }
 
-  async initialize() {
-    await Promise.all(
-      this.features.map(async feat => {
-        if (feat.initialize) {
-          const cleanup = await feat.initialize({
-            featureId: feat.featureId,
-          });
-          this.setCleanupHandler(feat, 'initialize', cleanup);
-        }
-      })
-    );
+  private async resolveGatewayIntents() {
+    return (
+      await asyncMap(
+        this.features,
+        async feat =>
+          (feat.gatewayIntents && (await feat.gatewayIntents({ featureId: feat.featureId }))) ?? 0
+      )
+    ).reduce((a, b) => a + b, 0);
+  }
 
+  private async resolveDJSOptions() {
+    let clientOptions: DJS.ClientOptions = { intents: this.currentGatewayIntents };
+
+    for (const feat of this.features) {
+      if (feat.djsOptions) {
+        clientOptions =
+          (await feat.djsOptions({
+            featureId: feat.featureId,
+            options: clientOptions,
+          })) ?? clientOptions;
+      }
+    }
+
+    return clientOptions;
+  }
+
+  // TODO: fix types on this to not have that required `Event` type param, but whatever.
+  private async runLifecycleHook<Event extends FeatureEvent>(
+    features: InternalFeature[],
+    hook: LifecycleHookNames,
+    data: Omit<Event, 'featureId'>
+  ) {
+    await asyncMap(features, async feat => {
+      if (hook in feat) {
+        const cleanup = await feat[hook]!({
+          featureId: feat.featureId,
+          ...data,
+        } as any);
+        this.setCleanupHandler(feat, hook, cleanup);
+      }
+    });
+  }
+
+  async initialize() {
     const botReliesOnDJS = this.features.some(featureRequiresDJS);
 
     // Discord.JS related initialization
     if (botReliesOnDJS) {
       // I use this async import to make sure that the purplet build won't load discord.js
       // regardless of whether it's actually being used or not.
-      const DJS = await import('discord.js');
+      const Discord = await import('discord.js');
 
       // Resolve intents
-      const intents = (
-        await Promise.all(
-          this.features.map(async feat => {
-            return (
-              (feat.gatewayIntents && (await feat.gatewayIntents({ featureId: feat.featureId }))) ??
-              0
-            );
-          })
-        )
-      ).reduce((a, b) => a + b, 0);
-
-      console.log(`Initializing Discord.JS client with intents: ${intents}`);
+      this.currentGatewayIntents = await this.resolveGatewayIntents();
 
       // Resolve ClientOptions
-      let clientOptions: DJS.ClientOptions = { intents };
-      for (const feat of this.features) {
-        if (feat.djsOptions) {
-          clientOptions =
-            (await feat.djsOptions({
-              featureId: feat.featureId,
-              options: clientOptions,
-            })) ?? clientOptions;
-        }
-      }
+      this.currentDJSOptions = await this.resolveDJSOptions();
 
       // Construct client
-      this.djs = new DJS.Client(clientOptions);
+      this.djs = new Discord.Client(this.currentDJSOptions);
       await this.djs.login(process.env.DISCORD_BOT_TOKEN);
 
       // Client hook
-      await Promise.all(
-        this.features.map(async feat => {
-          if (feat.djsClient) {
-            const cleanup = await feat.djsClient({
-              featureId: feat.featureId,
-              client: this.djs!,
-            });
-            this.setCleanupHandler(feat, 'djsClient', cleanup);
-          }
-        })
-      );
+      await this.runLifecycleHook<DJSClientEvent>(this.features, 'djsClient', { client: this.djs });
     }
 
     this.initialized = true;

@@ -3,6 +3,8 @@ import type { Awaitable } from '@davecode/types';
 import type { GatewayDispatchEvents } from 'discord-api-types/gateway';
 import type { Cleanup, Module } from '../utils/types';
 
+export type ApplicationCommandData = DJS.ApplicationCommandData;
+
 const IS_FEATURE = Symbol.for('purplet.is-bot-feature');
 
 export interface Feature extends FeatureHooks {
@@ -37,6 +39,8 @@ export interface InteractionEvent extends FeatureEvent {
   interaction: unknown;
 }
 
+export interface ApplicationCommandEvent extends FeatureEvent {}
+
 export interface GatewayEvent extends FeatureEvent {
   data: unknown;
 }
@@ -61,21 +65,26 @@ export interface FeatureHooks {
    */
   djsOptions?: EventHook<DJSOptionsEvent, DJS.ClientOptions | void>;
   /**
-   * Called for incoming interactions, and does not explicity rely on Discord.js, meaning bots using
+   * @notImplemented Called for incoming interactions, and does not explicity rely on Discord.js, meaning bots using
    * this hook can theoretically be deployed to a cloud function and called over HTTPs.
    */
   interaction?: EventHook<InteractionEvent>;
+  /** @notImplemented Called to resolve this feature's application commands. This hook must */
+  applicationCommands?: EventHook<ApplicationCommandEvent, ApplicationCommandData[]>;
   /**
    * This hook allows you to specify what gateway intents your gateway bot requires. Does not assume
    * a Discord.js environment, and will trigger on either using Discord.js, or the `gatewayEvents` hook.
    */
   gatewayIntents?: EventHook<GatewayIntentsEvent, number | void>;
   /**
-   * Unknown how this will exactly work, but this is an alternative to using discord.js for the
+   * @notImplemented Unknown how this will exactly work, but this is an alternative to using discord.js for the
    * gateway. Handle raw events. I'm not sure.
    */
   gatewayEvents?: { [K in GatewayDispatchEvents]?: EventHook<GatewayEvent> };
 }
+
+// TODO: use dyanmic types to get this, i couldn't figure it out in the time I had.
+export type LifecycleHookNames = 'initialize' | 'djsClient';
 
 export function createFeature(data: FeatureHooks & { name: string }) {
   return {
