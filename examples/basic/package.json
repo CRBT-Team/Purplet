@@ -1,0 +1,8 @@
+{
+  "name": "basic",
+  "private": true,
+  "license": "Apache-2.0",
+  "dependencies": {
+    "purplet": "workspace:*"
+  }
+}

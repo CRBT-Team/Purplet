@@ -13,45 +13,30 @@
 
 ## About Purplet
 
-Built with [TypeScript](https://typescriptlang.org) and [Discord.js](https://discord.js.org/), this framework provides an easy way to build Discord applications that leverage Discord's interaction API.
+Purplet is a discord framework, where your bot features are defined in small modules that can be reloaded instantly. Iterate your ideas faster than ever with the combined powers of [TypeScript][1], [Vite][2], and [Discord.js][3].
 
-⚠️ Purplet is still in development, so you may expect bugs and missing features.
-Encountered any? Open an [issue](https://github.com/CRBT-Team/Purplet/issues) or a pull request.
+⚠️ Purplet is still in development, so you may expect bugs and missing features. Encountered any? Open an [issue](https://github.com/CRBT-Team/Purplet/issues) or a pull request.
 
 > Purplet is not affiliated with Discord or Discord.js.
 
+[1]: https://www.typescriptlang.org/
+[2]: https://vitejs.dev/
+[3]: https://discord.js.org/
+
 ## Development
 
-To install and get started, run
+To get started, use your package manager's create command and follow it's instructions.
 
-```
+```sh
 npm init purplet
+# or
+yarn create purplet
+# or
+pnpm create purplet
 ```
-
-and follow the instructions.
 
 Part of Purplet is documented [here](/docs/), and we encourage devs to check the [sample project](https://github.com/CRBT-Team/Purplet/tree/main/sample) for inspiration and guidance.
 
 ## License
 
 Purplet is licensed under the [Apache 2.0 license](/LICENSE).
-
-## Roadmap
-
-- [x] Chat/Slash command handler
-- [x] Context commands
-- [x] Chat subcommands
-- [x] Text command handler
-- [x] Event handler
-- [x] Configuration file
-- [x] Service Handler
-- [ ] Global Handler
-- [x] PresenceProvider Handler
-- [x] Component Handler
-- [x] Modals
-- [ ] Optimize cramming method
-- [ ] Dev mode
-- [ ] Revise configuration
-- [ ] Utils
-- [x] Init command to create a new project
-- [ ] Finish documentation

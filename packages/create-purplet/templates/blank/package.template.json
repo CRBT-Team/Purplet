@@ -1,0 +1,18 @@
+{
+  "name": "{name}",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "purplet build && node dist/bot.mjs",
+    "dev": "purplet build && node dist/bot.mjs --dev",
+    "build": "purplet build"
+  },
+  "dependencies": {
+    "discord.js": "X",
+    "purplet": "X"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1",
+    "prettier-plugin-jsdoc": "^0.3.24",
+    "prettier-plugin-organize-imports": "^2.3.4"
+  }
+}

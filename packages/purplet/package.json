@@ -1,0 +1,38 @@
+{
+  "name": "purplet",
+  "version": "2.0.0-next.0",
+  "description": "A toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
+  "keywords": [
+    "discord",
+    "framework",
+    "bot",
+    "discord.js",
+    "purplet"
+  ],
+  "bugs": "https://github.com/CRBT-Team/Purplet/issues",
+  "repository": "github:CRBT-Team/Purplet",
+  "license": "Apache-2.0",
+  "contributors": [
+    "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+    "Clembs <clembs@clembs.xyz> (https://github.com/Clembs)"
+  ],
+  "type": "module",
+  "bin": "./dist/cli.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c --watch"
+  },
+  "dependencies": {
+    "sade": "^1.8.1",
+    "vite": "^2.9.9"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-replace": "^4.0.0",
+    "esbuild": "^0.14.41",
+    "rollup": "^2.75.1",
+    "rollup-plugin-add-shebang": "^0.3.1",
+    "rollup-plugin-esbuild": "^4.9.1"
+  }
+}

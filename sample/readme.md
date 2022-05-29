@@ -1,1 +1,0 @@
-# Purplet Sample Project
