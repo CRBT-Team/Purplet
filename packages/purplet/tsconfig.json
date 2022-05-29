@@ -12,7 +12,9 @@
     "allowJs": true,
     "checkJs": true,
     "strict": true,
-    "downlevelIteration": true
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "importsNotUsedAsValues": "error"
   },
   "exclude": ["**/node_modules", "**/dist"]
 }

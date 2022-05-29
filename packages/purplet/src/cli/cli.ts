@@ -1,7 +1,7 @@
+// TODO: My own env solution, or something where we can reload this file.
+import 'dotenv/config';
 import * as dev from '../dev/dev';
 import sade from 'sade';
-
-declare const process: { argv: string[]; cwd(): string };
 
 const prog = sade('purplet');
 prog
