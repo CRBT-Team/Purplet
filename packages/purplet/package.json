@@ -25,7 +25,9 @@
     "dev": "rollup -c --watch"
   },
   "dependencies": {
+    "@ungap/structured-clone": "^1.0.1",
     "dotenv": "^16.0.1",
+    "fast-equals": "^3.0.3",
     "sade": "^1.8.1",
     "vite": "^2.9.9"
   },

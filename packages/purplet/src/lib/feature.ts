@@ -34,6 +34,7 @@ export interface DJSOptionsEvent extends FeatureEvent {
 }
 
 export interface GatewayIntentsEvent extends FeatureEvent {}
+export type IntentResolvable = number | number[];
 
 export interface InteractionEvent extends FeatureEvent {
   interaction: unknown;
@@ -75,7 +76,7 @@ export interface FeatureHooks {
    * This hook allows you to specify what gateway intents your gateway bot requires. Does not assume
    * a Discord.js environment, and will trigger on either using Discord.js, or the `gatewayEvents` hook.
    */
-  gatewayIntents?: EventHook<GatewayIntentsEvent, number | void>;
+  gatewayIntents?: EventHook<GatewayIntentsEvent, IntentResolvable | void> | IntentResolvable;
   /**
    * @notImplemented Unknown how this will exactly work, but this is an alternative to using discord.js for the
    * gateway. Handle raw events. I'm not sure.

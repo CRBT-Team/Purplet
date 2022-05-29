@@ -29,7 +29,7 @@ export async function initializeDevelopmentMode(options: DevOptions) {
     const relativeFilename = path.relative(modulesPath, filename);
     const [features] = await Promise.all([
       moduleToFeatureArray(relativeFilename, await viteServer.ssrLoadModule(filename)),
-      gateway.unloadModulesFromFile(filename),
+      gateway.unloadModulesFromFile(relativeFilename),
     ]);
     await gateway.loadFeatures(...features);
   }
@@ -40,12 +40,8 @@ export async function initializeDevelopmentMode(options: DevOptions) {
   await gateway.initialize();
 
   hmrWatcher.on('resolvedHotUpdate', async (files: string[]) => {
-    console.log(`---`);
     console.log(` Hot Update Triggered`);
-    console.log(modulesPath);
-    console.log(files);
     const modulesToReload = files.filter(file => file.startsWith(modulesPath));
-    console.log(` Reloading ${modulesToReload.length} modules`);
 
     await Promise.all(modulesToReload.map(reloadFeatureModule));
   });
@@ -53,7 +49,7 @@ export async function initializeDevelopmentMode(options: DevOptions) {
   viteServer.watcher.on('unlink', filename => {
     console.log(`File removed: ${filename}`);
     if (filename.startsWith(modulesPath)) {
-      gateway.unloadModulesFromFile(filename);
+      gateway.unloadModulesFromFile(path.relative(modulesPath, filename));
     }
   });
 }

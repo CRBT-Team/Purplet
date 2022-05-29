@@ -1,12 +1,14 @@
 import { GatewayIntentBits, Message } from 'discord.js';
 import { createFeature } from 'purplet';
 
-export const logMessages = createFeature('log messages', {
-  async djsClient({ featureId, client }) {
-    console.log(`${featureId} loaded and on ${client.user.tag}!!!`);
+export const logMessages = createFeature({
+  name: 'log messages',
+
+  djsClient({ featureId, client }) {
+    console.log(`${featureId} loaded and ${client.user.tag}!`);
 
     function handleMessage(msg: Message) {
-      console.log(`${featureId} msg: ${msg.author.tag}: ${msg.content}`);
+      console.log(`${featureId} message: ${msg.author.tag}: ${msg.content}`);
     }
 
     client.on('messageCreate', handleMessage);
@@ -17,6 +19,9 @@ export const logMessages = createFeature('log messages', {
     };
   },
 
-  gatewayIntents: () =>
-    GatewayIntentBits.Guilds + GatewayIntentBits.MessageContent + GatewayIntentBits.GuildMessages,
+  gatewayIntents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessages,
+  ],
 });
