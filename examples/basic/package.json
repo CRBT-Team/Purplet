@@ -3,6 +3,7 @@
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
+    "discord.js": "14.0.0-dev.1653480262-68d5169",
     "purplet": "workspace:*"
   }
 }

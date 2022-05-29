@@ -10,8 +10,11 @@ interface CleanupHandlers {
 export class GatewayBot {
   initialized = false;
   features: InternalFeature[] = [];
-  cleanupHandlers = new WeakMap<InternalFeature, CleanupHandlers>();
-  djs?: DJS.Client;
+
+  private cleanupHandlers = new WeakMap<InternalFeature, CleanupHandlers>();
+  private djs?: DJS.Client;
+  private currentDJSOptions?: DJS.ClientOptions;
+  private currentGatewayIntents: number = 0;
 
   constructor() {}
 
@@ -62,7 +65,9 @@ export class GatewayBot {
             );
           })
         )
-      ).reduce((a, b) => a | b, 0);
+      ).reduce((a, b) => a + b, 0);
+
+      console.log(`Initializing Discord.JS client with intents: ${intents}`);
 
       // Resolve ClientOptions
       let clientOptions: DJS.ClientOptions = { intents };
