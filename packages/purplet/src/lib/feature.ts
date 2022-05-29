@@ -3,10 +3,10 @@ import type { Awaitable } from '@davecode/types';
 import type { GatewayDispatchEvents } from 'discord-api-types/gateway';
 import type { Cleanup, Module } from '../utils/types';
 
-const IS_BOT_FEATURE = Symbol.for('purplet.is-bot-feature');
+const IS_FEATURE = Symbol.for('purplet.is-bot-feature');
 
 export interface Feature extends FeatureHooks {
-  [IS_BOT_FEATURE]: true;
+  [IS_FEATURE]: true;
   name: string;
 }
 
@@ -77,16 +77,15 @@ export interface FeatureHooks {
   gatewayEvents?: { [K in GatewayDispatchEvents]?: EventHook<GatewayEvent> };
 }
 
-export function createFeature(name: string, hooks: FeatureHooks) {
+export function createFeature(data: FeatureHooks & { name: string }) {
   return {
-    [IS_BOT_FEATURE]: true,
-    name,
-    ...hooks,
+    [IS_FEATURE]: true,
+    ...data,
   };
 }
 
-export function isBotFeature(feature: unknown): feature is Feature {
-  return ((feature && (feature as Feature)[IS_BOT_FEATURE]) || false) as boolean;
+export function isFeature(feature: unknown): feature is Feature {
+  return ((feature && (feature as Feature)[IS_FEATURE]) || false) as boolean;
 }
 
 export interface InternalFeature extends Feature {
@@ -98,7 +97,7 @@ export interface InternalFeature extends Feature {
 /** Converts a module of features (and other exports) into an array of its `Feature`s. */
 export function moduleToFeatureArray(filename: string, module: Module) {
   return Object.entries(module)
-    .filter(([key, value]) => isBotFeature(value))
+    .filter(([key, value]) => isFeature(value))
     .map(([key, value]) => {
       const feature = value as InternalFeature;
       feature.filename = filename;
