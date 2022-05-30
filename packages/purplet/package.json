@@ -9,6 +9,7 @@
     "discord.js",
     "purplet"
   ],
+  "homepage": "https://github.com/CRBT-Team/Purplet",
   "bugs": "https://github.com/CRBT-Team/Purplet/issues",
   "repository": "github:CRBT-Team/Purplet",
   "license": "Apache-2.0",
@@ -59,5 +60,8 @@
   },
   "peerDependencies": {
     "discord.js": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
