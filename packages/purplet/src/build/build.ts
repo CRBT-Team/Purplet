@@ -69,7 +69,7 @@ export async function buildGatewayBot(options: BuildOptions) {
     `  bot.start();`,
     `}`,
     ``,
-    `export default bot`,
+    `export default bot;`,
     ``,
   ].join('\n');
 
