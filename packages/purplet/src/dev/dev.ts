@@ -1,11 +1,17 @@
 import * as vite from 'vite';
 import path from 'path';
+import { watch } from 'chokidar';
+import { createRequire } from 'module';
 import { VitePluginPurpletHMRHook } from './hmr-hook';
 import { moduleToFeatureArray } from '../internal';
 import { GatewayBot } from '../lib/gateway';
 import { isSourceFile } from '../utils/filetypes';
 import { walk } from '../utils/fs';
 import { asyncMap } from '../utils/promise';
+
+const purpletSourceCode = path
+  .dirname(createRequire(import.meta.url).resolve('purplet'))
+  .replace(/\\/g, '/');
 
 export interface DevOptions {
   root: string;
@@ -23,7 +29,21 @@ export async function startDevelopmentBot(options: DevOptions) {
     root: options.root,
     logLevel: 'silent',
     plugins: [hmrWatcher],
+    server: {
+      watch: {
+        ignored: purpletSourceCode,
+      },
+    },
   });
+
+  if (purpletSourceCode.endsWith('packages/purplet/dist')) {
+    // Most likely running from inside the monorepo. Maybe we want a better test for this?
+    const watcher = watch(path.join(purpletSourceCode, '*.js')).on('change', () => {
+      console.log('');
+      console.log('Purplet itself was rebuilt. Please restart this dev process.');
+      watcher.close();
+    });
+  }
 
   const gateway = new GatewayBot({ mode: 'development' });
 
