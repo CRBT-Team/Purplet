@@ -1,7 +1,7 @@
 import * as vite from 'vite';
 import path from 'path';
 import { VitePluginPurpletHMRHook } from './hmr-hook';
-import { moduleToFeatureArray } from '../lib';
+import { moduleToFeatureArray } from '../internal';
 import { GatewayBot } from '../lib/gateway';
 import { isSourceFile } from '../utils/filetypes';
 import { walk } from '../utils/fs';
@@ -10,7 +10,7 @@ export interface DevOptions {
   root: string;
 }
 
-export async function initializeDevelopmentMode(options: DevOptions) {
+export async function startDevelopmentBot(options: DevOptions) {
   const modulesPath = path.normalize(path.join(options.root, 'src/modules'));
 
   const hmrWatcher = new VitePluginPurpletHMRHook();

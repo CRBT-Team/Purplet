@@ -1,8 +1,7 @@
 // TODO: My own env solution, or something where we can reload this file.
 import 'dotenv/config';
-import * as build from '../build/build';
-import * as dev from '../dev/dev';
 import sade from 'sade';
+import { buildGatewayBot, startDevelopmentBot } from './build-api';
 
 const prog = sade('purplet');
 prog
@@ -10,14 +9,14 @@ prog
   .command('dev')
   .describe('Start bot in development mode.')
   .action(() => {
-    dev.initializeDevelopmentMode({
+    startDevelopmentBot({
       root: process.cwd(),
     });
   })
   .command('build')
   .describe('Build bot for production.')
   .action(() => {
-    build.runBuild({
+    buildGatewayBot({
       root: process.cwd(),
     });
   });

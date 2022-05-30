@@ -1,13 +1,13 @@
 import type * as DJS from 'discord.js';
 import { deepEqual } from 'fast-equals';
-import {
+import type {
   DJSClientEvent,
   Feature,
   FeatureEvent,
-  featureRequiresDJS,
   InitializeEvent,
   LifecycleHookNames,
 } from './feature';
+import { featureRequiresDJS } from './feature-utils';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 

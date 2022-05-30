@@ -20,8 +20,10 @@ const external = [].concat(
 export default [
   {
     input: {
-      cli: 'src/cli/cli.ts',
-      lib: 'src/lib/index.ts',
+      cli: 'src/cli.ts',
+      build: 'src/build-api.ts',
+      lib: 'src/index.ts',
+      internal: 'src/internal.ts',
     },
     output: {
       dir: 'dist',
