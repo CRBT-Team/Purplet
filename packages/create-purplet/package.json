@@ -27,7 +27,6 @@
     "@types/prettier": "^2.4.4",
     "@types/prompts": "^2.0.14",
     "discord.js": "^13.6.0",
-    "prettier": "^2.6.1",
-    "purplet": "^1.2.7"
+    "prettier": "^2.6.1"
   }
 }

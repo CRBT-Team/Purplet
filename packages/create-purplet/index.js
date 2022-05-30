@@ -37,8 +37,8 @@ const copyFiles = (dir, templateDir, deps) => {
       const pjson = JSON.parse(readFileSync(filePath, 'utf-8'));
       pjson.name = dir;
       pjson.dependencies = {
-        ['purplet']: deps.purplet,
-        ['discord.js']: deps['discord.js'],
+        purplet: deps.purplet,
+        'discord.js': deps['discord.js'],
       };
       fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pjson, null, 2));
       return;
