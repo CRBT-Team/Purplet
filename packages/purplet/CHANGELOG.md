@@ -2,6 +2,8 @@
 
 ## 2.0.0-next.2
 
+### Patch Changes
+
 - 16cc280: - add `$onDJSEvent`, a wrapper around `djsClient` hook with `.on(event)`
   - add `$intents`, shorthand for the `intents` hook
   - add `$service`, a wrapper around the `initialize` hook
@@ -20,6 +22,8 @@
 - ebc53d4: add custom hook `$onRawEvent`
 
 ## 2.0.0-next.1
+
+### Patch Changes
 
 - Rewritten codebase, projects are bundled with vite and built with rollup. Instead of a Modules + Handlers api, it is based off of `Feature` objects.
 - Removed purplet configuration file.
