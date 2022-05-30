@@ -13,7 +13,7 @@ function getImportedModules(module: ModuleNode): string[] {
 export class VitePluginPurpletHMRHook extends EventEmitter implements Plugin {
   name = 'vite-plugin-purplet-hmr';
 
-  async handleHotUpdate(ctx: HmrContext) {
+  handleHotUpdate(ctx: HmrContext) {
     const dependants = unique(ctx.modules.map(x => getImportedModules(x)).flat()).map(x =>
       path.normalize(x)
     );

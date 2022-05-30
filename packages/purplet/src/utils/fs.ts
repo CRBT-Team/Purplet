@@ -1,17 +1,17 @@
 import fs from 'fs/promises';
 import path from 'path';
+import type { Dirent } from 'fs';
+import { asyncMap } from './promise';
 
 export async function walk(root: string): Promise<string[]> {
   const files = await fs.readdir(root, { withFileTypes: true });
-  const paths = await Promise.all(
-    files.map(async file => {
-      const filename = path.join(root, file.name);
-      if (file.isDirectory()) {
-        return walk(filename);
-      }
-      return path.normalize(filename);
-    })
-  );
+  const paths = await asyncMap<Dirent, string | string[]>(files, file => {
+    const filename = path.join(root, file.name);
+    if (file.isDirectory()) {
+      return walk(filename);
+    }
+    return path.normalize(filename);
+  });
   return paths.flat();
 }
 

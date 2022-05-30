@@ -5,3 +5,4 @@ import '@ungap/structured-clone';
 
 export * from './lib/feature';
 export * from './lib/gateway';
+export type { Cleanup } from './utils/types';

@@ -27,11 +27,13 @@
   "bin": "./dist/cli.js",
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c --watch"
+    "dev": "rollup -c --watch",
+    "lint": "eslint src/**/*.{ts,tsx}"
   },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@ungap/structured-clone": "^1.0.1",
+    "chalk": "^5.0.1",
     "dedent": "^0.7.0",
     "dotenv": "^16.0.1",
     "esbuild": "^0.14.42",

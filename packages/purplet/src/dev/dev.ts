@@ -5,6 +5,7 @@ import { moduleToFeatureArray } from '../internal';
 import { GatewayBot } from '../lib/gateway';
 import { isSourceFile } from '../utils/filetypes';
 import { walk } from '../utils/fs';
+import { asyncMap } from '../utils/promise';
 
 export interface DevOptions {
   root: string;
@@ -36,7 +37,7 @@ export async function startDevelopmentBot(options: DevOptions) {
   }
 
   const initModules = (await walk(modulesPath)).filter(isSourceFile);
-  await Promise.all(initModules.map(reloadFeatureModule));
+  await asyncMap(initModules, reloadFeatureModule);
   console.log(`Loaded ${initModules.length} modules for bot start.`);
   await gateway.start();
 
@@ -44,7 +45,7 @@ export async function startDevelopmentBot(options: DevOptions) {
     console.log(` Hot Update Triggered`);
     const modulesToReload = files.filter(file => file.startsWith(modulesPath));
 
-    await Promise.all(modulesToReload.map(reloadFeatureModule));
+    await asyncMap(modulesToReload, reloadFeatureModule);
   });
 
   viteServer.watcher.on('unlink', filename => {

@@ -1,4 +1,5 @@
-import { Feature, isFeature } from './feature';
+import type { Module } from './types';
+import { Feature, isFeature } from '../lib/feature';
 
 /**
  * Converts a module of type `Record<string, MarkedFeature | unknown>` into an array of its
@@ -6,7 +7,7 @@ import { Feature, isFeature } from './feature';
  */
 export function moduleToFeatureArray(filename: string, module: Module) {
   return Object.entries(module)
-    .filter(([key, value]) => isFeature(value))
+    .filter(([, value]) => isFeature(value))
     .map(([key, value]) => {
       const feature = value as Feature;
       feature.filename = filename;

@@ -1,5 +1,11 @@
 # `purplet`
 
+## 2.0.0-next.0
+
+- Rewritten codebase, projects are bundled with vite and built with rollup. Instead of a Modules + Handlers api, it is based off of `Feature` objects.
+- Removed purplet configuration file.
+- Removed every handler type, but all of these will be added in some variation.
+
 ## 1.3.1
 
 ### Changes

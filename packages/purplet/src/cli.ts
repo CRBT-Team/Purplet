@@ -1,7 +1,13 @@
 // TODO: My own env solution, or something where we can reload this file.
 import 'dotenv/config';
+import chalk from 'chalk';
 import sade from 'sade';
 import { buildGatewayBot, startDevelopmentBot } from './build-api';
+
+console.log('');
+console.log(chalk.yellowBright('⚠️ Purplet v__VERSION__ is beta software! ⚠️'));
+console.log(chalk.yellowBright('Report issues to https://github.com/CRBT-Team/purplet/issues'));
+console.log('');
 
 const prog = sade('purplet');
 prog

@@ -7,7 +7,7 @@ import type {
   InitializeEvent,
   LifecycleHookNames,
 } from './feature';
-import { featureRequiresDJS } from './feature-utils';
+import { featureRequiresDJS } from '../utils/feature';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 
@@ -76,7 +76,7 @@ export class GatewayBot {
   /** @internal Resolves what gateway intents are desired using the `intents` hook. */
   private async resolveGatewayIntents() {
     return (
-      await asyncMap(this.#features, async feat =>
+      await asyncMap(this.#features, feat =>
         typeof feat.intents === 'function'
           ? feat.intents({ featureId: feat.featureId })
           : feat.intents
@@ -169,7 +169,7 @@ export class GatewayBot {
     const Discord = this.#djsModule ?? (await import('discord.js'));
 
     // Cleanup the djsClient hook
-    await asyncMap(this.#features, async feat => this.runCleanupHandler(feat, 'djsClient'));
+    await asyncMap(this.#features, feat => this.runCleanupHandler(feat, 'djsClient'));
 
     // Construct and login client
     this.#djsClient = new Discord.Client(structuredClone(this.#currentDJSOptions));
