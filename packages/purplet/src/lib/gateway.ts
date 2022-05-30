@@ -2,6 +2,7 @@ import type * as DJS from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
   DJSClientEvent,
+  DJSOptions,
   Feature,
   FeatureEvent,
   InitializeEvent,
@@ -34,7 +35,7 @@ export class GatewayBot {
   #cleanupHandlers = new WeakMap<Feature, CleanupHandlers>();
   #djsModule?: typeof DJS;
   #djsClient?: DJS.Client;
-  #currentDJSOptions?: DJS.ClientOptions;
+  #currentDJSOptions?: DJSOptions;
   #currentIntents: number = 0;
 
   get running() {
@@ -91,7 +92,7 @@ export class GatewayBot {
    * Properly handles passing an object around and running the hooks in sequence.
    */
   private async resolveDJSOptions() {
-    let clientOptions: DJS.ClientOptions = { intents: this.#currentIntents };
+    let clientOptions: DJSOptions = {};
 
     for (const feat of this.#features) {
       if (feat.djsOptions) {
@@ -172,7 +173,11 @@ export class GatewayBot {
     await asyncMap(this.#features, feat => this.runCleanupHandler(feat, 'djsClient'));
 
     // Construct and login client
-    this.#djsClient = new Discord.Client(structuredClone(this.#currentDJSOptions));
+    console.log(this.#currentDJSOptions);
+    this.#djsClient = new Discord.Client({
+      intents: this.#currentIntents,
+      ...structuredClone(this.#currentDJSOptions),
+    });
     await this.#djsClient.login(process.env.DISCORD_BOT_TOKEN);
 
     // Run the djsClient hook

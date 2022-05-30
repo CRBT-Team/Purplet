@@ -17,6 +17,8 @@ export interface FeatureEvent {
 export type LifecycleHook<E extends FeatureEvent> = (this: Feature, ctx: E) => Awaitable<Cleanup>;
 export type EventHook<E extends FeatureEvent, R = void> = (this: Feature, ctx: E) => Awaitable<R>;
 
+export type DJSOptions = Omit<DJS.ClientOptions, 'intents'>;
+
 /** @see {FeatureData.initialize} */
 export interface InitializeEvent extends FeatureEvent {}
 
@@ -27,7 +29,7 @@ export interface DJSClientEvent extends FeatureEvent {
 
 /** @see {FeatureData.djsOptions} */
 export interface DJSOptionsEvent extends FeatureEvent {
-  options: DJS.ClientOptions;
+  options: DJSOptions;
 }
 
 /** @see {FeatureData.gatewayIntents} */
@@ -70,7 +72,7 @@ export interface FeatureData {
    *
    * Note: this hook will only be called if some feature in your project requests the Discord.js client.
    */
-  djsOptions?: EventHook<DJSOptionsEvent, DJS.ClientOptions | void>;
+  djsOptions?: EventHook<DJSOptionsEvent, DJSOptions | void>;
   /**
    * Called for incoming interactions, and does not explicity rely on Discord.js, meaning bots using
    * this hook can theoretically be deployed to a cloud function and called over HTTPs.
