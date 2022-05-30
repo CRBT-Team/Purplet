@@ -1,8 +1,9 @@
 import * as vite from 'vite';
 import path from 'path';
-import { VitePluginPurpletHooks } from './vite-plugin';
+import { VitePluginPurpletHMRHook } from './hmr-hook';
 import { moduleToFeatureArray } from '../lib';
 import { GatewayBot } from '../lib/gateway';
+import { isSourceFile } from '../utils/filetypes';
 import { walk } from '../utils/fs';
 
 export interface DevOptions {
@@ -12,7 +13,7 @@ export interface DevOptions {
 export async function initializeDevelopmentMode(options: DevOptions) {
   const modulesPath = path.normalize(path.join(options.root, 'src/modules'));
 
-  const hmrWatcher = new VitePluginPurpletHooks();
+  const hmrWatcher = new VitePluginPurpletHMRHook();
 
   const viteServer = await vite.createServer({
     configFile: false,
@@ -23,21 +24,21 @@ export async function initializeDevelopmentMode(options: DevOptions) {
     plugins: [hmrWatcher],
   });
 
-  const gateway = new GatewayBot();
+  const gateway = new GatewayBot({ mode: 'development' });
 
   async function reloadFeatureModule(filename: string) {
     const relativeFilename = path.relative(modulesPath, filename);
     const [features] = await Promise.all([
       moduleToFeatureArray(relativeFilename, await viteServer.ssrLoadModule(filename)),
-      gateway.unloadModulesFromFile(relativeFilename),
+      gateway.unloadFeaturesFromFile(relativeFilename),
     ]);
     await gateway.loadFeatures(...features);
   }
 
-  const initModules = await walk(modulesPath);
+  const initModules = (await walk(modulesPath)).filter(isSourceFile);
   await Promise.all(initModules.map(reloadFeatureModule));
   console.log(`Loaded ${initModules.length} modules for bot start.`);
-  await gateway.initialize();
+  await gateway.start();
 
   hmrWatcher.on('resolvedHotUpdate', async (files: string[]) => {
     console.log(` Hot Update Triggered`);
@@ -49,7 +50,7 @@ export async function initializeDevelopmentMode(options: DevOptions) {
   viteServer.watcher.on('unlink', filename => {
     console.log(`File removed: ${filename}`);
     if (filename.startsWith(modulesPath)) {
-      gateway.unloadModulesFromFile(path.relative(modulesPath, filename));
+      gateway.unloadFeaturesFromFile(path.relative(modulesPath, filename));
     }
   });
 }

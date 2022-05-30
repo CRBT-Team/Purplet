@@ -1,5 +1,6 @@
+// This configuration is modelled after what SvelteKit uses to bundle their app.
+
 // @ts-nocheck
-import commonjs from '@rollup/plugin-commonjs';
 import fs from 'fs';
 import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
@@ -27,21 +28,19 @@ export default [
       format: 'esm',
       chunkFileNames: '[name].js',
     },
-    external: id => {
-      return id.startsWith('node:') || external.some(x => id.startsWith(x));
-    },
+    external: id => id.startsWith('node:') || external.some(x => id.startsWith(x)),
     plugins: [
       replace({
         preventAssignment: true,
         values: {
           __VERSION__: pkg.version,
+          v__VERSION__: 'v' + pkg.version,
         },
       }),
       resolve({
         extensions: ['.mjs', '.js', '.ts', '.json'],
       }),
       esbuild(),
-      commonjs(),
       shebang(),
     ],
   },

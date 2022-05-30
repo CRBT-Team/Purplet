@@ -14,3 +14,12 @@ export async function walk(root: string): Promise<string[]> {
   );
   return paths.flat();
 }
+
+export async function exists(filename: string): Promise<boolean> {
+  try {
+    await fs.access(filename);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

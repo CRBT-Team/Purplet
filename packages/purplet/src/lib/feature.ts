@@ -1,16 +1,10 @@
 import type * as DJS from 'discord.js';
 import type { Awaitable } from '@davecode/types';
-import type { GatewayDispatchEvents } from 'discord-api-types/gateway';
 import type { Cleanup, Module } from '../utils/types';
 
 export type ApplicationCommandData = DJS.ApplicationCommandData;
 
 const IS_FEATURE = Symbol.for('purplet.is-bot-feature');
-
-export interface Feature extends FeatureHooks {
-  [IS_FEATURE]: true;
-  name: string;
-}
 
 export interface FeatureEvent {
   /**
@@ -20,33 +14,45 @@ export interface FeatureEvent {
   featureId: string;
 }
 
-export type LifecycleHook<E extends FeatureEvent> = (ctx: E) => Awaitable<Cleanup>;
-export type EventHook<E extends FeatureEvent, R = void> = (ctx: E) => Awaitable<R>;
+export type LifecycleHook<E extends FeatureEvent> = (this: Feature, ctx: E) => Awaitable<Cleanup>;
+export type EventHook<E extends FeatureEvent, R = void> = (this: Feature, ctx: E) => Awaitable<R>;
 
+/** @see {FeatureData.initialize} */
 export interface InitializeEvent extends FeatureEvent {}
 
+/** @see {FeatureData.djsClient} */
 export interface DJSClientEvent extends FeatureEvent {
   client: DJS.Client;
 }
 
+/** @see {FeatureData.djsOptions} */
 export interface DJSOptionsEvent extends FeatureEvent {
   options: DJS.ClientOptions;
 }
 
+/** @see {FeatureData.gatewayIntents} */
 export interface GatewayIntentsEvent extends FeatureEvent {}
 export type IntentResolvable = number | number[];
 
+/** @see {FeatureData.interaction} */
 export interface InteractionEvent extends FeatureEvent {
   interaction: unknown;
 }
 
+/** @see {FeatureData.applicationCommand} */
 export interface ApplicationCommandEvent extends FeatureEvent {}
 
-export interface GatewayEvent extends FeatureEvent {
-  data: unknown;
-}
-
-export interface FeatureHooks {
+/**
+ * A feature represents anything that contributes to the bot's functionality. In purplet, features
+ * achieve action through a small set of hooks that let you tie into Discord.js and Purplet's own
+ * API. They look very similar to vite and rollup plugins.
+ *
+ * Also, there is some extra data about your feature available as `this` inside of the hooks, so I'd
+ * stray away from using arrow functions for that, plus it looks nicer with the method shorthand.
+ */
+export interface FeatureData {
+  /** Name of this feature, as see in some debug menus. */
+  name: string;
   /**
    * This is the first hook that is called for your bot, and is always called. This hook allows for
    * a cleanup function, which you should use to remove event handlers.
@@ -66,7 +72,7 @@ export interface FeatureHooks {
    */
   djsOptions?: EventHook<DJSOptionsEvent, DJS.ClientOptions | void>;
   /**
-   * @notImplemented Called for incoming interactions, and does not explicity rely on Discord.js, meaning bots using
+   * Called for incoming interactions, and does not explicity rely on Discord.js, meaning bots using
    * this hook can theoretically be deployed to a cloud function and called over HTTPs.
    */
   interaction?: EventHook<InteractionEvent>;
@@ -76,47 +82,67 @@ export interface FeatureHooks {
    * This hook allows you to specify what gateway intents your gateway bot requires. Does not assume
    * a Discord.js environment, and will trigger on either using Discord.js, or the `gatewayEvents` hook.
    */
-  gatewayIntents?: EventHook<GatewayIntentsEvent, IntentResolvable | void> | IntentResolvable;
-  /**
-   * @notImplemented Unknown how this will exactly work, but this is an alternative to using discord.js for the
-   * gateway. Handle raw events. I'm not sure.
-   */
-  gatewayEvents?: { [K in GatewayDispatchEvents]?: EventHook<GatewayEvent> };
+  intents?: EventHook<GatewayIntentsEvent, IntentResolvable | void> | IntentResolvable;
+}
+
+/** Represents feature data that has gone through `createFeature` but not annotated by `moduleToFeatureArray`. */
+export interface MarkedFeature extends FeatureData {
+  [IS_FEATURE]: true;
+}
+
+/** Represents a fully anno. */
+export interface Feature extends FeatureData {
+  [IS_FEATURE]: true;
+
+  /** The full path to this module's source file. */
+  filename: string;
+  /** The id of the export that contained this feature. */
+  exportId: string;
+  /** A generated ID based on the `filename` and `exportId`. */
+  featureId: string;
 }
 
 // TODO: use dyanmic types to get this, i couldn't figure it out in the time I had.
 export type LifecycleHookNames = 'initialize' | 'djsClient';
 
-export function createFeature(data: FeatureHooks & { name: string }) {
+/** `createFeature` annotates a FeatureData with a symbol used to mark what object is actually a Feature. */
+export function createFeature(data: FeatureData): MarkedFeature {
   return {
     [IS_FEATURE]: true,
     ...data,
   };
 }
 
+/**
+ * Returns true if a value is a `Feature` (this doesn't check annotation state, but it's type
+ * returned will be `Feature` regardless). The subtle cast is in place, since most of the time, the
+ * feature has already been annotated.
+ */
 export function isFeature(feature: unknown): feature is Feature {
   return ((feature && (feature as Feature)[IS_FEATURE]) || false) as boolean;
 }
 
-export interface InternalFeature extends Feature {
-  filename: string;
-  exportId: string;
-  featureId: string;
-}
-
-/** Converts a module of features (and other exports) into an array of its `Feature`s. */
+/**
+ * Converts a module of type `Record<string, MarkedFeature | unknown>` into an array of its
+ * `Feature`s, annotating them in the process.
+ */
 export function moduleToFeatureArray(filename: string, module: Module) {
   return Object.entries(module)
     .filter(([key, value]) => isFeature(value))
     .map(([key, value]) => {
-      const feature = value as InternalFeature;
+      const feature = value as Feature;
       feature.filename = filename;
       feature.exportId = key;
-      feature.featureId = `${filename}#${key}`;
+      const filenameWithoutExtension = filename.replace(/\.[^.]+$/, '');
+      // I would hash this to get a smaller ID, but I'm scared of collisions.
+      // Two modules on the same ID could break certain situations with Buttons
+      feature.featureId = `${filenameWithoutExtension.toLowerCase()}#${key}`;
       return feature;
     });
 }
 
-export function featureRequiresDJS(feature: FeatureHooks): boolean {
-  return !!feature.djsClient;
+/** Returns weather or not a `Feature` depends on Discord.JS to be present. */
+export function featureRequiresDJS(feature: Feature): boolean {
+  // Note: for now interactions are done through discord.js, so we need that.
+  return 'djsClient' in feature || 'interaction' in feature;
 }

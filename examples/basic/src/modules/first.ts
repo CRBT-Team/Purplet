@@ -19,7 +19,7 @@ export const logMessages = createFeature({
     };
   },
 
-  gatewayIntents: [
+  intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMessages,
