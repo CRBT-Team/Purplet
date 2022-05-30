@@ -1,4 +1,5 @@
 import type * as DJS from 'discord.js';
+import { APIInteraction, APIInteractionResponse, Routes } from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
   DJSOptions,
@@ -104,6 +105,20 @@ export class GatewayBot {
     return clientOptions;
   }
 
+  /** @internal */
+  private async handleInteraction(i: APIInteraction) {
+    const responseHandler = (response: APIInteractionResponse) => {
+      const route = Routes.interactionCallback(i.id, i.token);
+      // TODO: get a rest client in here.
+    };
+
+    const interaction = new PurpletInteraction(i, responseHandler);
+
+    // Run handlers
+    (await asyncMap(this.#features, feat => feat.interaction?.call?.(feat, interaction))) //
+      .forEach(response => response && interaction.respond(response));
+  }
+
   // TODO: fix types on this to not have that required `Event` type param, but whatever.
   /**
    * @internal Runs a lifecycle hook on an array of features. A lifecycle hook is one that may
@@ -172,9 +187,10 @@ export class GatewayBot {
       intents: this.#currentIntents,
       ...structuredClone(this.#currentDJSOptions),
     });
+
+    // Intercept all raw gateway events for the `gatewayEvent` hook.
     const wsEmit = this.#djsClient.ws.emit;
     this.#djsClient.ws.emit = (event: keyof GatewayEventHook, ...args: unknown[]) => {
-      // Intercept all raw gateway events.
       this.features.forEach(feature => {
         const handler = feature.gatewayEvent?.[event] as EventHook<unknown>;
         if (handler) {
@@ -185,25 +201,11 @@ export class GatewayBot {
       return wsEmit.call(this.#djsClient!.ws, event, ...args);
     };
 
-    this.#djsClient.ws.on(
-      Discord.GatewayDispatchEvents.InteractionCreate,
-      async (i: DJS.GatewayInteractionCreateDispatchData) => {
-        let response: DJS.APIInteractionResponse | null = null;
-        const wrapped = new PurpletInteraction(i, r => (response = r));
-
-        const features = this.features.filter(x => !!x.interaction);
-        for (const feature of features) {
-          const returnValue = await feature.interaction!.call(feature, wrapped);
-          response = returnValue ?? response;
-          if (response) {
-            break;
-          }
-        }
-
-        // TODO: handle response, but also handle the case where a feature is delaying
-        // their .respond() call. It might actually be an idea to run them all in parallel.
-      }
-    );
+    // Listen for raw interaction events for the `interaction` hook.
+    // TODO: THIS IS ALL SKETCHING, DAVE MUST FIX THIS
+    this.#djsClient.ws.on(Discord.GatewayDispatchEvents.InteractionCreate, async i => {
+      this.handleInteraction(i);
+    });
 
     await this.#djsClient.login(process.env.DISCORD_BOT_TOKEN);
 

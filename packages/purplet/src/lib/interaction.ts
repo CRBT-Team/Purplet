@@ -4,6 +4,7 @@ export type InteractionResponseHandler<Data extends APIInteractionResponse> = (r
 
 export class PurpletInteraction<Response extends APIInteractionResponse = APIInteractionResponse> {
   #onRespond: InteractionResponseHandler<Response> | undefined;
+  #respondedTo = false;
 
   constructor(public data: APIInteraction, onRespond?: InteractionResponseHandler<Response>) {
     this.#onRespond = onRespond;
@@ -50,11 +51,22 @@ export class PurpletInteraction<Response extends APIInteractionResponse = APIInt
   }
 
   respond(response: Response) {
+    if (this.#respondedTo) {
+      throw new Error('Cannot respond to an interaction twice');
+    }
+    this.#respondedTo = true;
+
     if (this.#onRespond) {
       this.#onRespond(response);
     } else {
-      throw new Error('No response handler set');
+      throw new Error(
+        'This interaction cannot be responded to. (onRespond not set in constructor)'
+      );
     }
+  }
+
+  get responseSent() {
+    return this.#respondedTo;
   }
 
   /** Resolves to either `.member` or `.user` depending which one is filled in. */
