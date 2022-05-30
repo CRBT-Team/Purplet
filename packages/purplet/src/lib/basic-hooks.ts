@@ -1,7 +1,14 @@
 // The following custom hooks are all extremely simple, and wrap around the built-in hooks.
 /* eslint-disable no-redeclare */
 import type * as DJS from 'discord.js';
-import { createFeature, DJSOptions, FeatureData, IntentResolvable, MarkedFeature } from './feature';
+import {
+  createFeature,
+  DJSOptions,
+  FeatureData,
+  GatewayEventHook,
+  IntentResolvable,
+  MarkedFeature,
+} from './feature';
 import type { Cleanup } from '../utils/types';
 
 // TODO: This function's types
@@ -13,6 +20,19 @@ export function $onDJSEvent(eventName: string, handler: (...args: any[]) => void
     djsClient(client) {
       client.on(eventName, handler);
       return () => client.off(eventName, handler);
+    },
+  });
+}
+
+export function $onRawEvent<K extends keyof GatewayEventHook>(
+  eventName: K,
+  handler: (data: GatewayEventHook[K]) => void
+) {
+  return createFeature({
+    name: `gateway event "${eventName}" handler`,
+
+    gatewayEvent: {
+      [eventName]: handler,
     },
   });
 }
