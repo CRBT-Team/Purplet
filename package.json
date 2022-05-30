@@ -1,6 +1,7 @@
 {
   "name": "purplet-monorepo",
   "private": true,
+  "license": "Apache-2.0",
   "workspaces": [
     "packages/*"
   ],
@@ -8,23 +9,22 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md}\"",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "pub": "changeset publish --tag next",
+    "version": "changeset version"
   },
-  "dependencies": {
+  "devDependencies": {
     "@changesets/cli": "^2.22.0",
     "eslint": "^8.16.0",
     "eslint-config-dave": "^3.0.1",
-    "prettier-config-dave": "^1.0.1",
-    "typescript": "^4.7.2"
-  },
-  "devDependencies": {
     "prettier": "^2.6.2",
-    "turbo": "latest"
+    "prettier-config-dave": "^1.0.1",
+    "turbo": "latest",
+    "typescript": "^4.7.2"
   },
   "packageManager": "pnpm@7.1.0",
   "engines": {
     "node": ">=16.0.0",
     "pnpm": ">=7.1.0"
-  },
-  "license": "Apache-2.0"
+  }
 }

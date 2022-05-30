@@ -1,6 +1,6 @@
 # `purplet`
 
-## 2.0.0-next.2
+## 2.0.0-next.3
 
 ### Patch Changes
 
