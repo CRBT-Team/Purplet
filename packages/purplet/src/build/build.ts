@@ -121,5 +121,10 @@ export async function buildGatewayBot(options: BuildOptions) {
     banner: ROLLUP_HEADER,
   });
 
-  console.log('Built bot to .purplet/build/index.js');
+  if (userPkg.main === '.purplet/build' || userPkg.main === '.purplet/build/index.js') {
+    console.log('Built bot, you can run it with `node .`');
+  } else {
+    console.log('Built bot, you can run it with `node .purplet/build`');
+    console.log('Please add "main": ".purplet/build" to your package.json.');
+  }
 }

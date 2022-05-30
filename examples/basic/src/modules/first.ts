@@ -1,14 +1,14 @@
 import {
-  ApplicationCommandType,
   ButtonStyle,
   ComponentType,
   GatewayIntentBits,
-  Message,
+  InteractionResponseType,
+  Routes,
 } from 'discord.js';
-import { $onDJSEvent, createFeature } from 'purplet';
+import { createFeature, rest } from 'purplet';
 
-export const logMessages = createFeature({
-  name: 'log messages',
+export default createFeature({
+  name: 'test',
 
   intents: [
     GatewayIntentBits.Guilds,
@@ -16,36 +16,37 @@ export const logMessages = createFeature({
     GatewayIntentBits.GuildMessages,
   ],
 
-  interaction(i) {},
-
-  applicationCommands: () => [
-    {
-      type: ApplicationCommandType.ChatInput,
-      name: 'log',
-      description: 'Logs a message to the console',
-      default_member_permissions: '421',
+  gatewayEvent: {
+    MESSAGE_CREATE(message) {
+      if (message.content === '!test') {
+        rest.post(Routes.channelMessages(message.channel_id), {
+          body: {
+            content: 'test',
+            components: [
+              {
+                type: ComponentType.ActionRow,
+                components: [
+                  {
+                    type: ComponentType.Button,
+                    label: 'test',
+                    style: ButtonStyle.Primary,
+                    custom_id: 'test',
+                  },
+                ],
+              },
+            ],
+          },
+        });
+      }
     },
-  ],
-});
+  },
 
-export const messageListener = $onDJSEvent('messageCreate', (msg: Message) => {
-  console.log(msg.content);
-  if (msg.content === '!test') {
-    msg.channel.send({
-      content: 'test',
-      components: [
-        {
-          type: ComponentType.ActionRow,
-          components: [
-            {
-              type: ComponentType.Button,
-              label: 'test',
-              style: ButtonStyle.Primary,
-              custom_id: 'test',
-            },
-          ],
-        },
-      ],
+  interaction(i) {
+    i.respond({
+      type: InteractionResponseType.ChannelMessageWithSource,
+      data: {
+        content: 'test lmaof',
+      },
     });
-  }
+  },
 });

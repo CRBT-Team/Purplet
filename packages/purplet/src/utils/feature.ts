@@ -23,5 +23,5 @@ export function moduleToFeatureArray(filename: string, module: Module) {
 /** Returns weather or not a `Feature` depends on Discord.JS to be present. */
 export function featureRequiresDJS(feature: Feature): boolean {
   // Note: for now interactions are done through discord.js, so we need that.
-  return 'djsClient' in feature || 'interaction' in feature;
+  return 'djsClient' in feature || 'interaction' in feature || 'gatewayEvent' in feature;
 }

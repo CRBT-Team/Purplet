@@ -23,9 +23,11 @@ importers:
 
   examples/basic:
     specifiers:
+      discord-api-types: ^0.33.1
       discord.js: 14.0.0-dev.1653480262-68d5169
       purplet: workspace:*
     dependencies:
+      discord-api-types: 0.33.1
       discord.js: 14.0.0-dev.1653480262-68d5169
       purplet: link:../../packages/purplet
 
@@ -51,6 +53,7 @@ importers:
   packages/purplet:
     specifiers:
       '@davecode/types': ^1.0.1
+      '@discordjs/rest': ^0.4.1
       '@rollup/plugin-node-resolve': ^13.3.0
       '@rollup/plugin-replace': ^4.0.0
       '@types/node': ^17.0.36
@@ -67,8 +70,9 @@ importers:
       rollup-plugin-add-shebang: ^0.3.1
       rollup-plugin-esbuild: ^4.9.1
       sade: ^1.8.1
-      vite: '2'
+      vite: 3.0.0-alpha.7
     dependencies:
+      '@discordjs/rest': 0.4.1
       '@rollup/plugin-node-resolve': 13.3.0_rollup@2.75.3
       '@ungap/structured-clone': 1.0.1
       chalk: 5.0.1
@@ -79,7 +83,7 @@ importers:
       rollup: 2.75.3
       rollup-plugin-esbuild: 4.9.1_dgay67aafm6c67qd6qiu2dy75y
       sade: 1.8.1
-      vite: 2.9.9
+      vite: 3.0.0-alpha.7
     devDependencies:
       '@davecode/types': 1.0.1
       '@rollup/plugin-replace': 4.0.0_rollup@2.75.3
@@ -340,6 +344,22 @@ packages:
     resolution: {integrity: sha512-s8z+4G82yrIbS0OxqVyitkS72mvE6lxYW8zjsKfpqPAIG6fKQ9n41c9HEsCG1VlWNeQ6F23fKf2hT3bGIdRGsQ==}
     engines: {node: '>=16.9.0'}
 
+  /@discordjs/rest/0.4.1:
+    resolution: {integrity: sha512-rtWy+AIfNlfjGkAgA2TJLASdqli07aTNQceVGT6RQQiQaEqV0nsfBO4WtDlDzk7PmO3w+InP3dpwEolJI5jz0A==}
+    engines: {node: '>=16.9.0'}
+    dependencies:
+      '@discordjs/collection': 0.7.0-dev.1653480253-68d5169
+      '@sapphire/async-queue': 1.3.1
+      '@sapphire/snowflake': 3.2.2
+      '@types/node-fetch': 2.6.1
+      discord-api-types: 0.29.0
+      form-data: 4.0.0
+      node-fetch: 2.6.7
+      tslib: 2.4.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /@discordjs/rest/0.5.0-dev.1653480262-68d5169:
     resolution: {integrity: sha512-ktwMm2AsILdX4MdR8kfIRuNRJmrqNTBHZZXt2SYsGaKd+Gd8XEH8ikWpiDaTnINHSYtywVlEhsdOWvs5YsO+CA==}
     engines: {node: '>=16.9.0'}
@@ -561,7 +581,6 @@ packages:
     dependencies:
       '@types/node': 17.0.36
       form-data: 3.0.1
-    dev: true
 
   /@types/node/12.20.52:
     resolution: {integrity: sha512-cfkwWw72849SNYp3Zx0IcIs25vABmFh73xicxhCkTcvtZQeIez15PpwQN8fY3RD7gv1Wrxlc9MEtfMORZDEsGw==}
@@ -819,7 +838,6 @@ packages:
 
   /asynckit/0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
-    dev: true
 
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -1042,7 +1060,6 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
-    dev: true
 
   /comment-parser/1.3.1:
     resolution: {integrity: sha512-B52sN2VNghyq5ofvUsqZjmk6YkihBX5vMSChmSK9v4ShjKf3Vk5Xcmgpw4o+iIgtrnM/u5FiMpz9VKb8lpBveA==}
@@ -1148,7 +1165,6 @@ packages:
   /delayed-stream/1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
-    dev: true
 
   /dequal/2.0.2:
     resolution: {integrity: sha512-q9K8BlJVxK7hQYqa6XISGmBZbtQQWVXSrRrWreHC94rMt1QL/Impruc+7p2CYSYuVIUr+YCt6hjrs1kkdJRTug==}
@@ -1175,6 +1191,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       path-type: 4.0.0
+    dev: false
+
+  /discord-api-types/0.29.0:
+    resolution: {integrity: sha512-Ekq1ICNpOTVajXKZguNFrsDeTmam+ZeA38txsNLZnANdXUjU6QBPIZLUQTC6MzigFGb0Tt8vk4xLnXmzv0shNg==}
     dev: false
 
   /discord-api-types/0.30.0:
@@ -1766,7 +1786,6 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
-    dev: true
 
   /form-data/4.0.0:
     resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
@@ -1775,7 +1794,6 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
-    dev: true
 
   /format-css-grid/0.1.0:
     resolution: {integrity: sha512-lQQicKwJCJ6Qtj9ubUCIPn0+kBYhGoZZ1Awbo0hJYFRhWIk4szcx7kz0gKCMk1wOUR5vGNKMGMuJM7hqEMapBg==}
@@ -2488,14 +2506,12 @@ packages:
   /mime-db/1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
-    dev: true
 
   /mime-types/2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
     dependencies:
       mime-db: 1.52.0
-    dev: true
 
   /mimic-fn/2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
@@ -2573,7 +2589,6 @@ packages:
         optional: true
     dependencies:
       whatwg-url: 5.0.0
-    dev: true
 
   /normalize-package-data/2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
@@ -3328,7 +3343,6 @@ packages:
 
   /tr46/0.0.3:
     resolution: {integrity: sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=}
-    dev: true
 
   /trim-newlines/3.0.1:
     resolution: {integrity: sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==}
@@ -3597,9 +3611,9 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: false
 
-  /vite/2.9.9:
-    resolution: {integrity: sha512-ffaam+NgHfbEmfw/Vuh6BHKKlI/XIAhxE5QSS7gFLIngxg171mg1P3a4LSRME0z2ZU1ScxoKzphkipcYwSD5Ew==}
-    engines: {node: '>=12.2.0'}
+  /vite/3.0.0-alpha.7:
+    resolution: {integrity: sha512-DrYhToGCv7nAj8ZM1ZArLrUvHTHkNvg5iQE0asf06QV1GEyg+2hpYsLePMWnHPOwt3I2IxYgewERF2rm7S5VhQ==}
+    engines: {node: '>=14.6.0'}
     hasBin: true
     peerDependencies:
       less: '*'
@@ -3629,14 +3643,12 @@ packages:
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE=}
-    dev: true
 
   /whatwg-url/5.0.0:
     resolution: {integrity: sha1-lmRU6HZUYuN2RNNib2dCzotwll0=}
     dependencies:
       tr46: 0.0.3
       webidl-conversions: 3.0.1
-    dev: true
 
   /which-module/2.0.0:
     resolution: {integrity: sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho=}

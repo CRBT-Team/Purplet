@@ -34,6 +34,9 @@ export async function startDevelopmentBot(options: DevOptions) {
         ignored: purpletSourceCode,
       },
     },
+    ssr: {
+      external: ['purplet'],
+    },
   });
 
   if (purpletSourceCode.endsWith('packages/purplet/dist')) {
@@ -73,5 +76,19 @@ export async function startDevelopmentBot(options: DevOptions) {
     if (filename.startsWith(modulesPath)) {
       gateway.unloadFeaturesFromFile(path.relative(modulesPath, filename));
     }
+  });
+
+  process.on('uncaughtException', err => {
+    // viteServer.ssrFixStacktrace(err);
+    console.error('Uncaught Error:');
+    console.error(err);
+  });
+
+  process.on('unhandledRejection', err => {
+    if (err instanceof Error) {
+      // viteServer.ssrFixStacktrace(err);
+    }
+    console.error('Uncaught Error (async):');
+    console.error(err);
   });
 }

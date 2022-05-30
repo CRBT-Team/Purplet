@@ -9,6 +9,7 @@ import type {
   LifecycleHookNames,
 } from './feature';
 import { PurpletInteraction } from './interaction';
+import { rest } from './rest';
 import { featureRequiresDJS } from '../utils/feature';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
@@ -35,6 +36,7 @@ interface CleanupHandlers {
  */
 export class GatewayBot {
   #running = false;
+  #token: string = '';
   #features: Feature[] = [];
   #cleanupHandlers = new WeakMap<Feature, CleanupHandlers>();
   #djsModule?: typeof DJS;
@@ -108,8 +110,11 @@ export class GatewayBot {
   /** @internal */
   private async handleInteraction(i: APIInteraction) {
     const responseHandler = (response: APIInteractionResponse) => {
-      const route = Routes.interactionCallback(i.id, i.token);
-      // TODO: get a rest client in here.
+      rest.post(Routes.interactionCallback(i.id, i.token), {
+        body: response,
+        // TODO: handle file uploads for interaction responses.
+        files: [],
+      });
     };
 
     const interaction = new PurpletInteraction(i, responseHandler);
@@ -141,6 +146,18 @@ export class GatewayBot {
   /** Starts the gateway bot. Run the first set of `.loadFeatures` _before_ using this. */
   async start() {
     const botReliesOnDJS = this.#features.some(featureRequiresDJS);
+
+    // TODO: do not use process.env but something else. related to custom env solution.
+    if (process.env.DISCORD_BOT_TOKEN) {
+      this.#token = process.env.DISCORD_BOT_TOKEN;
+      rest.setToken(this.#token);
+    } else {
+      console.warn('No Discord.JS token provided. Bot will not be online.');
+      console.warn('Edit your ".env" file and add a line with the following:');
+      console.warn();
+      console.warn('DISCORD_BOT_TOKEN="your-token-here"');
+      console.warn();
+    }
 
     await this.runLifecycleHook(this.#features, 'initialize');
 
@@ -202,12 +219,11 @@ export class GatewayBot {
     };
 
     // Listen for raw interaction events for the `interaction` hook.
-    // TODO: THIS IS ALL SKETCHING, DAVE MUST FIX THIS
     this.#djsClient.ws.on(Discord.GatewayDispatchEvents.InteractionCreate, async i => {
       this.handleInteraction(i);
     });
 
-    await this.#djsClient.login(process.env.DISCORD_BOT_TOKEN);
+    await this.#djsClient.login(this.#token);
 
     // Run the djsClient hook
     await this.runLifecycleHook(this.#features, 'djsClient', this.#djsClient);

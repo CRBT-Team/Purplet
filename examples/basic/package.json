@@ -3,7 +3,13 @@
   "private": true,
   "license": "Apache-2.0",
   "type": "module",
+  "main": ".purplet/build",
+  "scripts": {
+    "build": "purplet build",
+    "dev": "purplet dev"
+  },
   "dependencies": {
+    "discord-api-types": "^0.33.1",
     "discord.js": "14.0.0-dev.1653480262-68d5169",
     "purplet": "workspace:*"
   }
