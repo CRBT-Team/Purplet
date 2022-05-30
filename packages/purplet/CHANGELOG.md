@@ -1,5 +1,24 @@
 # `purplet`
 
+## 2.0.0-next.2
+
+- 16cc280: - add `$onDJSEvent`, a wrapper around `djsClient` hook with `.on(event)`
+  - add `$intents`, shorthand for the `intents` hook
+  - add `$service`, a wrapper around the `initialize` hook
+  - add `$djsOptions`, shorthand for the `djsOptions` hook
+  - add `$presence`, a one liner on top of `$djsOptions` for presence data
+- 1360e42: breaking: simplify built in hook apis
+  - `initialize` -> no args
+  - `djsClient` -> client first arg
+  - `djsOptions` -> prev options first arg
+  - `interaction` -> the interaction
+  - `applicationCommands` -> no args
+  - `intents` -> no args
+- c840aae: fix framework breaking when it is rebuilt while also running
+- 31c8390: add `@discordjs/rest` client under the `rest` import
+- 0cb148c: add `applicationCommands` hook
+- ebc53d4: add custom hook `$onRawEvent`
+
 ## 2.0.0-next.1
 
 - Rewritten codebase, projects are bundled with vite and built with rollup. Instead of a Modules + Handlers api, it is based off of `Feature` objects.
