@@ -33,7 +33,7 @@ const crbtFace = `
 ....................(#(#(#(#(#(#(#(#(#(#(#(#(#`;
 const colored = crbtFace
   .split('')
-  .map((c) => chalk[c === '.' ? 'hidden' : 'magentaBright'](c))
+  .map(c => chalk[c === '.' ? 'hidden' : 'magentaBright'](c))
   .join('');
 
 const intro = `
@@ -46,9 +46,7 @@ Welcome to ${chalk.magentaBright.bold(`Purplet`)} ${chalk.gray(
 ${chalk.red.yellow(
   '⚠️  Purplet is still in development, so you may expect bugs and missing features.'
 )}
-Encountered any? Open an issue at ${chalk.cyan(
-  'https://github.com/CRBT-Team/Purplet/issues'
-)}.
+Encountered any? Open an issue at ${chalk.cyan('https://github.com/CRBT-Team/Purplet/issues')}.
 `;
 
 const main = async () => {
@@ -61,8 +59,7 @@ const main = async () => {
       {
         name: 'dir',
         type: 'text',
-        message:
-          'Where should the project be created?\n  (leave blank for current directory)',
+        message: 'Where should the project be created?\n  (leave blank for current directory)',
       },
     ]);
 
@@ -97,18 +94,12 @@ const main = async () => {
     const relative = path.relative(process.cwd(), cwd);
 
     if (relative !== '') {
-      console.log(
-        `  ${i++}. Go to your project with ${chalk.magentaBright(`cd ${cwd}`)}`
-      );
+      console.log(`  ${i++}. Go to your project with ${chalk.magentaBright(`cd ${cwd}`)}`);
     }
 
+    console.log(`  ${i++}. Install deps with ${chalk.magentaBright('npm install')}.`);
     console.log(
-      `  ${i++}. Install deps with ${chalk.magentaBright('npm install')}.`
-    );
-    console.log(
-      `  ${i++} Start your project on dev mode with ${chalk.magentaBright(
-        'npm run dev'
-      )}.`
+      `  ${i++} Start your project on dev mode with ${chalk.magentaBright('npm run dev')}.`
     );
   } catch (err) {
     spinner.fail('Purplet project creation failed');

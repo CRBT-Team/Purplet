@@ -6,9 +6,7 @@ export const createPurplet = async (dir, options) => {
   fs.mkdirSync(dir, { recursive: true });
 
   try {
-    const templateDir = fileURLToPath(
-      new URL(`./templates/blank`, import.meta.url).href
-    );
+    const templateDir = fileURLToPath(new URL(`./templates/blank`, import.meta.url).href);
     copyFiles(dir, templateDir, options.deps);
   } catch (e) {
     throw new Error(e);
@@ -19,13 +17,10 @@ const copyFiles = (dir, templateDir, deps) => {
   const files = fs.readdirSync(templateDir);
 
   const ignored = fs
-    .readFileSync(
-      fileURLToPath(new URL(`./templates/blank/.ignore`, import.meta.url)),
-      'utf-8'
-    )
+    .readFileSync(fileURLToPath(new URL(`./templates/blank/.ignore`, import.meta.url)), 'utf-8')
     .split('\r\n');
 
-  files.forEach((file) => {
+  files.forEach(file => {
     const filePath = path.join(templateDir, file);
     const fileName = path.basename(filePath);
 
@@ -45,10 +40,7 @@ const copyFiles = (dir, templateDir, deps) => {
         ['purplet']: deps.purplet,
         ['discord.js']: deps['discord.js'],
       };
-      fs.writeFileSync(
-        path.join(dir, 'package.json'),
-        JSON.stringify(pjson, null, 2)
-      );
+      fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pjson, null, 2));
       return;
     }
     fs.copyFileSync(filePath, path.join(dir, fileName));
