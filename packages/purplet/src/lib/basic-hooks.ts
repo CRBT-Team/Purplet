@@ -10,7 +10,7 @@ export function $onDJSEvent(eventName: string, handler: (...args: any[]) => void
   return createFeature({
     name: `discord.js on("${eventName}") handler`,
 
-    djsClient({ client }) {
+    djsClient(client) {
       client.on(eventName, handler);
       return () => client.off(eventName, handler);
     },
@@ -65,7 +65,7 @@ export function $djsOptions(options: FeatureData['djsOptions'] | DJSOptions) {
     djsOptions:
       typeof options === 'function'
         ? options
-        : ({ options: previousOptions }) => ({ ...previousOptions, ...options }),
+        : previousOptions => ({ ...previousOptions, ...options }),
   });
 }
 

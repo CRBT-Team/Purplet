@@ -1,48 +1,18 @@
 import type * as DJS from 'discord.js';
 import type { Awaitable } from '@davecode/types';
+import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord.js';
 import type { Cleanup } from '../utils/types';
-
-export type ApplicationCommandData = DJS.ApplicationCommandData;
 
 const IS_FEATURE = Symbol.for('purplet.is-bot-feature');
 
-export interface FeatureEvent {
-  /**
-   * Unique ID based on the filename and export name that the user defines a feature in. This can be
-   * used to auto-generate the `custom_id` field for Discord message components, or do other things.
-   */
-  featureId: string;
-}
-
-export type LifecycleHook<E extends FeatureEvent> = (this: Feature, ctx: E) => Awaitable<Cleanup>;
-export type EventHook<E extends FeatureEvent, R = void> = (this: Feature, ctx: E) => Awaitable<R>;
+export type LifecycleHook<E> = (this: Feature, event: E) => Awaitable<Cleanup>;
+export type EventHook<E, R = void> = (this: Feature, ctx: E) => Awaitable<R>;
+export type SequentialHook<E, R = void> = (this: Feature, ctx: E) => Awaitable<R>;
 
 export type DJSOptions = Omit<DJS.ClientOptions, 'intents'>;
+export type ApplicationCommandData = RESTPostAPIApplicationCommandsJSONBody;
 
-/** @see {FeatureData.initialize} */
-export interface InitializeEvent extends FeatureEvent {}
-
-/** @see {FeatureData.djsClient} */
-export interface DJSClientEvent extends FeatureEvent {
-  client: DJS.Client;
-}
-
-/** @see {FeatureData.djsOptions} */
-export interface DJSOptionsEvent extends FeatureEvent {
-  options: DJSOptions;
-}
-
-/** @see {FeatureData.gatewayIntents} */
-export interface GatewayIntentsEvent extends FeatureEvent {}
 export type IntentResolvable = number | number[];
-
-/** @see {FeatureData.interaction} */
-export interface InteractionEvent extends FeatureEvent {
-  interaction: unknown;
-}
-
-/** @see {FeatureData.applicationCommand} */
-export interface ApplicationCommandEvent extends FeatureEvent {}
 
 /**
  * A feature represents anything that contributes to the bot's functionality. In purplet, features
@@ -59,12 +29,12 @@ export interface FeatureData {
    * This is the first hook that is called for your bot, and is always called. This hook allows for
    * a cleanup function, which you should use to remove event handlers.
    */
-  initialize?: LifecycleHook<InitializeEvent>;
+  initialize?: LifecycleHook<void>;
   /**
    * Called on load with a Discord.js client. Specifying this hook will cause the Discord.js client
    * to be setup. This hook allows for a cleanup function, which you should use to remove event handlers.
    */
-  djsClient?: LifecycleHook<DJSClientEvent>;
+  djsClient?: LifecycleHook<DJS.Client>;
   /**
    * Called before the Discord.js client is created, passing a configuration object. You are able to
    * return or modify the configuration object, and that will be passed to Discord.js. Do not
@@ -72,19 +42,22 @@ export interface FeatureData {
    *
    * Note: this hook will only be called if some feature in your project requests the Discord.js client.
    */
-  djsOptions?: EventHook<DJSOptionsEvent, DJSOptions | void>;
+  djsOptions?: EventHook<DJSOptions, DJSOptions | void>;
   /**
    * Called for incoming interactions, and does not explicity rely on Discord.js, meaning bots using
    * this hook can theoretically be deployed to a cloud function and called over HTTPs.
    */
-  interaction?: EventHook<InteractionEvent>;
-  /** @notImplemented Called to resolve this feature's application commands. This hook must */
-  applicationCommands?: EventHook<ApplicationCommandEvent, ApplicationCommandData[]>;
+  interaction?: EventHook<unknown>;
+  /**
+   * Called to resolve this feature's application commands. Note that this requires raw command
+   * objects, as per the Discord API, NOT Discord.js types and classes.
+   */
+  applicationCommands?: EventHook<void, ApplicationCommandData[]>;
   /**
    * This hook allows you to specify what gateway intents your gateway bot requires. Does not assume
    * a Discord.js environment, and will trigger on either using Discord.js, or the `gatewayEvents` hook.
    */
-  intents?: EventHook<GatewayIntentsEvent, IntentResolvable | void> | IntentResolvable;
+  intents?: EventHook<void, IntentResolvable | void> | IntentResolvable;
 }
 
 /** Represents feature data that has gone through `createFeature` but not annotated by `moduleToFeatureArray`. */

@@ -1,16 +1,12 @@
 import type * as DJS from 'discord.js';
 import { deepEqual } from 'fast-equals';
-import type {
-  DJSClientEvent,
-  DJSOptions,
-  Feature,
-  FeatureEvent,
-  InitializeEvent,
-  LifecycleHookNames,
-} from './feature';
+import type { DJSOptions, Feature, LifecycleHookNames } from './feature';
 import { featureRequiresDJS } from '../utils/feature';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
+
+// These `.call()`s are needed due to the way features are created
+/* eslint-disable no-useless-call */
 
 export interface GatewayBotOptions {
   mode?: 'production' | 'development';
@@ -78,9 +74,7 @@ export class GatewayBot {
   private async resolveGatewayIntents() {
     return (
       await asyncMap(this.#features, feat =>
-        typeof feat.intents === 'function'
-          ? feat.intents({ featureId: feat.featureId })
-          : feat.intents
+        typeof feat.intents === 'function' ? feat.intents.call(feat) : feat.intents
       )
     )
       .flat()
@@ -96,11 +90,7 @@ export class GatewayBot {
 
     for (const feat of this.#features) {
       if (feat.djsOptions) {
-        clientOptions =
-          (await feat.djsOptions({
-            featureId: feat.featureId,
-            options: clientOptions,
-          })) ?? clientOptions;
+        clientOptions = (await feat.djsOptions.call(feat, clientOptions)) ?? clientOptions;
       }
     }
 
@@ -112,17 +102,15 @@ export class GatewayBot {
    * @internal Runs a lifecycle hook on an array of features. A lifecycle hook is one that may
    * return a cleanup handler, and such those handlers are saved using `.setCleanupHandler`.
    */
-  private async runLifecycleHook<Event extends FeatureEvent>(
+  private async runLifecycleHook<Event>(
     features: Feature[],
     hook: LifecycleHookNames,
-    data: Omit<Event, 'featureId'>
+    data?: Event
   ) {
     await asyncMap(features, async feat => {
       if (hook in feat) {
-        const cleanup = await feat[hook]!({
-          featureId: feat.featureId,
-          ...data,
-        } as any);
+        // @ts-ignore
+        const cleanup = await feat[hook]!.call(feat, data);
         this.setCleanupHandler(feat, hook, cleanup);
       }
     });
@@ -132,7 +120,7 @@ export class GatewayBot {
   async start() {
     const botReliesOnDJS = this.#features.some(featureRequiresDJS);
 
-    await this.runLifecycleHook<InitializeEvent>(this.#features, 'initialize', {});
+    await this.runLifecycleHook(this.#features, 'initialize');
 
     // Discord.JS related initialization
     if (botReliesOnDJS) {
@@ -181,9 +169,7 @@ export class GatewayBot {
     await this.#djsClient.login(process.env.DISCORD_BOT_TOKEN);
 
     // Run the djsClient hook
-    await this.runLifecycleHook<DJSClientEvent>(this.#features, 'djsClient', {
-      client: this.#djsClient,
-    });
+    await this.runLifecycleHook(this.#features, 'djsClient', this.#djsClient);
   }
 
   /** @internal Re-runs `intent` and `djsConfig` hooks and returns a boolean if the Discord.js client should be restarted. */
@@ -223,16 +209,14 @@ export class GatewayBot {
       return;
     }
 
-    await this.runLifecycleHook<InitializeEvent>(features, 'initialize', {});
+    await this.runLifecycleHook(features, 'initialize');
 
     if (await this.shouldRestartDJSClient()) {
       // Restart the bot with new configuration
       await this.restartDJSClient();
     } else {
       // Run the djsClient hook
-      await this.runLifecycleHook<DJSClientEvent>(features, 'djsClient', {
-        client: this.#djsClient!,
-      });
+      await this.runLifecycleHook(features, 'djsClient', this.#djsClient!);
     }
   }
 

@@ -1,14 +1,14 @@
-import { GatewayIntentBits, Message } from 'discord.js';
+import { ApplicationCommandType, GatewayIntentBits, Message } from 'discord.js';
 import { createFeature } from 'purplet';
 
 export const logMessages = createFeature({
   name: 'log messages',
 
-  djsClient({ featureId, client }) {
-    console.log(`${featureId} loaded and ${client.user.tag}!`);
+  djsClient(client) {
+    console.log(`${this.featureId} loaded and ${client.user.tag}!`);
 
     function handleMessage(msg: Message) {
-      console.log(`${featureId} message: ${msg.author.tag}: ${msg.content}`);
+      console.log(`${this.featureId} message: ${msg.author.tag}: ${msg.content}`);
     }
 
     client.on('messageCreate', handleMessage);
@@ -23,5 +23,14 @@ export const logMessages = createFeature({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMessages,
+  ],
+
+  applicationCommands: () => [
+    {
+      type: ApplicationCommandType.ChatInput,
+      name: 'log',
+      description: 'Logs a message to the console',
+      default_member_permissions: '421',
+    },
   ],
 });
