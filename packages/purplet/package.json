@@ -4,10 +4,11 @@
   "description": "A toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
   "keywords": [
     "discord",
-    "framework",
     "bot",
-    "discord.js",
-    "purplet"
+    "api",
+    "framework",
+    "typescript",
+    "discord.js"
   ],
   "homepage": "https://github.com/CRBT-Team/Purplet",
   "bugs": "https://github.com/CRBT-Team/Purplet/issues",

@@ -13,19 +13,18 @@
 
 ## About Purplet
 
-Purplet is a discord framework, where your bot features are defined in small modules that can be reloaded instantly. Iterate your ideas faster than ever with the combined powers of [TypeScript][1], [Vite][2], and [Discord.js][3].
+Purplet is a discord framework where your bot features are defined in small modules that can be reloaded instantly. Iterate your ideas faster than ever with the combined powers of [TypeScript][1], [Vite][2], and [Discord.js][3].
 
-⚠️ Purplet is still in development, so you may expect bugs and missing features. Encountered any? Open an [issue](https://github.com/CRBT-Team/Purplet/issues) or a pull request.
-
-> Purplet is not affiliated with Discord or Discord.js.
+> ⚠️ Purplet v2 is a rewrite of the framework. Most features from [v1][v1] have not yet been ported, and only the core basics function. Proceed with caution.
 
 [1]: https://www.typescriptlang.org/
 [2]: https://vitejs.dev/
 [3]: https://discord.js.org/
+[v1]: https://github.com/CRBT-Team/Purplet/tree/main
 
-## Development
+## Getting Started
 
-To get started, use your package manager's create command and follow it's instructions.
+The best way to get started is using `create-purplet` via your package manager's create command:
 
 ```sh
 npm init purplet@next
@@ -35,8 +34,19 @@ yarn create purplet@next
 pnpm create purplet@next
 ```
 
-Part of Purplet is documented [here](/docs/), and we encourage devs to check the [sample project](https://github.com/CRBT-Team/Purplet/tree/main/sample) for inspiration and guidance.
+and follow the instructions it gives.
+
+## Repository Contents
+
+| Package                                   | Changelog                                         |
+| ----------------------------------------- | ------------------------------------------------- |
+| [purplet](packages/purplet)               | [Changelog](packages/purplet/CHANGELOG.md)        |
+| [create-purplet](packages/create-purplet) | [Changelog](packages/create-purplet/CHANGELOG.md) |
+
+| Example Projects        |
+| ----------------------- |
+| [Basic](examples/basic) |
 
 ## License
 
-Purplet is licensed under the [Apache 2.0 license](/LICENSE).
+Purplet is licensed under the [Apache License 2.0](https://github.com/CRBT-Team/Purplet/blob/main/LICENSE).
