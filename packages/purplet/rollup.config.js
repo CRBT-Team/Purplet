@@ -9,6 +9,7 @@ import shebang from 'rollup-plugin-add-shebang';
 import pkg from './package.json';
 
 fs.rmSync('dist', { recursive: true, force: true });
+fs.mkdirSync('dist');
 
 /** @type {string[]} */
 const external = [].concat(
@@ -21,8 +22,8 @@ export default [
   {
     input: {
       cli: 'src/cli.ts',
-      build: 'src/build-api.ts',
-      lib: 'src/index.ts',
+      'build-api': 'src/build-api.ts',
+      index: 'src/index.ts',
       internal: 'src/internal.ts',
     },
     output: {
@@ -44,6 +45,23 @@ export default [
       }),
       esbuild(),
       shebang(),
+      // This plugin is used to get types when working in other packages in this monorepo,
+      // without having to build the types, and F12 jump to definiton even brings you to the source.
+      // We can't publish the package like this, so we only run the hook during watch
+      {
+        name: 'rollup-plugin-tsc-point',
+        options(opts) {
+          if (!opts.watch) {
+            return;
+          }
+          for (const [name, input] of Object.entries(opts.input)) {
+            fs.writeFileSync(
+              `dist/${name}.d.ts`,
+              `export * from '../${input.replace(/\.ts$/, '')}';`
+            );
+          }
+        },
+      },
     ],
   },
 ];

@@ -18,15 +18,21 @@
   ],
   "type": "module",
   "exports": {
-    ".": "./dist/lib.js",
-    "./build-api": "./dist/build.js",
+    ".": "./dist/index.js",
+    "./build-api": "./dist/build-api.js",
     "./internal": "./dist/internal.js"
   },
-  "main": "./dist/lib.js",
-  "types": "./src/lib/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "bin": "./dist/cli.js",
+  "files": [
+    "dist",
+    "CHANGELOG.MD",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && tsc -p .",
     "dev": "rollup -c --watch",
     "lint": "eslint src/**/*.{ts,tsx}"
   },
@@ -34,14 +40,13 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@ungap/structured-clone": "^1.0.1",
     "chalk": "^5.0.1",
-    "dedent": "^0.7.0",
     "dotenv": "^16.0.1",
     "esbuild": "^0.14.42",
     "fast-equals": "^3.0.3",
     "rollup": "^2.75.3",
     "rollup-plugin-esbuild": "^4.9.1",
     "sade": "^1.8.1",
-    "vite": "^2.9.9"
+    "vite": "2"
   },
   "devDependencies": {
     "@davecode/types": "^1.0.1",
@@ -49,6 +54,7 @@
     "@types/node": "^17.0.36",
     "discord-api-types": "^0.33.1",
     "discord.js": "14.0.0-dev.1653480262-68d5169",
+    "dts-bundle-generator": "^6.9.0",
     "rollup-plugin-add-shebang": "^0.3.1"
   },
   "peerDependencies": {

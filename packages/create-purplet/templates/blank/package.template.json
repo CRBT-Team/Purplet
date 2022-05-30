@@ -9,10 +9,5 @@
   "dependencies": {
     "discord.js": "X",
     "purplet": "X"
-  },
-  "devDependencies": {
-    "prettier": "^2.4.1",
-    "prettier-plugin-jsdoc": "^0.3.24",
-    "prettier-plugin-organize-imports": "^2.3.4"
   }
 }

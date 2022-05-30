@@ -28,11 +28,11 @@ Purplet is a discord framework, where your bot features are defined in small mod
 To get started, use your package manager's create command and follow it's instructions.
 
 ```sh
-npm init purplet
+npm init purplet@next
 # or
-yarn create purplet
+yarn create purplet@next
 # or
-pnpm create purplet
+pnpm create purplet@next
 ```
 
 Part of Purplet is documented [here](/docs/), and we encourage devs to check the [sample project](https://github.com/CRBT-Team/Purplet/tree/main/sample) for inspiration and guidance.

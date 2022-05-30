@@ -1,10 +1,27 @@
-import { ChatCommand, OptionBuilder } from 'purplet';
+import { GatewayIntentBits, Message } from 'discord.js';
+import { createFeature } from 'purplet';
 
-export default ChatCommand({
-  name: 'hello',
-  description: 'Your starter Purplet command. Say hello to someone.',
-  options: new OptionBuilder().user('user', 'Who to say hello to.'),
-  async handle({ user }) {
-    this.reply(`Hello ${user ?? 'world'}!`);
+export const logMessages = createFeature({
+  name: 'log messages',
+
+  djsClient({ featureId, client }) {
+    console.log(`${featureId} loaded and ${client.user.tag}!`);
+
+    function handleMessage(msg: Message) {
+      console.log(`${featureId} message: ${msg.author.tag}: ${msg.content}`);
+    }
+
+    client.on('messageCreate', handleMessage);
+
+    // Cleanup function, run on hot reload (or other unload/shutdown reason)
+    return () => {
+      client.off('messageCreate', handleMessage);
+    };
   },
+
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessages,
+  ],
 });
