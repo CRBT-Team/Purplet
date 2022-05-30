@@ -1,7 +1,14 @@
 import type * as DJS from 'discord.js';
-import { APIInteraction, APIInteractionResponse, Routes } from 'discord.js';
+import type { Immutable } from '@davecode/types';
+import {
+  APIInteraction,
+  APIInteractionResponse,
+  RESTGetAPICurrentUserResult,
+  Routes,
+} from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
+  ApplicationCommandData,
   DJSOptions,
   EventHook,
   Feature,
@@ -18,7 +25,11 @@ import type { Cleanup } from '../utils/types';
 /* eslint-disable no-useless-call */
 
 export interface GatewayBotOptions {
-  mode?: 'production' | 'development';
+  /**
+   * Mode. "production" or "development" depending on what state the bot code is in. If in
+   * development, commands are only deployed to a specified set of test servers.
+   */
+  mode: 'production' | 'development';
 }
 
 interface CleanupHandlers {
@@ -43,6 +54,12 @@ export class GatewayBot {
   #djsClient?: DJS.Client;
   #currentDJSOptions?: DJSOptions;
   #currentIntents: number = 0;
+  #id: string = '';
+  #cachedCommandData?: ApplicationCommandData[];
+
+  get id() {
+    return this.#id;
+  }
 
   get running() {
     return this.#running;
@@ -56,7 +73,7 @@ export class GatewayBot {
     return this.#djsClient;
   }
 
-  constructor(options: GatewayBotOptions) {}
+  constructor(readonly options: Immutable<GatewayBotOptions>) {}
 
   /** @internal Saves a cleanup handler for a feature in the #cleanupHandlers */
   private setCleanupHandler(feature: Feature, id: keyof CleanupHandlers, handler: Cleanup) {
@@ -159,7 +176,13 @@ export class GatewayBot {
       console.warn();
     }
 
+    const currentUser = (await rest.get(Routes.user())) as RESTGetAPICurrentUserResult;
+    this.#id = currentUser.id;
+
     await this.runLifecycleHook(this.#features, 'initialize');
+
+    // Command Sync
+    await this.updateApplicationCommands();
 
     // Discord.JS related initialization
     if (botReliesOnDJS) {
@@ -174,6 +197,69 @@ export class GatewayBot {
     }
 
     this.#running = true;
+    const tag = `${currentUser.username}#${currentUser.discriminator}`;
+    console.log(`Bot has finished starting up, logged in as @${tag}`);
+  }
+
+  /** @internal */
+  private async resolveApplicationCommands() {
+    return (
+      await asyncMap(
+        this.#features,
+        feat =>
+          (typeof feat.applicationCommands === 'function'
+            ? feat.applicationCommands.call(feat)
+            : feat.applicationCommands) ?? []
+      )
+    ).flat();
+  }
+
+  /** @internal */
+  private async updateApplicationCommands() {
+    const commands = await this.resolveApplicationCommands();
+
+    if (commands.length === 0) {
+      return;
+    }
+
+    // Check for sameness, and if so, don't update.
+    if (this.#cachedCommandData && deepEqual(commands, this.#cachedCommandData)) {
+      return;
+    }
+
+    // In production, simply apply global commands.
+    if (this.options.mode === 'production') {
+      await rest.put(Routes.applicationCommands(this.#id), {
+        body: commands,
+      });
+    }
+
+    // Overwrite the global command data with nothing, but only on first load.
+    // This line might cause a lot of people some problems. We need to ensure that the docs
+    // scream at people to use separate development and production bots to avoid stuff like this.
+    if (!this.#cachedCommandData) {
+      await rest.put(Routes.applicationCommands(this.#id), { body: [] });
+    }
+    this.#cachedCommandData = commands;
+
+    if (!process.env.UNSTABLE_PURPLET_COMMAND_GUILDS) {
+      console.warn('No guilds provided for development application commands.');
+      console.warn();
+      console.warn('In development mode, you must specify which guilds to deploy your commands to');
+      console.warn('through the temporary `UNSTABLE_PURPLET_COMMAND_GUILDS` environment variable.');
+      console.warn('This api will change once a better system for deciding how commands are');
+      console.warn('registered.');
+      console.warn();
+      return;
+    }
+
+    const guildList = process.env.UNSTABLE_PURPLET_COMMAND_GUILDS?.split(',');
+
+    await asyncMap(guildList, async guildId => {
+      await rest.put(Routes.applicationGuildCommands(this.#id, guildId), {
+        body: commands,
+      });
+    });
   }
 
   /**
@@ -267,6 +353,8 @@ export class GatewayBot {
     }
 
     await this.runLifecycleHook(features, 'initialize');
+
+    await this.updateApplicationCommands();
 
     if (await this.shouldRestartDJSClient()) {
       // Restart the bot with new configuration

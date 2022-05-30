@@ -7,9 +7,12 @@ import type { Cleanup } from '../utils/types';
 
 const IS_FEATURE = Symbol.for('purplet.is-bot-feature');
 
+/** Lifecycle hooks run once, and can provide a cleanup function. */
 export type LifecycleHook<E> = (this: Feature, event: E) => Awaitable<Cleanup>;
+/** Event hooks run multiple times, and are passed an event object, they can also return stuff. */
 export type EventHook<E, R = void> = (this: Feature, ctx: E) => Awaitable<R>;
-export type SequentialHook<E, R = void> = (this: Feature, ctx: E) => Awaitable<R>;
+/** Data hooks can be either functions that resolve to data, or just data themselves. */
+export type DataHook<T> = ((this: Feature) => Awaitable<T>) | Awaitable<T>;
 
 export type DJSOptions = Omit<DJS.ClientOptions, 'intents'>;
 export type ApplicationCommandData = RESTPostAPIApplicationCommandsJSONBody;
@@ -60,15 +63,21 @@ export interface FeatureData {
    */
   gatewayEvent?: GatewayEventHook;
   /**
-   * Called to resolve this feature's application commands. Note that this requires raw command
-   * objects, as per the Discord API, NOT Discord.js types and classes.
+   * Called to resolve this feature's application commands. Return an array of commands to be
+   * registered to Discord. If your command is not returned here, it may be deleted.
+   *
+   * In development mode, you must set the `UNSTABLE_PURPLET_COMMAND_GUILDS` environment variable to
+   * a comma separated list of guild IDs to register commands to. Commands may also cleared on bot shutdown.
+   *
+   * Currently, only global application commands are supported. You can manually use the REST API to
+   * add guild-level ones, but this will interfere with development mode's behavior of overwriting commands.
    */
-  applicationCommands?: EventHook<void, ApplicationCommandData[]>;
+  applicationCommands?: DataHook<ApplicationCommandData[]>;
   /**
    * This hook allows you to specify what gateway intents your gateway bot requires. Does not assume
    * a Discord.js environment, and will trigger on either using Discord.js, or the `gatewayEvents` hook.
    */
-  intents?: EventHook<void, IntentResolvable | void> | IntentResolvable;
+  intents?: DataHook<IntentResolvable>;
 }
 
 /** Represents feature data that has gone through `createFeature` but not annotated by `moduleToFeatureArray`. */

@@ -63,6 +63,7 @@ export async function startDevelopmentBot(options: DevOptions) {
   await asyncMap(initModules, reloadFeatureModule);
   console.log(`Loaded ${initModules.length} modules for bot start.`);
   await gateway.start();
+  console.log('Watching for changes...');
 
   hmrWatcher.on('resolvedHotUpdate', async (files: string[]) => {
     console.log(` Hot Update Triggered`);
@@ -79,14 +80,14 @@ export async function startDevelopmentBot(options: DevOptions) {
   });
 
   process.on('uncaughtException', err => {
-    // viteServer.ssrFixStacktrace(err);
+    viteServer.ssrFixStacktrace(err);
     console.error('Uncaught Error:');
     console.error(err);
   });
 
   process.on('unhandledRejection', err => {
     if (err instanceof Error) {
-      // viteServer.ssrFixStacktrace(err);
+      viteServer.ssrFixStacktrace(err);
     }
     console.error('Uncaught Error (async):');
     console.error(err);
