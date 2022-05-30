@@ -1,6 +1,13 @@
 import type * as DJS from 'discord.js';
 import { deepEqual } from 'fast-equals';
-import type { DJSOptions, Feature, LifecycleHookNames } from './feature';
+import type {
+  DJSOptions,
+  EventHook,
+  Feature,
+  GatewayEventHook,
+  LifecycleHookNames,
+} from './feature';
+import { PurpletInteraction } from './interaction';
 import { featureRequiresDJS } from '../utils/feature';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
@@ -161,11 +168,43 @@ export class GatewayBot {
     await asyncMap(this.#features, feat => this.runCleanupHandler(feat, 'djsClient'));
 
     // Construct and login client
-    console.log(this.#currentDJSOptions);
     this.#djsClient = new Discord.Client({
       intents: this.#currentIntents,
       ...structuredClone(this.#currentDJSOptions),
     });
+    const wsEmit = this.#djsClient.ws.emit;
+    this.#djsClient.ws.emit = (event: keyof GatewayEventHook, ...args: unknown[]) => {
+      // Intercept all raw gateway events.
+      this.features.forEach(feature => {
+        const handler = feature.gatewayEvent?.[event] as EventHook<unknown>;
+        if (handler) {
+          handler.call(feature, args[0]);
+        }
+      });
+
+      return wsEmit.call(this.#djsClient!.ws, event, ...args);
+    };
+
+    this.#djsClient.ws.on(
+      Discord.GatewayDispatchEvents.InteractionCreate,
+      async (i: DJS.GatewayInteractionCreateDispatchData) => {
+        let response: DJS.APIInteractionResponse | null = null;
+        const wrapped = new PurpletInteraction(i, r => (response = r));
+
+        const features = this.features.filter(x => !!x.interaction);
+        for (const feature of features) {
+          const returnValue = await feature.interaction!.call(feature, wrapped);
+          response = returnValue ?? response;
+          if (response) {
+            break;
+          }
+        }
+
+        // TODO: handle response, but also handle the case where a feature is delaying
+        // their .respond() call. It might actually be an idea to run them all in parallel.
+      }
+    );
+
     await this.#djsClient.login(process.env.DISCORD_BOT_TOKEN);
 
     // Run the djsClient hook

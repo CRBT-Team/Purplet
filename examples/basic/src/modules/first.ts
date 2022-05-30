@@ -1,29 +1,22 @@
-import { ApplicationCommandType, GatewayIntentBits, Message } from 'discord.js';
-import { createFeature } from 'purplet';
+import {
+  ApplicationCommandType,
+  ButtonStyle,
+  ComponentType,
+  GatewayIntentBits,
+  Message,
+} from 'discord.js';
+import { $onDJSEvent, createFeature } from 'purplet';
 
 export const logMessages = createFeature({
   name: 'log messages',
-
-  djsClient(client) {
-    console.log(`${this.featureId} loaded and ${client.user.tag}!`);
-
-    function handleMessage(msg: Message) {
-      console.log(`${this.featureId} message: ${msg.author.tag}: ${msg.content}`);
-    }
-
-    client.on('messageCreate', handleMessage);
-
-    // Cleanup function, run on hot reload (or other unload/shutdown reason)
-    return () => {
-      client.off('messageCreate', handleMessage);
-    };
-  },
 
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMessages,
   ],
+
+  interaction(i) {},
 
   applicationCommands: () => [
     {
@@ -33,4 +26,26 @@ export const logMessages = createFeature({
       default_member_permissions: '421',
     },
   ],
+});
+
+export const messageListener = $onDJSEvent('messageCreate', (msg: Message) => {
+  console.log(msg.content);
+  if (msg.content === '!test') {
+    msg.channel.send({
+      content: 'test',
+      components: [
+        {
+          type: ComponentType.ActionRow,
+          components: [
+            {
+              type: ComponentType.Button,
+              label: 'test',
+              style: ButtonStyle.Primary,
+              custom_id: 'test',
+            },
+          ],
+        },
+      ],
+    });
+  }
 });
