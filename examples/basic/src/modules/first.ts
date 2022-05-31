@@ -1,5 +1,5 @@
 import { EmbedBuilder, InteractionResponseType } from 'discord.js';
-import { $userContextCommand } from 'purplet';
+import { $userContextCommand, OptionBuilder } from 'purplet';
 
 export const getInfo1 = $userContextCommand({
   name: 'Get Info (purplet)',
@@ -18,3 +18,12 @@ export const getInfo1 = $userContextCommand({
     });
   },
 });
+
+const x = new OptionBuilder() //
+  .attachment('file', 'coolio')
+  .mentionable('who', 'yeah', {
+    required: true,
+  });
+//
+
+x;

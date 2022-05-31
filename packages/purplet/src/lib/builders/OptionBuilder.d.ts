@@ -1,6 +1,5 @@
 /* eslint-disable no-redeclare */
 import type { Awaitable, Class, ForceSimplify } from '@davecode/types';
-import { LocalizationMap } from 'discord-api-types/payloads/common';
 import {
   APIApplicationCommandOption,
   APIAttachment,
@@ -8,6 +7,7 @@ import {
   APIRole,
   APIUser,
   ChannelType,
+  LocalizationMap,
 } from 'discord.js';
 import type { PurpletAutocompleteInteraction } from '../interaction';
 
@@ -160,9 +160,15 @@ type OptionBuilderMethod<CurrentOptions, MethodName extends keyof OptionInputs> 
         IsRequired,
         Record<
           Key,
-          /** Here, we need to resolve EnumOptions, aka stuff with a choice array. */
+          /**
+           * Here, we need to resolve EnumOptions, aka stuff with a choice array. I'll be honest, I
+           * do not know why we need that extra `T extends string` check, but it breaks everything
+           * if I remove it, so ¯＼_(ツ)_/¯
+           */
           OptionOptions extends EnumOption<unknown, unknown, infer T>
-            ? T
+            ? T extends string
+              ? T
+              : OptionTypeValues[MethodName]
             : OptionTypeValues[MethodName]
         >
       >

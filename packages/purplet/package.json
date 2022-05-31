@@ -58,12 +58,16 @@
     "@types/node": "^17.0.36",
     "discord.js": "14.0.0-dev.1653480262-68d5169",
     "dts-bundle-generator": "^6.9.0",
-    "rollup-plugin-add-shebang": "^0.3.1"
+    "rollup-plugin-add-shebang": "^0.3.1",
+    "tsd": "^0.20.0"
   },
   "peerDependencies": {
     "discord.js": "^14.0.0"
   },
   "engines": {
     "node": ">=16.0.0"
+  },
+  "tsd": {
+    "directory": "./tests/types"
   }
 }
