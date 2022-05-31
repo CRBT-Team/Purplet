@@ -2,6 +2,8 @@
 'purplet': patch
 ---
 
+add hooks
+
 - add `$appCommand`
 - add `$userContextCommand`
 - add `$djsUserContextCommand`
