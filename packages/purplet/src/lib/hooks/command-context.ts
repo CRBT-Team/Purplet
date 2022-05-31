@@ -25,7 +25,7 @@ export interface UserCommandOptions extends ContextCommandOptions {
   handle: (this: PurpletUserCommandInteraction, target: APIUser) => void;
 }
 
-export function $userCommand(opts: UserCommandOptions) {
+export function $userContextCommand(opts: UserCommandOptions) {
   return $appCommand({
     command: {
       type: ApplicationCommandType.User,
@@ -46,8 +46,8 @@ export interface DJSUserCommandOptions extends ContextCommandOptions {
   handle: (this: UserContextMenuCommandInteraction, target: User) => void;
 }
 
-export function $djsUserCommand(options: DJSUserCommandOptions) {
-  return $userCommand({
+export function $djsUserContextCommand(options: DJSUserCommandOptions) {
+  return $userContextCommand({
     ...options,
     handle() {
       const i = this.toDJS();
@@ -60,7 +60,7 @@ export interface MessageCommandOptions extends ContextCommandOptions {
   handle: (this: PurpletMessageCommandInteraction, target: APIMessage) => void;
 }
 
-export function $messageCommand(opts: MessageCommandOptions) {
+export function $messageContextCommand(opts: MessageCommandOptions) {
   return $appCommand({
     command: {
       type: ApplicationCommandType.User,
@@ -82,7 +82,7 @@ export interface DJSMessageCommandOptions extends ContextCommandOptions {
 }
 
 export function $djsMessageCommand(options: DJSMessageCommandOptions) {
-  return $messageCommand({
+  return $messageContextCommand({
     ...options,
     handle() {
       const i = this.toDJS();

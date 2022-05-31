@@ -1,18 +1,5 @@
 # `purplet`
 
-## 2.0.0-next.4
-
-### Patch Changes
-
-- a4980c7: add more hooks
-  - add `$appCommand`
-  - add `$userCommand`
-  - add `$djsUserCommand`
-  - add `$messageCommand`
-  - add `$djsMessageCommand`
-- a4980c7: Add PurpletInteraction and all of it's subclasses.
-- a4980c7: add OptionBuilder
-
 ## 2.0.0-next.3
 
 ### Patch Changes

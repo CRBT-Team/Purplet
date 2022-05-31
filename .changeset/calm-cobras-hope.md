@@ -3,7 +3,7 @@
 ---
 
 - add `$appCommand`
-- add `$userCommand`
-- add `$djsUserCommand`
-- add `$messageCommand`
-- add `$djsMessageCommand`
+- add `$userContextCommand`
+- add `$djsUserContextCommand`
+- add `$messageContextCommand`
+- add `$djsMessageContextCommand`

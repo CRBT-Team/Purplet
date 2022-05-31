@@ -4,10 +4,5 @@
   "initialVersions": {
     "create-purplet": "2.0.0-next.0",
     "purplet": "2.0.0-next.3"
-  },
-  "changesets": [
-    "calm-cobras-hope",
-    "lovely-mugs-beam",
-    "strange-bananas-melt"
-  ]
+  }
 }
