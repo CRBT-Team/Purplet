@@ -1,5 +1,7 @@
 // be careful changing this file
 
+import { ApplicationCommandOptionType } from 'discord.js';
+
 export class OptionBuilder {
   options = [];
   autocompleteHandlers = {};
@@ -47,15 +49,15 @@ export class OptionBuilder {
     };
   }
 
-  string = this.#createOption('STRING');
-  integer = this.#createOption('INTEGER');
-  boolean = this.#createOption('BOOLEAN');
-  channel = this.#createOption('CHANNEL');
-  user = this.#createOption('USER');
-  mentionable = this.#createOption('MENTIONABLE');
-  role = this.#createOption('ROLE');
-  number = this.#createOption('NUMBER');
-  attachment = this.#createOption('ATTACHMENT');
+  string = this.#createOption(ApplicationCommandOptionType.String);
+  integer = this.#createOption(ApplicationCommandOptionType.Integer);
+  boolean = this.#createOption(ApplicationCommandOptionType.Boolean);
+  channel = this.#createOption(ApplicationCommandOptionType.Channel);
+  user = this.#createOption(ApplicationCommandOptionType.User);
+  mentionable = this.#createOption(ApplicationCommandOptionType.Mentionable);
+  role = this.#createOption(ApplicationCommandOptionType.Role);
+  number = this.#createOption(ApplicationCommandOptionType.Number);
+  attachment = this.#createOption(ApplicationCommandOptionType.Attachment);
 
   toJSON() {
     return this.options;

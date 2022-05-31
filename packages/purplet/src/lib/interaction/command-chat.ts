@@ -1,6 +1,7 @@
 import {
   APIChatInputApplicationCommandInteraction,
   APIInteraction,
+  ApplicationCommandOptionType,
   ApplicationCommandType,
   ChatInputCommandInteraction,
 } from 'discord.js';
@@ -15,6 +16,37 @@ export class PurpletChatCommandInteraction<
     return (
       PurpletCommandInteraction.matches(raw) && raw.data.type === ApplicationCommandType.ChatInput
     );
+  }
+
+  get options() {
+    return this.raw.data.options ?? [];
+  }
+
+  getResolvedOption(name: string) {
+    const opt = this.raw.data.options?.find(option => option.name === name);
+    if (!opt) {
+      return null;
+    }
+    switch (opt.type) {
+      case ApplicationCommandOptionType.String:
+      case ApplicationCommandOptionType.Number:
+      case ApplicationCommandOptionType.Integer:
+      case ApplicationCommandOptionType.Boolean:
+        return opt.value;
+      case ApplicationCommandOptionType.Attachment:
+        return this.getResolved('attachments', opt.value);
+      case ApplicationCommandOptionType.Channel:
+        return this.getResolved('channels', opt.value);
+      case ApplicationCommandOptionType.Mentionable:
+        return this.getResolved('roles', opt.value) ?? this.getResolved('users', opt.value);
+      case ApplicationCommandOptionType.Role:
+        return this.getResolved('roles', opt.value);
+      case ApplicationCommandOptionType.User:
+        return this.getResolved('attachments', opt.value);
+
+      default:
+        return null;
+    }
   }
 
   toDJS() {

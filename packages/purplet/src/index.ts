@@ -8,6 +8,7 @@ export * from './lib/feature';
 export * from './lib/gateway';
 export { djs, rest } from './lib/global';
 export * from './lib/hooks/command-basic';
+export * from './lib/hooks/command-chat';
 export * from './lib/hooks/command-context';
 export * from './lib/hooks/djs';
 export * from './lib/hooks/gateway';

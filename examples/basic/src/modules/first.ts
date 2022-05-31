@@ -1,29 +1,19 @@
-import { EmbedBuilder, InteractionResponseType } from 'discord.js';
-import { $userContextCommand, OptionBuilder } from 'purplet';
+import { InteractionResponseType } from 'discord.js';
+import { $chatCommand, OptionBuilder } from 'purplet';
 
-export const getInfo1 = $userContextCommand({
-  name: 'Get Info (purplet)',
-  handle(target) {
+export const helloWorld = $chatCommand({
+  name: 'hello',
+  description: 'Say hello',
+  options: new OptionBuilder().string('name', 'what is your name?', { required: true }),
+  handle(options) {
     this.respond({
       type: InteractionResponseType.ChannelMessageWithSource,
       data: {
-        allowed_mentions: {},
-        embeds: [
-          new EmbedBuilder()
-            .setTitle('User')
-            .setDescription('```json\n' + JSON.stringify(target, null, 2) + '\n```')
-            .toJSON(),
-        ],
+        allowed_mentions: {
+          parse: [],
+        },
+        content: `Hello ${options.name}!`,
       },
     });
   },
 });
-
-const x = new OptionBuilder() //
-  .attachment('file', 'coolio')
-  .mentionable('who', 'yeah', {
-    required: true,
-  });
-//
-
-x;
