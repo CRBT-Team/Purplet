@@ -35,7 +35,13 @@ export async function startDevelopmentBot(options: DevOptions) {
       },
     },
     ssr: {
-      external: ['purplet'],
+      external: [
+        'purplet',
+        'discord.js',
+        'discord-api-types',
+        '@discordjs/rest',
+        '@discordjs/builders',
+      ],
     },
   });
 

@@ -1,8 +1,9 @@
-import type * as DJS from 'discord.js';
 import type { Immutable } from '@davecode/types';
 import {
   APIInteraction,
   APIInteractionResponse,
+  Client,
+  GatewayDispatchEvents,
   RESTGetAPICurrentUserResult,
   Routes,
 } from 'discord.js';
@@ -15,8 +16,8 @@ import type {
   GatewayEventHook,
   LifecycleHookNames,
 } from './feature';
-import { PurpletInteraction } from './interaction';
-import { rest } from './rest';
+import { rest, setDJSClient } from './global';
+import { createInteraction } from './interaction';
 import { featureRequiresDJS } from '../utils/feature';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
@@ -50,8 +51,7 @@ export class GatewayBot {
   #token: string = '';
   #features: Feature[] = [];
   #cleanupHandlers = new WeakMap<Feature, CleanupHandlers>();
-  #djsModule?: typeof DJS;
-  #djsClient?: DJS.Client;
+  #djsClient?: Client;
   #currentDJSOptions?: DJSOptions;
   #currentIntents: number = 0;
   #id: string = '';
@@ -134,7 +134,7 @@ export class GatewayBot {
       });
     };
 
-    const interaction = new PurpletInteraction(i, responseHandler);
+    const interaction = createInteraction(i, responseHandler);
 
     // Run handlers
     (await asyncMap(this.#features, feat => feat.interaction?.call?.(feat, interaction))) //
@@ -256,6 +256,7 @@ export class GatewayBot {
     const guildList = process.env.UNSTABLE_PURPLET_COMMAND_GUILDS?.split(',');
 
     await asyncMap(guildList, async guildId => {
+      console.log(`replacing commands on ${guildId}`);
       await rest.put(Routes.applicationGuildCommands(this.#id, guildId), {
         body: commands,
       });
@@ -273,23 +274,21 @@ export class GatewayBot {
 
     if (this.#djsClient) {
       await this.#djsClient.destroy();
+      setDJSClient(undefined!);
       console.log('Restarting Discord.JS client');
     } else {
       console.log('Starting Discord.JS client...');
     }
 
-    // I use this async import to make sure that the purplet build won't load discord.js
-    // regardless of whether it's actually being used or not.
-    const Discord = this.#djsModule ?? (await import('discord.js'));
-
     // Cleanup the djsClient hook
     await asyncMap(this.#features, feat => this.runCleanupHandler(feat, 'djsClient'));
 
     // Construct and login client
-    this.#djsClient = new Discord.Client({
+    this.#djsClient = new Client({
       intents: this.#currentIntents,
       ...structuredClone(this.#currentDJSOptions),
     });
+    setDJSClient(this.#djsClient);
 
     // Intercept all raw gateway events for the `gatewayEvent` hook.
     const wsEmit = this.#djsClient.ws.emit;
@@ -305,7 +304,7 @@ export class GatewayBot {
     };
 
     // Listen for raw interaction events for the `interaction` hook.
-    this.#djsClient.ws.on(Discord.GatewayDispatchEvents.InteractionCreate, async i => {
+    this.#djsClient.ws.on(GatewayDispatchEvents.InteractionCreate, async i => {
       this.handleInteraction(i);
     });
 
@@ -384,5 +383,27 @@ export class GatewayBot {
   /** Unloads all features associated with a given filename. */
   unloadFeaturesFromFile(filename: string) {
     return this.unloadFeatures(...this.#features.filter(feat => feat.filename === filename));
+  }
+
+  /** Gracefully stop the bot. */
+  async stop() {
+    // Stop the bot
+    if (this.#djsClient) {
+      await this.#djsClient.destroy();
+    }
+
+    // Clear commands
+    if (this.options.mode === 'development') {
+      const guildList = process.env.UNSTABLE_PURPLET_COMMAND_GUILDS?.split(',');
+      if (guildList) {
+        await asyncMap(guildList, async guildId => {
+          await rest.put(Routes.applicationGuildCommands(this.#id, guildId), {
+            body: [],
+          });
+        });
+      }
+    }
+
+    this.#running = false;
   }
 }

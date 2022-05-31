@@ -53,10 +53,9 @@
     "vite": "3.0.0-alpha.7"
   },
   "devDependencies": {
-    "@davecode/types": "^1.0.1",
+    "@davecode/types": "^1.0.2",
     "@rollup/plugin-replace": "^4.0.0",
     "@types/node": "^17.0.36",
-    "discord-api-types": "^0.33.1",
     "discord.js": "14.0.0-dev.1653480262-68d5169",
     "dts-bundle-generator": "^6.9.0",
     "rollup-plugin-add-shebang": "^0.3.1"

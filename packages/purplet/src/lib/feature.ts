@@ -1,4 +1,3 @@
-import type * as Discord from 'discord-api-types/gateway';
 import type * as DJS from 'discord.js';
 import type { Awaitable } from '@davecode/types';
 import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord.js';
@@ -21,8 +20,8 @@ export type IntentResolvable = number | number[];
 
 /**
  * A feature represents anything that contributes to the bot's functionality. In purplet, features
- * achieve action through a small set of hooks that let you tie into Discord.js and Purplet's own
- * API. They look very similar to vite and rollup plugins.
+ * achieve action through a small set of hooks that let you tie into DJS.js and Purplet's own API.
+ * They look very similar to vite and rollup plugins.
  *
  * Also, there is some extra data about your feature available as `this` inside of the hooks, so I'd
  * stray away from using arrow functions for that, plus it looks nicer with the method shorthand.
@@ -36,35 +35,35 @@ export interface FeatureData {
    */
   initialize?: LifecycleHook<void>;
   /**
-   * Called on load with a Discord.js client. Specifying this hook will cause the Discord.js client
-   * to be setup. This hook allows for a cleanup function, which you should use to remove event handlers.
+   * Called on load with a DJS.js client. Specifying this hook will cause the DJS.js client to be
+   * setup. This hook allows for a cleanup function, which you should use to remove event handlers.
    */
   djsClient?: LifecycleHook<DJS.Client>;
   /**
-   * Called before the Discord.js client is created, passing a configuration object. You are able to
-   * return or modify the configuration object, and that will be passed to Discord.js. Do not
-   * configure gateway intents with this hook, and use the separate gateway intents hook instead.
+   * Called before the DJS.js client is created, passing a configuration object. You are able to
+   * return or modify the configuration object, and that will be passed to DJS.js. Do not configure
+   * gateway intents with this hook, and use the separate gateway intents hook instead.
    *
-   * Note: this hook will only be called if some feature in your project requests the Discord.js client.
+   * Note: this hook will only be called if some feature in your project requests the DJS.js client.
    */
   djsOptions?: EventHook<DJSOptions, DJSOptions | void>;
   /**
-   * Called for incoming interactions, and does not explicity rely on Discord.js, meaning bots using
+   * Called for incoming interactions, and does not explicity rely on DJS.js, meaning bots using
    * this hook can theoretically be deployed to a cloud function and called over HTTPs.
    */
   interaction?: EventHook<PurpletInteraction, DJS.APIInteractionResponse | void>;
   /**
    * An object mapping gateway event types to functions to handle them, does not explicity rely on
-   * Discord.js, meaning bots using this hook instead of `djsClient` can theoretically run without
-   * needing to use Discord.js. `INTERACTION_CREATE` is not emitted, as you should be using the
+   * DJS.js, meaning bots using this hook instead of `djsClient` can theoretically run without
+   * needing to use DJS.js. `INTERACTION_CREATE` is not emitted, as you should be using the
    * `interaction` hook for that.
    *
-   * Specifying this hook will cause a gateway client to be setup, currently that is Discord.js.
+   * Specifying this hook will cause a gateway client to be setup, currently that is DJS.js.
    */
   gatewayEvent?: GatewayEventHook;
   /**
    * Called to resolve this feature's application commands. Return an array of commands to be
-   * registered to Discord. If your command is not returned here, it may be deleted.
+   * registered to DJS. If your command is not returned here, it may be deleted.
    *
    * In development mode, you must set the `UNSTABLE_PURPLET_COMMAND_GUILDS` environment variable to
    * a comma separated list of guild IDs to register commands to. Commands may also cleared on bot shutdown.
@@ -75,7 +74,7 @@ export interface FeatureData {
   applicationCommands?: DataHook<ApplicationCommandData[]>;
   /**
    * This hook allows you to specify what gateway intents your gateway bot requires. Does not assume
-   * a Discord.js environment, and will trigger on either using Discord.js, or the `gatewayEvents` hook.
+   * a DJS.js environment, and will trigger on either using DJS.js, or the `gatewayEvents` hook.
    */
   intents?: DataHook<IntentResolvable>;
 }
@@ -121,57 +120,57 @@ export function isFeature(feature: unknown): feature is Feature {
 
 export interface GatewayEventHook {
   // This first type is missing... I don't mean to exclude it, but tsc will yell
-  // APPLICATION_COMMAND_PERMISSIONS_UPDATE?: EventHook<Discord.GatewayApplicationCommandPermissionsUpdateDispatchData>;
-  CHANNEL_CREATE?: EventHook<Discord.GatewayChannelCreateDispatchData>;
-  CHANNEL_DELETE?: EventHook<Discord.GatewayChannelDeleteDispatchData>;
-  CHANNEL_PINS_UPDATE?: EventHook<Discord.GatewayChannelPinsUpdateDispatchData>;
-  CHANNEL_UPDATE?: EventHook<Discord.GatewayChannelUpdateDispatchData>;
-  GUILD_BAN_ADD?: EventHook<Discord.GatewayGuildBanAddDispatchData>;
-  GUILD_BAN_REMOVE?: EventHook<Discord.GatewayGuildBanRemoveDispatchData>;
-  GUILD_CREATE?: EventHook<Discord.GatewayGuildCreateDispatchData>;
-  GUILD_DELETE?: EventHook<Discord.GatewayGuildDeleteDispatchData>;
-  GUILD_EMOJIS_UPDATE?: EventHook<Discord.GatewayGuildEmojisUpdateDispatchData>;
-  GUILD_INTEGRATIONS_UPDATE?: EventHook<Discord.GatewayGuildIntegrationsUpdateDispatchData>;
-  GUILD_MEMBER_ADD?: EventHook<Discord.GatewayGuildMemberAddDispatchData>;
-  GUILD_MEMBER_REMOVE?: EventHook<Discord.GatewayGuildMemberRemoveDispatchData>;
-  GUILD_MEMBERS_CHUNK?: EventHook<Discord.GatewayGuildMembersChunkDispatchData>;
-  GUILD_MEMBER_UPDATE?: EventHook<Discord.GatewayGuildMemberUpdateDispatchData>;
-  GUILD_ROLE_CREATE?: EventHook<Discord.GatewayGuildRoleCreateDispatchData>;
-  GUILD_ROLE_DELETE?: EventHook<Discord.GatewayGuildRoleDeleteDispatchData>;
-  GUILD_ROLE_UPDATE?: EventHook<Discord.GatewayGuildRoleUpdateDispatchData>;
-  GUILD_STICKERS_UPDATE?: EventHook<Discord.GatewayGuildStickersUpdateDispatchData>;
-  GUILD_UPDATE?: EventHook<Discord.GatewayGuildUpdateDispatchData>;
-  INTEGRATION_CREATE?: EventHook<Discord.GatewayIntegrationCreateDispatchData>;
-  INTEGRATION_DELETE?: EventHook<Discord.GatewayIntegrationDeleteDispatchData>;
-  INTEGRATION_UPDATE?: EventHook<Discord.GatewayIntegrationUpdateDispatchData>;
-  INVITE_CREATE?: EventHook<Discord.GatewayInviteCreateDispatchData>;
-  INVITE_DELETE?: EventHook<Discord.GatewayInviteDeleteDispatchData>;
-  MESSAGE_CREATE?: EventHook<Discord.GatewayMessageCreateDispatchData>;
-  MESSAGE_DELETE?: EventHook<Discord.GatewayMessageDeleteDispatchData>;
-  MESSAGE_DELETE_BULK?: EventHook<Discord.GatewayMessageDeleteBulkDispatchData>;
-  MESSAGE_REACTION_ADD?: EventHook<Discord.GatewayMessageReactionAddDispatchData>;
-  MESSAGE_REACTION_REMOVE?: EventHook<Discord.GatewayMessageReactionRemoveDispatchData>;
-  MESSAGE_REACTION_REMOVE_ALL?: EventHook<Discord.GatewayMessageReactionRemoveAllDispatchData>;
-  MESSAGE_REACTION_REMOVE_EMOJI?: EventHook<Discord.GatewayMessageReactionRemoveEmojiDispatchData>;
-  MESSAGE_UPDATE?: EventHook<Discord.GatewayMessageUpdateDispatchData>;
-  PRESENCE_UPDATE?: EventHook<Discord.GatewayPresenceUpdateDispatchData>;
-  STAGE_INSTANCE_CREATE?: EventHook<Discord.GatewayStageInstanceCreateDispatchData>;
-  STAGE_INSTANCE_DELETE?: EventHook<Discord.GatewayStageInstanceDeleteDispatchData>;
-  STAGE_INSTANCE_UPDATE?: EventHook<Discord.GatewayStageInstanceUpdateDispatchData>;
-  THREAD_CREATE?: EventHook<Discord.GatewayThreadCreateDispatchData>;
-  THREAD_DELETE?: EventHook<Discord.GatewayThreadDeleteDispatchData>;
-  THREAD_LIST_SYNC?: EventHook<Discord.GatewayThreadListSyncDispatchData>;
-  THREAD_MEMBERS_UPDATE?: EventHook<Discord.GatewayThreadMembersUpdateDispatchData>;
-  THREAD_MEMBER_UPDATE?: EventHook<Discord.GatewayThreadMemberUpdateDispatchData>;
-  THREAD_UPDATE?: EventHook<Discord.GatewayThreadUpdateDispatchData>;
-  TYPING_START?: EventHook<Discord.GatewayTypingStartDispatchData>;
-  USER_UPDATE?: EventHook<Discord.GatewayUserUpdateDispatchData>;
-  VOICE_SERVER_UPDATE?: EventHook<Discord.GatewayVoiceServerUpdateDispatchData>;
-  VOICE_STATE_UPDATE?: EventHook<Discord.GatewayVoiceStateUpdateDispatchData>;
-  WEBHOOKS_UPDATE?: EventHook<Discord.GatewayWebhooksUpdateDispatchData>;
-  GUILD_SCHEDULED_EVENT_CREATE?: EventHook<Discord.GatewayGuildScheduledEventCreateDispatchData>;
-  GUILD_SCHEDULED_EVENT_UPDATE?: EventHook<Discord.GatewayGuildScheduledEventUpdateDispatchData>;
-  GUILD_SCHEDULED_EVENT_DELETE?: EventHook<Discord.GatewayGuildScheduledEventDeleteDispatchData>;
-  GUILD_SCHEDULED_EVENT_USER_ADD?: EventHook<Discord.GatewayGuildScheduledEventUserAddDispatchData>;
-  GUILD_SCHEDULED_EVENT_USER_REMOVE?: EventHook<Discord.GatewayGuildScheduledEventUserRemoveDispatchData>;
+  // APPLICATION_COMMAND_PERMISSIONS_UPDATE?: EventHook<DJS.GatewayApplicationCommandPermissionsUpdateDispatchData>;
+  CHANNEL_CREATE?: EventHook<DJS.GatewayChannelCreateDispatchData>;
+  CHANNEL_DELETE?: EventHook<DJS.GatewayChannelDeleteDispatchData>;
+  CHANNEL_PINS_UPDATE?: EventHook<DJS.GatewayChannelPinsUpdateDispatchData>;
+  CHANNEL_UPDATE?: EventHook<DJS.GatewayChannelUpdateDispatchData>;
+  GUILD_BAN_ADD?: EventHook<DJS.GatewayGuildBanAddDispatchData>;
+  GUILD_BAN_REMOVE?: EventHook<DJS.GatewayGuildBanRemoveDispatchData>;
+  GUILD_CREATE?: EventHook<DJS.GatewayGuildCreateDispatchData>;
+  GUILD_DELETE?: EventHook<DJS.GatewayGuildDeleteDispatchData>;
+  GUILD_EMOJIS_UPDATE?: EventHook<DJS.GatewayGuildEmojisUpdateDispatchData>;
+  GUILD_INTEGRATIONS_UPDATE?: EventHook<DJS.GatewayGuildIntegrationsUpdateDispatchData>;
+  GUILD_MEMBER_ADD?: EventHook<DJS.GatewayGuildMemberAddDispatchData>;
+  GUILD_MEMBER_REMOVE?: EventHook<DJS.GatewayGuildMemberRemoveDispatchData>;
+  GUILD_MEMBERS_CHUNK?: EventHook<DJS.GatewayGuildMembersChunkDispatchData>;
+  GUILD_MEMBER_UPDATE?: EventHook<DJS.GatewayGuildMemberUpdateDispatchData>;
+  GUILD_ROLE_CREATE?: EventHook<DJS.GatewayGuildRoleCreateDispatchData>;
+  GUILD_ROLE_DELETE?: EventHook<DJS.GatewayGuildRoleDeleteDispatchData>;
+  GUILD_ROLE_UPDATE?: EventHook<DJS.GatewayGuildRoleUpdateDispatchData>;
+  GUILD_STICKERS_UPDATE?: EventHook<DJS.GatewayGuildStickersUpdateDispatchData>;
+  GUILD_UPDATE?: EventHook<DJS.GatewayGuildUpdateDispatchData>;
+  INTEGRATION_CREATE?: EventHook<DJS.GatewayIntegrationCreateDispatchData>;
+  INTEGRATION_DELETE?: EventHook<DJS.GatewayIntegrationDeleteDispatchData>;
+  INTEGRATION_UPDATE?: EventHook<DJS.GatewayIntegrationUpdateDispatchData>;
+  INVITE_CREATE?: EventHook<DJS.GatewayInviteCreateDispatchData>;
+  INVITE_DELETE?: EventHook<DJS.GatewayInviteDeleteDispatchData>;
+  MESSAGE_CREATE?: EventHook<DJS.GatewayMessageCreateDispatchData>;
+  MESSAGE_DELETE?: EventHook<DJS.GatewayMessageDeleteDispatchData>;
+  MESSAGE_DELETE_BULK?: EventHook<DJS.GatewayMessageDeleteBulkDispatchData>;
+  MESSAGE_REACTION_ADD?: EventHook<DJS.GatewayMessageReactionAddDispatchData>;
+  MESSAGE_REACTION_REMOVE?: EventHook<DJS.GatewayMessageReactionRemoveDispatchData>;
+  MESSAGE_REACTION_REMOVE_ALL?: EventHook<DJS.GatewayMessageReactionRemoveAllDispatchData>;
+  MESSAGE_REACTION_REMOVE_EMOJI?: EventHook<DJS.GatewayMessageReactionRemoveEmojiDispatchData>;
+  MESSAGE_UPDATE?: EventHook<DJS.GatewayMessageUpdateDispatchData>;
+  PRESENCE_UPDATE?: EventHook<DJS.GatewayPresenceUpdateDispatchData>;
+  STAGE_INSTANCE_CREATE?: EventHook<DJS.GatewayStageInstanceCreateDispatchData>;
+  STAGE_INSTANCE_DELETE?: EventHook<DJS.GatewayStageInstanceDeleteDispatchData>;
+  STAGE_INSTANCE_UPDATE?: EventHook<DJS.GatewayStageInstanceUpdateDispatchData>;
+  THREAD_CREATE?: EventHook<DJS.GatewayThreadCreateDispatchData>;
+  THREAD_DELETE?: EventHook<DJS.GatewayThreadDeleteDispatchData>;
+  THREAD_LIST_SYNC?: EventHook<DJS.GatewayThreadListSyncDispatchData>;
+  THREAD_MEMBERS_UPDATE?: EventHook<DJS.GatewayThreadMembersUpdateDispatchData>;
+  THREAD_MEMBER_UPDATE?: EventHook<DJS.GatewayThreadMemberUpdateDispatchData>;
+  THREAD_UPDATE?: EventHook<DJS.GatewayThreadUpdateDispatchData>;
+  TYPING_START?: EventHook<DJS.GatewayTypingStartDispatchData>;
+  USER_UPDATE?: EventHook<DJS.GatewayUserUpdateDispatchData>;
+  VOICE_SERVER_UPDATE?: EventHook<DJS.GatewayVoiceServerUpdateDispatchData>;
+  VOICE_STATE_UPDATE?: EventHook<DJS.GatewayVoiceStateUpdateDispatchData>;
+  WEBHOOKS_UPDATE?: EventHook<DJS.GatewayWebhooksUpdateDispatchData>;
+  GUILD_SCHEDULED_EVENT_CREATE?: EventHook<DJS.GatewayGuildScheduledEventCreateDispatchData>;
+  GUILD_SCHEDULED_EVENT_UPDATE?: EventHook<DJS.GatewayGuildScheduledEventUpdateDispatchData>;
+  GUILD_SCHEDULED_EVENT_DELETE?: EventHook<DJS.GatewayGuildScheduledEventDeleteDispatchData>;
+  GUILD_SCHEDULED_EVENT_USER_ADD?: EventHook<DJS.GatewayGuildScheduledEventUserAddDispatchData>;
+  GUILD_SCHEDULED_EVENT_USER_REMOVE?: EventHook<DJS.GatewayGuildScheduledEventUserRemoveDispatchData>;
 }
