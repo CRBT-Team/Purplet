@@ -7,8 +7,8 @@ import {
   InteractionType,
 } from 'discord.js';
 import { PurpletInteraction } from './base';
-import { djs } from '../global';
-import type { JSONResolvable } from '../../utils/plain';
+import { djs } from '../../global';
+import type { JSONResolvable } from '../../../utils/plain';
 
 export class PurpletAutocompleteInteraction<
   Data extends APIApplicationCommandAutocompleteInteraction = APIApplicationCommandAutocompleteInteraction
@@ -44,7 +44,7 @@ export class PurpletAutocompleteInteraction<
     });
   }
 
-  toDJS() {
+  toDJS(): AutocompleteInteraction {
     // @ts-expect-error Discord.js marks this with wrong types.
     return new AutocompleteInteraction(djs, this.raw);
   }

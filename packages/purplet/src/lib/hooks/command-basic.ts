@@ -1,6 +1,6 @@
 import { ApplicationCommandType } from 'discord.js';
 import { ApplicationCommandData, createFeature } from '../feature';
-import { PurpletCommandInteraction, PurpletInteraction } from '../interaction';
+import { PurpletCommandInteraction, PurpletInteraction } from '../structures/interaction';
 
 function formatCommandName(cmd: ApplicationCommandData) {
   const commandTypeNames = {

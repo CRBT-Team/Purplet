@@ -1,54 +1,51 @@
 /* eslint-disable no-redeclare */
-import type { Awaitable, Class, ForceSimplify } from '@davecode/types';
+import type { Awaitable, Class, ForceSimplify, Overwrite } from '@davecode/types';
 import {
   APIApplicationCommandOption,
   APIAttachment,
-  APIInteractionDataResolvedChannel,
-  APIRole,
-  APIUser,
+  ApplicationCommandOptionType,
+  Attachment,
+  Channel,
   ChannelType,
   LocalizationMap,
+  Role,
+  User,
 } from 'discord.js';
 import type { PurpletAutocompleteInteraction } from '../interaction';
 
 /**
- * (Explainer part 1 of 2)
+ * OptionBuilder is a very complex piece of type-code built out of a lot of mapped types to reduce
+ * the amount of copied code. The reasoning for all of this is to give a nice interface to users by
+ * keeping track of EVERYTHING passed to it in the `<Options>` type param, which can be extracted
+ * later, giving you strong types inside of `$chatCommand` and other places.
  *
- * OptionBuilder is built out of a lot of mapped types, to reduce the amount of copied code. This
- * builder is special because it keeps track of EVERYTHING passed to it in a type parameter, which
- * can be extracted later, giving you strong types inside of `$chatCommand`.
- *
- * The first two types, `OptionInputs` and `OptionOutputs` are interfaces mapping method names to
- * their respective input and output. "Input" in this case refers to the third argument, containing
- * options after name and description. All of these inputs extend other interfaces according to the
- * discord api, but with camel case names. "Output" refers to the resolved data types.
+ * The first type `OptionInputs` is an interfaces mapping method names to their respective `options`
+ * argument (third one where first is `name` and second is `description`). All of these inputs
+ * extend other interfaces according to the discord api, but with camel case instead of snake case.
  */
 
-/** @internal Maps builder method names to what the third argument should be. */
-interface OptionInputs<ThisKey = string, ExistingOptions = null> {
-  string: EnumOption<ThisKey, ExistingOptions, string>;
-  integer: NumericOption<ThisKey, ExistingOptions>;
+/**
+ * @internal Maps builder method names to what the third argument should be. When editing this, you
+ * must ensure the keys match to discord option type names. See the assertion type below for if that
+ * check is met.
+ */
+interface OptionInputs {
+  string: EnumOption<string>;
+  integer: NumericOption;
   boolean: BaseOption;
   channel: ChannelOption;
   user: BaseOption;
   mentionable: BaseOption;
   role: BaseOption;
-  number: NumericOption<ThisKey, ExistingOptions>;
+  number: NumericOption;
   attachment: BaseOption;
 }
 
-/** @internal Maps builder method names to what the option resolves to. */
-interface OptionTypeValues {
-  string: string;
-  integer: number;
-  boolean: boolean;
-  channel: APIInteractionDataResolvedChannel;
-  user: APIUser;
-  mentionable: APIUser | APIRole;
-  role: APIRole;
-  number: number;
-  attachment: APIAttachment;
-}
+/** @internal This type MUST only be equal to "PASS", if it includes "FAIL" then the above type is incorrect. */
+type AssertOptionInputsCorrect = //
+  typeof ApplicationCommandOptionType[Capitalize<keyof OptionInputs>] extends number
+    ? 'PASS'
+    : 'FAIL';
 
 /** @internal Used for `OptionInputs`. Hold the common properties of all options. */
 interface BaseOption {
@@ -56,26 +53,25 @@ interface BaseOption {
   descriptionLocalizations?: LocalizationMap;
 }
 
-/** @internal Used for `OptionInputs`. This option has an autocomplete handler */
-interface AutocompleteOption<ThisKey, ExistingOptions, T> extends BaseOption {
-  autocomplete?: Autocomplete<Partial<ExistingOptions> & Record<ThisKey, T>, T>;
+/** @internal Used for `OptionInputs`. This option has an autocomplete handler. */
+interface AutocompleteOption<T extends string | number> extends BaseOption {
+  autocomplete?: Autocomplete<null, T>;
 }
 
 /**
  * @internal Used for `OptionInputs`. Enum Options as I call them are anything with a dropdown list.
  * In Discord, this is done with a `choices` list or `autocomplete` handler.
  */
-type EnumOption<ThisKey, ExistingOptions, T> =
-  | AutocompleteOption<ThisKey, ExistingOptions, T>
-  | (BaseOption & {
+export type EnumOption<T extends string | number> =
+  | AutocompleteOption<T>
+  | ({
       // Look at this: it's an object, NOT an array. Personal opinion tbh, looks cleaner.
       choices: Record<T, string>;
       choiceLocalizations?: Record<T, LocalizationMap>;
-    });
+    } & BaseOption);
 
 /** @internal Used for `OptionInputs`. Numeric options have a min and max value, in addition to being enum-able. */
-interface NumericOption<ThisKey, ExistingOptions>
-  extends EnumOption<ThisKey, ExistingOptions, number> {
+interface NumericOption extends EnumOption<number> {
   minValue?: number;
   maxValue?: number;
 }
@@ -86,12 +82,12 @@ interface ChannelOption extends BaseOption {
 }
 
 /**
- * The rest of the option types are BaseOption, as they have no extra properties.
+ * The rest of the option types are BaseOption, as they have no extra properties. (like `role`)
  *
  * Next up are a few utility types for stuff youre passing to the builder for choices and autocomplete.
  */
 
-/** Represents one choice from a `.choices` object. */
+/** Represents one choice from a `.choices` object or return from an autocomplete handler. */
 export interface Choice<T = string | number> {
   name: string;
   nameLocalizations?: LocalizationMap;
@@ -103,10 +99,29 @@ export interface Choice<T = string | number> {
  * options argument. This function gets called on autocomplete interactions tied to whatever command
  * option you pass it to.
  */
-export type Autocomplete<ExistingOptions = Record<string, never>, Type = unknown> = (
+export type Autocomplete<Context = null, Type = unknown> = (
   this: PurpletAutocompleteInteraction,
-  ctx: ExistingOptions
+  ctx: Context
 ) => Awaitable<Choice<Type>[]>;
+
+/**
+ * Transforms { autocomplete?: Autocomplete<null, T> } to fill that `null`. This type exists so we
+ * don't have to pass `CurrentOptions` and `Key` through to each thing in `OptionInputs`
+ */
+export type TransformAutocompleteOptions<T, CurrentOptions, Key> = //
+  T extends AutocompleteOption<infer ACType>
+    ? Overwrite<
+        T,
+        {
+          autocomplete: Autocomplete<
+            ForceSimplify<
+              Partial<OptionBuilderToUnresolvedObject<CurrentOptions> & Record<Key, ACType>>
+            >,
+            ACType
+          >;
+        }
+      >
+    : T;
 
 /**
  * Now, for building the actual OptionBuilder instance type. We simply map over the keys of the
@@ -139,7 +154,7 @@ type OptionBuilderMethod<CurrentOptions, MethodName extends keyof OptionInputs> 
    * from `OptionInputs` up above. We also pass it the `ThisKey` and `ExistingOptions` params, which
    * are only really used for the `autocomplete` method.
    */
-  OptionOptions extends OptionInputs<Key, CurrentOptions>[MethodName],
+  OptionOptions extends TransformAutocompleteOptions<OptionInputs[MethodName], CurrentOptions, Key>,
   /**
    * `IsRequired` is a boolean that will match the extra { required?: boolean } object we join
    * `OptionOptions` with, as we perform different type behavior based on whether or not it's
@@ -168,9 +183,9 @@ type OptionBuilderMethod<CurrentOptions, MethodName extends keyof OptionInputs> 
            */
           OptionOptions extends EnumOption<unknown, unknown, infer T>
             ? T extends string
-              ? T
-              : OptionTypeValues[MethodName]
-            : OptionTypeValues[MethodName]
+              ? { enum: T }
+              : { type: typeof ApplicationCommandOptionType[Capitalize<MethodName>] }
+            : { type: typeof ApplicationCommandOptionType[Capitalize<MethodName>] }
         >
       >
   >
@@ -187,7 +202,67 @@ export function getOptionBuilderAutocompleteHandlers(
   builder: OptionBuilder | undefined
 ): Record<string, Autocomplete>;
 
-/** Utility type to extract the option types out of an `OptionBuilder` */
-export type GetOptionsFromBuilder<T extends OptionBuilder> = T extends OptionBuilder<infer U>
-  ? U
+/** Now here are types for resolving the OptionBuilder's type param to more useful structures. */
+
+type OptionBuilderOrType<T> = OptionBuilder<T> | T;
+
+/** "Unresolved" refers to the raw `value` property given in an interaction. */
+export type OptionBuilderEntryToUnresolved<X> = X extends { type: infer T }
+  ? {
+      [ApplicationCommandOptionType.String]: string;
+      [ApplicationCommandOptionType.Integer]: number;
+      [ApplicationCommandOptionType.Boolean]: boolean;
+      [ApplicationCommandOptionType.User]: string;
+      [ApplicationCommandOptionType.Channel]: string;
+      [ApplicationCommandOptionType.Role]: string;
+      [ApplicationCommandOptionType.Mentionable]: string;
+      [ApplicationCommandOptionType.Number]: number;
+      [ApplicationCommandOptionType.Attachment]: string;
+    }[T]
+  : X extends { enum: infer T }
+  ? T
+  : never;
+/** "Unresolved" refers to the raw `value` property given in an interaction. */
+export type OptionBuilderToUnresolvedObject<X> = X extends OptionBuilderOrType<infer T>
+  ? { [K in keyof T]: OptionBuilderEntryToUnresolved<T[K]> }
+  : never;
+/** "PurpletResolved" refers to the resolved value given with `$chatCommand` */
+export type OptionBuilderEntryToPurpletResolved<X> = X extends { type: infer T }
+  ? {
+      [ApplicationCommandOptionType.String]: string;
+      [ApplicationCommandOptionType.Integer]: number;
+      [ApplicationCommandOptionType.Boolean]: boolean;
+      [ApplicationCommandOptionType.User]: APIUser;
+      [ApplicationCommandOptionType.Channel]: APIInteractionDataResolvedChannel;
+      [ApplicationCommandOptionType.Role]: APIRole;
+      [ApplicationCommandOptionType.Mentionable]: APIUser | APIRole;
+      [ApplicationCommandOptionType.Number]: number;
+      [ApplicationCommandOptionType.Attachment]: APIAttachment;
+    }[T]
+  : X extends { enum: infer T }
+  ? T
+  : never;
+/** "PurpletResolved" refers to the resolved value given with `$chatCommand` */
+export type OptionBuilderToPurpletResolvedObject<X> = X extends OptionBuilderOrType<infer T>
+  ? { [K in keyof T]: OptionBuilderEntryToPurpletResolved<T[K]> }
+  : never;
+/** "DJSResolved" refers to the resolved value given with `$djsChatCommand` */
+export type OptionBuilderEntryToDJSResolved<X> = X extends { type: infer T }
+  ? {
+      [ApplicationCommandOptionType.String]: string;
+      [ApplicationCommandOptionType.Integer]: number;
+      [ApplicationCommandOptionType.Boolean]: boolean;
+      [ApplicationCommandOptionType.User]: User;
+      [ApplicationCommandOptionType.Channel]: Channel;
+      [ApplicationCommandOptionType.Role]: Role;
+      [ApplicationCommandOptionType.Mentionable]: User | Role;
+      [ApplicationCommandOptionType.Number]: number;
+      [ApplicationCommandOptionType.Attachment]: Attachment;
+    }[T]
+  : X extends { enum: infer T }
+  ? T
+  : never;
+/** "DJSResolved" refers to the resolved value given with `$djsChatCommand` */
+export type OptionBuilderToDJSResolvedObject<X> = X extends OptionBuilderOrType<infer T>
+  ? { [K in keyof T]: OptionBuilderEntryToDJSResolved<T[K]> }
   : never;

@@ -17,8 +17,9 @@ import type {
   LifecycleHookNames,
 } from './feature';
 import { rest, setDJSClient } from './global';
-import { createInteraction } from './interaction';
+import { createInteraction } from './structures/interaction';
 import { featureRequiresDJS } from '../utils/feature';
+import { JSONValue, toJSONValue } from '../utils/plain';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 
@@ -126,8 +127,8 @@ export class GatewayBot {
 
   /** @internal */
   private async handleInteraction(i: APIInteraction) {
-    const responseHandler = (response: APIInteractionResponse) => {
-      rest.post(Routes.interactionCallback(i.id, i.token), {
+    const responseHandler = async (response: APIInteractionResponse) => {
+      await rest.post(Routes.interactionCallback(i.id, i.token), {
         body: response,
         // TODO: handle file uploads for interaction responses.
         files: [],
@@ -138,7 +139,7 @@ export class GatewayBot {
 
     // Run handlers
     (await asyncMap(this.#features, feat => feat.interaction?.call?.(feat, interaction))) //
-      .forEach(response => response && interaction.respond(response));
+      .forEach(response => response && responseHandler(toJSONValue(response as JSONValue)));
   }
 
   // TODO: fix types on this to not have that required `Event` type param, but whatever.

@@ -5,7 +5,7 @@ import {
   SelectMenuInteraction,
 } from 'discord.js';
 import { PurpletComponentInteraction } from './component';
-import { djs } from '../global';
+import { djs } from '../../global';
 
 export class PurpletSelectMenuInteraction<
   Data extends APIMessageComponentSelectMenuInteraction = APIMessageComponentSelectMenuInteraction

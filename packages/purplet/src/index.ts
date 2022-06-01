@@ -13,5 +13,6 @@ export * from './lib/hooks/command-chat';
 export * from './lib/hooks/command-context';
 export * from './lib/hooks/gateway';
 export * from './lib/hooks/service';
-export * from './lib/interaction';
+export * from './lib/structures/interaction';
+export * from './lib/structures/interaction-resposne';
 export type { Cleanup } from './utils/types';

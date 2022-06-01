@@ -1,7 +1,8 @@
+import type { Awaitable } from '@davecode/types';
 import type { APIInteraction, APIInteractionResponse, Interaction } from 'discord.js';
-import { JSONResolvable, toJSONValue } from '../../utils/plain';
+import { JSONResolvable, toJSONValue } from '../../../utils/plain';
 
-export type InteractionResponseHandler = (r: APIInteractionResponse) => void;
+export type InteractionResponseHandler = (r: APIInteractionResponse) => Awaitable<void>;
 
 export abstract class PurpletInteraction<Data extends APIInteraction = APIInteraction> {
   #onRespond: InteractionResponseHandler | undefined;
@@ -40,17 +41,17 @@ export abstract class PurpletInteraction<Data extends APIInteraction = APIIntera
   }
 
   get user() {
-    return this.raw.user;
+    return this.raw.user ?? this.member!.user;
   }
 
-  protected respond(response: JSONResolvable<APIInteractionResponse>) {
+  protected async respond(response: JSONResolvable<APIInteractionResponse>) {
     if (this.#replied) {
       throw new Error('Cannot respond to an interaction twice');
     }
     this.#replied = true;
 
     if (this.#onRespond) {
-      this.#onRespond(toJSONValue(response));
+      await this.#onRespond(toJSONValue(response));
     } else {
       throw new Error(
         'This interaction cannot be responded to. (onRespond not set in constructor)'
@@ -60,12 +61,6 @@ export abstract class PurpletInteraction<Data extends APIInteraction = APIIntera
 
   get replied() {
     return this.#replied;
-  }
-
-  /** Resolves to either `.member` or `.user` depending which one is filled in. */
-  get invoker() {
-    // The null assert ensures that the type is APIMember | APIUser, but excluding null.
-    return this.member ?? this.user!;
   }
 
   /**

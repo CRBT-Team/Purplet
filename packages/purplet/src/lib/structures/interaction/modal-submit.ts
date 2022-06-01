@@ -7,7 +7,7 @@ import {
   ModalSubmitInteraction,
 } from 'discord.js';
 import { PurpletChannelInteraction } from './base-channel';
-import { djs } from '../global';
+import { djs } from '../../global';
 
 export class PurpletModalSubmitInteraction<
   Data extends APIModalSubmitInteraction = APIModalSubmitInteraction

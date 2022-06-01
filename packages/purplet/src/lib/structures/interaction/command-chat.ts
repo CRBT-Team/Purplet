@@ -6,7 +6,7 @@ import {
   ChatInputCommandInteraction,
 } from 'discord.js';
 import { PurpletCommandInteraction } from './command';
-import { djs } from '../global';
+import { djs } from '../../global';
 
 export class PurpletChatCommandInteraction<
   Data extends APIChatInputApplicationCommandInteraction = APIChatInputApplicationCommandInteraction

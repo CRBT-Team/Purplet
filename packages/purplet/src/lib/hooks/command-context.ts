@@ -11,7 +11,7 @@ import { $appCommand } from './command-basic';
 import type {
   PurpletMessageCommandInteraction,
   PurpletUserCommandInteraction,
-} from '../interaction';
+} from '../structures/interaction';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../../utils/permissions';
 
 export interface ContextCommandOptions extends CommandPermissionsInput {

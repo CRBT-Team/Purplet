@@ -2,8 +2,15 @@ import { ApplicationCommandType, LocalizationMap } from 'discord.js';
 import { $interaction } from './basic';
 import { $appCommand } from './command-basic';
 import { $merge } from './merge';
-import { getOptionBuilderAutocompleteHandlers, OptionBuilder } from '../builders/OptionBuilder';
-import { PurpletAutocompleteInteraction, PurpletChatCommandInteraction } from '../interaction';
+import {
+  getOptionBuilderAutocompleteHandlers,
+  OptionBuilder,
+  OptionBuilderToPurpletResolvedObject,
+} from '../builders/OptionBuilder';
+import {
+  PurpletAutocompleteInteraction,
+  PurpletChatCommandInteraction,
+} from '../structures/interaction';
 import { camelChoiceToSnake } from '../../utils/case';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../../utils/permissions';
 
@@ -13,7 +20,10 @@ export interface ChatCommandOptions<T> extends CommandPermissionsInput {
   description: string;
   descriptionLocalizations?: LocalizationMap;
   options?: OptionBuilder<T>;
-  handle(this: PurpletChatCommandInteraction, options: T): void;
+  handle(
+    this: PurpletChatCommandInteraction,
+    options: OptionBuilderToPurpletResolvedObject<T>
+  ): void;
 }
 
 export function $chatCommand<T>(options: ChatCommandOptions<T>) {
@@ -34,7 +44,8 @@ export function $chatCommand<T>(options: ChatCommandOptions<T>) {
       handle(this: PurpletChatCommandInteraction) {
         const resolvedOptions = Object.fromEntries(
           commandOptions.map(option => [option.name, this.getResolvedOption(option.name)])
-        ) as unknown as T;
+        ) as unknown as OptionBuilderToPurpletResolvedObject<T>;
+
         options.handle.call(this, resolvedOptions);
       },
     }),
@@ -47,7 +58,7 @@ export function $chatCommand<T>(options: ChatCommandOptions<T>) {
           i.commandType === ApplicationCommandType.ChatInput
         ) {
           const resolvedOptions = Object.fromEntries(
-            commandOptions.map(option => [option.name, i.getOption(option.name).value])
+            commandOptions.map(option => [option.name, i.getOption(option.name)?.value])
           ) as unknown as T;
 
           i.showAutocompleteResponse({
