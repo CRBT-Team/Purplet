@@ -1,17 +1,25 @@
-// be careful changing this file
-
 import { ApplicationCommandOptionType } from 'discord.js';
 
 export class OptionBuilder {
+  /** @type {import('discord.js').APIApplicationCommandOption[]} */
   options = [];
+  /** @type {Record<string, import('./OptionBuilder').Autocomplete>} */
   autocompleteHandlers = {};
 
+  /** @param {import('discord.js').ApplicationCommandOptionType} type */
   #createOption(type) {
+    /**
+     * @param {string} name
+     * @param {string} description
+     * @param {Record<string, any>} opts
+     */
     return (name, description, opts = {}) => {
+      /** @type {any} */
       const obj = {
         type,
         name,
         description,
+        required: opts.required,
         min_value: opts.minValue ?? undefined,
         max_value: opts.maxValue ?? undefined,
         channel_types: opts.channelTypes ?? undefined,
@@ -19,19 +27,21 @@ export class OptionBuilder {
         description_localizations: opts.descriptionLocalizations ?? undefined,
       };
 
-      if (obj.required === undefined) {
-        obj.required = false;
-      }
-
       if (opts.autocomplete) {
         this.autocompleteHandlers[name] = opts.autocomplete;
         obj.autocomplete = true;
       }
 
       if (opts.choices) {
-        obj.choices = Object.entries(opts.choices).map(([value, displayName]) => {
+        obj.choices = Object.entries(opts.choices).map(([key, displayName]) => {
+          /** @type {string | number} */
+          let value = key;
+
           // value may be converted to string, undo that:
-          if (type === 'NUMBER' || type === 'INTEGER') {
+          if (
+            type === ApplicationCommandOptionType.Number ||
+            type === ApplicationCommandOptionType.Integer
+          ) {
             value = Number(value);
           }
 
@@ -64,10 +74,7 @@ export class OptionBuilder {
   }
 }
 
-export function getOptionsFromBuilder(builder) {
-  return builder ? builder.options : [];
-}
-
-export function getAutoCompleteHandlersFromBuilder(builder) {
+/** @param {OptionBuilder} builder */
+export function getOptionBuilderAutocompleteHandlers(builder) {
   return builder ? builder.autocompleteHandlers : {};
 }

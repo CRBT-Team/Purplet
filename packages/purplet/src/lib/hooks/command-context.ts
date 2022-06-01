@@ -3,7 +3,6 @@ import {
   APIUser,
   ApplicationCommandType,
   LocalizationMap,
-  PermissionResolvable,
   PermissionsBitField,
   User,
   UserContextMenuCommandInteraction,
@@ -13,12 +12,11 @@ import type {
   PurpletMessageCommandInteraction,
   PurpletUserCommandInteraction,
 } from '../interaction';
+import { CommandPermissionsInput, resolveCommandPermissions } from '../../utils/permissions';
 
-export interface ContextCommandOptions {
+export interface ContextCommandOptions extends CommandPermissionsInput {
   name: string;
   nameLocalizations?: LocalizationMap;
-  permissions?: PermissionResolvable;
-  allowInDM?: boolean;
 }
 
 export interface UserCommandOptions extends ContextCommandOptions {
@@ -31,10 +29,7 @@ export function $userContextCommand(opts: UserCommandOptions) {
       type: ApplicationCommandType.User,
       name: opts.name,
       name_localizations: opts.nameLocalizations,
-      default_member_permissions: opts.permissions
-        ? PermissionsBitField.resolve(opts.permissions).toString()
-        : null,
-      dm_permission: opts.allowInDM,
+      ...resolveCommandPermissions(opts),
     },
     handle(this: PurpletUserCommandInteraction) {
       opts.handle.call(this, this.targetUser);

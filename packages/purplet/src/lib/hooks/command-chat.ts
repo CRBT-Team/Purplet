@@ -1,44 +1,61 @@
-import {
-  ApplicationCommandType,
-  LocalizationMap,
-  PermissionResolvable,
-  PermissionsBitField,
-} from 'discord.js';
+import { ApplicationCommandType, LocalizationMap } from 'discord.js';
+import { $interaction } from './basic';
 import { $appCommand } from './command-basic';
-import type { OptionBuilder } from '../builders/OptionBuilder';
-import type { PurpletChatCommandInteraction } from '../interaction';
+import { $merge } from './merge';
+import { getOptionBuilderAutocompleteHandlers, OptionBuilder } from '../builders/OptionBuilder';
+import { PurpletAutocompleteInteraction, PurpletChatCommandInteraction } from '../interaction';
+import { camelChoiceToSnake } from '../../utils/case';
+import { CommandPermissionsInput, resolveCommandPermissions } from '../../utils/permissions';
 
-export interface ChatCommandOptions<T> {
+export interface ChatCommandOptions<T> extends CommandPermissionsInput {
   name: string;
   nameLocalizations?: LocalizationMap;
   description: string;
   descriptionLocalizations?: LocalizationMap;
-  permissions?: PermissionResolvable;
-  allowInDM?: boolean;
   options?: OptionBuilder<T>;
   handle(this: PurpletChatCommandInteraction, options: T): void;
 }
 
 export function $chatCommand<T>(options: ChatCommandOptions<T>) {
   const commandOptions = options.options ? options.options.toJSON() : [];
-  return $appCommand({
-    command: {
-      type: ApplicationCommandType.ChatInput,
-      name: options.name,
-      name_localizations: options.nameLocalizations,
-      description: options.description,
-      description_localizations: options.descriptionLocalizations,
-      default_member_permissions: options.permissions
-        ? PermissionsBitField.resolve(options.permissions).toString()
-        : null,
-      dm_permission: options.allowInDM,
-      options: commandOptions,
-    },
-    handle(this: PurpletChatCommandInteraction) {
-      const resolvedOptions = Object.fromEntries(
-        commandOptions.map(option => [option.name, this.getResolvedOption(option.name)])
-      ) as unknown as T;
-      options.handle.call(this, resolvedOptions);
-    },
-  });
+  const autocompleteHandlers = getOptionBuilderAutocompleteHandlers(options.options);
+
+  return $merge(
+    $appCommand({
+      command: {
+        type: ApplicationCommandType.ChatInput,
+        name: options.name,
+        name_localizations: options.nameLocalizations,
+        description: options.description,
+        description_localizations: options.descriptionLocalizations,
+        ...resolveCommandPermissions(options),
+        options: commandOptions,
+      },
+      handle(this: PurpletChatCommandInteraction) {
+        const resolvedOptions = Object.fromEntries(
+          commandOptions.map(option => [option.name, this.getResolvedOption(option.name)])
+        ) as unknown as T;
+        options.handle.call(this, resolvedOptions);
+      },
+    }),
+    Object.keys(autocompleteHandlers ?? {}).length > 0 &&
+      $interaction(async i => {
+        // TODO: complete implementing this.
+        if (
+          i instanceof PurpletAutocompleteInteraction &&
+          i.commandName === options.name &&
+          i.commandType === ApplicationCommandType.ChatInput
+        ) {
+          const resolvedOptions = Object.fromEntries(
+            commandOptions.map(option => [option.name, i.getOption(option.name).value])
+          ) as unknown as T;
+
+          i.showAutocompleteResponse({
+            choices: (
+              await (autocompleteHandlers as any)[i.focusedOption.name].call(i, resolvedOptions)
+            ).map(camelChoiceToSnake),
+          });
+        }
+      })
+  );
 }

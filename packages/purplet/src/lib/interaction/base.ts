@@ -1,4 +1,5 @@
 import type { APIInteraction, APIInteractionResponse, Interaction } from 'discord.js';
+import { JSONResolvable, toJSONValue } from '../../utils/plain';
 
 export type InteractionResponseHandler = (r: APIInteractionResponse) => void;
 
@@ -42,14 +43,14 @@ export abstract class PurpletInteraction<Data extends APIInteraction = APIIntera
     return this.raw.user;
   }
 
-  respond(response: APIInteractionResponse) {
+  protected respond(response: JSONResolvable<APIInteractionResponse>) {
     if (this.#replied) {
       throw new Error('Cannot respond to an interaction twice');
     }
     this.#replied = true;
 
     if (this.#onRespond) {
-      this.#onRespond(response);
+      this.#onRespond(toJSONValue(response));
     } else {
       throw new Error(
         'This interaction cannot be responded to. (onRespond not set in constructor)'

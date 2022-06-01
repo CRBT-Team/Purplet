@@ -1,7 +1,7 @@
 import type { Class } from '@davecode/types';
 import type { APIInteraction } from 'discord.js';
+import { PurpletAutocompleteInteraction } from './autocomplete';
 import type { InteractionResponseHandler, PurpletInteraction } from './base';
-import { PurpletAutocompleteInteraction } from './command-autocomplete';
 import { PurpletChatCommandInteraction } from './command-chat';
 import { PurpletMessageCommandInteraction } from './command-message';
 import { PurpletUserCommandInteraction } from './command-user';
@@ -9,9 +9,9 @@ import { PurpletButtonInteraction } from './component-button';
 import { PurpletSelectMenuInteraction } from './component-select';
 import { PurpletModalSubmitInteraction } from './modal-submit';
 
+export * from './autocomplete';
 export * from './base';
 export * from './command';
-export * from './command-autocomplete';
 export * from './command-chat';
 export * from './command-context';
 export * from './command-message';

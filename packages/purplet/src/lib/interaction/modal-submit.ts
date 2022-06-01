@@ -6,12 +6,12 @@ import {
   InteractionType,
   ModalSubmitInteraction,
 } from 'discord.js';
-import { PurpletInteraction } from './base';
+import { PurpletChannelInteraction } from './base-channel';
 import { djs } from '../global';
 
 export class PurpletModalSubmitInteraction<
   Data extends APIModalSubmitInteraction = APIModalSubmitInteraction
-> extends PurpletInteraction<Data> {
+> extends PurpletChannelInteraction<Data> {
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIMessageComponentSelectMenuInteraction {
     return raw.type === InteractionType.ModalSubmit;

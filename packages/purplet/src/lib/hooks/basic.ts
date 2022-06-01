@@ -24,3 +24,10 @@ export function $djsOptions(options: FeatureData['djsOptions'] | DJSOptions) {
         : previousOptions => ({ ...previousOptions, ...options }),
   });
 }
+
+export function $interaction(handler: FeatureData['interaction']) {
+  return createFeature({
+    name: 'interaction handler',
+    interaction: handler,
+  });
+}

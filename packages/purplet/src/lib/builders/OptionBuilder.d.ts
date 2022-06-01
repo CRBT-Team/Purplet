@@ -92,7 +92,7 @@ interface ChannelOption extends BaseOption {
  */
 
 /** Represents one choice from a `.choices` object. */
-export interface Choice<T> {
+export interface Choice<T = string | number> {
   name: string;
   nameLocalizations?: LocalizationMap;
   value: T;
@@ -116,7 +116,8 @@ export type Autocomplete<ExistingOptions = Record<string, never>, Type = unknown
 
 /**
  * `OptionBuilder` is an advanced builder class for `CHAT_INPUT` command's `options` property,
- * keeping contents of.
+ * keeping track of all the options you pass to it in a type parameter, which is extracted by
+ * `$chatCommand` to give you rich option types.
  */
 export type OptionBuilder<Options = {}> = {
   /** Append an option. */
@@ -182,7 +183,7 @@ type RequiredIf<If, T> = If extends false ? Partial<T> : T;
 export const OptionBuilder: Class<OptionBuilder>;
 
 /** Extract the Record<string, Autocomplete> out of an OptionBuilder. */
-export function getAutoCompleteHandlersFromBuilder(
+export function getOptionBuilderAutocompleteHandlers(
   builder: OptionBuilder | undefined
 ): Record<string, Autocomplete>;
 

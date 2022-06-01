@@ -1,9 +1,9 @@
 import { APIInteraction, APIMessageComponentInteraction, InteractionType } from 'discord.js';
-import { PurpletInteraction } from './base';
+import { PurpletChannelInteraction } from './base-channel';
 
 export abstract class PurpletComponentInteraction<
   Data extends APIMessageComponentInteraction = APIMessageComponentInteraction
-> extends PurpletInteraction<Data> {
+> extends PurpletChannelInteraction<Data> {
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIMessageComponentInteraction {
     return raw.type === InteractionType.MessageComponent;

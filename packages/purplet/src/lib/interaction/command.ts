@@ -10,7 +10,7 @@ import {
   InteractionType,
   Snowflake,
 } from 'discord.js';
-import { PurpletInteraction } from './base';
+import { PurpletChannelInteraction } from './base-channel';
 
 // TODO: build this type based off of what is inside of discord.js
 interface ResolvedData {
@@ -24,7 +24,7 @@ interface ResolvedData {
 
 export abstract class PurpletCommandInteraction<
   Data extends APIApplicationCommandInteraction = APIApplicationCommandInteraction
-> extends PurpletInteraction<Data> {
+> extends PurpletChannelInteraction<Data> {
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIApplicationCommandInteraction {
     return raw.type === InteractionType.ApplicationCommand;
