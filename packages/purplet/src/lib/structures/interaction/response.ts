@@ -44,7 +44,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
       type: InteractionResponseType.ChannelMessageWithSource,
       data: message,
     });
-    return new PurpletOriginalInteractionMessagePartial(this);
+    return new PurpletOriginalInteractionMessagePartial({ id: '@original' }, this);
   }
 
   /**
@@ -64,7 +64,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
         flags: options?.ephemeral ? MessageFlags.Ephemeral : 0,
       },
     });
-    return new PurpletOriginalInteractionMessagePartial(this);
+    return new PurpletOriginalInteractionMessagePartial({ id: '@original' }, this);
   }
 
   /**
@@ -82,7 +82,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
       type: InteractionResponseType.UpdateMessage,
       data: message,
     });
-    return new PurpletOriginalInteractionMessagePartial(this);
+    return new PurpletOriginalInteractionMessagePartial({ id: '@original' }, this);
   }
 
   /**
@@ -102,7 +102,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
         flags: options?.ephemeral ? MessageFlags.Ephemeral : 0,
       },
     });
-    return new PurpletOriginalInteractionMessagePartial(this);
+    return new PurpletOriginalInteractionMessagePartial({ id: '@original' }, this);
   }
 
   /**

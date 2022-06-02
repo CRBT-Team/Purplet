@@ -71,7 +71,6 @@ function $messageComponent<
         featureId = this.featureId;
       },
       interaction(i) {
-        console.log(i.raw);
         if (i instanceof PurpletComponentInteraction && i.customId.startsWith(featureId + ':')) {
           const data = i.customId.substring(featureId.length + 1);
           const context = structure.fromJSON(serializer.fromString(data));

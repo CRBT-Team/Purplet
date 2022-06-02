@@ -8,26 +8,27 @@ import {
   Routes,
 } from 'discord.js';
 import type { PurpletInteraction } from './interaction/base';
+import { PurpletMessage } from './message';
 import { rest } from '../global';
+import { createPartialClass, PartialClass } from '../../utils/partial';
 import { JSONResolvable, toJSONValue } from '../../utils/plain';
 
-// These types are overly specific. It would be interesting if a "Partial" generator could be
-// made so this file would only be a couple of classes.
-
-export class PurpletInteractionMessagePartial {
-  constructor(readonly interaction: PurpletInteraction, readonly id: string) {}
+export class PurpletInteractionMessage extends PurpletMessage {
+  constructor(raw: APIMessage, readonly interaction: PurpletInteraction) {
+    super(raw);
+  }
 
   async fetch() {
     const data = (await rest.get(
-      Routes.webhookMessage(this.interaction.applicationId, this.interaction.id, this.id)
+      Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.raw.id)
     )) as RESTGetAPIWebhookWithTokenMessageResult;
-    return new PurpletInteractionMessage(this.interaction, data);
+    return new PurpletInteractionMessage(data, this.interaction);
   }
 
   async edit(message: JSONResolvable<RESTPatchAPIWebhookWithTokenMessageJSONBody>) {
     // TODO: uploading files.
     const data = (await rest.patch(
-      Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.id),
+      Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.raw.id),
       {
         body: toJSONValue(message),
         files: [],
@@ -38,26 +39,27 @@ export class PurpletInteractionMessagePartial {
 
   async delete() {
     await rest.delete(
-      Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.id)
+      Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.raw.id)
     );
   }
 }
 
-export class PurpletInteractionMessage extends PurpletInteractionMessagePartial {
-  constructor(interaction: PurpletInteraction, readonly raw: APIMessage) {
-    super(interaction, raw.id);
-  }
-}
+export type PurpletInteractionMessagePartial = PartialClass<
+  typeof PurpletInteractionMessage,
+  'id',
+  'fetch' | 'edit' | 'delete' | 'interaction'
+>;
+export const PurpletInteractionMessagePartial =
+  createPartialClass<PurpletInteractionMessagePartial>(PurpletInteractionMessage);
 
-export class PurpletOriginalInteractionMessagePartial extends PurpletInteractionMessagePartial {
-  constructor(interaction: PurpletInteraction, raw?: APIMessage) {
-    super(interaction, '@original');
+export class PurpletOriginalInteractionMessage extends PurpletInteractionMessage {
+  constructor(raw: APIMessage, interaction: PurpletInteraction) {
+    super(raw, interaction);
   }
 
   async fetch() {
     const message = await super.fetch();
-    console.log(message.raw);
-    return new PurpletOriginalInteractionMessage(this.interaction, message.raw);
+    return new PurpletOriginalInteractionMessage(message.raw, this.interaction);
   }
 
   async showFollowup(message: RESTPostAPIWebhookWithTokenJSONBody) {
@@ -69,16 +71,14 @@ export class PurpletOriginalInteractionMessagePartial extends PurpletInteraction
       }
     )) as RESTPostAPIWebhookWithTokenWaitResult;
 
-    return new PurpletInteractionMessage(this.interaction, data);
+    return new PurpletInteractionMessage(data, this.interaction);
   }
 }
 
-export class PurpletOriginalInteractionMessage extends PurpletInteractionMessage {
-  constructor(interaction: PurpletInteraction, readonly raw: APIMessage) {
-    super(interaction, raw);
-  }
-
-  async showFollowup(message: RESTPostAPIWebhookWithTokenJSONBody) {
-    return PurpletOriginalInteractionMessagePartial.prototype.showFollowup.call(this, message);
-  }
-}
+export type PurpletOriginalInteractionMessagePartial = PartialClass<
+  typeof PurpletOriginalInteractionMessage,
+  'id',
+  'fetch' | 'edit' | 'delete' | 'interaction' | 'showFollowup'
+>;
+export const PurpletOriginalInteractionMessagePartial =
+  createPartialClass<PurpletInteractionMessagePartial>(PurpletOriginalInteractionMessage);
