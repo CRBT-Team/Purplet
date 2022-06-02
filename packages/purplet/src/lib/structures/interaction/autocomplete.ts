@@ -1,14 +1,16 @@
 import {
   APIApplicationCommandAutocompleteInteraction,
-  APICommandAutocompleteInteractionResponseCallbackData,
   APIInteraction,
   AutocompleteInteraction,
-  InteractionResponseType,
   InteractionType,
 } from 'discord.js';
 import { PurpletInteraction } from './base';
+import {
+  applyInteractionResponseMixins,
+  createInteractionMixinList,
+  InteractionResponseMixin,
+} from './response';
 import { djs } from '../../global';
-import type { JSONResolvable } from '../../../utils/plain';
 
 export class PurpletAutocompleteInteraction<
   Data extends APIApplicationCommandAutocompleteInteraction = APIApplicationCommandAutocompleteInteraction
@@ -34,18 +36,18 @@ export class PurpletAutocompleteInteraction<
     return this.raw.data.options.find(x => x.name === name);
   }
 
-  /** Responds with autocomplete options. */
-  showAutocompleteResponse(
-    choices: JSONResolvable<APICommandAutocompleteInteractionResponseCallbackData>
-  ) {
-    this.respond({
-      type: InteractionResponseType.ApplicationCommandAutocompleteResult,
-      data: choices,
-    });
-  }
-
   toDJS(): AutocompleteInteraction {
     // @ts-expect-error Discord.js marks this with wrong types.
     return new AutocompleteInteraction(djs, this.raw);
   }
 }
+
+// Mixin the response methods.
+const allowedMethods = createInteractionMixinList([
+  //
+  'showAutocompleteResponse',
+]);
+
+applyInteractionResponseMixins(PurpletAutocompleteInteraction, allowedMethods);
+export interface PurpletAutocompleteInteraction
+  extends InteractionResponseMixin<typeof allowedMethods> {}

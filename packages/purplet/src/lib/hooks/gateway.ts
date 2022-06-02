@@ -1,4 +1,3 @@
-/* eslint-disable no-redeclare */
 import type { PresenceData } from 'discord.js';
 import { $djsOptions } from './basic';
 import {

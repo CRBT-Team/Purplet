@@ -80,7 +80,7 @@ export interface FeatureData {
 }
 
 /** Represents feature data that has gone through `createFeature` but not annotated by `moduleToFeatureArray`. */
-export type MarkedFeature<T> = {
+export type MarkedFeature<T = Record<never, unknown>> = {
   [IS_FEATURE]: true;
 } & T;
 

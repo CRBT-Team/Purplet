@@ -1,4 +1,3 @@
-/* eslint-disable no-redeclare */
 import type { Awaitable, Class, ForceSimplify, Overwrite } from '@davecode/types';
 import {
   APIApplicationCommandOption,
