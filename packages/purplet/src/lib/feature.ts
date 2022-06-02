@@ -1,5 +1,5 @@
 import type * as DJS from 'discord.js';
-import type { Awaitable } from '@davecode/types';
+import type { Awaitable, Dict } from '@davecode/types';
 import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord.js';
 import type { PurpletInteraction } from './structures/interaction';
 import type { Cleanup } from '../utils/types';
@@ -80,14 +80,13 @@ export interface FeatureData {
 }
 
 /** Represents feature data that has gone through `createFeature` but not annotated by `moduleToFeatureArray`. */
-export interface MarkedFeature extends FeatureData {
+export type MarkedFeature<T> = {
   [IS_FEATURE]: true;
-}
+} & T;
 
 /** Represents a fully anno. */
 export interface Feature extends FeatureData {
   [IS_FEATURE]: true;
-
   /** The full path to this module's source file. */
   filename: string;
   /** The id of the export that contained this feature. */
@@ -100,11 +99,15 @@ export interface Feature extends FeatureData {
 export type LifecycleHookNames = 'initialize' | 'djsClient';
 
 /** `createFeature` annotates a FeatureData with a symbol used to mark what object is actually a Feature. */
-export function createFeature(data: FeatureData): MarkedFeature {
+export function createFeature<T extends Dict<unknown>>(
+  data: FeatureData,
+  staticProps?: T
+): MarkedFeature<T> {
   return {
     [IS_FEATURE]: true,
     ...data,
-  };
+    ...staticProps,
+  } as unknown as MarkedFeature<T>;
 }
 
 /**

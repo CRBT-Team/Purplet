@@ -11,6 +11,7 @@ export * from './lib/hooks/basic';
 export * from './lib/hooks/command-basic';
 export * from './lib/hooks/command-chat';
 export * from './lib/hooks/command-context';
+export * from './lib/hooks/component';
 export * from './lib/hooks/gateway';
 export * from './lib/hooks/service';
 export * from './lib/structures/interaction';

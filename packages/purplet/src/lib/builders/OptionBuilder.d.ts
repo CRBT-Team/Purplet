@@ -113,7 +113,7 @@ export type TransformAutocompleteOptions<T, CurrentOptions, Key> = //
     ? Overwrite<
         T,
         {
-          autocomplete: Autocomplete<
+          autocomplete?: Autocomplete<
             ForceSimplify<
               Partial<OptionBuilderToUnresolvedObject<CurrentOptions> & Record<Key, ACType>>
             >,
