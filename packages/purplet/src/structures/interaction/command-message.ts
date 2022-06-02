@@ -6,7 +6,7 @@ import {
 } from 'discord.js';
 import { PurpletCommandInteraction } from './command';
 import { PurpletContextCommandInteraction } from './command-context';
-import { djs } from '../../global';
+import { djs } from '../../lib/global';
 
 export class PurpletMessageCommandInteraction<
   Data extends APIMessageApplicationCommandInteraction = APIMessageApplicationCommandInteraction

@@ -17,7 +17,7 @@ import type {
   LifecycleHookNames,
 } from './feature';
 import { rest, setDJSClient } from './global';
-import { createInteraction } from './structures/interaction';
+import { createInteraction } from '../structures/interaction';
 import { featureRequiresDJS } from '../utils/feature';
 import { JSONValue, toJSONValue } from '../utils/plain';
 import { asyncMap } from '../utils/promise';

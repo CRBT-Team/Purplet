@@ -1,13 +1,13 @@
 import * as vite from 'vite';
 import path from 'path';
-import { watch } from 'chokidar';
-import { createRequire } from 'module';
-import { VitePluginPurpletHMRHook } from './hmr-hook';
-import { moduleToFeatureArray } from '../internal';
 import { GatewayBot } from '../lib/gateway';
+import { moduleToFeatureArray } from '../utils/feature';
 import { isSourceFile } from '../utils/filetypes';
 import { walk } from '../utils/fs';
 import { asyncMap } from '../utils/promise';
+import { watch } from 'chokidar';
+import { createRequire } from 'module';
+import { VitePluginPurpletHMRHook } from './hmr-hook';
 
 const purpletSourceCode = path
   .dirname(createRequire(import.meta.url).resolve('purplet'))

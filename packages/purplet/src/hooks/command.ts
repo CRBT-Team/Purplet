@@ -1,5 +1,5 @@
 import { ApplicationCommandType } from 'discord.js';
-import { ApplicationCommandData, createFeature } from '../feature';
+import { ApplicationCommandData, createFeature } from '../lib/feature';
 import { PurpletCommandInteraction, PurpletInteraction } from '../structures/interaction';
 
 function formatCommandName(cmd: ApplicationCommandData) {

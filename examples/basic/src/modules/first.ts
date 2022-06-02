@@ -23,7 +23,7 @@ export const helloWorld = $chatCommand({
   description: 'testing components',
   options: new OptionBuilder().string('name', 'name of button', { required: true }),
   async handle(options) {
-    this.showMessage({
+    await this.showMessage({
       components: new MessageComponentBuilder() //
         .addInline(SampleButton.create({ name: options.name.toUpperCase() }))
         .addInline(SampleButton.create({ name: options.name.toLowerCase() })),

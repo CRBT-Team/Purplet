@@ -1,3 +1,4 @@
+import { djs } from '../../lib/global';
 import {
   APIInteraction,
   APIMessageComponentSelectMenuInteraction,
@@ -12,7 +13,6 @@ import {
   createInteractionMixinList,
   InteractionResponseMixin,
 } from './response';
-import { djs } from '../../global';
 
 export class PurpletModalSubmitInteraction<
   Data extends APIModalSubmitInteraction = APIModalSubmitInteraction

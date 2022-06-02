@@ -4,9 +4,14 @@
 import fs from 'fs';
 import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
+import alias from '@rollup/plugin-alias';
 import esbuild from 'rollup-plugin-esbuild';
 import shebang from 'rollup-plugin-add-shebang';
 import pkg from './package.json';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 fs.rmSync('dist', { recursive: true, force: true });
 fs.mkdirSync('dist');
@@ -42,6 +47,14 @@ export default [
       }),
       resolve({
         extensions: ['.mjs', '.js', '.ts', '.json'],
+      }),
+      alias({
+        entries: {
+          $lib: path.join(__dirname, 'src/lib'),
+          $utils: path.join(__dirname, 'src/utils'),
+          $builders: path.join(__dirname, 'src/builders'),
+          $structures: path.join(__dirname, 'src/structures'),
+        },
       }),
       esbuild(),
       shebang(),

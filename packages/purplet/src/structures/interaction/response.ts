@@ -1,3 +1,4 @@
+import type { JSONResolvable } from '../../utils/plain';
 import {
   APICommandAutocompleteInteractionResponseCallbackData,
   APIInteractionResponseCallbackData,
@@ -6,8 +7,7 @@ import {
   MessageFlags,
 } from 'discord.js';
 import { PurpletInteraction } from './base';
-import { PurpletOriginalInteractionMessagePartial } from '../interaction-resposne';
-import type { JSONResolvable } from '../../../utils/plain';
+import { PurpletOriginalInteractionMessagePartial } from '../message-interaction';
 
 /** Options for `Interaction.deferMessage` */
 export interface DeferMessageOptions {
@@ -37,9 +37,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
    * **Response functions can only be called once per interaction.**
    */
   // TODO: use a custom structure instead, to allow easy message flags and attachments.
-  async showMessage(
-    message: JSONResolvable<APIInteractionResponseCallbackData>
-  ): Promise<PurpletOriginalInteractionMessagePartial> {
+  async showMessage(message: JSONResolvable<APIInteractionResponseCallbackData>) {
     await this.respond({
       type: InteractionResponseType.ChannelMessageWithSource,
       data: message,
@@ -54,9 +52,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
    *
    * **Response functions can only be called once per interaction.**
    */
-  async deferMessage(
-    options?: DeferMessageOptions
-  ): Promise<PurpletOriginalInteractionMessagePartial> {
+  async deferMessage(options?: DeferMessageOptions) {
     // Note: ephemeral is the only thing we can use (well so can suppress embeds, but can't we set those when we edit?)
     await this.respond({
       type: InteractionResponseType.DeferredChannelMessageWithSource,
@@ -75,9 +71,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
    * **Response functions can only be called once per interaction.**
    */
   // TODO: use a custom structure instead, to allow easy message flags and attachments.
-  async updateMessage(
-    message: JSONResolvable<APIInteractionResponseCallbackData>
-  ): Promise<PurpletOriginalInteractionMessagePartial> {
+  async updateMessage(message: JSONResolvable<APIInteractionResponseCallbackData>) {
     await this.respond({
       type: InteractionResponseType.UpdateMessage,
       data: message,
@@ -92,9 +86,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
    *
    * **Response functions can only be called once per interaction.**
    */
-  async deferUpdateMessage(
-    options?: DeferMessageOptions
-  ): Promise<PurpletOriginalInteractionMessagePartial> {
+  async deferUpdateMessage(options?: DeferMessageOptions) {
     // Note: ephemeral is the only thing we can use (well so can suppress embeds, but can't we set those when we edit?)
     await this.respond({
       type: InteractionResponseType.DeferredMessageUpdate,

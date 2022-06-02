@@ -1,6 +1,6 @@
 // TODO: This function's types
 
-import { createFeature, DJSOptions, FeatureData } from '../feature';
+import { createFeature, DJSOptions, FeatureData } from '../lib/feature';
 
 /** This hook allows you to listen for a Discord.js client event. */
 export function $onDJSEvent(eventName: string, handler: (...args: any[]) => void) {

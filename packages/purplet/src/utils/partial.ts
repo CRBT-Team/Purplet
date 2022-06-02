@@ -20,7 +20,7 @@ export type PartialClass<
   SupportedPartialMethods extends keyof InstanceType<T>
 > = Pick<InstanceType<T>, SupportedPartialMethods> & {
   readonly raw: Pick<ConstructorParameters<T>[0], PickedRawProperties>;
-  [HIDDEN]: [SupportedPartialMethods];
+  [HIDDEN]: [T, PickedRawProperties, SupportedPartialMethods];
 };
 
 type GetRestArgs<C> = C extends { new (arg0: any, ...args: infer R): any } ? R : never;

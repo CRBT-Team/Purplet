@@ -3,14 +3,14 @@ import type {
   APIMessageActionRowComponent,
   APISelectMenuComponent,
 } from 'discord.js';
-import { createFeature } from '../feature';
+import { createFeature } from '../lib/feature';
 import {
   PurpletButtonInteraction,
   PurpletComponentInteraction,
   PurpletSelectMenuInteraction,
-} from '../structures/interaction';
-import { JSONResolvable, JSONValue, toJSONValue } from '../../utils/plain';
-import type { IsUnknown } from '../../utils/types';
+} from '../structures';
+import { JSONResolvable, JSONValue, toJSONValue } from '../utils/plain';
+import type { IsUnknown } from '../utils/types';
 
 type CustomStructure<Deserialized, Serialized> = {
   toJSON(data: Deserialized): Serialized;

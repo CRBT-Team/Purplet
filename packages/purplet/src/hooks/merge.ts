@@ -1,9 +1,9 @@
-import { createFeature, FeatureData, GatewayEventHook, MarkedFeature } from '../feature';
-import { asyncMap } from '../../utils/promise';
+import { createFeature, FeatureData, GatewayEventHook, MarkedFeature } from '../lib/feature';
+import { asyncMap } from '../utils/promise';
 
 /** Merges one or more feature into a single feature object. */
-export function $merge(...input: (MarkedFeature | false | null | undefined)[]) {
-  const features = input.filter(Boolean) as MarkedFeature[];
+export function $merge(...input: (FeatureData | MarkedFeature | false | null | undefined)[]) {
+  const features = input.filter(Boolean) as FeatureData[];
   if (features.length === 0) {
     return createFeature({ name: 'empty merge' });
   }

@@ -10,7 +10,7 @@
     "dev": "turbo run dev --parallel",
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md}\"",
     "lint": "turbo run lint",
-    "pub": "changeset publish --tag next",
+    "pub": "changeset publish",
     "version": "changeset version"
   },
   "devDependencies": {

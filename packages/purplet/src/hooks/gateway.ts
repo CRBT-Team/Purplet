@@ -6,7 +6,7 @@ import {
   GatewayEventHook,
   IntentResolvable,
   MarkedFeature,
-} from '../feature';
+} from '../lib/feature';
 
 /**
  * This hook allows you to specify what gateway intents your gateway bot requires. Does not assume a

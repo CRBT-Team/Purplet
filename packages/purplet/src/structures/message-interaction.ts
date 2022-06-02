@@ -1,3 +1,4 @@
+import type { Immutable } from '@davecode/types';
 import {
   APIMessage,
   RESTGetAPIWebhookWithTokenMessageResult,
@@ -9,12 +10,12 @@ import {
 } from 'discord.js';
 import type { PurpletInteraction } from './interaction/base';
 import { PurpletMessage } from './message';
-import { rest } from '../global';
-import { createPartialClass, PartialClass } from '../../utils/partial';
-import { JSONResolvable, toJSONValue } from '../../utils/plain';
+import { rest } from '../lib/global';
+import { createPartialClass, PartialClass } from '../utils/partial';
+import { JSONResolvable, toJSONValue } from '../utils/plain';
 
 export class PurpletInteractionMessage extends PurpletMessage {
-  constructor(raw: APIMessage, readonly interaction: PurpletInteraction) {
+  constructor(readonly raw: Immutable<APIMessage>, readonly interaction: PurpletInteraction) {
     super(raw);
   }
 
@@ -53,7 +54,7 @@ export const PurpletInteractionMessagePartial =
   createPartialClass<PurpletInteractionMessagePartial>(PurpletInteractionMessage);
 
 export class PurpletOriginalInteractionMessage extends PurpletInteractionMessage {
-  constructor(raw: APIMessage, interaction: PurpletInteraction) {
+  constructor(readonly raw: Immutable<APIMessage>, interaction: PurpletInteraction) {
     super(raw, interaction);
   }
 
@@ -78,7 +79,7 @@ export class PurpletOriginalInteractionMessage extends PurpletInteractionMessage
 export type PurpletOriginalInteractionMessagePartial = PartialClass<
   typeof PurpletOriginalInteractionMessage,
   'id',
-  'fetch' | 'edit' | 'delete' | 'interaction' | 'showFollowup'
+  'id' | 'fetch' | 'edit' | 'delete' | 'interaction' | 'showFollowup'
 >;
 export const PurpletOriginalInteractionMessagePartial =
-  createPartialClass<PurpletInteractionMessagePartial>(PurpletOriginalInteractionMessage);
+  createPartialClass<PurpletOriginalInteractionMessagePartial>(PurpletOriginalInteractionMessage);

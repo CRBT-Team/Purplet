@@ -3,18 +3,10 @@
 // Remove after Node.js 16 is no longer in LTS
 import '@ungap/structured-clone';
 
-export * from './lib/builders/ComponentBuilder';
-export * from './lib/builders/OptionBuilder';
+export * from './builders';
+export * from './hooks';
 export * from './lib/feature';
 export * from './lib/gateway';
 export { djs, rest } from './lib/global';
-export * from './lib/hooks/basic';
-export * from './lib/hooks/command-basic';
-export * from './lib/hooks/command-chat';
-export * from './lib/hooks/command-context';
-export * from './lib/hooks/component';
-export * from './lib/hooks/gateway';
-export * from './lib/hooks/service';
-export * from './lib/structures/interaction';
-export * from './lib/structures/interaction-resposne';
+export * from './structures';
 export type { Cleanup } from './utils/types';

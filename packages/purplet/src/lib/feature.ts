@@ -1,7 +1,7 @@
 import type * as DJS from 'discord.js';
 import type { Awaitable, Dict } from '@davecode/types';
 import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord.js';
-import type { PurpletInteraction } from './structures/interaction';
+import type { PurpletInteraction } from '../structures';
 import type { Cleanup } from '../utils/types';
 
 const IS_FEATURE = Symbol.for('purplet.is-bot-feature');

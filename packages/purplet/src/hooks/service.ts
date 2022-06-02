@@ -1,5 +1,5 @@
-import { createFeature } from '../feature';
-import type { Cleanup } from '../../utils/types';
+import { createFeature } from '../lib/feature';
+import type { Cleanup } from '../utils/types';
 
 export interface ServiceOptions {
   name?: string;

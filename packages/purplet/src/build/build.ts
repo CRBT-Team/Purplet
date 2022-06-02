@@ -44,8 +44,7 @@ export async function buildGatewayBot(options: BuildOptions) {
   // just in case we need to debug it.
   const entrySource = [
     ENTRY_HEADER,
-    `import { GatewayBot } from 'purplet';`,
-    `import { setupEnv, moduleToFeatureArray, isDirectlyRun } from 'purplet/internal';`,
+    `import { GatewayBot, setupEnv, moduleToFeatureArray, isDirectlyRun } from 'purplet/internal';`,
     ``,
     `setupEnv();`,
     ``,

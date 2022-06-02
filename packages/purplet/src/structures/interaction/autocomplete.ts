@@ -10,7 +10,7 @@ import {
   createInteractionMixinList,
   InteractionResponseMixin,
 } from './response';
-import { djs } from '../../global';
+import { djs } from '../lib/global';
 
 export class PurpletAutocompleteInteraction<
   Data extends APIApplicationCommandAutocompleteInteraction = APIApplicationCommandAutocompleteInteraction

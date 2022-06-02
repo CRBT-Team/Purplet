@@ -1,18 +1,15 @@
 import { ApplicationCommandType, LocalizationMap } from 'discord.js';
 import { $interaction } from './basic';
-import { $appCommand } from './command-basic';
+import { $appCommand } from './command';
 import { $merge } from './merge';
 import {
   getOptionBuilderAutocompleteHandlers,
   OptionBuilder,
   OptionBuilderToPurpletResolvedObject,
-} from '../builders/OptionBuilder';
-import {
-  PurpletAutocompleteInteraction,
-  PurpletChatCommandInteraction,
-} from '../structures/interaction';
-import { camelChoiceToSnake } from '../../utils/case';
-import { CommandPermissionsInput, resolveCommandPermissions } from '../../utils/permissions';
+} from '../builders';
+import { PurpletAutocompleteInteraction, PurpletChatCommandInteraction } from '../structures';
+import { camelChoiceToSnake } from '../utils/case';
+import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 
 export interface ChatCommandOptions<T> extends CommandPermissionsInput {
   name: string;
@@ -58,6 +55,7 @@ export function $chatCommand<T>(options: ChatCommandOptions<T>) {
           i.commandType === ApplicationCommandType.ChatInput
         ) {
           const resolvedOptions = Object.fromEntries(
+            // @ts-expect-error
             commandOptions.map(option => [option.name, i.getOption(option.name)?.value])
           ) as unknown as T;
 

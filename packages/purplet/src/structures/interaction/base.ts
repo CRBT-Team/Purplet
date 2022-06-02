@@ -1,6 +1,6 @@
 import type { Awaitable } from '@davecode/types';
 import type { APIInteraction, APIInteractionResponse, Interaction } from 'discord.js';
-import { JSONResolvable, toJSONValue } from '../../../utils/plain';
+import { JSONResolvable, toJSONValue } from '../../utils/plain';
 
 export type InteractionResponseHandler = (r: APIInteractionResponse) => Awaitable<void>;
 

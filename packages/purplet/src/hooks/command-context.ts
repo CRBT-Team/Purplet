@@ -7,12 +7,12 @@ import {
   User,
   UserContextMenuCommandInteraction,
 } from 'discord.js';
-import { $appCommand } from './command-basic';
+import { $appCommand } from './command';
 import type {
   PurpletMessageCommandInteraction,
   PurpletUserCommandInteraction,
-} from '../structures/interaction';
-import { CommandPermissionsInput, resolveCommandPermissions } from '../../utils/permissions';
+} from '../structures';
+import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 
 export interface ContextCommandOptions extends CommandPermissionsInput {
   name: string;
