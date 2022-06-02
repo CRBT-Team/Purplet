@@ -7,7 +7,7 @@ import {
   RESTPostAPIWebhookWithTokenWaitResult,
   Routes,
 } from 'discord.js';
-import type { PurpletChannelInteraction } from './interaction/base-channel';
+import type { PurpletInteraction } from './interaction/base';
 import { rest } from '../global';
 import { JSONResolvable, toJSONValue } from '../../utils/plain';
 
@@ -15,7 +15,7 @@ import { JSONResolvable, toJSONValue } from '../../utils/plain';
 // made so this file would only be a couple of classes.
 
 export class PurpletInteractionMessagePartial {
-  constructor(readonly interaction: PurpletChannelInteraction, readonly id: string) {}
+  constructor(readonly interaction: PurpletInteraction, readonly id: string) {}
 
   async fetch() {
     const data = (await rest.get(
@@ -44,13 +44,13 @@ export class PurpletInteractionMessagePartial {
 }
 
 export class PurpletInteractionMessage extends PurpletInteractionMessagePartial {
-  constructor(interaction: PurpletChannelInteraction, readonly raw: APIMessage) {
+  constructor(interaction: PurpletInteraction, readonly raw: APIMessage) {
     super(interaction, raw.id);
   }
 }
 
 export class PurpletOriginalInteractionMessagePartial extends PurpletInteractionMessagePartial {
-  constructor(interaction: PurpletChannelInteraction, raw?: APIMessage) {
+  constructor(interaction: PurpletInteraction, raw?: APIMessage) {
     super(interaction, '@original');
   }
 
@@ -74,7 +74,7 @@ export class PurpletOriginalInteractionMessagePartial extends PurpletInteraction
 }
 
 export class PurpletOriginalInteractionMessage extends PurpletInteractionMessage {
-  constructor(interaction: PurpletChannelInteraction, readonly raw: APIMessage) {
+  constructor(interaction: PurpletInteraction, readonly raw: APIMessage) {
     super(interaction, raw);
   }
 
