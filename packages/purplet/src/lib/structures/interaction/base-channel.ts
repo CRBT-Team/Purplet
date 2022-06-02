@@ -32,7 +32,9 @@ export abstract class PurpletChannelInteraction<
     return new PurpletOriginalInteractionMessagePartial(this);
   }
 
-  async deferMessage(options?: DeferMessageOptions) {
+  async deferMessage(
+    options?: DeferMessageOptions
+  ): Promise<PurpletOriginalInteractionMessagePartial> {
     // Note: ephemeral is the only thing we can use (well so can suppress embeds, but can't we set those when we edit?)
     await this.respond({
       type: InteractionResponseType.DeferredChannelMessageWithSource,

@@ -4,7 +4,11 @@ import type {
   APISelectMenuComponent,
 } from 'discord.js';
 import { createFeature } from '../feature';
-import { PurpletComponentInteraction } from '../structures/interaction';
+import {
+  PurpletButtonInteraction,
+  PurpletComponentInteraction,
+  PurpletSelectMenuInteraction,
+} from '../structures/interaction';
 import { JSONResolvable, JSONValue, toJSONValue } from '../../utils/plain';
 import type { IsUnknown } from '../../utils/types';
 
@@ -49,7 +53,7 @@ type MessageComponentStaticProps<
     : { create(context: Context): ComponentType }
   : { create(context: Context, props: CreateProps): ComponentType };
 
-export function $messageComponent<
+function $messageComponent<
   Context,
   CreateProps,
   ComponentType extends APIMessageActionRowComponent
@@ -88,14 +92,39 @@ export function $messageComponent<
   );
 }
 
+// specific component types. mainly just alter/restrict types.
+
+interface ButtonMessageComponentOptions<Context, CreateProps>
+  extends Omit<MessageComponentOptions<Context, CreateProps, APIButtonComponent>, 'handle'> {
+  handle(this: PurpletButtonInteraction, context: Context): void;
+}
+
 export function $buttonComponent<Context, CreateProps>(
-  options: MessageComponentOptions<Context, CreateProps, APIButtonComponent>
+  options: ButtonMessageComponentOptions<Context, CreateProps>
 ) {
-  return $messageComponent(options);
+  return $messageComponent({
+    ...options,
+    handle(this: PurpletButtonInteraction, context: Context) {
+      options.handle.call(this, context);
+    },
+  });
+}
+
+interface SelectMenuMessageComponentOptions<Context, CreateProps>
+  extends Omit<MessageComponentOptions<Context, CreateProps, APISelectMenuComponent>, 'handle'> {
+  handle(this: PurpletComponentInteraction, context: Context & { values: string[] }): void;
 }
 
 export function $selectMenuComponent<Context, CreateProps>(
-  options: MessageComponentOptions<Context, CreateProps, APISelectMenuComponent>
+  options: SelectMenuMessageComponentOptions<Context, CreateProps>
 ) {
-  return $messageComponent(options);
+  return $messageComponent({
+    ...options,
+    handle(this: PurpletSelectMenuInteraction, context) {
+      options.handle.call(this, {
+        ...context,
+        values: this.values,
+      });
+    },
+  });
 }
