@@ -3,6 +3,7 @@
 // Remove after Node.js 16 is no longer in LTS
 import '@ungap/structured-clone';
 
+export * from './lib/builders/ComponentBuilder';
 export * from './lib/builders/OptionBuilder';
 export * from './lib/feature';
 export * from './lib/gateway';

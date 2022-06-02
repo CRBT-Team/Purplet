@@ -1,23 +1,17 @@
 import { ButtonBuilder, ButtonStyle } from 'discord.js';
-import {
-  $buttonComponent,
-  $chatCommand,
-  OptionBuilder,
-  PurpletComponentInteraction,
-} from 'purplet';
+import { $buttonComponent, $chatCommand, MessageComponentBuilder, OptionBuilder } from 'purplet';
 
 interface SampleContext {
   name: string;
 }
 
 export const SampleButton = $buttonComponent({
-  create(data: SampleContext) {
-    return new ButtonBuilder() //
+  create: (data: SampleContext) =>
+    new ButtonBuilder() //
       .setStyle(ButtonStyle.Primary)
-      .setLabel('Button for ' + data.name);
-  },
-  handle(this: PurpletComponentInteraction, context) {
-    // cool!
+      .setLabel('Button for ' + data.name),
+
+  handle(context) {
     this.showMessage({
       content: 'You clicked the button for ' + context.name,
     });
@@ -30,7 +24,9 @@ export const helloWorld = $chatCommand({
   options: new OptionBuilder().string('name', 'name of button', { required: true }),
   async handle(options) {
     this.showMessage({
-      components: new messagecomp(),
+      components: new MessageComponentBuilder() //
+        .addInline(SampleButton.create({ name: options.name.toUpperCase() }))
+        .addInline(SampleButton.create({ name: options.name.toLowerCase() })),
     });
   },
 });

@@ -11,7 +11,7 @@ export type JSONValue =
 
 /**
  * Given a plain object type, gives you a version where any nested property can be an object with a
- * `toJSON` function, that resolves to the correct type. You can resolve these objects with
+ * `toJSONValue` function, that resolves to the correct type. You can resolve these objects with
  * `toPlain`, or just pass them to `JSON.stringify`, as that function handles `.toJSON()` nativly.
  */
 export type JSONResolvable<Target extends JSONValue> =
