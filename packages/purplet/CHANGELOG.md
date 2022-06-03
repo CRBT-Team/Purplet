@@ -1,5 +1,24 @@
 # `purplet`
 
+## 2.0.0-next.5
+
+### Patch Changes
+
+<!-- these links are bad -->
+
+- add `Message`, and partial helpers.
+- add some basic interaction response functions.
+- return an interaction message when you call `showMessage()`.
+- add Bitfield classes.
+- properly add all response functions.
+- add full bitfield resolving.
+- add basic autocomplete handler execution.
+- add `$merge` and `$interaction`.
+- add `MessageComponentBuilder` and `ModalComponentBuilder` for simplified creation of the `components` array..
+- add component stuff.
+- messed with the changelog format
+-
+
 ## 2.0.0-next.4
 
 ### Patch Changes
