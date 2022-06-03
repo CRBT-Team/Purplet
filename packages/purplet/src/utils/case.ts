@@ -1,4 +1,4 @@
-import type { APIApplicationCommandOptionChoice } from 'discord.js';
+import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 import type { Choice } from '../builders';
 
 export function camelChoiceToSnake<T>(choice: Choice<T>): APIApplicationCommandOptionChoice<T> {

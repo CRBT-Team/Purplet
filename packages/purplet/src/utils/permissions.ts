@@ -1,4 +1,4 @@
-import { PermissionResolvable, PermissionsBitField } from 'discord.js';
+import { PermissionResolvable, PermissionsBitField } from 'discord-api-types/v10';
 
 export interface CommandPermissionsInput {
   permissions?: PermissionResolvable;

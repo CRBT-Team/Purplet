@@ -1,6 +1,6 @@
-import { ApplicationCommandType } from 'discord.js';
+import { ApplicationCommandType } from 'discord-api-types/v10';
 import { ApplicationCommandData, createFeature } from '../lib/feature';
-import { PurpletCommandInteraction, PurpletInteraction } from '../structures/interaction';
+import { CommandInteraction, Interaction } from '../structures/interaction';
 
 function formatCommandName(cmd: ApplicationCommandData) {
   const commandTypeNames = {
@@ -15,7 +15,7 @@ function formatCommandName(cmd: ApplicationCommandData) {
 
 export interface AppCommandOptions {
   command: ApplicationCommandData;
-  handle(this: PurpletInteraction): void;
+  handle(this: Interaction): void;
 }
 
 export function $appCommand(opts: AppCommandOptions) {
@@ -24,7 +24,7 @@ export function $appCommand(opts: AppCommandOptions) {
     applicationCommands: [opts.command],
     interaction(i) {
       if (
-        i instanceof PurpletCommandInteraction &&
+        i instanceof CommandInteraction &&
         i.commandType === opts.command.type &&
         i.commandName === opts.command.name
       ) {

@@ -1,22 +1,20 @@
-import { djs } from '../../lib/global';
 import {
   APIInteraction,
   APIMessageComponentSelectMenuInteraction,
   APIModalSubmitInteraction,
   ComponentType,
   InteractionType,
-  ModalSubmitInteraction,
-} from 'discord.js';
-import { PurpletInteraction } from './base';
+} from 'discord-api-types/v10';
+import { Interaction } from './base';
 import {
   applyInteractionResponseMixins,
   createInteractionMixinList,
   InteractionResponseMixin,
 } from './response';
 
-export class PurpletModalSubmitInteraction<
+export class ModalSubmitInteraction<
   Data extends APIModalSubmitInteraction = APIModalSubmitInteraction
-> extends PurpletInteraction<Data> {
+> extends Interaction<Data> {
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIMessageComponentSelectMenuInteraction {
     return raw.type === InteractionType.ModalSubmit;
@@ -55,11 +53,6 @@ export class PurpletModalSubmitInteraction<
     }
     return comp.value;
   }
-
-  toDJS() {
-    // @ts-expect-error Discord.js marks this with wrong types.
-    return new ModalSubmitInteraction(djs, this.raw);
-  }
 }
 
 // Mixin the response methods.
@@ -75,6 +68,5 @@ const allowedMethods = createInteractionMixinList([
   'deferUpdateMessage',
 ]);
 
-applyInteractionResponseMixins(PurpletModalSubmitInteraction, allowedMethods);
-export interface PurpletModalSubmitInteraction
-  extends InteractionResponseMixin<typeof allowedMethods> {}
+applyInteractionResponseMixins(ModalSubmitInteraction, allowedMethods);
+export interface ModalSubmitInteraction extends InteractionResponseMixin<typeof allowedMethods> {}

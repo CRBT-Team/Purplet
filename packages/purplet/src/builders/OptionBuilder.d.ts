@@ -1,16 +1,13 @@
 import type { Awaitable, Class, ForceSimplify, Overwrite } from '@davecode/types';
-import {
+import type {
   APIApplicationCommandOption,
   APIAttachment,
   ApplicationCommandOptionType,
-  Attachment,
-  Channel,
   ChannelType,
   LocalizationMap,
-  Role,
-  User,
-} from 'discord.js';
-import type { PurpletAutocompleteInteraction } from '../interaction';
+} from 'discord-api-types/v10';
+import type { Attachment, Channel, Role, User } from 'discord.js';
+import type { AutocompleteInteraction } from '../interaction';
 import type { InteractionUser } from '../structures';
 
 /**
@@ -100,7 +97,7 @@ export interface Choice<T = string | number> {
  * option you pass it to.
  */
 export type Autocomplete<Context = null, Type = unknown> = (
-  this: PurpletAutocompleteInteraction,
+  this: AutocompleteInteraction,
   ctx: Context
 ) => Awaitable<Choice<Type>[]>;
 

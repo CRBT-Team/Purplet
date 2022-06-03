@@ -8,7 +8,7 @@ import {
   PermissionFlagsBits,
   ThreadMemberFlags,
   UserFlags,
-} from 'discord.js';
+} from 'discord-api-types/v10';
 import { createBitfieldClass, createReadonlyBitfield } from './bit-field-base';
 
 // For this file, use the workspace snippet "template_bitfield"

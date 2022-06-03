@@ -2,13 +2,9 @@ import type {
   APIButtonComponent,
   APIMessageActionRowComponent,
   APISelectMenuComponent,
-} from 'discord.js';
+} from 'discord-api-types/v10';
 import { createFeature } from '../lib/feature';
-import {
-  PurpletButtonInteraction,
-  PurpletComponentInteraction,
-  PurpletSelectMenuInteraction,
-} from '../structures';
+import { ButtonInteraction, ComponentInteraction, SelectMenuInteraction } from '../structures';
 import { JSONResolvable, JSONValue, toJSONValue } from '../utils/plain';
 import type { IsUnknown } from '../utils/types';
 
@@ -39,7 +35,7 @@ interface MessageComponentOptions<
   structure?: CustomStructure<Context, JSONValue>;
   serializer?: CustomSerializer;
   create(ctx: Context, createProps: CreateProps): JSONResolvable<ComponentType>;
-  handle(this: PurpletComponentInteraction, context: Context): void;
+  handle(this: ComponentInteraction, context: Context): void;
 }
 
 /** @internal This type is used to remove properties of the `create` function if they are not needed. */
@@ -71,7 +67,7 @@ function $messageComponent<
         featureId = this.featureId;
       },
       interaction(i) {
-        if (i instanceof PurpletComponentInteraction && i.customId.startsWith(featureId + ':')) {
+        if (i instanceof ComponentInteraction && i.customId.startsWith(featureId + ':')) {
           const data = i.customId.substring(featureId.length + 1);
           const context = structure.fromJSON(serializer.fromString(data));
           options.handle.call(i, context);
@@ -95,7 +91,7 @@ function $messageComponent<
 
 interface ButtonMessageComponentOptions<Context, CreateProps>
   extends Omit<MessageComponentOptions<Context, CreateProps, APIButtonComponent>, 'handle'> {
-  handle(this: PurpletButtonInteraction, context: Context): void;
+  handle(this: ButtonInteraction, context: Context): void;
 }
 
 export function $buttonComponent<Context, CreateProps>(
@@ -103,7 +99,7 @@ export function $buttonComponent<Context, CreateProps>(
 ) {
   return $messageComponent({
     ...options,
-    handle(this: PurpletButtonInteraction, context: Context) {
+    handle(this: ButtonInteraction, context: Context) {
       options.handle.call(this, context);
     },
   });
@@ -111,7 +107,7 @@ export function $buttonComponent<Context, CreateProps>(
 
 interface SelectMenuMessageComponentOptions<Context, CreateProps>
   extends Omit<MessageComponentOptions<Context, CreateProps, APISelectMenuComponent>, 'handle'> {
-  handle(this: PurpletComponentInteraction, context: Context & { values: string[] }): void;
+  handle(this: ComponentInteraction, context: Context & { values: string[] }): void;
 }
 
 export function $selectMenuComponent<Context, CreateProps>(
@@ -119,7 +115,7 @@ export function $selectMenuComponent<Context, CreateProps>(
 ) {
   return $messageComponent({
     ...options,
-    handle(this: PurpletSelectMenuInteraction, context) {
+    handle(this: SelectMenuInteraction, context) {
       options.handle.call(this, {
         ...context,
         values: this.values,

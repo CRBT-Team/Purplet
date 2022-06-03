@@ -9,8 +9,8 @@ import {
   APIUser,
   InteractionType,
   Snowflake,
-} from 'discord.js';
-import { PurpletInteraction } from './base';
+} from 'discord-api-types/v10';
+import { Interaction } from './base';
 import {
   applyInteractionResponseMixins,
   createInteractionMixinList,
@@ -27,9 +27,9 @@ interface ResolvedData {
   messages: APIMessage;
 }
 
-export abstract class PurpletCommandInteraction<
+export abstract class CommandInteraction<
   Data extends APIApplicationCommandInteraction = APIApplicationCommandInteraction
-> extends PurpletInteraction<Data> {
+> extends Interaction<Data> {
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIApplicationCommandInteraction {
     return raw.type === InteractionType.ApplicationCommand;
@@ -56,6 +56,5 @@ const allowedMethods = createInteractionMixinList([
   'showModal',
 ]);
 
-applyInteractionResponseMixins(PurpletCommandInteraction, allowedMethods);
-export interface PurpletCommandInteraction
-  extends InteractionResponseMixin<typeof allowedMethods> {}
+applyInteractionResponseMixins(CommandInteraction, allowedMethods);
+export interface CommandInteraction extends InteractionResponseMixin<typeof allowedMethods> {}

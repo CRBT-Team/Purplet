@@ -7,15 +7,15 @@ import {
   RESTPostAPIWebhookWithTokenJSONBody,
   RESTPostAPIWebhookWithTokenWaitResult,
   Routes,
-} from 'discord.js';
-import type { PurpletInteraction } from './interaction/base';
-import { PurpletMessage } from './message';
+} from 'discord-api-types/v10';
+import type { Interaction } from './interaction/base';
+import { Message } from './message';
 import { rest } from '../lib/global';
 import { createPartialClass, PartialClass } from '../utils/partial';
 import { JSONResolvable, toJSONValue } from '../utils/plain';
 
-export class PurpletInteractionMessage extends PurpletMessage {
-  constructor(readonly raw: Immutable<APIMessage>, readonly interaction: PurpletInteraction) {
+export class InteractionMessage extends Message {
+  constructor(readonly raw: Immutable<APIMessage>, readonly interaction: Interaction) {
     super(raw);
   }
 
@@ -23,7 +23,7 @@ export class PurpletInteractionMessage extends PurpletMessage {
     const data = (await rest.get(
       Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.raw.id)
     )) as RESTGetAPIWebhookWithTokenMessageResult;
-    return new PurpletInteractionMessage(data, this.interaction);
+    return new InteractionMessage(data, this.interaction);
   }
 
   async edit(message: JSONResolvable<RESTPatchAPIWebhookWithTokenMessageJSONBody>) {
@@ -45,22 +45,22 @@ export class PurpletInteractionMessage extends PurpletMessage {
   }
 }
 
-export type PurpletInteractionMessagePartial = PartialClass<
-  typeof PurpletInteractionMessage,
+export type InteractionMessagePartial = PartialClass<
+  typeof InteractionMessage,
   'id',
   'fetch' | 'edit' | 'delete' | 'interaction'
 >;
-export const PurpletInteractionMessagePartial =
-  createPartialClass<PurpletInteractionMessagePartial>(PurpletInteractionMessage);
+export const InteractionMessagePartial =
+  createPartialClass<InteractionMessagePartial>(InteractionMessage);
 
-export class PurpletOriginalInteractionMessage extends PurpletInteractionMessage {
-  constructor(readonly raw: Immutable<APIMessage>, interaction: PurpletInteraction) {
+export class OriginalInteractionMessage extends InteractionMessage {
+  constructor(readonly raw: Immutable<APIMessage>, interaction: Interaction) {
     super(raw, interaction);
   }
 
   async fetch() {
     const message = await super.fetch();
-    return new PurpletOriginalInteractionMessage(message.raw, this.interaction);
+    return new OriginalInteractionMessage(message.raw, this.interaction);
   }
 
   async showFollowup(message: RESTPostAPIWebhookWithTokenJSONBody) {
@@ -72,14 +72,14 @@ export class PurpletOriginalInteractionMessage extends PurpletInteractionMessage
       }
     )) as RESTPostAPIWebhookWithTokenWaitResult;
 
-    return new PurpletInteractionMessage(data, this.interaction);
+    return new InteractionMessage(data, this.interaction);
   }
 }
 
-export type PurpletOriginalInteractionMessagePartial = PartialClass<
-  typeof PurpletOriginalInteractionMessage,
+export type OriginalInteractionMessagePartial = PartialClass<
+  typeof OriginalInteractionMessage,
   'id',
   'id' | 'fetch' | 'edit' | 'delete' | 'interaction' | 'showFollowup'
 >;
-export const PurpletOriginalInteractionMessagePartial =
-  createPartialClass<PurpletOriginalInteractionMessagePartial>(PurpletOriginalInteractionMessage);
+export const OriginalInteractionMessagePartial =
+  createPartialClass<OriginalInteractionMessagePartial>(OriginalInteractionMessage);

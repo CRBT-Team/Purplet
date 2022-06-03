@@ -1,9 +1,9 @@
 import type { Immutable } from '@davecode/types';
-import { APIMessage, MessageFlags } from 'discord.js';
+import { APIMessage, MessageFlags } from 'discord-api-types/v10';
 import { createPartialClass, PartialClass } from '../utils/partial';
 
 /** This class has a long way to go but its OK right now. */
-export class PurpletMessage {
+export class Message {
   constructor(readonly raw: Immutable<APIMessage>) {}
 
   get id() {
@@ -112,10 +112,10 @@ export class PurpletMessage {
   }
 }
 
-export type PurpletMessagePartial = PartialClass<
+export type MessagePartial = PartialClass<
   //
-  typeof PurpletMessage,
+  typeof Message,
   'id',
   'id'
 >;
-export const PurpletMessagePartial = createPartialClass<PurpletMessagePartial>(PurpletMessage);
+export const MessagePartial = createPartialClass<MessagePartial>(Message);

@@ -1,4 +1,4 @@
-import { ActivityType } from 'discord.js';
+import { ActivityType } from 'discord-api-types/v10';
 import { $presence } from 'purplet';
 
 export const data = $presence({

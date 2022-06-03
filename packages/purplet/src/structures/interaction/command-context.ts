@@ -1,9 +1,9 @@
-import type { APIContextMenuInteraction } from 'discord.js';
-import { PurpletCommandInteraction } from './command';
+import type { APIContextMenuInteraction } from 'discord-api-types/v10';
+import { CommandInteraction } from './command';
 
-export abstract class PurpletContextCommandInteraction<
+export abstract class ContextCommandInteraction<
   Data extends APIContextMenuInteraction = APIContextMenuInteraction
-> extends PurpletCommandInteraction<Data> {
+> extends CommandInteraction<Data> {
   get targetId() {
     return this.raw.data.target_id;
   }

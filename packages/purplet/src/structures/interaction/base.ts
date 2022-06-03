@@ -3,8 +3,7 @@ import type {
   APIInteraction,
   APIInteractionResponse,
   APIPingInteraction,
-  Interaction,
-} from 'discord.js';
+} from 'discord-api-types/v10';
 import { InteractionExecutingUser } from '../user';
 import { JSONResolvable, toJSONValue } from '../../utils/plain';
 
@@ -12,9 +11,7 @@ export type InteractionResponseHandler = (r: APIInteractionResponse) => Awaitabl
 
 export type APINonPingInteraction = Exclude<APIInteraction, APIPingInteraction>;
 
-export abstract class PurpletInteraction<
-  Data extends APINonPingInteraction = APINonPingInteraction
-> {
+export abstract class Interaction<Data extends APINonPingInteraction = APINonPingInteraction> {
   #onRespond: InteractionResponseHandler | undefined;
   #replied = false;
 
@@ -76,10 +73,4 @@ export abstract class PurpletInteraction<
   get replied() {
     return this.#replied;
   }
-
-  /**
-   * Returns the Discord.js equivalent of this interaction. Not valid in cases where you are not
-   * using Discord.js.
-   */
-  abstract toDJS(): Interaction;
 }

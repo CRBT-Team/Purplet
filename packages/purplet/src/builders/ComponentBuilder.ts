@@ -1,12 +1,12 @@
+import { ButtonBuilder } from '@discordjs/builders';
 import {
   APIActionRowComponent,
   APIActionRowComponentTypes,
   APIMessageActionRowComponent,
   APIModalActionRowComponent,
-  ButtonBuilder,
   ButtonStyle,
   ComponentType,
-} from 'discord.js';
+} from 'discord-api-types/v10';
 
 abstract class ComponentBuilder<Type extends APIActionRowComponentTypes> {
   private data: APIActionRowComponent<Type>[] = [];

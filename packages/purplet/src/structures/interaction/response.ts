@@ -1,13 +1,13 @@
-import type { JSONResolvable } from '../../utils/plain';
 import {
   APICommandAutocompleteInteractionResponseCallbackData,
   APIInteractionResponseCallbackData,
   APIModalInteractionResponseCallbackData,
   InteractionResponseType,
   MessageFlags,
-} from 'discord.js';
-import { PurpletInteraction } from './base';
-import { PurpletOriginalInteractionMessagePartial } from '../message-interaction';
+} from 'discord-api-types/v10';
+import { Interaction } from './base';
+import { OriginalInteractionMessagePartial } from '../message-interaction';
+import type { JSONResolvable } from '../../utils/plain';
 
 /** Options for `Interaction.deferMessage` */
 export interface DeferMessageOptions {
@@ -29,7 +29,7 @@ export interface DeferMessageOptions {
  * Oh also while im on the topic who came up with `DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE`? i mean it
  * makes sense, but that is a really long name lol.
  */
-abstract class InteractionResponseMethods extends PurpletInteraction {
+abstract class InteractionResponseMethods extends Interaction {
   /**
    * Respond to this interaction with a message. Corresponds to the `CHANNEL_MESSAGE_WITH_SOURCE`
    * interaction response type.
@@ -42,7 +42,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
       type: InteractionResponseType.ChannelMessageWithSource,
       data: message,
     });
-    return new PurpletOriginalInteractionMessagePartial({ id: '@original' }, this);
+    return new OriginalInteractionMessagePartial({ id: '@original' }, this);
   }
 
   /**
@@ -60,7 +60,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
         flags: options?.ephemeral ? MessageFlags.Ephemeral : 0,
       },
     });
-    return new PurpletOriginalInteractionMessagePartial({ id: '@original' }, this);
+    return new OriginalInteractionMessagePartial({ id: '@original' }, this);
   }
 
   /**
@@ -76,7 +76,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
       type: InteractionResponseType.UpdateMessage,
       data: message,
     });
-    return new PurpletOriginalInteractionMessagePartial({ id: '@original' }, this);
+    return new OriginalInteractionMessagePartial({ id: '@original' }, this);
   }
 
   /**
@@ -94,7 +94,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
         flags: options?.ephemeral ? MessageFlags.Ephemeral : 0,
       },
     });
-    return new PurpletOriginalInteractionMessagePartial({ id: '@original' }, this);
+    return new OriginalInteractionMessagePartial({ id: '@original' }, this);
   }
 
   /**
@@ -133,10 +133,7 @@ abstract class InteractionResponseMethods extends PurpletInteraction {
 /** Here goes all my mixin utilities. */
 
 /** @internal methods added in InteractionResponseMethods */
-export type ResponseMethodName = Exclude<
-  keyof InteractionResponseMethods,
-  keyof PurpletInteraction
->;
+export type ResponseMethodName = Exclude<keyof InteractionResponseMethods, keyof Interaction>;
 
 /**
  * Mixin helper for adding responses to an interaction. Use in in combination with

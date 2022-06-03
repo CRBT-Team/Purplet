@@ -1,4 +1,4 @@
-import { ApplicationCommandType, LocalizationMap } from 'discord.js';
+import { ApplicationCommandType, LocalizationMap } from 'discord-api-types/v10';
 import { $interaction } from './basic';
 import { $appCommand } from './command';
 import { $merge } from './merge';
@@ -7,7 +7,7 @@ import {
   OptionBuilder,
   OptionBuilderToPurpletResolvedObject,
 } from '../builders';
-import { PurpletAutocompleteInteraction, PurpletChatCommandInteraction } from '../structures';
+import { AutocompleteInteraction, ChatCommandInteraction } from '../structures';
 import { camelChoiceToSnake } from '../utils/case';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 
@@ -17,10 +17,7 @@ export interface ChatCommandOptions<T> extends CommandPermissionsInput {
   description: string;
   descriptionLocalizations?: LocalizationMap;
   options?: OptionBuilder<T>;
-  handle(
-    this: PurpletChatCommandInteraction,
-    options: OptionBuilderToPurpletResolvedObject<T>
-  ): void;
+  handle(this: ChatCommandInteraction, options: OptionBuilderToPurpletResolvedObject<T>): void;
 }
 
 export function $chatCommand<T>(options: ChatCommandOptions<T>) {
@@ -38,7 +35,7 @@ export function $chatCommand<T>(options: ChatCommandOptions<T>) {
         ...resolveCommandPermissions(options),
         options: commandOptions,
       },
-      handle(this: PurpletChatCommandInteraction) {
+      handle(this: ChatCommandInteraction) {
         const resolvedOptions = Object.fromEntries(
           commandOptions.map(option => [option.name, this.getResolvedOption(option.name)])
         ) as unknown as OptionBuilderToPurpletResolvedObject<T>;
@@ -50,7 +47,7 @@ export function $chatCommand<T>(options: ChatCommandOptions<T>) {
       $interaction(async i => {
         // TODO: complete implementing this.
         if (
-          i instanceof PurpletAutocompleteInteraction &&
+          i instanceof AutocompleteInteraction &&
           i.commandName === options.name &&
           i.commandType === ApplicationCommandType.ChatInput
         ) {

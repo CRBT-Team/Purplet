@@ -2,11 +2,11 @@ import type { Immutable } from '@davecode/types';
 import {
   APIInteraction,
   APIInteractionResponse,
-  Client,
   GatewayDispatchEvents,
   RESTGetAPICurrentUserResult,
   Routes,
-} from 'discord.js';
+} from 'discord-api-types/v10';
+import { Client } from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
   ApplicationCommandData,

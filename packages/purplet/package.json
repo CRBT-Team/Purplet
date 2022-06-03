@@ -40,12 +40,14 @@
     "test": "watchlist src -- tsm node_modules/uvu/bin.js src .*\\.test\\.ts"
   },
   "dependencies": {
+    "@discordjs/builders": "^0.13.0",
     "@discordjs/rest": "^0.4.1",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@ungap/structured-clone": "^1.0.1",
     "chalk": "^5.0.1",
     "chokidar": "^3.5.3",
+    "discord-api-types": "^0.33.1",
     "dotenv": "^16.0.1",
     "fast-equals": "^3.0.3",
     "rollup": "^2.75.5",

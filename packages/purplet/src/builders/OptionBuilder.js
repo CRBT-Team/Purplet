@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from 'discord.js';
+import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 
 export class OptionBuilder {
   /** @type {import('discord.js').APIApplicationCommandOption[]} */

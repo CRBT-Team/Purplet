@@ -1,8 +1,8 @@
 import type { Immutable } from '@davecode/types';
 import type { ImageURLOptions } from '@discordjs/rest';
-import type { APIUser } from 'discord.js';
+import type { APIUser } from 'discord-api-types/v10';
 import { UserFlagsBitfield } from './bit-field';
-import type { PurpletInteraction } from './interaction';
+import type { Interaction } from './interaction';
 import { rest } from '../lib/global';
 import { createPartialClass, PartialClass } from '../utils/partial';
 
@@ -106,7 +106,7 @@ export type InteractionUser = PartialClass<
 export const InteractionUser = createPartialClass<InteractionUser>(User);
 
 export class InteractionExecutingUser extends InteractionUser {
-  constructor(readonly raw: APIUser, readonly interaction: PurpletInteraction) {
+  constructor(readonly raw: APIUser, readonly interaction: Interaction) {
     super(raw);
   }
 

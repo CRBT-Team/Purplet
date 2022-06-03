@@ -1,6 +1,6 @@
 // tests/demo.js
 import * as assert from 'uvu/assert';
-import { UserFlags } from 'discord.js';
+import { UserFlags } from 'discord-api-types/v10';
 import { test } from 'uvu';
 import { UserFlagsBitfield } from './bit-field';
 

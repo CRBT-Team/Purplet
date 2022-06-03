@@ -2,18 +2,16 @@ import {
   APIInteraction,
   APIUserApplicationCommandInteraction,
   ApplicationCommandType,
-  UserContextMenuCommandInteraction,
-} from 'discord.js';
-import { PurpletCommandInteraction } from './command';
-import { PurpletContextCommandInteraction } from './command-context';
-import { djs } from '../../lib/global';
+} from 'discord-api-types/v10';
+import { CommandInteraction } from './command';
+import { ContextCommandInteraction } from './command-context';
 
-export class PurpletUserCommandInteraction<
+export class UserCommandInteraction<
   Data extends APIUserApplicationCommandInteraction = APIUserApplicationCommandInteraction
-> extends PurpletContextCommandInteraction<Data> {
+> extends ContextCommandInteraction<Data> {
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIUserApplicationCommandInteraction {
-    return PurpletCommandInteraction.matches(raw) && raw.data.type === ApplicationCommandType.User;
+    return CommandInteraction.matches(raw) && raw.data.type === ApplicationCommandType.User;
   }
 
   get targetUser() {
@@ -28,10 +26,5 @@ export class PurpletUserCommandInteraction<
 
   get target() {
     return this.targetMember ?? this.targetUser;
-  }
-
-  toDJS(): UserContextMenuCommandInteraction {
-    // @ts-expect-error Discord.js marks this as a private constructor, which is stupid.
-    return new UserContextMenuCommandInteraction(djs, this.raw);
   }
 }

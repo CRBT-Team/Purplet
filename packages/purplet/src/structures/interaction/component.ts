@@ -1,14 +1,18 @@
-import { APIInteraction, APIMessageComponentInteraction, InteractionType } from 'discord.js';
-import { PurpletInteraction } from './base';
+import {
+  APIInteraction,
+  APIMessageComponentInteraction,
+  InteractionType,
+} from 'discord-api-types/v10';
+import { Interaction } from './base';
 import {
   applyInteractionResponseMixins,
   createInteractionMixinList,
   InteractionResponseMixin,
 } from './response';
 
-export abstract class PurpletComponentInteraction<
+export abstract class ComponentInteraction<
   Data extends APIMessageComponentInteraction = APIMessageComponentInteraction
-> extends PurpletInteraction<Data> {
+> extends Interaction<Data> {
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIMessageComponentInteraction {
     return raw.type === InteractionType.MessageComponent;
@@ -37,6 +41,5 @@ const allowedMethods = createInteractionMixinList([
   'showModal',
 ]);
 
-applyInteractionResponseMixins(PurpletComponentInteraction, allowedMethods);
-export interface PurpletComponentInteraction
-  extends InteractionResponseMixin<typeof allowedMethods> {}
+applyInteractionResponseMixins(ComponentInteraction, allowedMethods);
+export interface ComponentInteraction extends InteractionResponseMixin<typeof allowedMethods> {}

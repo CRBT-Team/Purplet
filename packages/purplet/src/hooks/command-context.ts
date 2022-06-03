@@ -3,15 +3,9 @@ import {
   APIUser,
   ApplicationCommandType,
   LocalizationMap,
-  PermissionsBitField,
-  User,
-  UserContextMenuCommandInteraction,
-} from 'discord.js';
+} from 'discord-api-types/v10';
 import { $appCommand } from './command';
-import type {
-  PurpletMessageCommandInteraction,
-  PurpletUserCommandInteraction,
-} from '../structures';
+import type { MessageCommandInteraction, UserCommandInteraction } from '../structures';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 
 export interface ContextCommandOptions extends CommandPermissionsInput {
@@ -20,7 +14,7 @@ export interface ContextCommandOptions extends CommandPermissionsInput {
 }
 
 export interface UserCommandOptions extends ContextCommandOptions {
-  handle: (this: PurpletUserCommandInteraction, target: APIUser) => void;
+  handle: (this: UserCommandInteraction, target: APIUser) => void;
 }
 
 export function $userContextCommand(opts: UserCommandOptions) {
@@ -31,28 +25,28 @@ export function $userContextCommand(opts: UserCommandOptions) {
       name_localizations: opts.nameLocalizations,
       ...resolveCommandPermissions(opts),
     },
-    handle(this: PurpletUserCommandInteraction) {
+    handle(this: UserCommandInteraction) {
       opts.handle.call(this, this.targetUser);
     },
   });
 }
 
-export interface DJSUserCommandOptions extends ContextCommandOptions {
-  handle: (this: UserContextMenuCommandInteraction, target: User) => void;
-}
+// export interface DJSUserCommandOptions extends ContextCommandOptions {
+//   handle: (this: UserContextMenuCommandInteraction, target: User) => void;
+// }
 
-export function $djsUserContextCommand(options: DJSUserCommandOptions) {
-  return $userContextCommand({
-    ...options,
-    handle() {
-      const i = this.toDJS();
-      options.handle.call(i, i.targetUser);
-    },
-  });
-}
+// export function $djsUserContextCommand(options: DJSUserCommandOptions) {
+//   return $userContextCommand({
+//     ...options,
+//     handle() {
+//       const i = this.toDJS();
+//       options.handle.call(i, i.targetUser);
+//     },
+//   });
+// }
 
 export interface MessageCommandOptions extends ContextCommandOptions {
-  handle: (this: PurpletMessageCommandInteraction, target: APIMessage) => void;
+  handle: (this: MessageCommandInteraction, target: APIMessage) => void;
 }
 
 export function $messageContextCommand(opts: MessageCommandOptions) {
@@ -61,27 +55,24 @@ export function $messageContextCommand(opts: MessageCommandOptions) {
       type: ApplicationCommandType.User,
       name: opts.name,
       name_localizations: opts.nameLocalizations,
-      default_member_permissions: opts.permissions
-        ? PermissionsBitField.resolve(opts.permissions).toString()
-        : null,
-      dm_permission: opts.allowInDM,
+      ...resolveCommandPermissions(opts),
     },
-    handle(this: PurpletMessageCommandInteraction) {
+    handle(this: MessageCommandInteraction) {
       opts.handle.call(this, this.target);
     },
   });
 }
 
-export interface DJSMessageCommandOptions extends ContextCommandOptions {
-  handle: (this: UserContextMenuCommandInteraction, target: User) => void;
-}
-
-export function $djsMessageCommand(options: DJSMessageCommandOptions) {
-  return $messageContextCommand({
-    ...options,
-    handle() {
-      const i = this.toDJS();
-      options.handle.call(i, i.message);
-    },
-  });
-}
+// export interface DJSMessageCommandOptions extends ContextCommandOptions {
+//   handle: (this: UserContextMenuCommandInteraction, target: User) => void;
+// }
+//
+// export function $djsMessageCommand(options: DJSMessageCommandOptions) {
+//   return $messageContextCommand({
+//     ...options,
+//     handle() {
+//       const i = this.toDJS();
+//       options.handle.call(i, i.message);
+//     },
+//   });
+// }
