@@ -30,11 +30,11 @@ export class User {
     return `${this.username}#${this.discriminator}`;
   }
 
-  get avatarId() {
+  get avatarHash() {
     return this.raw.avatar;
   }
 
-  get bannerId() {
+  get bannerHash() {
     return this.raw.banner;
   }
 
@@ -71,13 +71,13 @@ export class User {
   }
 
   avatarURL(options: ImageURLOptions = {}) {
-    return this.raw.avatar
-      ? rest.cdn.avatar(this.id, this.raw.avatar, options)
+    return this.avatarHash
+      ? rest.cdn.avatar(this.id, this.avatarHash, options)
       : this.defaultAvatarURL;
   }
 
   bannerURL(options: ImageURLOptions = {}) {
-    return this.raw.banner ? rest.cdn.banner(this.id, this.raw.banner, options) : null;
+    return this.bannerHash ? rest.cdn.banner(this.id, this.bannerHash, options) : null;
   }
 
   // TODO: uncomment and tweak when released.
@@ -113,7 +113,7 @@ export type PartialUser = PartialClass<
   | 'flags'
   | 'discriminator'
   | 'tag'
-  | 'avatarId'
+  | 'avatarHash'
   | 'avatarURL'
   | 'defaultAvatarURL'
   | 'hypesquadHouse'
