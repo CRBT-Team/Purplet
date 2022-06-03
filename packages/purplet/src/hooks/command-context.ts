@@ -1,11 +1,11 @@
-import {
-  APIMessage,
-  APIUser,
-  ApplicationCommandType,
-  LocalizationMap,
-} from 'discord-api-types/v10';
+import { ApplicationCommandType, LocalizationMap } from 'discord-api-types/v10';
 import { $appCommand } from './command';
-import type { MessageCommandInteraction, UserCommandInteraction } from '../structures';
+import type {
+  Message,
+  MessageCommandInteraction,
+  User,
+  UserCommandInteraction,
+} from '../structures';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 
 export interface ContextCommandOptions extends CommandPermissionsInput {
@@ -14,7 +14,7 @@ export interface ContextCommandOptions extends CommandPermissionsInput {
 }
 
 export interface UserCommandOptions extends ContextCommandOptions {
-  handle: (this: UserCommandInteraction, target: APIUser) => void;
+  handle: (this: UserCommandInteraction, target: User) => void;
 }
 
 export function $userContextCommand(opts: UserCommandOptions) {
@@ -46,13 +46,13 @@ export function $userContextCommand(opts: UserCommandOptions) {
 // }
 
 export interface MessageCommandOptions extends ContextCommandOptions {
-  handle: (this: MessageCommandInteraction, target: APIMessage) => void;
+  handle: (this: MessageCommandInteraction, target: Message) => void;
 }
 
 export function $messageContextCommand(opts: MessageCommandOptions) {
   return $appCommand({
     command: {
-      type: ApplicationCommandType.User,
+      type: ApplicationCommandType.Message,
       name: opts.name,
       name_localizations: opts.nameLocalizations,
       ...resolveCommandPermissions(opts),

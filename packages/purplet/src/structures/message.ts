@@ -1,9 +1,12 @@
 import type { Immutable } from '@davecode/types';
-import { APIMessage, MessageFlags } from 'discord-api-types/v10';
+import type { APIMessage } from 'discord-api-types/v10';
+import { ReadonlyMessageFlagsBitfield } from './bit-field';
+import { PartialUser } from './user';
 import { createPartialClass, PartialClass } from '../utils/partial';
 
 /** This class has a long way to go but its OK right now. */
 export class Message {
+  // TODO Fields: mentions, mention_roles, mention_everyone, mention_channels, and everything that is hidden lol.
   constructor(readonly raw: Immutable<APIMessage>) {}
 
   get id() {
@@ -27,7 +30,7 @@ export class Message {
   }
 
   get author() {
-    return this.raw.author;
+    return new PartialUser(this.raw.author);
   }
 
   get channelId() {
@@ -74,41 +77,8 @@ export class Message {
     return this.raw.tts;
   }
 
-  /** This message has been published to subscribed channels (via Channel Following) */
-  get isCrossposted() {
-    return (this.raw.flags ?? 0) & MessageFlags.Crossposted;
-  }
-  /** This message originated from a message in another channel (via Channel Following) */
-  get isCrosspost() {
-    return (this.raw.flags ?? 0) & MessageFlags.IsCrosspost;
-  }
-  /** Do not include any embeds when serializing this message. */
-  get suppressEmbeds() {
-    return (this.raw.flags ?? 0) & MessageFlags.SuppressEmbeds;
-  }
-  /** The source message for this crosspost has been deleted (via Channel Following) */
-  get isSourceDeleted() {
-    return (this.raw.flags ?? 0) & MessageFlags.SourceMessageDeleted;
-  }
-  /** This message came from the urgent message system. */
-  get isUrgent() {
-    return (this.raw.flags ?? 0) & MessageFlags.Urgent;
-  }
-  /** This message has an associated thread, which shares its id. */
-  get hasThread() {
-    return (this.raw.flags ?? 0) & MessageFlags.HasThread;
-  }
-  /** This message is only visible to the user who invoked the Interaction. */
-  get isEphemeral() {
-    return (this.raw.flags ?? 0) & MessageFlags.Ephemeral;
-  }
-  /** This message is an Interaction Response and the bot is "thinking" */
-  get isLoading() {
-    return (this.raw.flags ?? 0) & MessageFlags.Loading;
-  }
-  /** This message failed to mention some roles and add their members to the thread. */
-  get isFailedToMentionSomeRolesInThread() {
-    return (this.raw.flags ?? 0) & MessageFlags.FailedToMentionSomeRolesInThread;
+  get flags() {
+    return new ReadonlyMessageFlagsBitfield(this.raw.flags);
   }
 }
 

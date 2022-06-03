@@ -4,9 +4,7 @@ import {
   APIInteraction,
   APIInteractionDataResolvedChannel,
   APIInteractionDataResolvedGuildMember,
-  APIMessage,
   APIRole,
-  APIUser,
   InteractionType,
   Snowflake,
 } from 'discord-api-types/v10';
@@ -16,16 +14,27 @@ import {
   createInteractionMixinList,
   InteractionResponseMixin,
 } from './response';
+import { Message } from '../message';
+import { PartialUser } from '../user';
 
 // TODO: build this type based off of what is inside of discord.js
 interface ResolvedData {
-  users: APIUser;
+  users: PartialUser;
   roles: APIRole;
   members: APIInteractionDataResolvedGuildMember;
   channels: APIInteractionDataResolvedChannel;
   attachments: APIAttachment;
-  messages: APIMessage;
+  messages: Message;
 }
+
+const structures: Record<string, any> = {
+  users: PartialUser,
+  roles: null,
+  members: null,
+  channels: null,
+  attachments: null,
+  messages: Message,
+};
 
 export abstract class CommandInteraction<
   Data extends APIApplicationCommandInteraction = APIApplicationCommandInteraction
@@ -44,7 +53,11 @@ export abstract class CommandInteraction<
   }
 
   getResolved<T extends keyof ResolvedData>(type: T, id: Snowflake): ResolvedData[T] | null {
-    return (this.raw.data.resolved as any)[type]?.[id] ?? null;
+    const raw = (this.raw.data.resolved as any)[type]?.[id] ?? null;
+    if (raw && structures[type]) {
+      return new structures[type](raw);
+    }
+    return raw;
   }
 }
 
