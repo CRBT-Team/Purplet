@@ -11,6 +11,7 @@ import {
   User,
 } from 'discord.js';
 import type { PurpletAutocompleteInteraction } from '../interaction';
+import type { InteractionUser } from '../structures';
 
 /**
  * OptionBuilder is a very complex piece of type-code built out of a lot of mapped types to reduce
@@ -231,7 +232,7 @@ export type OptionBuilderEntryToPurpletResolved<X> = X extends { type: infer T }
       [ApplicationCommandOptionType.String]: string;
       [ApplicationCommandOptionType.Integer]: number;
       [ApplicationCommandOptionType.Boolean]: boolean;
-      [ApplicationCommandOptionType.User]: APIUser;
+      [ApplicationCommandOptionType.User]: InteractionUser;
       [ApplicationCommandOptionType.Channel]: APIInteractionDataResolvedChannel;
       [ApplicationCommandOptionType.Role]: APIRole;
       [ApplicationCommandOptionType.Mentionable]: APIUser | APIRole;

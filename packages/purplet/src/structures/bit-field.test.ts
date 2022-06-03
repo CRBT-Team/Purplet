@@ -1,4 +1,6 @@
 // tests/demo.js
+import * as assert from 'uvu/assert';
+import { UserFlags } from 'discord.js';
 import { test } from 'uvu';
 import { UserFlagsBitfield } from './bit-field';
 
@@ -35,7 +37,21 @@ import { UserFlagsBitfield } from './bit-field';
 // });
 
 test('test', () => {
-  const userFlags = new UserFlagsBitfield(0b100110);
+  const userFlags = new UserFlagsBitfield(
+    UserFlags.HypeSquadOnlineHouse1 | UserFlags.Spammer | UserFlags.PremiumEarlySupporter
+  );
+  assert.equal(
+    userFlags.bitfield,
+    UserFlags.HypeSquadOnlineHouse1 | UserFlags.Spammer | UserFlags.PremiumEarlySupporter
+  );
+  assert.equal(userFlags.has(UserFlags.HypeSquadOnlineHouse1), true);
+  assert.equal(userFlags.has(UserFlags.Spammer), true);
+  assert.equal(userFlags.has(UserFlags.PremiumEarlySupporter), true);
+  assert.equal(userFlags.has(UserFlags.HypeSquadOnlineHouse2), false);
+  assert.equal(userFlags.has(UserFlags.HypeSquadOnlineHouse3), false);
+  assert.equal(userFlags.has(UserFlags.BugHunterLevel2), false);
+  assert.equal(userFlags.has(UserFlags.BotHTTPInteractions), false);
+  assert.equal(userFlags.has(UserFlags.Staff), false);
 });
 
 test.run();

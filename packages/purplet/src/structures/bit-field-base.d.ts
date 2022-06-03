@@ -12,6 +12,7 @@ export type Bitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Pick
     bitfield: Value;
     toJSON(): Value extends bigint ? string : number;
     toArray(): Value[];
+    toStringArray(): Extract<keyof Enum, string>[];
     clone(): Bitfield<Value>;
     has(bit: Value): boolean;
     add(bit: Value): this;
@@ -26,7 +27,15 @@ export type ReadonlyBitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]
   'add' | 'remove'
 >;
 
-type BitfieldClass<BF extends ReadonlyBitfield> = BF extends ReadonlyBitfield<infer A, infer B>
+type BitfieldClass<BF extends ReadonlyBitfield> = BF extends Bitfield<infer A, infer B>
+  ? {
+      new (bitfield?: (B extends bigint ? string | bigint : number) | ReadonlyBitfield<A, B>): BF;
+    }
+  : never;
+type ReadonlyBitfieldClass<BF extends ReadonlyBitfield> = BF extends ReadonlyBitfield<
+  infer A,
+  infer B
+>
   ? {
       new (bitfield?: (B extends bigint ? string | bigint : number) | ReadonlyBitfield<A, B>): BF;
     }
@@ -38,4 +47,4 @@ export function createBitfieldClass<Enum extends BitfieldEnum>(
 ): BitfieldClass<Bitfield<Enum>>;
 export function createReadonlyBitfield<T extends Bitfield>(
   bitfield: BitfieldClass<T>
-): T extends Bitfield<infer A, infer B> ? BitfieldClass<ReadonlyBitfield<A, B>> : never;
+): T extends Bitfield<infer A, infer B> ? ReadonlyBitfieldClass<ReadonlyBitfield<A, B>> : never;

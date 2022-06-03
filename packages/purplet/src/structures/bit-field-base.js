@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-function toValue(...values) {
+function toValue(values) {
   return values.map(x => x?.bitfield ?? x).reduce((a, b) => a | b);
 }
 
@@ -29,16 +29,16 @@ class Bitfield {
     return this;
   }
 
-  missing(flags) {
+  missing(...flags) {
     return toBitField(this.bitfield).remove(flags);
   }
 
-  any(bit) {
-    return (this.bitfield & toValue(bit)) !== 0;
+  any(...flags) {
+    return (this.bitfield & toValue(flags)) !== 0;
   }
 
   equals(other) {
-    return this.bitfield === toValue(other);
+    return this.bitfield === toValue([other]);
   }
 
   toArray() {
@@ -53,16 +53,20 @@ class Bitfield {
     return array;
   }
 
+  toStringArray() {
+    return this.map(x => this.constructor.flags[x]);
+  }
+
+  clone() {
+    return new this.constructor(this.bitfield);
+  }
+
   forEach(callback) {
     this.toArray().forEach(callback);
   }
 
   map(callback) {
     return this.toArray().map(callback);
-  }
-
-  clone() {
-    return new BitField(this.bitfield);
   }
 
   reduce(callback, initialValue) {
@@ -91,11 +95,13 @@ class Bitfield {
 }
 
 export function createBitfieldClass(name, flagObject) {
-  const Class = class extends Bitfield {};
+  const Class = class extends Bitfield {
+    static flags = flagObject;
+  };
   Object.defineProperty(Class, 'name', { value: name });
   for (const flag in flagObject) {
     if (!flag.match(/^[0-9]/)) {
-      Object.defineProperty(Class, 'has' + flag[0].toUpperCase() + flag.slice(1), {
+      Object.defineProperty(Class.prototype, 'has' + flag[0].toUpperCase() + flag.slice(1), {
         get() {
           return this.has(flagObject[flag]);
         },

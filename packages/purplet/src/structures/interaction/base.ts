@@ -1,10 +1,20 @@
 import type { Awaitable } from '@davecode/types';
-import type { APIInteraction, APIInteractionResponse, Interaction } from 'discord.js';
+import type {
+  APIInteraction,
+  APIInteractionResponse,
+  APIPingInteraction,
+  Interaction,
+} from 'discord.js';
+import { InteractionExecutingUser } from '../user';
 import { JSONResolvable, toJSONValue } from '../../utils/plain';
 
 export type InteractionResponseHandler = (r: APIInteractionResponse) => Awaitable<void>;
 
-export abstract class PurpletInteraction<Data extends APIInteraction = APIInteraction> {
+export type APINonPingInteraction = Exclude<APIInteraction, APIPingInteraction>;
+
+export abstract class PurpletInteraction<
+  Data extends APINonPingInteraction = APINonPingInteraction
+> {
   #onRespond: InteractionResponseHandler | undefined;
   #replied = false;
 
@@ -21,7 +31,11 @@ export abstract class PurpletInteraction<Data extends APIInteraction = APIIntera
   }
 
   get guildLocale() {
-    return this.raw.guild_locale;
+    return this.raw.guild_locale ?? this.raw.locale;
+  }
+
+  get locale() {
+    return this.raw.locale ?? this.raw.guild_locale;
   }
 
   get id() {
@@ -40,8 +54,8 @@ export abstract class PurpletInteraction<Data extends APIInteraction = APIIntera
     return this.raw.type;
   }
 
-  get user() {
-    return this.raw.user ?? this.member!.user;
+  get user(): InteractionExecutingUser {
+    return new InteractionExecutingUser(this.raw.user ?? this.member!.user, this);
   }
 
   protected async respond(response: JSONResolvable<APIInteractionResponse>) {
