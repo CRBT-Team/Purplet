@@ -3,7 +3,7 @@ import { $appCommand } from './command';
 import type {
   Message,
   MessageCommandInteraction,
-  User,
+  PartialUser,
   UserCommandInteraction,
 } from '../structures';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
@@ -14,7 +14,7 @@ export interface ContextCommandOptions extends CommandPermissionsInput {
 }
 
 export interface UserCommandOptions extends ContextCommandOptions {
-  handle: (this: UserCommandInteraction, target: User) => void;
+  handle: (this: UserCommandInteraction, target: PartialUser) => void;
 }
 
 export function $userContextCommand(opts: UserCommandOptions) {

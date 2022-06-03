@@ -2,6 +2,7 @@ import { ButtonBuilder } from '@discordjs/builders';
 import {
   APIActionRowComponent,
   APIActionRowComponentTypes,
+  APIButtonComponentWithURL,
   APIMessageActionRowComponent,
   APIModalActionRowComponent,
   ButtonStyle,
@@ -64,5 +65,5 @@ export function createLinkButton(label: string, url: string) {
     .setStyle(ButtonStyle.Link)
     .setLabel(label)
     .setURL(url)
-    .toJSON();
+    .toJSON() as APIButtonComponentWithURL;
 }
