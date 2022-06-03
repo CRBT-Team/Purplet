@@ -8,7 +8,7 @@ import type {
 } from 'discord-api-types/v10';
 import type { Attachment, Channel, Role, User } from 'discord.js';
 import type { AutocompleteInteraction } from '../interaction';
-import type { InteractionUser } from '../structures';
+import type { BareUser, InteractionUser } from '../structures';
 
 /**
  * OptionBuilder is a very complex piece of type-code built out of a lot of mapped types to reduce
@@ -209,7 +209,7 @@ export type OptionBuilderEntryToUnresolved<X> = X extends { type: infer T }
       [ApplicationCommandOptionType.String]: string;
       [ApplicationCommandOptionType.Integer]: number;
       [ApplicationCommandOptionType.Boolean]: boolean;
-      [ApplicationCommandOptionType.User]: string;
+      [ApplicationCommandOptionType.User]: BareUser;
       [ApplicationCommandOptionType.Channel]: string;
       [ApplicationCommandOptionType.Role]: string;
       [ApplicationCommandOptionType.Mentionable]: string;

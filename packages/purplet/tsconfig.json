@@ -25,6 +25,6 @@
     "strictFunctionTypes": true,
     "target": "ESNext"
   },
-  "include": ["src/**/*.ts", "src/**/*.js"],
+  "include": ["src/**/*.ts", "src/**/*.js", "./node_modules/discord-api-types"],
   "exclude": ["**/node_modules", "**/dist"]
 }

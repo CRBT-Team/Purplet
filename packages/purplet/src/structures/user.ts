@@ -80,26 +80,27 @@ export class User {
     return this.raw.banner ? rest.cdn.banner(this.id, this.raw.banner, options) : null;
   }
 
-  get locale() {
-    return this.raw.locale ?? 'en-US';
-  }
-
   // TODO: uncomment and tweak when released.
   // get avatarDecorationId() {
   //   // @ts-expect-error Unreleased, so obviously missing from discord-api-types
   //   return this.raw.avatar_decoration;
   // }
-}
 
-export class UserWithEmail extends User {
-  get isEmailVerified() {
-    return this.raw.verified;
-  }
-
-  get email() {
-    return this.raw.email;
+  toString() {
+    return `<@${this.id}>`;
   }
 }
+
+// Uncomment if needed
+// export class OAuthUser extends User {
+//   get isEmailVerified() {
+//     return this.raw.verified;
+//   }
+//
+//   get email() {
+//     return this.raw.email;
+//   }
+// }
 
 // InteractionExecutingUser refers to the user that is executing an interaction, seen on `interaction.user`.
 // InteractionUser refers to user data that is passed to an interaction.
@@ -117,8 +118,18 @@ export type PartialUser = PartialClass<
   | 'defaultAvatarURL'
   | 'hypesquadHouse'
   | 'isBot'
+  | 'fetch'
+  | 'toString'
 >;
 export const PartialUser = createPartialClass<PartialUser>(User);
+
+export type EmptyUser = PartialClass<
+  // Class, Required properties from `raw`, Allowed methods from class
+  typeof User,
+  'id',
+  'id' | 'fetch' | 'toString'
+>;
+export const EmptyUser = createPartialClass<EmptyUser>(User);
 
 export class InteractionExecutingUser extends PartialUser {
   constructor(readonly raw: APIUser, readonly interaction: Interaction) {

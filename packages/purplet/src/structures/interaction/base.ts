@@ -4,6 +4,8 @@ import type {
   APIInteractionResponse,
   APIPingInteraction,
 } from 'discord-api-types/v10';
+import { EmptyTextChannel } from '../channel';
+import { EmptyGuild } from '../guild';
 import { InteractionExecutingUser } from '../user';
 import { JSONResolvable, toJSONValue } from '../../utils/plain';
 
@@ -23,8 +25,12 @@ export abstract class Interaction<Data extends APINonPingInteraction = APINonPin
     return this.raw.application_id;
   }
 
-  get guildId() {
-    return this.raw.guild_id;
+  get guild() {
+    return this.raw.guild_id ? new EmptyGuild({ id: this.raw.guild_id }) : null;
+  }
+
+  get channel() {
+    return this.raw.channel_id ? new EmptyTextChannel({ id: this.raw.channel_id }) : null;
   }
 
   get guildLocale() {
