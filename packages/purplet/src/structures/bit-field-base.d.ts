@@ -26,7 +26,7 @@ export type Bitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Pick
 
 export type ReadonlyBitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Omit<
   Bitfield<Enum, Value>,
-  'add' | 'remove'
+  'add' | 'remove' | 'freeze'
 > & {
   [Key in Extract<keyof Enum, string> as `has${Capitalize<Key>}`]: boolean;
 };

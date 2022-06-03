@@ -93,6 +93,10 @@ class Bitfield {
     return String(this.bitfield);
   }
 
+  freeze() {
+    return Object.freeze(this);
+  }
+
   *[Symbol.iterator]() {
     yield* this.toArray();
   }
