@@ -1,4 +1,4 @@
-import { ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 import { $buttonComponent, $chatCommand, MessageComponentBuilder, OptionBuilder } from 'purplet';
 
 interface SampleContext {
@@ -24,6 +24,11 @@ export const helloWorld = $chatCommand({
   options: new OptionBuilder().string('name', 'name of button', { required: true }),
   async handle(options) {
     await this.showMessage({
+      embeds: [
+        new EmbedBuilder()
+          .setTitle('User')
+          .setDescription('```json\n' + JSON.stringify(this.user, null, 2) + '\n```'),
+      ],
       components: new MessageComponentBuilder() //
         .addInline(SampleButton.create({ name: options.name.toUpperCase() }))
         .addInline(SampleButton.create({ name: options.name.toLowerCase() })),
