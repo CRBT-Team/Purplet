@@ -11,6 +11,7 @@ export type Bitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Pick
   } & {
     bitfield: Value;
     toJSON(): Value extends bigint ? string : number;
+    toString(): string;
     toArray(): Value[];
     toStringArray(): Extract<keyof Enum, string>[];
     clone(): Bitfield<Value>;
@@ -20,24 +21,40 @@ export type Bitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Pick
     missing(bit: Value): Bitfield<Value>;
     any(bit: Value): boolean;
     equals(other: Bitfield<Value>): boolean;
+    freeze(): ReadonlyBitfield<Enum>;
   };
 
 export type ReadonlyBitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Omit<
   Bitfield<Enum, Value>,
   'add' | 'remove'
->;
+> & {
+  [Key in Extract<keyof Enum, string> as `has${Capitalize<Key>}`]: boolean;
+};
 
-type BitfieldClass<BF extends ReadonlyBitfield> = BF extends Bitfield<infer A, infer B>
+export type BitfieldResolvable<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> =
+  | ReadonlyBitfield<Enum, Value>
+  | Bitfield<Enum, Value>
+  | (Value extends bigint ? `${bigint}` | bigint : number)
+  | Extract<keyof Enum, string>
+  | Array<BitfieldResolvable<Enum, Value>>;
+
+type BitfieldClass<BF extends ReadonlyBitfield> = BF extends Bitfield<infer Enum, infer Value>
   ? {
-      new (bitfield?: (B extends bigint ? string | bigint : number) | ReadonlyBitfield<A, B>): BF;
+      new (
+        bitfield?: (Value extends bigint ? string | bigint : number) | ReadonlyBitfield<Enum, Value>
+      ): BF;
+      resolve(...data: BitfieldResolvable<Enum, Value>[]): BF;
     }
   : never;
 type ReadonlyBitfieldClass<BF extends ReadonlyBitfield> = BF extends ReadonlyBitfield<
-  infer A,
-  infer B
+  infer Enum,
+  infer Value
 >
   ? {
-      new (bitfield?: (B extends bigint ? string | bigint : number) | ReadonlyBitfield<A, B>): BF;
+      new (
+        bitfield?: (Value extends bigint ? string | bigint : number) | ReadonlyBitfield<Enum, Value>
+      ): BF;
+      resolve(...data: BitfieldResolvable<Enum, Value>[]): BF;
     }
   : never;
 

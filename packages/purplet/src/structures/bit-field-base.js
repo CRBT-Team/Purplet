@@ -30,7 +30,7 @@ class Bitfield {
   }
 
   missing(...flags) {
-    return toBitField(this.bitfield).remove(flags);
+    return new Bitfield(this.bitfield).remove(flags);
   }
 
   any(...flags) {
@@ -89,14 +89,34 @@ class Bitfield {
     return typeof this.bitfield === 'bigint' ? String(this.bitfield) : this.bitfield;
   }
 
+  toString() {
+    return String(this.bitfield);
+  }
+
   *[Symbol.iterator]() {
     yield* this.toArray();
   }
 }
 
 export function createBitfieldClass(name, flagObject) {
-  const Class = class extends Bitfield {
+  const Class = class Class extends Bitfield {
     static flags = flagObject;
+    static resolveValue(...data) {
+      return data
+        .map(data => {
+          if (typeof data === 'string') {
+            return Class.flags[data] ?? BigInt(data);
+          } else if (Array.isArray(data)) {
+            return Class.resolveValue(...data);
+          } else {
+            return toValue([data]);
+          }
+        })
+        .reduce((a, b) => a | b);
+    }
+    static resolve(...data) {
+      return new Class(Class.resolveValue(...data));
+    }
   };
   Object.defineProperty(Class, 'name', { value: name });
   for (const flag in flagObject) {

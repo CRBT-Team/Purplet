@@ -18,56 +18,56 @@ export const UserFlagsBitfield = createBitfieldClass<typeof UserFlags>(
   UserFlags
 );
 export const ReadonlyUserFlagsBitfield = createReadonlyBitfield(UserFlagsBitfield);
-export type UserFlagsBitField = InstanceType<typeof UserFlagsBitfield>;
-export type ReadonlyUserFlagsBitField = InstanceType<typeof ReadonlyUserFlagsBitfield>;
+export type UserFlagsBitfield = InstanceType<typeof UserFlagsBitfield>;
+export type ReadonlyUserFlagsBitfield = InstanceType<typeof ReadonlyUserFlagsBitfield>;
 
 export const MessageFlagsBitfield = createBitfieldClass<typeof MessageFlags>(
   'MessageFlagsBitfield',
   MessageFlags
 );
 export const ReadonlyMessageFlagsBitfield = createReadonlyBitfield(MessageFlagsBitfield);
-export type MessageFlagsBitField = InstanceType<typeof MessageFlagsBitfield>;
-export type ReadonlyMessageFlagsBitField = InstanceType<typeof ReadonlyMessageFlagsBitfield>;
+export type MessageFlagsBitfield = InstanceType<typeof MessageFlagsBitfield>;
+export type ReadonlyMessageFlagsBitfield = InstanceType<typeof ReadonlyMessageFlagsBitfield>;
 
 export const ChannelFlagsBitfield = createBitfieldClass<typeof ChannelFlags>(
   'ChannelFlagsBitfield',
   ChannelFlags
 );
 export const ReadonlyChannelFlagsBitfield = createReadonlyBitfield(ChannelFlagsBitfield);
-export type ChannelFlagsBitField = InstanceType<typeof ChannelFlagsBitfield>;
-export type ReadonlyChannelFlagsBitField = InstanceType<typeof ReadonlyChannelFlagsBitfield>;
+export type ChannelFlagsBitfield = InstanceType<typeof ChannelFlagsBitfield>;
+export type ReadonlyChannelFlagsBitfield = InstanceType<typeof ReadonlyChannelFlagsBitfield>;
 
 export const ActivityFlagsBitfield = createBitfieldClass<typeof ActivityFlags>(
   'ActivityFlagsBitfield',
   ActivityFlags
 );
 export const ReadonlyActivityFlagsBitfield = createReadonlyBitfield(ActivityFlagsBitfield);
-export type ActivityFlagsBitField = InstanceType<typeof ActivityFlagsBitfield>;
-export type ReadonlyActivityFlagsBitField = InstanceType<typeof ReadonlyActivityFlagsBitfield>;
+export type ActivityFlagsBitfield = InstanceType<typeof ActivityFlagsBitfield>;
+export type ReadonlyActivityFlagsBitfield = InstanceType<typeof ReadonlyActivityFlagsBitfield>;
 
 export const PermissionBitfield = createBitfieldClass<typeof PermissionFlagsBits>(
   'PermissionBitfield',
   PermissionFlagsBits
 );
 export const ReadonlyPermissionBitfield = createReadonlyBitfield(PermissionBitfield);
-export type PermissionBitField = InstanceType<typeof PermissionBitfield>;
-export type ReadonlyPermissionBitField = InstanceType<typeof ReadonlyPermissionBitfield>;
+export type PermissionBitfield = InstanceType<typeof PermissionBitfield>;
+export type ReadonlyPermissionBitfield = InstanceType<typeof ReadonlyPermissionBitfield>;
 
 export const IntentBitfield = createBitfieldClass<typeof GatewayIntentBits>(
   'IntentBitfield',
   GatewayIntentBits
 );
 export const ReadonlyIntentBitfield = createReadonlyBitfield(IntentBitfield);
-export type IntentBitField = InstanceType<typeof IntentBitfield>;
-export type ReadonlyIntentBitField = InstanceType<typeof ReadonlyIntentBitfield>;
+export type IntentBitfield = InstanceType<typeof IntentBitfield>;
+export type ReadonlyIntentBitfield = InstanceType<typeof ReadonlyIntentBitfield>;
 
 export const ApplicationFlagsBitfield = createBitfieldClass<typeof ApplicationFlags>(
   'ApplicationFlagsBitfield',
   ApplicationFlags
 );
 export const ReadonlyApplicationFlagsBitfield = createReadonlyBitfield(ApplicationFlagsBitfield);
-export type ApplicationFlagsBitField = InstanceType<typeof ApplicationFlagsBitfield>;
-export type ReadonlyApplicationFlagsBitField = InstanceType<
+export type ApplicationFlagsBitfield = InstanceType<typeof ApplicationFlagsBitfield>;
+export type ReadonlyApplicationFlagsBitfield = InstanceType<
   typeof ReadonlyApplicationFlagsBitfield
 >;
 
@@ -76,8 +76,8 @@ export const ThreadMemberFlagsBitfield = createBitfieldClass<typeof ThreadMember
   ThreadMemberFlags
 );
 export const ReadonlyThreadMemberFlagsBitfield = createReadonlyBitfield(ThreadMemberFlagsBitfield);
-export type ThreadMemberFlagsBitField = InstanceType<typeof ThreadMemberFlagsBitfield>;
-export type ReadonlyThreadMemberFlagsBitField = InstanceType<
+export type ThreadMemberFlagsBitfield = InstanceType<typeof ThreadMemberFlagsBitfield>;
+export type ReadonlyThreadMemberFlagsBitfield = InstanceType<
   typeof ReadonlyThreadMemberFlagsBitfield
 >;
 
@@ -88,7 +88,7 @@ export const GuildSystemChannelFlagsBitfield = createBitfieldClass<typeof GuildS
 export const ReadonlyGuildSystemChannelFlagsBitfield = createReadonlyBitfield(
   GuildSystemChannelFlagsBitfield
 );
-export type GuildSystemChannelFlagsBitField = InstanceType<typeof GuildSystemChannelFlagsBitfield>;
-export type ReadonlyGuildSystemChannelFlagsBitField = InstanceType<
+export type GuildSystemChannelFlagsBitfield = InstanceType<typeof GuildSystemChannelFlagsBitfield>;
+export type ReadonlyGuildSystemChannelFlagsBitfield = InstanceType<
   typeof ReadonlyGuildSystemChannelFlagsBitfield
 >;

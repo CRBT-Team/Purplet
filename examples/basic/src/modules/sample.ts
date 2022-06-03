@@ -5,6 +5,7 @@ export const helloWorld = $chatCommand({
   name: 'user_info',
   description: 'testing',
   options: new OptionBuilder().user('who', 'who am'),
+  permissions: [],
   async handle(options) {
     await this.showMessage({
       embeds: [

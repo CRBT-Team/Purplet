@@ -5,7 +5,7 @@ import { test } from 'uvu';
 import { UserFlagsBitfield } from './bit-field';
 
 // test('bitfield.has', () => {
-//   const field = new BitField(0b100110);
+//   const field = new Bitfield(0b100110);
 //   assert.equal(field.has(1), false);
 //   assert.equal(field.has(2), true);
 //   assert.equal(field.has(4), true);
@@ -14,22 +14,22 @@ import { UserFlagsBitfield } from './bit-field';
 //   assert.equal(field.has(32), true);
 // });
 // test('bitfield.toArray()', () => {
-//   const field = new BitField(0b100110);
+//   const field = new Bitfield(0b100110);
 //   assert.equal(field.toArray(), [2, 4, 32]);
 // });
 // test('bitfield.bitfield', () => {
-//   const field = new BitField(0b100110);
+//   const field = new Bitfield(0b100110);
 //   assert.equal(field.bitfield, 0b100110);
 // });
 // test('bitfield.add', () => {
-//   const field = new BitField(0b100110);
+//   const field = new Bitfield(0b100110);
 //   field.add(1);
 //   assert.equal(field.bitfield, 0b100111);
 //   field.add(2);
 //   assert.equal(field.bitfield, 0b100111);
 // });
 // test('bitfield.remove', () => {
-//   const field = new BitField(0b100110);
+//   const field = new Bitfield(0b100110);
 //   field.remove(1);
 //   assert.equal(field.bitfield, 0b100110);
 //   field.remove(2);

@@ -1,14 +1,15 @@
-import { PermissionResolvable, PermissionsBitField } from 'discord-api-types/v10';
+import type { PermissionFlagsBits } from 'discord.js';
+import { BitfieldResolvable, PermissionBitfield } from '../structures';
 
 export interface CommandPermissionsInput {
-  permissions?: PermissionResolvable;
+  permissions?: BitfieldResolvable<typeof PermissionFlagsBits>;
   allowInDM?: boolean;
 }
 
 export function resolveCommandPermissions(input: CommandPermissionsInput) {
   return {
     default_member_permissions: input.permissions
-      ? PermissionsBitField.resolve(input.permissions).toString()
+      ? PermissionBitfield.resolve(input.permissions).toJSON()
       : null,
     dm_permission: input.allowInDM ?? true,
   };
