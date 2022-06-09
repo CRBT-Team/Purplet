@@ -1,0 +1,24 @@
+# Getting Started
+
+TODO: Purplet install explanation
+
+import InstallCodeBlock from '@site/src/components/InstallCodeBlock';
+
+<InstallCodeBlock />
+
+## Scripts
+
+- **`purplet dev`**: Starts a bot in development mode. Allows live-reloading. Deploys application
+  commands only to specified servers to ensure they are instantly usable.
+- **`purplet build`**: Builds a compiled `.js` file with the bot, running application commands
+  globally.
+
+## Project Structure
+
+- **`.env`**: Git-ignored file with environment variables, including bot and database tokens.
+- **`purplet.config.ts`**: Contains project configuration.
+- **`.purplet/`**: Contains generated files by purplet
+- **`src/features/`**: Every `.js`/`.ts` file in this folder will be automatically scanned and
+  loaded for Features.
+- **`src/lib/`**: Contains reusable code for your bot, importable by `$lib`. Not loaded
+  automatically like the features folder is.
