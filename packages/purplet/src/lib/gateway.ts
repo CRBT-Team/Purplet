@@ -1,11 +1,5 @@
 import type { Immutable } from '@davecode/types';
-import {
-  APIInteraction,
-  APIInteractionResponse,
-  GatewayDispatchEvents,
-  RESTGetAPICurrentUserResult,
-  Routes,
-} from 'discord-api-types/v10';
+import { RESTGetAPICurrentUserResult, Routes } from 'discord-api-types/v10';
 import { Client } from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
@@ -17,9 +11,7 @@ import type {
   LifecycleHookNames,
 } from './feature';
 import { rest, setDJSClient } from './global';
-import { createInteraction } from '../structures/interaction';
 import { featureRequiresDJS } from '../utils/feature';
-import { JSONValue, toJSONValue } from '../utils/plain';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 
@@ -125,22 +117,22 @@ export class GatewayBot {
     return clientOptions;
   }
 
-  /** @internal */
-  private async handleInteraction(i: APIInteraction) {
-    const responseHandler = async (response: APIInteractionResponse) => {
-      await rest.post(Routes.interactionCallback(i.id, i.token), {
-        body: response,
-        // TODO: handle file uploads for interaction responses.
-        files: [],
-      });
-    };
+  // /** @internal */
+  // private async handleInteraction(i: APIInteraction) {
+  //   const responseHandler = async (response: APIInteractionResponse) => {
+  //     await rest.post(Routes.interactionCallback(i.id, i.token), {
+  //       body: response,
+  //       // TODO: handle file uploads for interaction responses.
+  //       files: [],
+  //     });
+  //   };
 
-    const interaction = createInteraction(i, responseHandler);
+  //   const interaction = createInteraction(i, responseHandler);
 
-    // Run handlers
-    (await asyncMap(this.#features, feat => feat.interaction?.call?.(feat, interaction))) //
-      .forEach(response => response && responseHandler(toJSONValue(response as JSONValue)));
-  }
+  //   // Run handlers
+  //   (await asyncMap(this.#features, feat => feat.interaction?.call?.(feat, interaction))) //
+  //     .forEach(response => response && responseHandler(toJSONValue(response as JSONValue)));
+  // }
 
   // TODO: fix types on this to not have that required `Event` type param, but whatever.
   /**
@@ -163,6 +155,7 @@ export class GatewayBot {
 
   /** Starts the gateway bot. Run the first set of `.loadFeatures` _before_ using this. */
   async start() {
+    // Remove after Node.js 16 is no longer in LTS
     const botReliesOnDJS = this.#features.some(featureRequiresDJS);
 
     // TODO: do not use process.env but something else. related to custom env solution.
@@ -305,8 +298,13 @@ export class GatewayBot {
     };
 
     // Listen for raw interaction events for the `interaction` hook.
-    this.#djsClient.ws.on(GatewayDispatchEvents.InteractionCreate, async i => {
-      this.handleInteraction(i);
+    // this.#djsClient.ws.on(GatewayDispatchEvents.InteractionCreate, async i => {
+    //   this.handleInteraction(i);
+    // });
+    this.#djsClient.on('interactionCreate', i => {
+      this.features.forEach(feature => {
+        feature.interaction?.(i);
+      });
     });
 
     await this.#djsClient.login(this.#token);

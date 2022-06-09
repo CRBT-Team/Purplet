@@ -1,6 +1,6 @@
 import { ApplicationCommandType } from 'discord-api-types/v10';
 import { ApplicationCommandData, createFeature } from '../lib/feature';
-import { CommandInteraction, Interaction } from '../structures/interaction';
+import type { CommandInteraction, Interaction } from 'discord.js';
 
 function formatCommandName(cmd: ApplicationCommandData) {
   const commandTypeNames = {
@@ -24,7 +24,7 @@ export function $appCommand(opts: AppCommandOptions) {
     applicationCommands: [opts.command],
     interaction(i) {
       if (
-        i instanceof CommandInteraction &&
+        i.isCommand() &&
         i.commandType === opts.command.type &&
         i.commandName === opts.command.name
       ) {

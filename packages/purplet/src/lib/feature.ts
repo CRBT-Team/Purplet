@@ -5,7 +5,7 @@ import type {
   RESTPostAPIApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import type { Client, ClientOptions } from 'discord.js';
-import type { Interaction } from '../structures';
+import type { Interaction } from 'discord.js';
 import type { Cleanup } from '../utils/types';
 
 const IS_FEATURE = Symbol.for('purplet.is-bot-feature');

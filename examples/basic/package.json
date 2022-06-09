@@ -13,6 +13,9 @@
     "@davecode/utils": "^1.0.0",
     "discord-api-types": "^0.33.1",
     "discord.js": "14.0.0-dev.1653480262-68d5169",
-    "purplet": "workspace:2.0.0-next.4"
+    "purplet": "workspace:2.0.0-next.5"
+  },
+  "devDependencies": {
+    "@types/ungap__structured-clone": "^0.3.0"
   }
 }

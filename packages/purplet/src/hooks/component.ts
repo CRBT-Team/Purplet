@@ -3,8 +3,12 @@ import type {
   APIMessageActionRowComponent,
   APISelectMenuComponent,
 } from 'discord-api-types/v10';
+import type {
+  ButtonInteraction,
+  MessageComponentInteraction,
+  SelectMenuInteraction,
+} from 'discord.js';
 import { createFeature } from '../lib/feature';
-import { ButtonInteraction, ComponentInteraction, SelectMenuInteraction } from '../structures';
 import { JSONResolvable, JSONValue, toJSONValue } from '../utils/plain';
 import type { IsUnknown } from '../utils/types';
 
@@ -35,7 +39,7 @@ interface MessageComponentOptions<
   structure?: CustomStructure<Context, JSONValue>;
   serializer?: CustomSerializer;
   create(ctx: Context, createProps: CreateProps): JSONResolvable<ComponentType>;
-  handle(this: ComponentInteraction, context: Context): void;
+  handle(this: MessageComponentInteraction, context: Context): void;
 }
 
 /** @internal This type is used to remove properties of the `create` function if they are not needed. */
@@ -67,7 +71,7 @@ function $messageComponent<
         featureId = this.featureId;
       },
       interaction(i) {
-        if (i instanceof ComponentInteraction && i.customId.startsWith(featureId + ':')) {
+        if (i.isMessageComponent() && i.customId.startsWith(featureId + ':')) {
           const data = i.customId.substring(featureId.length + 1);
           const context = structure.fromJSON(serializer.fromString(data));
           options.handle.call(i, context);
@@ -107,7 +111,7 @@ export function $buttonComponent<Context, CreateProps>(
 
 interface SelectMenuMessageComponentOptions<Context, CreateProps>
   extends Omit<MessageComponentOptions<Context, CreateProps, APISelectMenuComponent>, 'handle'> {
-  handle(this: ComponentInteraction, context: Context & { values: string[] }): void;
+  handle(this: MessageComponentInteraction, context: Context & { values: string[] }): void;
 }
 
 export function $selectMenuComponent<Context, CreateProps>(

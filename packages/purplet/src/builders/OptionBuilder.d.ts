@@ -7,8 +7,8 @@ import type {
   LocalizationMap,
 } from 'discord-api-types/v10';
 import type { Attachment, Channel, Role, User } from 'discord.js';
+import type { BareUser, InteractionUser } from '../_experimental_structures';
 import type { AutocompleteInteraction } from '../interaction';
-import type { BareUser, InteractionUser } from '../structures';
 
 /**
  * OptionBuilder is a very complex piece of type-code built out of a lot of mapped types to reduce

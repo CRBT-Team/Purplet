@@ -38,7 +38,7 @@ export class ChatCommandInteraction<
       case ApplicationCommandOptionType.Role:
         return this.getResolved('roles', opt.value);
       case ApplicationCommandOptionType.User:
-        return this.getResolved('attachments', opt.value);
+        return this.getResolved('users', opt.value);
 
       default:
         return null;
