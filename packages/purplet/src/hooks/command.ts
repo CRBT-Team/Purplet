@@ -1,6 +1,6 @@
 import { ApplicationCommandType } from 'discord-api-types/v10';
+import type { Interaction } from 'discord.js';
 import { ApplicationCommandData, createFeature } from '../lib/feature';
-import type { CommandInteraction, Interaction } from 'discord.js';
 
 function formatCommandName(cmd: ApplicationCommandData) {
   const commandTypeNames = {

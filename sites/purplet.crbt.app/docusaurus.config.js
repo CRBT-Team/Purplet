@@ -35,13 +35,11 @@ const config = {
         docs: {
           path: '../../docs',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl:
-            'https://github.com/CRBT-Team/purplet/tree/main/sites/purplet.crbt.app/',
+          editUrl: 'https://github.com/CRBT-Team/purplet/tree/main/sites/purplet.crbt.app/',
         },
         blog: {
           showReadingTime: true,
-          editUrl:
-            'https://github.com/CRBT-Team/purplet/tree/main/sites/purplet.crbt.app/',
+          editUrl: 'https://github.com/CRBT-Team/purplet/tree/main/sites/purplet.crbt.app/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -66,7 +64,7 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          { to: '/blog', label: 'Blog', position: 'left' },
           {
             href: 'https://github.com/CRBT-Team/purplet',
             label: 'GitHub',

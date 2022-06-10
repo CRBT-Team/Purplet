@@ -15,14 +15,3 @@ export const helloWorld = $chatCommand({
     });
   },
 });
-
-export const balls = $chatCommand({
-  name: 'balls',
-  description: 'the balls!!!!!',
-
-  async handle(options) {
-    await this.reply({
-      content: 'balls!',
-    });
-  },
-});
