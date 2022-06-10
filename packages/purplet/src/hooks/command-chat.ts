@@ -11,7 +11,7 @@ import { $merge } from './merge';
 import {
   getOptionBuilderAutocompleteHandlers,
   OptionBuilder,
-  OptionBuilderToPurpletResolvedObject,
+  OptionBuilderToDJSResolvedObject,
 } from '../builders';
 import { camelChoiceToSnake } from '../utils/case';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
@@ -23,7 +23,7 @@ export interface ChatCommandOptions<T> extends CommandPermissionsInput {
   description: string;
   descriptionLocalizations?: LocalizationMap;
   options?: OptionBuilder<T>;
-  handle(this: ChatInputCommandInteraction, options: OptionBuilderToPurpletResolvedObject<T>): void;
+  handle(this: ChatInputCommandInteraction, options: OptionBuilderToDJSResolvedObject<T>): void;
 }
 
 function getResolved(
