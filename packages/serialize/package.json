@@ -1,0 +1,19 @@
+{
+  "name": "serialize",
+  "version": "0.0.0",
+  "description": "Utilities for binary serialization, used by Purplet",
+  "scripts": {
+    "build": "rollup -c && tsc -p . && echo Types Passing",
+    "dev": "rollup -c --watch",
+    "lint": "eslint src/**/*.{ts,tsx}"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "esbuild": "^0.14.42",
+    "rollup": "^2.75.5",
+    "rollup-plugin-esbuild": "^4.9.1"
+  }
+}
