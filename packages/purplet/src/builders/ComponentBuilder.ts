@@ -5,60 +5,80 @@ import {
   APIButtonComponentWithURL,
   APIMessageActionRowComponent,
   APIModalActionRowComponent,
+  APIModalInteractionResponseCallbackData,
   ButtonStyle,
   ComponentType,
 } from 'discord-api-types/v10';
+import { JSONResolvable, toJSONValue } from '../utils/plain';
 
 abstract class ComponentBuilder<Type extends APIActionRowComponentTypes> {
-  private data: APIActionRowComponent<Type>[] = [];
-
-  toJSON(): APIActionRowComponent<Type>[] {
-    return this.data;
-  }
+  protected components: APIActionRowComponent<Type>[] = [];
 
   /**
    * Adds an Action Row, either by providing an array of components, a single component, or a whole
    * action row.
    */
-  addRow(row: APIActionRowComponent<Type> | Type | Type[]) {
-    if (Array.isArray(row)) {
-      this.data.push({
+  addRow(row: JSONResolvable<APIActionRowComponent<Type> | Type | Type[]>) {
+    const resolved = toJSONValue(row);
+    if (Array.isArray(resolved)) {
+      this.components.push({
         type: ComponentType.ActionRow,
-        components: row,
+        components: resolved,
       });
-    } else if (row.type === ComponentType.ActionRow) {
-      this.data.push(row);
+    } else if (resolved.type === ComponentType.ActionRow) {
+      this.components.push(resolved);
     } else {
-      this.data.push({
+      this.components.push({
         type: ComponentType.ActionRow,
-        components: [row],
+        components: [resolved],
       });
     }
     return this;
   }
 
   /** Adds the component inline, but will add a new Action Row if space runs out. */
-  addInline(item: Type) {
+  addInline(item: JSONResolvable<Type>) {
+    const resolved = toJSONValue(item);
     // SelectMenu and TextInput
     if (
-      this.data.length === 0 ||
-      item.type === ComponentType.SelectMenu ||
-      item.type === ComponentType.TextInput ||
-      this.data[this.data.length - 1].components.length >= 5
+      this.components.length === 0 ||
+      resolved.type === ComponentType.SelectMenu ||
+      resolved.type === ComponentType.TextInput ||
+      this.components[this.components.length - 1].components.length >= 5
     ) {
       this.addRow(item);
       return this;
     }
 
-    this.data[this.data.length - 1].components.push(item);
+    this.components[this.components.length - 1].components.push(resolved);
 
     return this;
   }
 }
 
-export class MessageComponentBuilder extends ComponentBuilder<APIMessageActionRowComponent> {}
+export class MessageComponentBuilder extends ComponentBuilder<APIMessageActionRowComponent> {
+  toJSON() {
+    return this.components;
+  }
+}
 
-export class ModalComponentBuilder extends ComponentBuilder<APIModalActionRowComponent> {}
+export class ModalComponentBuilder extends ComponentBuilder<APIModalActionRowComponent> {
+  #modalTitle = 'Modal';
+
+  setModal(title: string) {
+    this.#modalTitle = title;
+    return this;
+  }
+
+  toJSON(): APIModalInteractionResponseCallbackData {
+    return {
+      // This builder doesnt have the custom id field because Purplet internals change this anyways
+      custom_id: 'custom_id',
+      title: this.#modalTitle,
+      components: this.components,
+    };
+  }
+}
 
 export function createLinkButton(label: string, url: string) {
   return new ButtonBuilder() //

@@ -5,4 +5,5 @@ export * from './command-context';
 export * from './component';
 export * from './gateway';
 export * from './merge';
+export * from './modal';
 export * from './service';

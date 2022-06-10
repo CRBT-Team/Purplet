@@ -18,7 +18,7 @@ export interface DevOptions {
 }
 
 export async function startDevelopmentBot(options: DevOptions) {
-  const modulesPath = path.normalize(path.join(options.root, 'src/modules'));
+  const modulesPath = path.normalize(path.join(options.root, 'src/features'));
 
   const hmrWatcher = new VitePluginPurpletHMRHook();
 

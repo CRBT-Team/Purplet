@@ -15,7 +15,7 @@ export interface BuildOptions {
 
 export async function buildGatewayBot(options: BuildOptions) {
   // Scan for modules
-  const modulesPath = path.normalize(path.join(options.root, 'src/modules'));
+  const modulesPath = path.normalize(path.join(options.root, 'src/features'));
   const modules = (await walk(modulesPath)).filter(isSourceFile);
 
   // Setup temp folder
