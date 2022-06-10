@@ -124,6 +124,7 @@ importers:
       react: ^17.0.2
       react-dom: ^17.0.2
       typescript: ^4.6.4
+      use-between: ^1.3.4
     dependencies:
       '@docusaurus/core': 2.0.0-beta.21_k26rfrdk2uh2ao3d3jcmn6wejm
       '@docusaurus/preset-classic': 2.0.0-beta.21_w5c3jqcaxnwga63dwzpfxk6rxe
@@ -132,6 +133,7 @@ importers:
       prism-react-renderer: 1.3.3_react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+      use-between: 1.3.4_react@17.0.2
     devDependencies:
       '@docusaurus/module-type-aliases': 2.0.0-beta.21_sfoxds7t5ydpegc3knd667wn6m
       '@tsconfig/docusaurus': 1.0.5
@@ -10181,6 +10183,14 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       prepend-http: 2.0.0
+    dev: false
+
+  /use-between/1.3.4_react@17.0.2:
+    resolution: {integrity: sha512-jtLCBVeytJUjAc9+/r/0SREuNLyn3KO9VjvSi7eozeThPfnbOedKuH9qep/C+jgfJ9Ohx4bf714ri78Hev9BGA==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 17.0.2
     dev: false
 
   /use-composed-ref/1.3.0_react@17.0.2:
