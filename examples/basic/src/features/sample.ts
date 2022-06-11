@@ -7,15 +7,17 @@ interface ModalProps {
 
 export const myModal = $modal({
   create({ title }: ModalProps) {
-    return new ModalComponentBuilder().addInline(
-      new TextInputBuilder()
-        .setCustomId('name')
-        .setLabel('Name')
-        .setStyle(TextInputStyle.Short)
-        .setRequired(false)
-    );
+    return new ModalComponentBuilder()
+      .setTitle(title)
+      .addInline(
+        new TextInputBuilder()
+          .setCustomId('name')
+          .setLabel('Name')
+          .setStyle(TextInputStyle.Short)
+          .setRequired(false)
+      );
   },
-  handle() {
+  handle(context) {
     this.reply({
       content: JSON.stringify(this.fields),
     });

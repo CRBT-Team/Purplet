@@ -1,3 +1,4 @@
+import { BasicEncoder, BitArray, GenericSerializer } from '@purplet/serialize';
 import type {
   APIButtonComponent,
   APIMessageActionRowComponent,
@@ -27,8 +28,12 @@ const defaultStructure: CustomStructure<any, any> = {
 };
 
 const defaultSerializer = {
-  toString: (data: JSONValue) => JSON.stringify(data),
-  fromString: (data: string) => JSON.parse(data),
+  toString: (data: JSONValue) => {
+    return BasicEncoder.encode(GenericSerializer.serialize(data).asUint8Array());
+  },
+  fromString: (data: string) => {
+    return GenericSerializer.deserialize(BitArray.fromUint8Array(BasicEncoder.decode(data)));
+  },
 };
 
 interface MessageComponentOptions<
@@ -83,7 +88,9 @@ function $messageComponent<
       create(context: Context, createProps: CreateProps) {
         const template = toJSONValue(options.create(context, createProps));
         (template as any).custom_id =
-          featureId + ':' + serializer.toString(structure.toJSON(context));
+          featureId +
+          ':' +
+          (context !== undefined ? serializer.toString(structure.toJSON(context)) : '');
         return template;
       },
       // This cast makes the two parameters optional if the context is `unknown`.

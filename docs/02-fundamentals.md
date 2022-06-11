@@ -1,8 +1,8 @@
 # Purplet Fundamentals
 
-Purplet's core functions around a special object called a _feature_, which adds some functionality to your Discord bot. Registering features is done by `export`ing them from your modules. This lets Purplet easily hot-reload your changes without having to restart the entire bot.
+Purplet's core functions around a special object called a _feature_, which represents anything that contributes to your bot's functionality. In Purplet, features achieve action through a small set of hooks that let you tie into the running Discord.js client. Registering features is done by `export`ing them from any module inside of `src/features`. In development mode, Purplet watches your feature files for changes and is able to load your changes without restarting anything.
 
-```ts
+```ts title='src/features/example.ts'
 import { createFeature } from 'purplet';
 
 export default createFeature({
@@ -13,9 +13,9 @@ export default createFeature({
 });
 ```
 
-To keep the core as simple as possible, the api of `createFeature` is extremely basic, and you should instead use the various feature functions, which all start with a `$`. These feature functions are built-in abstractions on top of the core that make it trivial to add things such as slash commands:
+`createFeature` is intentionally extremely simple, consisting of only 7 "core hooks". More complex features, like registering and handling chat commands, are done in abstractions on top of `createFeature` called "custom hooks", such as the `$chatCommand` hook:
 
-```ts
+```ts title='src/features/command.ts'
 import { $chatCommand } from 'purplet';
 
 export const helloWorld = $chatCommand({
@@ -30,8 +30,10 @@ export const helloWorld = $chatCommand({
 });
 ```
 
-We use `$` as a prefix for feature functions, as the symbol is valid in variable names, and isn't used anywhere else in this context of development. It allows us to have short function names that are understandable, as well as an ESLint plugin that checks to ensure you are correctly `export`ing your features.
+:::note
 
-## Current Feature Functions
+We use "$" as a prefix for custom hooks, as the "$" symbol is valid in variable names, and isn't used anywhere else in this context of development. This allows us to have short function names that are easily understandable, as well as a potential ESLint plugin that checks to ensure you are correctly `export`ing your features.
 
-TODO:
+:::
+
+The base `createFeature` API is described in depth [here](/docs/core-hooks), but you will almost always use the built-in custom hooks that the next pages of this documentation covers. However, understanding the simple underlying system Purplet will simplify the usage of the rest of the framework.

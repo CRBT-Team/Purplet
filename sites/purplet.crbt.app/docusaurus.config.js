@@ -1,8 +1,10 @@
-// @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+
+lightCodeTheme.plain.backgroundColor = '#F6F7F8';
+darkCodeTheme.plain.backgroundColor = '#323234';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {

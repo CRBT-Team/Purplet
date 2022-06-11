@@ -73,7 +73,7 @@ export function $chatCommand<T>(options: ChatCommandOptions<T>) {
             option.name,
             getResolved(this.options as CommandInteractionOptionResolver, option),
           ])
-        ) as unknown as OptionBuilderToPurpletResolvedObject<T>;
+        ) as unknown as OptionBuilderToDJSResolvedObject<T>;
 
         options.handle.call(this, resolvedOptions);
       },

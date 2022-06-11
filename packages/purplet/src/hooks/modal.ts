@@ -1,3 +1,4 @@
+import { BasicEncoder, BitArray, GenericSerializer } from '@purplet/serialize';
 import type { APIModalInteractionResponseCallbackData } from 'discord-api-types/v10';
 import type { ModalSubmitInteraction } from 'discord.js';
 import { createFeature } from '../lib/feature';
@@ -21,8 +22,12 @@ const defaultStructure: CustomStructure<any, any> = {
 };
 
 const defaultSerializer = {
-  toString: (data: JSONValue) => JSON.stringify(data),
-  fromString: (data: string) => JSON.parse(data),
+  toString: (data: JSONValue) => {
+    return BasicEncoder.encode(GenericSerializer.serialize(data).asUint8Array());
+  },
+  fromString: (data: string) => {
+    return GenericSerializer.deserialize(BitArray.fromUint8Array(BasicEncoder.decode(data)));
+  },
 };
 
 interface ModalComponentOptions<Context, CreateProps> {

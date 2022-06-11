@@ -1,5 +1,5 @@
 {
-  "name": "serialize",
+  "name": "@purplet/serialize",
   "version": "0.0.0",
   "description": "Utilities for binary serialization, used by Purplet",
   "scripts": {
@@ -7,9 +7,15 @@
     "dev": "rollup -c --watch",
     "lint": "eslint src/**/*.{ts,tsx}"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "keywords": [
+    "serialization",
+    "purplet"
+  ],
+  "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
     "esbuild": "^0.14.42",

@@ -31,7 +31,7 @@ export type IntentResolvable = number | number[];
  */
 export interface FeatureData {
   /** Name of this feature, as see in some debug menus. */
-  name: string;
+  name?: string;
   /**
    * This is the first hook that is called for your bot, and is always called. This hook allows for
    * a cleanup function, which you should use to remove event handlers.

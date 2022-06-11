@@ -65,7 +65,7 @@ export class MessageComponentBuilder extends ComponentBuilder<APIMessageActionRo
 export class ModalComponentBuilder extends ComponentBuilder<APIModalActionRowComponent> {
   #modalTitle = 'Modal';
 
-  setModal(title: string) {
+  setTitle(title: string) {
     this.#modalTitle = title;
     return this;
   }
