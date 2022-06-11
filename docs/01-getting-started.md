@@ -44,7 +44,7 @@ You then start development mode with <RunScriptCodeBlock name='dev' />
 ## File Structure
 
 - **`.env`**: Git-ignored file with environment variables, including bot and database tokens.
-- **`purplet.config.ts`**: Contains project configuration.
-- **`.purplet/`**: Contains generated files by purplet
-- **`src/features/`**: Every `.js`/`.ts` file in this folder will be automatically scanned and loaded for Features.
+- **`purplet.config.ts`**: Contains [project configuration](/docs/configuration).
+- **`.purplet/`**: Contains generated files by Purplet
+- **`src/features/`**: Every `.js`/`.ts` file in this folder will be automatically scanned and loaded for [Features](/docs/fundamentals).
 - **`src/lib/`**: Contains reusable code for your bot, importable by `$lib`. Not loaded automatically like the features folder is.
