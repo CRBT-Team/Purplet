@@ -1,7 +1,7 @@
 // @ts-ignore
 import tsSource from '!!raw-loader!../../../../../docs/04-default-config.ts';
 import CodeBlock from '@theme/CodeBlock';
-import React from 'React';
+import React from 'react';
 import { TabbedCodeBlock, TabItem } from '../TabbedCodeBlock';
 
 const jsSource = `/** @type {import('purplet').Config} */
