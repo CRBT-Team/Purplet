@@ -30,6 +30,8 @@ The object passed to `$slashCommand` is the `ChatCommandData` interface, which h
 | `description` | 1-100 character description |
 | `options?` | An [`OptionBuilder`](#command-options) containing a list of command options. |
 | `handle(args)` | A function that is called when the command is run. The first argument given is an object mapping option names to option values, which is fully typed off of the `options` property. |
+| `permissions?` | Required permissions to use this command, unless overridden by a server admin, see [Permissions](#permissions). Defaults to [] |
+| `allowInDM?` | If `false`, disallow this command in direct messages, see [Permissions](#permissions). |
 
 ## Command Options
 
@@ -37,7 +39,7 @@ The `options` parameter takes an instance of an `OptionBuilder`, which makes it 
 
 ```ts
 export default $slashCommand({
-  name: 'schedule_message',
+  name: 'schedule-message',
   description: 'Sends a message with the specified text with a delay.',
   options: new OptionBuilder() //
     .string('text', 'Text to send.', { required: true })
@@ -77,7 +79,7 @@ The third parameter is an "options for the option" object. Here is a full list o
 | `number`      | `required`, `autocomplete`, `choices`, `minValue`, `maxValue` |
 | `attachment`  | `required`                                                    |
 
-For more detail on the functionality of these properties, with the exception of `choices` and `autocomplete`, see [this page on the Discord API Docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure) as our API mirrors it except for using camel case property names.
+For more detail on the functionality of these properties, with the exception of `choices` and `autocomplete`, see [this page on the Discord API Docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure) as our API mirrors it except for using camel case property names. Subcommand and Subcommand Group types are missing here as they are fulfilled by [Command Groups](#subcommands).
 
 ### Options with Choices
 
@@ -124,11 +126,80 @@ An option cannot specify both `autocomplete` and `choices`.
 
 :::
 
+## Permissions
+
+Command permissions are configurable by server admins, but bots are allowed to change their default permissions. The `permissions` property takes anything that can resolve to a permission string, including strings of permission names, bigints, or `BitField` objects. Bots can also control commands being able to be used in Direct Messages via the `allowInDM` property, which defaults to `true`.
+
+A list of permission strings can be found [here](https://github.com/discordjs/discord-api-types/blob/main/payloads/common.ts#L10). Here is an example of a command that requires a server member with "Manage Roles":
+
+```ts
+export default $slashCommand({
+  name: 'role-related-command',
+  description: '...',
+  options: new OptionBuilder(),
+  permissions: [
+    'ManageRoles',
+  ],
+  allowInDM: false,
+  handle(options) {
+    // ...
+  }
+});
+```
+
+:::note
+
+This does not affect the TS type of the interaction passed to `handle`. In the future, this will be modified to give a stronger `Interaction` type, such as making `.member` not optional if you set `allowInDM` to `false` since that property will always exist.
+
+:::
+
 ## Subcommands
 
-Not supported currently, check back later...
+:::danger Not Implemented
 
-## Notes
+Subcommands and Command Groups are not supported currently. This section just describes how they _would_ work, were they to be added.
 
-- **_TODO_**: invent the way you deploy commands in development.
-- In production, there is a separate command used to deploy Application Commands. See Building for Production for more details.
+:::
+
+Natively, subcommands are represented as the `SUB_COMMAND` and `SUB_COMMAND_GROUP` option types. [Refer to the Discord API Docs to learn how commands are usually structured](https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups), as Purplet takes a different approach.
+
+In Purplet, Subcommands are defined by putting a space in the command's `name`, then defining a separate `$slashCommandGroup` feature to contain metadata about the group.
+
+```ts
+export const play = $slashCommand({
+  name: 'music play',
+  description: 'Play a track by name.',
+  // ...
+});
+
+export const stop = $slashCommand({
+  name: 'music stop',
+  description: 'Stop the music player.',
+  // ...
+});
+
+export const skip = $slashCommand({
+  name: 'music skip',
+  description: 'Skip the current track.',
+  // ...
+});
+
+export default $slashCommandGroup({
+  name: 'music',
+  description: 'Play and manage the Music Player.'
+});
+```
+
+:::tip
+
+For large commands, you can split the individual exports across multiple files, since `Feature` objects are collected into a project-wide list, then Command Groups are resolved.
+
+:::
+
+Under the hood, these features are merged into one, and a single Application Command is deployed, and interactions are routed to the individual `$slashCommand` `handle()` functions. **Command groups are required for subcommands, as descriptions are mandatory**.
+
+## Deploying Commands
+
+- In development mode, Application Commands are deployed to individual servers, see Commands in Development for more details.
+  
+- In production mode, Application Commands are deployed globally using `purplet deploy`. See Building for Production for more details.

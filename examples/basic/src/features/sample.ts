@@ -36,3 +36,16 @@ export const helloWorld = $slashCommand({
     );
   },
 });
+
+export default $slashCommand({
+  name: 'explode',
+  description: 'Explode',
+  options: new OptionBuilder(),
+  permissions: [
+    'ManageRoles',
+  ],
+  allowInDM: false,
+  handle(options) {
+    // ...
+  }
+});

@@ -1,4 +1,4 @@
-# Configuration
+# Configuration File
 
 <!--
   The structure of this document is directly stolen from SvelteKit's docs
