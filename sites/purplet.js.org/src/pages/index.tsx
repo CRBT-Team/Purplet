@@ -53,8 +53,7 @@ export default function Home(): JSX.Element {
               <p>
                 Purplet achieves total modularity by breaking your bot into different{' '}
                 <code>Feature</code> objects that define a single behavior, such as a{' '}
-                <Link href='/docs/slash-commands'>Slash Command</Link> or{' '}
-                <Link href='/docs/modals'>Modal Component</Link>.
+                <Link href='/docs/slash-commands'>Slash Command</Link> or Modal Component.
               </p>
             </div>
             <div className='col col--4'>
