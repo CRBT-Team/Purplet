@@ -13,12 +13,12 @@ export default createFeature({
 });
 ```
 
-`createFeature` is intentionally extremely simple, consisting of only 7 "core hooks". More complex features, like registering and handling chat commands, are done in abstractions on top of `createFeature` called "custom hooks", such as the `$chatCommand` hook:
+`createFeature` is intentionally extremely simple, consisting of only 7 "core hooks". More complex features, like registering and handling chat commands, are done in abstractions on top of `createFeature` called "custom hooks", such as the `$slashCommand` hook:
 
-```ts title='src/features/command.ts'
-import { $chatCommand } from 'purplet';
+```ts title='src/features/slash-command.ts'
+import { $slashCommand } from 'purplet';
 
-export const helloWorld = $chatCommand({
+export const helloWorld = $slashCommand({
   name: 'hello',
   description: 'A simple "Hello, World" command.',
 

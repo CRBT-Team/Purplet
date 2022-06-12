@@ -14,7 +14,7 @@ import type { AutocompleteInteraction } from '../interaction';
  * OptionBuilder is a very complex piece of type-code built out of a lot of mapped types to reduce
  * the amount of copied code. The reasoning for all of this is to give a nice interface to users by
  * keeping track of EVERYTHING passed to it in the `<Options>` type param, which can be extracted
- * later, giving you strong types inside of `$chatCommand` and other places.
+ * later, giving you strong types inside of `$slashCommand` and other places.
  *
  * The first type `OptionInputs` is an interfaces mapping method names to their respective `options`
  * argument (third one where first is `name` and second is `description`). All of these inputs
@@ -129,7 +129,7 @@ export type TransformAutocompleteOptions<T, CurrentOptions, Key> = //
 /**
  * `OptionBuilder` is an advanced builder class for `CHAT_INPUT` command's `options` property,
  * keeping track of all the options you pass to it in a type parameter, which is extracted by
- * `$chatCommand` to give you rich option types.
+ * `$slashCommand` to give you rich option types.
  */
 export type OptionBuilder<Options = {}> = {
   /** Append an option. */
@@ -223,7 +223,7 @@ export type OptionBuilderEntryToUnresolved<X> = X extends { type: infer T }
 export type OptionBuilderToUnresolvedObject<X> = X extends OptionBuilderOrType<infer T>
   ? { [K in keyof T]: OptionBuilderEntryToUnresolved<T[K]> }
   : never;
-/** "PurpletResolved" refers to the resolved value given with `$chatCommand` */
+/** "PurpletResolved" is unused. */
 export type OptionBuilderEntryToPurpletResolved<X> = X extends { type: infer T }
   ? {
       [ApplicationCommandOptionType.String]: string;
@@ -239,11 +239,11 @@ export type OptionBuilderEntryToPurpletResolved<X> = X extends { type: infer T }
   : X extends { enum: infer T }
   ? T
   : never;
-/** "PurpletResolved" refers to the resolved value given with `$chatCommand` */
+/** "PurpletResolved" is unused. */
 export type OptionBuilderToPurpletResolvedObject<X> = X extends OptionBuilderOrType<infer T>
   ? { [K in keyof T]: OptionBuilderEntryToPurpletResolved<T[K]> }
   : never;
-/** "DJSResolved" refers to the resolved value given with `$djsChatCommand` */
+/** "DJSResolved" refers to the resolved value given with `$slashCommand` */
 export type OptionBuilderEntryToDJSResolved<X> = X extends { type: infer T }
   ? {
       [ApplicationCommandOptionType.String]: string;
@@ -259,7 +259,7 @@ export type OptionBuilderEntryToDJSResolved<X> = X extends { type: infer T }
   : X extends { enum: infer T }
   ? T
   : never;
-/** "DJSResolved" refers to the resolved value given with `$djsChatCommand` */
+/** "DJSResolved" refers to the resolved value given with `$slashCommand` */
 export type OptionBuilderToDJSResolvedObject<X> = X extends OptionBuilderOrType<infer T>
   ? { [K in keyof T]: OptionBuilderEntryToDJSResolved<T[K]> }
   : never;

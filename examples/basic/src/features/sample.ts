@@ -1,5 +1,5 @@
 import { TextInputBuilder, TextInputStyle } from 'discord.js';
-import { $chatCommand, $modal, ModalComponentBuilder, OptionBuilder } from 'purplet';
+import { $modal, $slashCommand, ModalComponentBuilder, OptionBuilder } from 'purplet';
 
 interface ModalProps {
   title: string;
@@ -24,7 +24,7 @@ export const myModal = $modal({
   },
 });
 
-export const helloWorld = $chatCommand({
+export const helloWorld = $slashCommand({
   name: 'modal_test',
   description: 'show a modal',
   options: new OptionBuilder().string('title', 'the title', { required: false }),

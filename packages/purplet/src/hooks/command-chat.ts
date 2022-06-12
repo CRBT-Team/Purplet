@@ -17,7 +17,7 @@ import { camelChoiceToSnake } from '../utils/case';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 import { toJSONValue } from '../utils/plain';
 
-export interface ChatCommandOptions<T> extends CommandPermissionsInput {
+export interface ChatCommandData<T> extends CommandPermissionsInput {
   name: string;
   nameLocalizations?: LocalizationMap;
   description: string;
@@ -52,7 +52,7 @@ function getResolved(
   }
 }
 
-export function $chatCommand<T>(options: ChatCommandOptions<T>) {
+export function $slashCommand<T>(options: ChatCommandData<T>) {
   const commandOptions = toJSONValue(options.options ?? []);
   const autocompleteHandlers = getOptionBuilderAutocompleteHandlers(options.options);
 

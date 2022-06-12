@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import React from 'react';
 import styles from './index.module.css';
 
-const example1 = `export const helloWorld = $chatCommand({
+const example1 = `export const helloWorld = $slashCommand({
   name: 'hello',
   description: 'A simple "Hello, World" command.',
 
@@ -53,8 +53,8 @@ export default function Home(): JSX.Element {
               <p>
                 Purplet achieves total modularity by breaking your bot into different{' '}
                 <code>Feature</code> objects that define a single behavior, such as a{' '}
-                <Link href='/docs/api/chat-command'>Chat Command</Link> or{' '}
-                <Link href='/docs/api/modal'>Modal Component</Link>.
+                <Link href='/docs/slash-commands'>Slash Command</Link> or{' '}
+                <Link href='/docs/modals'>Modal Component</Link>.
               </p>
             </div>
             <div className='col col--4'>
