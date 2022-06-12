@@ -1,6 +1,6 @@
-import { Config } from 'purplet';
+import type { ResolvedConfig } from './options';
 
-const config: Config = {
+const config: ResolvedConfig = {
   alias: {
     $lib: 'src/lib',
   },

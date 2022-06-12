@@ -1,8 +1,8 @@
 # Slash Commands
 
-[Slash Commands](https://discord.com/developers/docs/interactions/application-commands#slash-commands), aka Application Commands with type `CHAT_INPUT`, are the most common way of interacting with a Discord bot, accessed by typing `/` in a text channel.
+[Slash Commands](https://discord.com/developers/docs/interactions/application-commands#slash-commands), aka Application Commands with the type `CHAT_INPUT`, is the most common way of interacting with a Discord bot, accessed by typing `/` in a text channel.
 
-The Discord API separates commands into two parts, registering a command via the API, then receiving and responding to the interactions. Purplet combines these two functions into one function call, which handles both parts of the command. This coupling of commands creates simpler command definitions, and strong typing of the options.
+The Discord API separates commands into two parts, registering a command via the API, then receiving and responding to the interactions. Purplet combines these two functions into one function call, which handles both parts of the command. This coupling of commands creates simpler command definitions and strong typing of the options.
 
 Here is a simple "Hello World" command, it's the same one you've seen on the homepage and previous documentation page, but it also defines some options:
 
@@ -22,18 +22,18 @@ export default $slashCommand({
 });
 ```
 
-The object passed to `$slashCommand` is the `ChatCommandData` interface, which has these properties.
+The object passed to `$slashCommand` is the `ChatCommandData` interface, which has these properties:
 
 | Property | Description |
 | --- | --- |
-| `name` | [1-32 character name][cmd-naming] |
+| `name` | [1-32 character name](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming) |
 | `description` | 1-100 character description |
 | `options?` | An [`OptionBuilder`](#command-options) containing a list of command options. |
 | `handle(args)` | A function that is called when the command is run. The first argument given is an object mapping option names to option values, which is fully typed off of the `options` property. |
 
 ## Command Options
 
-The `options` paramter takes an instance of an `OptionBuilder`, which makes it quick to define a list of command options. Each option type has a method corresponding to it, taking in 2-3 parameters, and can be chained to add multiple options:
+The `options` parameter takes an instance of an `OptionBuilder`, which makes it quick to define a list of command options. Each option type has a method corresponding to it, taking in 2-3 parameters, and can be chained to add multiple options:
 
 ```ts
 export default $slashCommand({
@@ -77,7 +77,7 @@ The third parameter is an "options for the option" object. Here is a full list o
 | `number`      | `required`, `autocomplete`, `choices`, `minValue`, `maxValue` |
 | `attachment`  | `required`                                                    |
 
-For more detail on the functionality of these properties, with the exception of `choices` and `autocomplete`, see the [this page on the Discord API Docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure) as our api mirrors it except for using camel case property names.
+For more detail on the functionality of these properties, with the exception of `choices` and `autocomplete`, see [this page on the Discord API Docs](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure) as our API mirrors it except for using camel case property names.
 
 ### Options with Choices
 
@@ -103,7 +103,7 @@ The type passed to `handle()` will be a union of the choice object keys. In this
 
 ### Autocomplete
 
-Instead of passing a boolean to `autocomplete`, an async function is passed, which is used as the autocomplete handler. It is passed a single object of the user's current **unresolved** options. Remember that users can fill out command options in any order, and the interaction is sent out for an empty value to get the initial set of choices, so all properties given may be undefined. Unlike `choices`, you must return an array of [Choice objects][choice-object].
+Instead of passing a boolean to `autocomplete`, an async function is passed, which is used as the autocomplete handler. It is passed a single object of the user's current **unresolved** options. Remember that users can fill out command options in any order, and the interaction is sent out for an empty value to get the initial set of choices, so all properties given may be undefined. Unlike `choices`, you must return an array of [Choice objects](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-choice-structure).
 
 ```ts
 new OptionBuilder() //
@@ -132,8 +132,3 @@ Not supported currently, check back later...
 
 - **_TODO_**: invent the way you deploy commands in development.
 - In production, there is a separate command used to deploy Application Commands. See Building for Production for more details.
-
-<!-- Links -->
-
-[cmd-naming]: https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming
-[choice-object]: https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-choice-structure
