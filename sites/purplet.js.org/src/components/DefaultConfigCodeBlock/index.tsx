@@ -1,5 +1,5 @@
 // @ts-ignore
-import tsSource from '!!raw-loader!../../../../../docs/04-default-config.ts';
+import tsSource from '!!raw-loader!../../../docs/60-default-config.ts';
 import CodeBlock from '@theme/CodeBlock';
 import React from 'react';
 import { TabbedCodeBlock, TabItem } from '../TabbedCodeBlock';
