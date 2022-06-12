@@ -6,7 +6,7 @@ import {
 } from 'discord-api-types/v10';
 import type { ChatInputCommandInteraction, CommandInteractionOptionResolver } from 'discord.js';
 import { $interaction } from './basic';
-import { $appCommand } from './command';
+import { $applicationCommand } from './command';
 import { $merge } from './merge';
 import {
   getOptionBuilderAutocompleteHandlers,
@@ -57,7 +57,7 @@ export function $slashCommand<T>(options: ChatCommandData<T>) {
   const autocompleteHandlers = getOptionBuilderAutocompleteHandlers(options.options);
 
   return $merge(
-    $appCommand({
+    $applicationCommand({
       command: {
         type: ApplicationCommandType.ChatInput,
         name: options.name,

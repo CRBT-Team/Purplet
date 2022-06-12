@@ -13,12 +13,12 @@ function formatCommandName(cmd: ApplicationCommandData) {
     : `"${cmd.name}" on ${commandTypeNames[cmd.type!]}`;
 }
 
-export interface AppCommandOptions {
+export interface ApplicationCommandHookData {
   command: ApplicationCommandData;
   handle(this: Interaction): void;
 }
 
-export function $appCommand(opts: AppCommandOptions) {
+export function $applicationCommand(opts: ApplicationCommandHookData) {
   return createFeature({
     name: `command: ${formatCommandName(opts.command)}`,
     applicationCommands: [opts.command],

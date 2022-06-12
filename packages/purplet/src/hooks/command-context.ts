@@ -5,7 +5,7 @@ import type {
   User,
   UserContextMenuCommandInteraction,
 } from 'discord.js';
-import { $appCommand } from './command';
+import { $applicationCommand } from './command';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 
 export interface ContextCommandOptions extends CommandPermissionsInput {
@@ -18,7 +18,7 @@ export interface UserCommandOptions extends ContextCommandOptions {
 }
 
 export function $userContextCommand(opts: UserCommandOptions) {
-  return $appCommand({
+  return $applicationCommand({
     command: {
       type: ApplicationCommandType.User,
       name: opts.name,
@@ -36,7 +36,7 @@ export interface MessageCommandOptions extends ContextCommandOptions {
 }
 
 export function $messageContextCommand(opts: MessageCommandOptions) {
-  return $appCommand({
+  return $applicationCommand({
     command: {
       type: ApplicationCommandType.Message,
       name: opts.name,

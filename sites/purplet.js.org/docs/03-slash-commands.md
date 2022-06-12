@@ -137,13 +137,11 @@ export default $slashCommand({
   name: 'role-related-command',
   description: '...',
   options: new OptionBuilder(),
-  permissions: [
-    'ManageRoles',
-  ],
+  permissions: ['ManageRoles'],
   allowInDM: false,
   handle(options) {
     // ...
-  }
+  },
 });
 ```
 
@@ -186,7 +184,7 @@ export const skip = $slashCommand({
 
 export default $slashCommandGroup({
   name: 'music',
-  description: 'Play and manage the Music Player.'
+  description: 'Play and manage the Music Player.',
 });
 ```
 
@@ -201,5 +199,4 @@ Under the hood, these features are merged into one, and a single Application Com
 ## Deploying Commands
 
 - In development mode, Application Commands are deployed to individual servers, see Commands in Development for more details.
-  
 - In production mode, Application Commands are deployed globally using `purplet deploy`. See Building for Production for more details.

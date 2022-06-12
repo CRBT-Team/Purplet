@@ -41,11 +41,9 @@ export default $slashCommand({
   name: 'explode',
   description: 'Explode',
   options: new OptionBuilder(),
-  permissions: [
-    'ManageRoles',
-  ],
+  permissions: ['ManageRoles'],
   allowInDM: false,
   handle(options) {
     // ...
-  }
+  },
 });

@@ -166,7 +166,7 @@ export class ArraySerializer<A> implements Serializer<A[]> {
   }
 
   check(value: unknown): value is A[] {
-    return Array.isArray(value) && value.every((x) => this.a.check(x));
+    return Array.isArray(value) && value.every(x => this.a.check(x));
   }
 }
 

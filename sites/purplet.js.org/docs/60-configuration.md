@@ -22,8 +22,8 @@ For example, you can add aliases to a components and utils folder:
 ```ts title="svelte.config.ts"
 const config = {
   alias: {
-    $utils: 'src/utils'
-  }
+    $utils: 'src/utils',
+  },
 };
 ```
 
