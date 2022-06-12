@@ -5,6 +5,7 @@ const config: Config = {
     $lib: 'src/lib',
   },
   paths: {
+    build: '{output}/build',
     features: 'src/features',
     output: '.purplet',
     translations: './todo/undetermined',
