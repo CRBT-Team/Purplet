@@ -1,4 +1,4 @@
-import { BitArray } from './BitArray';
+import type { BitArray } from './BitArray';
 
 export interface Encoder {
   encode(value: Uint8Array): string;

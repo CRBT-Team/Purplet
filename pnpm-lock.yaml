@@ -125,6 +125,18 @@ importers:
       rollup: 2.75.5
       rollup-plugin-esbuild: 4.9.1_ghanyvlk4kmo7d7no7vuwcjfky
 
+  packages/structures:
+    specifiers:
+      '@rollup/plugin-node-resolve': ^13.3.0
+      esbuild: ^0.14.42
+      rollup: ^2.75.5
+      rollup-plugin-esbuild: ^4.9.1
+    devDependencies:
+      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.75.5
+      esbuild: 0.14.42
+      rollup: 2.75.5
+      rollup-plugin-esbuild: 4.9.1_ghanyvlk4kmo7d7no7vuwcjfky
+
   sites/purplet.js.org:
     specifiers:
       '@docusaurus/core': 2.0.0-beta.21
@@ -10837,7 +10849,7 @@ packages:
     dev: false
 
   /wrappy/1.0.2:
-    resolution: {integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=}
+    resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
   /write-file-atomic/3.0.3:
     resolution: {integrity: sha512-AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==}

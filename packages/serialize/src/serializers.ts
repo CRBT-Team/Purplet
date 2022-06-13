@@ -1,5 +1,5 @@
 import { BitArray } from './BitArray';
-import { Serializer } from './types';
+import type { Serializer } from './types';
 
 export type GenericValue =
   | string
@@ -122,7 +122,7 @@ export const DateSerializer: Serializer<Date> = {
 };
 
 export class MultiSerializer<A, B> implements Serializer<A | B> {
-  constructor(private readonly a: Serializer<A>, private readonly b: Serializer<B>) {}
+  constructor(private readonly a: Serializer<A>, private readonly b: Serializer<B>) { }
 
   serialize(value: A | B): BitArray {
     const isA = this.a.check(value);
@@ -145,7 +145,7 @@ export class MultiSerializer<A, B> implements Serializer<A | B> {
 }
 
 export class ArraySerializer<A> implements Serializer<A[]> {
-  constructor(private readonly a: Serializer<A>) {}
+  constructor(private readonly a: Serializer<A>) { }
 
   serialize(value: A[]): BitArray {
     const bits = new BitArray();

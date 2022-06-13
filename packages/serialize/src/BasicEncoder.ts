@@ -1,4 +1,4 @@
-import { Encoder } from '.';
+import type { Encoder } from '.';
 
 export const BasicEncoder: Encoder = {
   encode(bytes) {
