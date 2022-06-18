@@ -11,7 +11,7 @@
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md}\"",
     "lint": "turbo run lint",
     "pub": "changeset publish",
-    "version": "changeset version"
+    "bump": "changeset version"
   },
   "devDependencies": {
     "@changesets/cli": "^2.22.0",
