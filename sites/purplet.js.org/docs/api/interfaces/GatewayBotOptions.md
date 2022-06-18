@@ -1,7 +1,7 @@
 ---
-id: "GatewayBotOptions"
-title: "Interface: GatewayBotOptions"
-sidebar_label: "GatewayBotOptions"
+id: 'GatewayBotOptions'
+title: 'Interface: GatewayBotOptions'
+sidebar_label: 'GatewayBotOptions'
 sidebar_position: 0
 custom_edit_url: null
 ---
@@ -10,10 +10,9 @@ custom_edit_url: null
 
 ### mode
 
-• **mode**: ``"production"`` \| ``"development"``
+• **mode**: `"production"` \| `"development"`
 
-Mode. "production" or "development" depending on what state the bot code is in. If in
-development, commands are only deployed to a specified set of test servers.
+Mode. "production" or "development" depending on what state the bot code is in. If in development, commands are only deployed to a specified set of test servers.
 
 #### Defined in
 

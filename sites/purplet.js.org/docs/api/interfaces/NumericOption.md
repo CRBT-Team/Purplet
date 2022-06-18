@@ -1,7 +1,7 @@
 ---
-id: "NumericOption"
-title: "Interface: NumericOption"
-sidebar_label: "NumericOption"
+id: 'NumericOption'
+title: 'Interface: NumericOption'
+sidebar_label: 'NumericOption'
 sidebar_position: 0
 custom_edit_url: null
 ---
@@ -24,7 +24,7 @@ custom_edit_url: null
 
 [packages/purplet/src/builders/OptionBuilder.d.ts:73](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/builders/OptionBuilder.d.ts#L73)
 
-___
+---
 
 ### minValue
 

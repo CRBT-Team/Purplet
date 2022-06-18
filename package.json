@@ -7,11 +7,11 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "bump": "changeset version",
     "dev": "turbo run dev --parallel",
-    "format": "prettier --write \"**/*.{ts,ts,js,jsx,md}\"",
+    "format": "prettier --write \"**/*.{ts,ts,js,jsx,md,json}\"",
     "lint": "turbo run lint",
-    "pub": "changeset publish",
-    "bump": "changeset version"
+    "pub": "changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.22.0",

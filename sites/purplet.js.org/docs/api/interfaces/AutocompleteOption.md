@@ -1,7 +1,7 @@
 ---
-id: "AutocompleteOption"
-title: "Interface: AutocompleteOption<T>"
-sidebar_label: "AutocompleteOption"
+id: 'AutocompleteOption'
+title: 'Interface: AutocompleteOption<T>'
+sidebar_label: 'AutocompleteOption'
 sidebar_position: 0
 custom_edit_url: null
 ---
@@ -10,9 +10,9 @@ custom_edit_url: null
 
 ## Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `string` \| `number` |
+| Name | Type                         |
+| :--- | :--------------------------- |
+| `T`  | extends `string` \| `number` |
 
 ## Hierarchy
 
@@ -24,17 +24,17 @@ custom_edit_url: null
 
 ### autocomplete
 
-• `Optional` **autocomplete**: [`Autocomplete`](../modules.md#autocomplete)<``null``, `T`\>
+• `Optional` **autocomplete**: [`Autocomplete`](../modules.md#autocomplete)<`null`, `T`\>
 
 #### Defined in
 
 [packages/purplet/src/builders/OptionBuilder.d.ts:55](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/builders/OptionBuilder.d.ts#L55)
 
-___
+---
 
 ### descriptionLocalizations
 
-• `Optional` **descriptionLocalizations**: `Partial`<`Record`<``"en-US"`` \| ``"en-GB"`` \| ``"bg"`` \| ``"zh-CN"`` \| ``"zh-TW"`` \| ``"hr"`` \| ``"cs"`` \| ``"da"`` \| ``"nl"`` \| ``"fi"`` \| ``"fr"`` \| ``"de"`` \| ``"el"`` \| ``"hi"`` \| ``"hu"`` \| ``"it"`` \| ``"ja"`` \| ``"ko"`` \| ``"lt"`` \| ``"no"`` \| ``"pl"`` \| ``"pt-BR"`` \| ``"ro"`` \| ``"ru"`` \| ``"es-ES"`` \| ``"sv-SE"`` \| ``"th"`` \| ``"tr"`` \| ``"uk"`` \| ``"vi"``, ``null`` \| `string`\>\>
+• `Optional` **descriptionLocalizations**: `Partial`<`Record`<`"en-US"` \| `"en-GB"` \| `"bg"` \| `"zh-CN"` \| `"zh-TW"` \| `"hr"` \| `"cs"` \| `"da"` \| `"nl"` \| `"fi"` \| `"fr"` \| `"de"` \| `"el"` \| `"hi"` \| `"hu"` \| `"it"` \| `"ja"` \| `"ko"` \| `"lt"` \| `"no"` \| `"pl"` \| `"pt-BR"` \| `"ro"` \| `"ru"` \| `"es-ES"` \| `"sv-SE"` \| `"th"` \| `"tr"` \| `"uk"` \| `"vi"`, `null` \| `string`\>\>
 
 #### Inherited from
 
@@ -44,11 +44,11 @@ ___
 
 [packages/purplet/src/builders/OptionBuilder.d.ts:50](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/builders/OptionBuilder.d.ts#L50)
 
-___
+---
 
 ### nameLocalizations
 
-• `Optional` **nameLocalizations**: `Partial`<`Record`<``"en-US"`` \| ``"en-GB"`` \| ``"bg"`` \| ``"zh-CN"`` \| ``"zh-TW"`` \| ``"hr"`` \| ``"cs"`` \| ``"da"`` \| ``"nl"`` \| ``"fi"`` \| ``"fr"`` \| ``"de"`` \| ``"el"`` \| ``"hi"`` \| ``"hu"`` \| ``"it"`` \| ``"ja"`` \| ``"ko"`` \| ``"lt"`` \| ``"no"`` \| ``"pl"`` \| ``"pt-BR"`` \| ``"ro"`` \| ``"ru"`` \| ``"es-ES"`` \| ``"sv-SE"`` \| ``"th"`` \| ``"tr"`` \| ``"uk"`` \| ``"vi"``, ``null`` \| `string`\>\>
+• `Optional` **nameLocalizations**: `Partial`<`Record`<`"en-US"` \| `"en-GB"` \| `"bg"` \| `"zh-CN"` \| `"zh-TW"` \| `"hr"` \| `"cs"` \| `"da"` \| `"nl"` \| `"fi"` \| `"fr"` \| `"de"` \| `"el"` \| `"hi"` \| `"hu"` \| `"it"` \| `"ja"` \| `"ko"` \| `"lt"` \| `"no"` \| `"pl"` \| `"pt-BR"` \| `"ro"` \| `"ru"` \| `"es-ES"` \| `"sv-SE"` \| `"th"` \| `"tr"` \| `"uk"` \| `"vi"`, `null` \| `string`\>\>
 
 #### Inherited from
 

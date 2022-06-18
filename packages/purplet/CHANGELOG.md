@@ -1,5 +1,16 @@
 # `purplet`
 
+## 2.0.0-next.6
+
+### Patch Changes
+
+- rename `$chatCommand` to `$slashCommand` ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
+- add `$modal` ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
+- revert to using discord.js structure for everything - the world isn't ready for what i have lol ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
+- move `modules` to `features` ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
+- Updated dependencies [[`38d20aa`](https://github.com/CRBT-Team/Purplet/commit/38d20aa5a4d4e12bac3e05008aac179b866118d3)]:
+  - @purplet/serialize@1.0.0-next.0
+
 ## 2.0.0-next.5
 
 ### Patch Changes

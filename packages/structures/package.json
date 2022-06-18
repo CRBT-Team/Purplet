@@ -1,22 +1,22 @@
 {
   "name": "@purplet/structures",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "description": "Utilities for binary serialization, used by Purplet",
+  "keywords": [
+    "serialization",
+    "purplet"
+  ],
+  "license": "Apache-2.0",
+  "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rollup -c && tsc -p . && echo Types Passing",
     "dev": "rollup -c --watch",
     "lint": "eslint src/**/*.{ts,tsx}"
   },
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "keywords": [
-    "serialization",
-    "purplet"
-  ],
-  "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
-  "license": "Apache-2.0",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
     "esbuild": "^0.14.42",

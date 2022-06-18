@@ -1,7 +1,7 @@
 ---
-id: "MessageComponentBuilder"
-title: "Class: MessageComponentBuilder"
-sidebar_label: "MessageComponentBuilder"
+id: 'MessageComponentBuilder'
+title: 'Class: MessageComponentBuilder'
+sidebar_label: 'MessageComponentBuilder'
 sidebar_position: 0
 custom_edit_url: null
 ---
@@ -46,8 +46,8 @@ Adds the component inline, but will add a new Action Row if space runs out.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name   | Type                                              |
+| :----- | :------------------------------------------------ |
 | `item` | `JSONResolvable`<`APIMessageActionRowComponent`\> |
 
 #### Returns
@@ -62,19 +62,18 @@ ComponentBuilder.addInline
 
 [packages/purplet/src/builders/ComponentBuilder.ts:40](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/builders/ComponentBuilder.ts#L40)
 
-___
+---
 
 ### addRow
 
 ▸ **addRow**(`row`): [`MessageComponentBuilder`](MessageComponentBuilder.md)
 
-Adds an Action Row, either by providing an array of components, a single component, or a whole
-action row.
+Adds an Action Row, either by providing an array of components, a single component, or a whole action row.
 
 #### Parameters
 
 | Name | Type |
-| :------ | :------ |
+| :-- | :-- |
 | `row` | `JSONResolvable`<`APIMessageActionRowComponent` \| `APIActionRowComponent`<`APIMessageActionRowComponent`\> \| `APIMessageActionRowComponent`[]\> |
 
 #### Returns
@@ -89,7 +88,7 @@ ComponentBuilder.addRow
 
 [packages/purplet/src/builders/ComponentBuilder.ts:21](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/builders/ComponentBuilder.ts#L21)
 
-___
+---
 
 ### toJSON
 

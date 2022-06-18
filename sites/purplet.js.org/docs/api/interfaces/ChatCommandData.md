@@ -1,7 +1,7 @@
 ---
-id: "ChatCommandData"
-title: "Interface: ChatCommandData<T>"
-sidebar_label: "ChatCommandData"
+id: 'ChatCommandData'
+title: 'Interface: ChatCommandData<T>'
+sidebar_label: 'ChatCommandData'
 sidebar_position: 0
 custom_edit_url: null
 ---
@@ -9,8 +9,8 @@ custom_edit_url: null
 ## Type parameters
 
 | Name |
-| :------ |
-| `T` |
+| :--- |
+| `T`  |
 
 ## Hierarchy
 
@@ -32,7 +32,7 @@ CommandPermissionsInput.allowInDM
 
 [packages/purplet/src/utils/permissions.ts:6](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/utils/permissions.ts#L6)
 
-___
+---
 
 ### description
 
@@ -42,17 +42,17 @@ ___
 
 [packages/purplet/src/hooks/command-chat.ts:23](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/hooks/command-chat.ts#L23)
 
-___
+---
 
 ### descriptionLocalizations
 
-• `Optional` **descriptionLocalizations**: `Partial`<`Record`<``"en-US"`` \| ``"en-GB"`` \| ``"bg"`` \| ``"zh-CN"`` \| ``"zh-TW"`` \| ``"hr"`` \| ``"cs"`` \| ``"da"`` \| ``"nl"`` \| ``"fi"`` \| ``"fr"`` \| ``"de"`` \| ``"el"`` \| ``"hi"`` \| ``"hu"`` \| ``"it"`` \| ``"ja"`` \| ``"ko"`` \| ``"lt"`` \| ``"no"`` \| ``"pl"`` \| ``"pt-BR"`` \| ``"ro"`` \| ``"ru"`` \| ``"es-ES"`` \| ``"sv-SE"`` \| ``"th"`` \| ``"tr"`` \| ``"uk"`` \| ``"vi"``, ``null`` \| `string`\>\>
+• `Optional` **descriptionLocalizations**: `Partial`<`Record`<`"en-US"` \| `"en-GB"` \| `"bg"` \| `"zh-CN"` \| `"zh-TW"` \| `"hr"` \| `"cs"` \| `"da"` \| `"nl"` \| `"fi"` \| `"fr"` \| `"de"` \| `"el"` \| `"hi"` \| `"hu"` \| `"it"` \| `"ja"` \| `"ko"` \| `"lt"` \| `"no"` \| `"pl"` \| `"pt-BR"` \| `"ro"` \| `"ru"` \| `"es-ES"` \| `"sv-SE"` \| `"th"` \| `"tr"` \| `"uk"` \| `"vi"`, `null` \| `string`\>\>
 
 #### Defined in
 
 [packages/purplet/src/hooks/command-chat.ts:24](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/hooks/command-chat.ts#L24)
 
-___
+---
 
 ### name
 
@@ -62,17 +62,17 @@ ___
 
 [packages/purplet/src/hooks/command-chat.ts:21](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/hooks/command-chat.ts#L21)
 
-___
+---
 
 ### nameLocalizations
 
-• `Optional` **nameLocalizations**: `Partial`<`Record`<``"en-US"`` \| ``"en-GB"`` \| ``"bg"`` \| ``"zh-CN"`` \| ``"zh-TW"`` \| ``"hr"`` \| ``"cs"`` \| ``"da"`` \| ``"nl"`` \| ``"fi"`` \| ``"fr"`` \| ``"de"`` \| ``"el"`` \| ``"hi"`` \| ``"hu"`` \| ``"it"`` \| ``"ja"`` \| ``"ko"`` \| ``"lt"`` \| ``"no"`` \| ``"pl"`` \| ``"pt-BR"`` \| ``"ro"`` \| ``"ru"`` \| ``"es-ES"`` \| ``"sv-SE"`` \| ``"th"`` \| ``"tr"`` \| ``"uk"`` \| ``"vi"``, ``null`` \| `string`\>\>
+• `Optional` **nameLocalizations**: `Partial`<`Record`<`"en-US"` \| `"en-GB"` \| `"bg"` \| `"zh-CN"` \| `"zh-TW"` \| `"hr"` \| `"cs"` \| `"da"` \| `"nl"` \| `"fi"` \| `"fr"` \| `"de"` \| `"el"` \| `"hi"` \| `"hu"` \| `"it"` \| `"ja"` \| `"ko"` \| `"lt"` \| `"no"` \| `"pl"` \| `"pt-BR"` \| `"ro"` \| `"ru"` \| `"es-ES"` \| `"sv-SE"` \| `"th"` \| `"tr"` \| `"uk"` \| `"vi"`, `null` \| `string`\>\>
 
 #### Defined in
 
 [packages/purplet/src/hooks/command-chat.ts:22](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/hooks/command-chat.ts#L22)
 
-___
+---
 
 ### options
 
@@ -82,7 +82,7 @@ ___
 
 [packages/purplet/src/hooks/command-chat.ts:25](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/hooks/command-chat.ts#L25)
 
-___
+---
 
 ### permissions
 
@@ -105,7 +105,7 @@ CommandPermissionsInput.permissions
 #### Parameters
 
 | Name | Type |
-| :------ | :------ |
+| :-- | :-- |
 | `this` | `ChatInputCommandInteraction`<`CacheType`\> |
 | `options` | [`OptionBuilderToDJSResolvedObject`](../modules.md#optionbuildertodjsresolvedobject)<`T`\> |
 

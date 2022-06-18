@@ -1,7 +1,7 @@
 ---
-id: "MessageCommandOptions"
-title: "Interface: MessageCommandOptions"
-sidebar_label: "MessageCommandOptions"
+id: 'MessageCommandOptions'
+title: 'Interface: MessageCommandOptions'
+sidebar_label: 'MessageCommandOptions'
 sidebar_position: 0
 custom_edit_url: null
 ---
@@ -26,7 +26,7 @@ custom_edit_url: null
 
 [packages/purplet/src/utils/permissions.ts:6](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/utils/permissions.ts#L6)
 
-___
+---
 
 ### name
 
@@ -40,11 +40,11 @@ ___
 
 [packages/purplet/src/hooks/command-context.ts:12](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/hooks/command-context.ts#L12)
 
-___
+---
 
 ### nameLocalizations
 
-• `Optional` **nameLocalizations**: `Partial`<`Record`<``"en-US"`` \| ``"en-GB"`` \| ``"bg"`` \| ``"zh-CN"`` \| ``"zh-TW"`` \| ``"hr"`` \| ``"cs"`` \| ``"da"`` \| ``"nl"`` \| ``"fi"`` \| ``"fr"`` \| ``"de"`` \| ``"el"`` \| ``"hi"`` \| ``"hu"`` \| ``"it"`` \| ``"ja"`` \| ``"ko"`` \| ``"lt"`` \| ``"no"`` \| ``"pl"`` \| ``"pt-BR"`` \| ``"ro"`` \| ``"ru"`` \| ``"es-ES"`` \| ``"sv-SE"`` \| ``"th"`` \| ``"tr"`` \| ``"uk"`` \| ``"vi"``, ``null`` \| `string`\>\>
+• `Optional` **nameLocalizations**: `Partial`<`Record`<`"en-US"` \| `"en-GB"` \| `"bg"` \| `"zh-CN"` \| `"zh-TW"` \| `"hr"` \| `"cs"` \| `"da"` \| `"nl"` \| `"fi"` \| `"fr"` \| `"de"` \| `"el"` \| `"hi"` \| `"hu"` \| `"it"` \| `"ja"` \| `"ko"` \| `"lt"` \| `"no"` \| `"pl"` \| `"pt-BR"` \| `"ro"` \| `"ru"` \| `"es-ES"` \| `"sv-SE"` \| `"th"` \| `"tr"` \| `"uk"` \| `"vi"`, `null` \| `string`\>\>
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ ___
 
 [packages/purplet/src/hooks/command-context.ts:13](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/hooks/command-context.ts#L13)
 
-___
+---
 
 ### permissions
 
@@ -76,10 +76,10 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `this` | `MessageContextMenuCommandInteraction`<`CacheType`\> |
-| `target` | `APIMessage` \| `Message`<`boolean`\> |
+| Name     | Type                                                 |
+| :------- | :--------------------------------------------------- |
+| `this`   | `MessageContextMenuCommandInteraction`<`CacheType`\> |
+| `target` | `APIMessage` \| `Message`<`boolean`\>                |
 
 #### Returns
 

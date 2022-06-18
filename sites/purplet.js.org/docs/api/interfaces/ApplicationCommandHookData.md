@@ -1,7 +1,7 @@
 ---
-id: "ApplicationCommandHookData"
-title: "Interface: ApplicationCommandHookData"
-sidebar_label: "ApplicationCommandHookData"
+id: 'ApplicationCommandHookData'
+title: 'Interface: ApplicationCommandHookData'
+sidebar_label: 'ApplicationCommandHookData'
 sidebar_position: 0
 custom_edit_url: null
 ---
@@ -24,8 +24,8 @@ custom_edit_url: null
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name   | Type                        |
+| :----- | :-------------------------- |
 | `this` | `Interaction`<`CacheType`\> |
 
 #### Returns

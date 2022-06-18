@@ -2,17 +2,29 @@
   "name": "purplet.crbt.app",
   "private": true,
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "dev": "docusaurus start",
     "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
+    "deploy": "docusaurus deploy",
+    "dev": "docusaurus start",
+    "docusaurus": "docusaurus",
     "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
+    "start": "docusaurus start",
+    "swizzle": "docusaurus swizzle",
+    "typecheck": "tsc",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "write-translations": "docusaurus write-translations"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "dependencies": {
     "@docusaurus/core": "2.0.0-beta.21",
@@ -31,17 +43,5 @@
     "@types/react": "^18.0.12",
     "typescript": "^4.6.4",
     "webpack": "^5.73.0"
-  },
-  "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }

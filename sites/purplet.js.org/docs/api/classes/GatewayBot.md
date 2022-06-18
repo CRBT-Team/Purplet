@@ -1,15 +1,12 @@
 ---
-id: "GatewayBot"
-title: "Class: GatewayBot"
-sidebar_label: "GatewayBot"
+id: 'GatewayBot'
+title: 'Class: GatewayBot'
+sidebar_label: 'GatewayBot'
 sidebar_position: 0
 custom_edit_url: null
 ---
 
-A GatewayBot represents a bot that is running on a gateway with Discord.js. Features can be
-loaded and unloaded with `.loadFeatures` and `.unloadFeatures`, respectively. Features may be
-added after initialization, and will properly hot-swap them, including reconnecting the bot with
-different intents/config if required.
+A GatewayBot represents a bot that is running on a gateway with Discord.js. Features can be loaded and unloaded with `.loadFeatures` and `.unloadFeatures`, respectively. Features may be added after initialization, and will properly hot-swap them, including reconnecting the bot with different intents/config if required.
 
 Assumes the bot token is in the environment variable `DISCORD_BOT_TOKEN`.
 
@@ -21,8 +18,8 @@ Assumes the bot token is in the environment variable `DISCORD_BOT_TOKEN`.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type                                                      |
+| :-------- | :-------------------------------------------------------- |
 | `options` | [`GatewayBotOptions`](../interfaces/GatewayBotOptions.md) |
 
 #### Defined in
@@ -39,7 +36,7 @@ Assumes the bot token is in the environment variable `DISCORD_BOT_TOKEN`.
 
 [packages/purplet/src/lib/gateway.ts:51](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L51)
 
-___
+---
 
 ### #cleanupHandlers
 
@@ -49,7 +46,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:46](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L46)
 
-___
+---
 
 ### #currentDJSOptions
 
@@ -59,7 +56,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:48](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L48)
 
-___
+---
 
 ### #currentIntents
 
@@ -69,7 +66,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:49](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L49)
 
-___
+---
 
 ### #djsClient
 
@@ -79,7 +76,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:47](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L47)
 
-___
+---
 
 ### #features
 
@@ -89,7 +86,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:45](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L45)
 
-___
+---
 
 ### #id
 
@@ -99,7 +96,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:50](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L50)
 
-___
+---
 
 ### #running
 
@@ -109,7 +106,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:43](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L43)
 
-___
+---
 
 ### #token
 
@@ -119,7 +116,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:44](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L44)
 
-___
+---
 
 ### options
 
@@ -139,7 +136,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:65](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L65)
 
-___
+---
 
 ### features
 
@@ -153,7 +150,7 @@ readonly [`Feature`](../interfaces/Feature.md)[]
 
 [packages/purplet/src/lib/gateway.ts:61](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L61)
 
-___
+---
 
 ### id
 
@@ -167,7 +164,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:53](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L53)
 
-___
+---
 
 ### running
 
@@ -187,13 +184,12 @@ ___
 
 ▸ **loadFeatures**(...`features`): `Promise`<`void`\>
 
-Loads one or more features. This can be called after bot startup, and may restart the
-Discord.js client, if the `intents` or `djsOptions` hooks produce changed outputs.
+Loads one or more features. This can be called after bot startup, and may restart the Discord.js client, if the `intents` or `djsOptions` hooks produce changed outputs.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name          | Type                                    |
+| :------------ | :-------------------------------------- |
 | `...features` | [`Feature`](../interfaces/Feature.md)[] |
 
 #### Returns
@@ -204,7 +200,7 @@ Discord.js client, if the `intents` or `djsOptions` hooks produce changed output
 
 [packages/purplet/src/lib/gateway.ts:342](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L342)
 
-___
+---
 
 ### resolveApplicationCommands
 
@@ -220,14 +216,13 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:199](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L199)
 
-___
+---
 
 ### resolveDJSOptions
 
 ▸ `Private` **resolveDJSOptions**(): `Promise`<[`DJSOptions`](../modules.md#djsoptions)\>
 
-**`internal`** Resolves what options should be passed to Discord.js using the `djsOptions` hook.
-Properly handles passing an object around and running the hooks in sequence.
+**`internal`** Resolves what options should be passed to Discord.js using the `djsOptions` hook. Properly handles passing an object around and running the hooks in sequence.
 
 #### Returns
 
@@ -237,7 +232,7 @@ Properly handles passing an object around and running the hooks in sequence.
 
 [packages/purplet/src/lib/gateway.ts:108](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L108)
 
-___
+---
 
 ### resolveGatewayIntents
 
@@ -253,14 +248,13 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:94](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L94)
 
-___
+---
 
 ### restartDJSClient
 
 ▸ `Private` **restartDJSClient**(): `Promise`<`void`\>
 
-**`internal`** Starts or Restarts the Discord.JS client, assuming that `.#currentDJSOptions` is
-set.
+**`internal`** Starts or Restarts the Discord.JS client, assuming that `.#currentDJSOptions` is set.
 
 #### Returns
 
@@ -270,7 +264,7 @@ set.
 
 [packages/purplet/src/lib/gateway.ts:264](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L264)
 
-___
+---
 
 ### runCleanupHandler
 
@@ -280,10 +274,10 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type                                  |
+| :-------- | :------------------------------------ |
 | `feature` | [`Feature`](../interfaces/Feature.md) |
-| `id` | keyof `CleanupHandlers` |
+| `id`      | keyof `CleanupHandlers`               |
 
 #### Returns
 
@@ -293,28 +287,27 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:83](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L83)
 
-___
+---
 
 ### runLifecycleHook
 
 ▸ `Private` **runLifecycleHook**<`Event`\>(`features`, `hook`, `data?`): `Promise`<`void`\>
 
-**`internal`** Runs a lifecycle hook on an array of features. A lifecycle hook is one that may
-return a cleanup handler, and such those handlers are saved using `.setCleanupHandler`.
+**`internal`** Runs a lifecycle hook on an array of features. A lifecycle hook is one that may return a cleanup handler, and such those handlers are saved using `.setCleanupHandler`.
 
 #### Type parameters
 
-| Name |
+| Name    |
 | :------ |
 | `Event` |
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `features` | [`Feature`](../interfaces/Feature.md)[] |
-| `hook` | [`LifecycleHookNames`](../modules.md#lifecyclehooknames) |
-| `data?` | `Event` |
+| Name       | Type                                                     |
+| :--------- | :------------------------------------------------------- |
+| `features` | [`Feature`](../interfaces/Feature.md)[]                  |
+| `hook`     | [`LifecycleHookNames`](../modules.md#lifecyclehooknames) |
+| `data?`    | `Event`                                                  |
 
 #### Returns
 
@@ -324,7 +317,7 @@ return a cleanup handler, and such those handlers are saved using `.setCleanupHa
 
 [packages/purplet/src/lib/gateway.ts:142](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L142)
 
-___
+---
 
 ### setCleanupHandler
 
@@ -334,11 +327,11 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type                                  |
+| :-------- | :------------------------------------ |
 | `feature` | [`Feature`](../interfaces/Feature.md) |
-| `id` | keyof `CleanupHandlers` |
-| `handler` | [`Cleanup`](../modules.md#cleanup) |
+| `id`      | keyof `CleanupHandlers`               |
+| `handler` | [`Cleanup`](../modules.md#cleanup)    |
 
 #### Returns
 
@@ -348,7 +341,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:72](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L72)
 
-___
+---
 
 ### shouldRestartDJSClient
 
@@ -364,7 +357,7 @@ ___
 
 [packages/purplet/src/lib/gateway.ts:317](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L317)
 
-___
+---
 
 ### start
 
@@ -380,7 +373,7 @@ Starts the gateway bot. Run the first set of `.loadFeatures` _before_ using this
 
 [packages/purplet/src/lib/gateway.ts:157](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L157)
 
-___
+---
 
 ### stop
 
@@ -396,7 +389,7 @@ Gracefully stop the bot.
 
 [packages/purplet/src/lib/gateway.ts:388](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L388)
 
-___
+---
 
 ### unloadFeatures
 
@@ -406,8 +399,8 @@ Unloads features. By default, this does not cause Discord.js to restart like loa
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name          | Type                                    |
+| :------------ | :-------------------------------------- |
 | `...features` | [`Feature`](../interfaces/Feature.md)[] |
 
 #### Returns
@@ -418,7 +411,7 @@ Unloads features. By default, this does not cause Discord.js to restart like loa
 
 [packages/purplet/src/lib/gateway.ts:367](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L367)
 
-___
+---
 
 ### unloadFeaturesFromFile
 
@@ -428,8 +421,8 @@ Unloads all features associated with a given filename.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name       | Type     |
+| :--------- | :------- |
 | `filename` | `string` |
 
 #### Returns
@@ -440,7 +433,7 @@ Unloads all features associated with a given filename.
 
 [packages/purplet/src/lib/gateway.ts:383](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/lib/gateway.ts#L383)
 
-___
+---
 
 ### updateApplicationCommands
 

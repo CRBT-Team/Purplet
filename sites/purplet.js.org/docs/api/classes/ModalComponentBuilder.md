@@ -1,7 +1,7 @@
 ---
-id: "ModalComponentBuilder"
-title: "Class: ModalComponentBuilder"
-sidebar_label: "ModalComponentBuilder"
+id: 'ModalComponentBuilder'
+title: 'Class: ModalComponentBuilder'
+sidebar_label: 'ModalComponentBuilder'
 sidebar_position: 0
 custom_edit_url: null
 ---
@@ -32,7 +32,7 @@ ComponentBuilder<APIModalActionRowComponent\>.constructor
 
 [packages/purplet/src/builders/ComponentBuilder.ts:66](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/builders/ComponentBuilder.ts#L66)
 
-___
+---
 
 ### components
 
@@ -56,8 +56,8 @@ Adds the component inline, but will add a new Action Row if space runs out.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name   | Type                                       |
+| :----- | :----------------------------------------- |
 | `item` | `JSONResolvable`<`APITextInputComponent`\> |
 
 #### Returns
@@ -72,19 +72,18 @@ ComponentBuilder.addInline
 
 [packages/purplet/src/builders/ComponentBuilder.ts:40](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/builders/ComponentBuilder.ts#L40)
 
-___
+---
 
 ### addRow
 
 ▸ **addRow**(`row`): [`ModalComponentBuilder`](ModalComponentBuilder.md)
 
-Adds an Action Row, either by providing an array of components, a single component, or a whole
-action row.
+Adds an Action Row, either by providing an array of components, a single component, or a whole action row.
 
 #### Parameters
 
 | Name | Type |
-| :------ | :------ |
+| :-- | :-- |
 | `row` | `JSONResolvable`<`APITextInputComponent` \| `APIActionRowComponent`<`APITextInputComponent`\> \| `APITextInputComponent`[]\> |
 
 #### Returns
@@ -99,7 +98,7 @@ ComponentBuilder.addRow
 
 [packages/purplet/src/builders/ComponentBuilder.ts:21](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/builders/ComponentBuilder.ts#L21)
 
-___
+---
 
 ### setTitle
 
@@ -107,8 +106,8 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type     |
+| :------ | :------- |
 | `title` | `string` |
 
 #### Returns
@@ -119,7 +118,7 @@ ___
 
 [packages/purplet/src/builders/ComponentBuilder.ts:68](https://github.com/CRBT-Team/Purplet/blob/b72b1ee/packages/purplet/src/builders/ComponentBuilder.ts#L68)
 
-___
+---
 
 ### toJSON
 

@@ -1,5 +1,5 @@
 ---
-'serialize': major
+'@purplet/serialize': major
 ---
 
 add serialize library
