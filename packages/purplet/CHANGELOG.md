@@ -1,5 +1,11 @@
 # `purplet`
 
+## 2.0.0-next.8
+
+### Patch Changes
+
+- fix build
+
 ## 2.0.0-next.7
 
 ### Patch Changes
@@ -12,11 +18,9 @@
 
 - rename `$chatCommand` to `$slashCommand` ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
 - add `$modal` ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
-- revert to using discord.js structure for everything - the world isn't ready for what i have lol
-  ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
+- revert to using discord.js structure for everything - the world isn't ready for what i have lol ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
 - move `modules` to `features` ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
-- Updated dependencies
-  [[`38d20aa`](https://github.com/CRBT-Team/Purplet/commit/38d20aa5a4d4e12bac3e05008aac179b866118d3)]:
+- Updated dependencies [[`38d20aa`](https://github.com/CRBT-Team/Purplet/commit/38d20aa5a4d4e12bac3e05008aac179b866118d3)]:
   - @purplet/serialize@1.0.0-next.0
 
 ## 2.0.0-next.5
@@ -33,8 +37,7 @@
 - add full bitfield resolving.
 - add basic autocomplete handler execution.
 - add `$merge` and `$interaction`.
-- add `MessageComponentBuilder` and `ModalComponentBuilder` for simplified creation of the
-  `components` array..
+- add `MessageComponentBuilder` and `ModalComponentBuilder` for simplified creation of the `components` array..
 - add component stuff.
 - messed with the changelog format
 -
@@ -43,21 +46,16 @@
 
 ### Patch Changes
 
-- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff):
-  add hooks
+- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff): add hooks
   - `$appCommand`
   - `$userContextCommand`
   - `$djsUserContextCommand`
   - `$messageContextCommand`
   - `$djsMessageContextCommand`
-- [`3b6d61d`](https://github.com/CRBT-Team/Purplet/commit/3b6d61d7f87f3a9d15c3693c2f3f8f23807eeeb7):
-  add basic version of `$chatCommand`
-- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff):
-  Add PurpletInteraction and all of it's subclasses.
-- [`f16fdc3`](https://github.com/CRBT-Team/Purplet/commit/f16fdc3ee675e08eddc5bae352994b0ac913fd9f):
-  Fix OptionBuilder types
-- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff):
-  add OptionBuilder
+- [`3b6d61d`](https://github.com/CRBT-Team/Purplet/commit/3b6d61d7f87f3a9d15c3693c2f3f8f23807eeeb7): add basic version of `$chatCommand`
+- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff): Add PurpletInteraction and all of it's subclasses.
+- [`f16fdc3`](https://github.com/CRBT-Team/Purplet/commit/f16fdc3ee675e08eddc5bae352994b0ac913fd9f): Fix OptionBuilder types
+- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff): add OptionBuilder
 
 ## 2.0.0-next.3
 
@@ -84,8 +82,7 @@
 
 ### Patch Changes
 
-- Rewritten codebase, projects are bundled with vite and built with rollup. Instead of a Modules +
-  Handlers api, it is based off of `Feature` objects.
+- Rewritten codebase, projects are bundled with vite and built with rollup. Instead of a Modules + Handlers api, it is based off of `Feature` objects.
 - Removed purplet configuration file.
 - Removed every handler type, but all of these will be added in some variation.
 
