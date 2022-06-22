@@ -1,6 +1,6 @@
 import type { Immutable } from '@davecode/types';
-import { RESTGetAPICurrentUserResult, Routes } from 'discord-api-types/v10';
-import { Client } from 'discord.js';
+import { APIGuild, RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, Routes } from 'discord-api-types/v10';
+import { Client, Guild } from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
   ApplicationCommandData,
@@ -14,6 +14,7 @@ import { rest, setDJSClient } from './global';
 import { featureRequiresDJS } from '../utils/feature';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
+import { getEnvVar } from './env';
 
 // These `.call()`s are needed due to the way features are created
 /* eslint-disable no-useless-call */
@@ -159,8 +160,8 @@ export class GatewayBot {
     const botReliesOnDJS = this.#features.some(featureRequiresDJS);
 
     // TODO: do not use process.env but something else. related to custom env solution.
-    if (process.env.DISCORD_BOT_TOKEN) {
-      this.#token = process.env.DISCORD_BOT_TOKEN;
+    this.#token = getEnvVar('DISCORD_BOT_TOKEN') ?? '';
+    if (this.#token) {
       rest.setToken(this.#token);
     } else {
       console.warn('No Discord.JS token provided. Bot will not be online.');
@@ -221,11 +222,9 @@ export class GatewayBot {
       return;
     }
 
-    // In production, simply apply global commands.
-    if (this.options.mode === 'production') {
-      await rest.put(Routes.applicationCommands(this.#id), {
-        body: commands,
-      });
+    // In production, do nothing.
+    if (this.options.mode !== 'development') {
+      return;
     }
 
     // Overwrite the global command data with nothing, but only on first load.
@@ -236,24 +235,17 @@ export class GatewayBot {
     }
     this.#cachedCommandData = commands;
 
-    if (!process.env.UNSTABLE_PURPLET_COMMAND_GUILDS) {
-      console.warn('No guilds provided for development application commands.');
-      console.warn();
-      console.warn('In development mode, you must specify which guilds to deploy your commands to');
-      console.warn('through the temporary `UNSTABLE_PURPLET_COMMAND_GUILDS` environment variable.');
-      console.warn('This api will change once a better system for deciding how commands are');
-      console.warn('registered.');
-      console.warn();
-      return;
-    }
+    const guildList = await rest.get(Routes.userGuilds()) as RESTAPIPartialCurrentUserGuild[];
 
-    const guildList = process.env.UNSTABLE_PURPLET_COMMAND_GUILDS?.split(',');
+    await asyncMap(guildList, async guild => {
+      this.updateApplicationCommandsGuild(guild);
+    });
+  }
 
-    await asyncMap(guildList, async guildId => {
-      console.log(`replacing commands on ${guildId}`);
-      await rest.put(Routes.applicationGuildCommands(this.#id, guildId), {
-        body: commands,
-      });
+  private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
+    console.log(`Updating commands on ${guild.name}`);
+    await rest.put(Routes.applicationGuildCommands(this.#id, guild.id), {
+      body: this.#cachedCommandData,
     });
   }
 
@@ -306,6 +298,12 @@ export class GatewayBot {
         feature.interaction?.(i);
       });
     });
+
+    if (this.options.mode === 'development') {
+      this.#djsClient.on('guildCreate', (guild) => {
+        this.updateApplicationCommandsGuild(guild);
+      });
+    }
 
     await this.#djsClient.login(this.#token);
 
