@@ -66,7 +66,7 @@ export class GatewayBot {
     return this.#djsClient;
   }
 
-  constructor(readonly options: Immutable<GatewayBotOptions>) {}
+  constructor(readonly options: Immutable<GatewayBotOptions>) { }
 
   /** @internal Saves a cleanup handler for a feature in the #cleanupHandlers */
   private setCleanupHandler(feature: Feature, id: keyof CleanupHandlers, handler: Cleanup) {
@@ -114,7 +114,7 @@ export class GatewayBot {
       }
     }
 
-    return clientOptions;
+    return { ...clientOptions, intents: this.#currentIntents };
   }
 
   // /** @internal */
