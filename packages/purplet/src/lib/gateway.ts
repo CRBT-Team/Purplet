@@ -1,5 +1,5 @@
 import type { Immutable } from '@davecode/types';
-import { APIGuild, RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, Routes } from 'discord-api-types/v10';
+import { APIGuild, APIUser, RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, RESTGetAPIOAuth2CurrentApplicationResult, Routes } from 'discord-api-types/v10';
 import { Client, Guild } from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
@@ -55,6 +55,7 @@ export class GatewayBot {
   #id: string = '';
   #cachedCommandData?: ApplicationCommandData[];
   #options: Immutable<GatewayBotOptions> = null as any;
+  #owners: APIUser[] = [];
 
   get id() {
     return this.#id;
@@ -192,6 +193,17 @@ export class GatewayBot {
 
     const currentUser = (await rest.get(Routes.user())) as RESTGetAPICurrentUserResult;
     this.#id = currentUser.id;
+    const currentApplication = (await rest.get(Routes.oauth2CurrentApplication())) as RESTGetAPIOAuth2CurrentApplicationResult;
+
+    if (!currentApplication.team && currentApplication.owner) {
+      this.#owners = [currentApplication.owner];
+    }
+    if (currentApplication.team) {
+      this.#owners = currentApplication.team.members.map(x => x.user);
+    }
+
+    console.log('bot owners:')
+    console.log(this.#owners);
 
     await this.runLifecycleHook(this.#features, 'initialize');
 
