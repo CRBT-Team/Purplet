@@ -27,7 +27,6 @@ export default [
   {
     input: {
       cli: 'src/cli.ts',
-      'build-api': 'src/build-api.ts',
       index: 'src/index.ts',
       internal: 'src/internal.ts',
     },

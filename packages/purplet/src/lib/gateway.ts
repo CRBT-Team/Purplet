@@ -1,5 +1,5 @@
 import type { Immutable } from '@davecode/types';
-import { APIGuild, RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, Routes } from 'discord-api-types/v10';
+import { APIGuild, APIUser, RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, RESTGetAPIOAuth2CurrentApplicationResult, Routes } from 'discord-api-types/v10';
 import { Client, Guild } from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
@@ -25,6 +25,10 @@ export interface GatewayBotOptions {
    * development, commands are only deployed to a specified set of test servers.
    */
   mode: 'production' | 'development';
+  /**
+   * If set to false, the bot will not attempt to connect to the gateway.
+   */
+  gateway?: boolean;
 }
 
 interface CleanupHandlers {
@@ -50,6 +54,8 @@ export class GatewayBot {
   #currentIntents: number = 0;
   #id: string = '';
   #cachedCommandData?: ApplicationCommandData[];
+  #options: Immutable<GatewayBotOptions> = null as any;
+  #owners: APIUser[] = [];
 
   get id() {
     return this.#id;
@@ -67,7 +73,15 @@ export class GatewayBot {
     return this.#djsClient;
   }
 
-  constructor(readonly options: Immutable<GatewayBotOptions>) { }
+  get token() {
+    return this.#token || null;
+  }
+
+  get options() {
+    return this.#options;
+  }
+
+  constructor() { }
 
   /** @internal Saves a cleanup handler for a feature in the #cleanupHandlers */
   private setCleanupHandler(feature: Feature, id: keyof CleanupHandlers, handler: Cleanup) {
@@ -155,7 +169,13 @@ export class GatewayBot {
   }
 
   /** Starts the gateway bot. Run the first set of `.loadFeatures` _before_ using this. */
-  async start() {
+  async start(options: Immutable<GatewayBotOptions>) {
+    this.#options = options;
+
+    if (this.#options.gateway === undefined) {
+      this.#options.gateway = true;
+    }
+
     // Remove after Node.js 16 is no longer in LTS
     const botReliesOnDJS = this.#features.some(featureRequiresDJS);
 
@@ -173,6 +193,17 @@ export class GatewayBot {
 
     const currentUser = (await rest.get(Routes.user())) as RESTGetAPICurrentUserResult;
     this.#id = currentUser.id;
+    const currentApplication = (await rest.get(Routes.oauth2CurrentApplication())) as RESTGetAPIOAuth2CurrentApplicationResult;
+
+    if (!currentApplication.team && currentApplication.owner) {
+      this.#owners = [currentApplication.owner];
+    }
+    if (currentApplication.team) {
+      this.#owners = currentApplication.team.members.map(x => x.user);
+    }
+
+    console.log('bot owners:')
+    console.log(this.#owners);
 
     await this.runLifecycleHook(this.#features, 'initialize');
 
@@ -223,7 +254,7 @@ export class GatewayBot {
     }
 
     // In production, do nothing.
-    if (this.options.mode !== 'development') {
+    if (this.#options.mode !== 'development') {
       return;
     }
 
@@ -237,16 +268,36 @@ export class GatewayBot {
 
     const guildList = await rest.get(Routes.userGuilds()) as RESTAPIPartialCurrentUserGuild[];
 
+    if (guildList.length > 100) {
+      throw new Error("You can't have more than 75 guilds on your development bot.");
+    }
+    if (guildList.length >= 5) {
+      console.warn(`You have more ${guildList.length} guilds on your development bot. This can slow down the bot significantly, as commands are registered per-guild during development.`);
+    }
+
     await asyncMap(guildList, async guild => {
       this.updateApplicationCommandsGuild(guild);
     });
   }
 
   private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
+    if (!this.#cachedCommandData) {
+      throw new Error('No command data cached. Call `.start` first.');
+    }
+
     console.log(`Updating commands on ${guild.name}`);
     await rest.put(Routes.applicationGuildCommands(this.#id, guild.id), {
       body: this.#cachedCommandData,
     });
+  }
+
+  async updateApplicationCommandsGlobal() {
+    if (!this.#cachedCommandData) {
+      throw new Error('No command data cached. Call `.start` first.');
+    }
+
+    console.log('Updating commands globally');
+    await rest.put(Routes.applicationCommands(this.#id), { body: this.#cachedCommandData });
   }
 
   /**
@@ -299,7 +350,7 @@ export class GatewayBot {
       });
     });
 
-    if (this.options.mode === 'development') {
+    if (this.#options.mode === 'development') {
       this.#djsClient.on('guildCreate', (guild) => {
         this.updateApplicationCommandsGuild(guild);
       });
@@ -390,7 +441,7 @@ export class GatewayBot {
     }
 
     // Clear commands
-    if (this.options.mode === 'development') {
+    if (this.#options.mode === 'development') {
       const guildList = process.env.UNSTABLE_PURPLET_COMMAND_GUILDS?.split(',');
       if (guildList) {
         await asyncMap(guildList, async guildId => {
