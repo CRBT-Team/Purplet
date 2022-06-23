@@ -65,6 +65,12 @@ export async function startDevelopmentBot(options: DevOptions) {
     await gateway.loadFeatures(...features);
   }
 
+  process.on('SIGINT', () => {
+    console.log('Shutting down.');
+    viteServer.close();
+    gateway.stop();
+  });
+
   const initModules = (await walk(modulesPath)).filter(isSourceFile);
   await asyncMap(initModules, reloadFeatureModule);
   console.log(`Loaded ${initModules.length} modules for bot start.`);
