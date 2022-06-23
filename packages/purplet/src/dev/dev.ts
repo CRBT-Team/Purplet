@@ -54,7 +54,7 @@ export async function startDevelopmentBot(options: DevOptions) {
     });
   }
 
-  const gateway = new GatewayBot({ mode: 'development' });
+  const gateway = new GatewayBot();
 
   async function reloadFeatureModule(filename: string) {
     const relativeFilename = path.relative(modulesPath, filename);
@@ -68,7 +68,7 @@ export async function startDevelopmentBot(options: DevOptions) {
   const initModules = (await walk(modulesPath)).filter(isSourceFile);
   await asyncMap(initModules, reloadFeatureModule);
   console.log(`Loaded ${initModules.length} modules for bot start.`);
-  await gateway.start();
+  await gateway.start({ mode: 'development' });
   console.log('Watching for changes...');
 
   hmrWatcher.on('resolvedHotUpdate', async (files: string[]) => {

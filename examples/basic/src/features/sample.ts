@@ -1,5 +1,5 @@
 import { TextInputBuilder, TextInputStyle } from 'discord.js';
-import { $modal, $slashCommand, ModalComponentBuilder, OptionBuilder } from 'purplet';
+import { $mentionCommand, $modal, $slashCommand, ModalComponentBuilder, OptionBuilder } from 'purplet';
 
 interface ModalProps {
   title: string;
@@ -37,13 +37,12 @@ export const helloWorld = $slashCommand({
   },
 });
 
-export default $slashCommand({
+export default $mentionCommand({
   name: 'explode',
-  description: 'Explode',
-  options: new OptionBuilder(),
-  permissions: ['ManageRoles'],
-  allowInDM: false,
-  handle(options) {
-    // ...
+  argMatch: /(.*)/,
+  async handle(options) {
+    await this.client.application!.fetch();
+    console.log(this.client.application?.owner?.id);
+    this.reply('BOOM!');
   },
 });

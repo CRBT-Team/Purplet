@@ -63,7 +63,7 @@ importers:
       '@davecode/types': ^1.0.2
       '@discordjs/builders': ^0.13.0
       '@discordjs/rest': ^0.4.1
-      '@purplet/serialize': workspace:^1.0.0
+      '@purplet/serialize': workspace:^1.0.1
       '@rollup/plugin-alias': ^3.1.9
       '@rollup/plugin-node-resolve': ^13.3.0
       '@rollup/plugin-replace': ^4.0.0
