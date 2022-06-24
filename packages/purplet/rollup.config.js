@@ -23,6 +23,8 @@ const external = [].concat(
   Object.keys(process.binding('natives'))
 );
 
+const version = process.argv.includes('--watch') ? pkg.version.replace(/-.*$/, '-dev') : pkg.version;
+
 export default [
   {
     input: {
@@ -40,8 +42,8 @@ export default [
       replace({
         preventAssignment: true,
         values: {
-          __VERSION__: pkg.version,
-          v__VERSION__: 'v' + pkg.version,
+          __VERSION__: version,
+          v__VERSION__: 'v' + version,
         },
       }),
       resolve({

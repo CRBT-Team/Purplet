@@ -1,6 +1,5 @@
 // TODO: My own env solution, or something where we can reload this file.
 import { REST } from '@discordjs/rest';
-import chalk from 'chalk';
 import { RESTGetAPICurrentUserResult, Routes } from 'discord.js';
 import { createRequire } from 'module';
 import path from 'path';
@@ -9,9 +8,7 @@ import { buildGatewayBot } from './build/build';
 import { startDevelopmentBot } from './dev/dev';
 import type { GatewayBot } from './internal';
 import { getEnvVar, setupEnv } from './lib/env';
-import { injectLogger, log, startSpinner } from './lib/logger';
-import ora from 'ora';
-import { delay } from '@davecode/utils/dist/index.js';
+import { injectLogger, log } from './lib/logger';
 
 const require = createRequire(import.meta.url);
 
@@ -51,27 +48,29 @@ prog
       console.error(`Could not resolve bot entry point. Make sure you run \`purplet build\` first.`);
       return;
     }
-    const bot = (await import(resolved)).default as GatewayBot;
+    const bot = (await import('file:///' + resolved)).default as GatewayBot;
     await bot.start({
       mode: 'production',
       gateway: false,
+      checkIfProductionBot: false,
     });
     await bot.updateApplicationCommandsGlobal();
-    console.log(`Deployed.`);
+    log('purplet', `Application Commands have been deployed`);
   })
   .command('undeploy')
   .describe('Delete all global application commands.')
   .action(async () => {
     setupEnv(true);
+    console.log(`Deleting commands on this bot.`);
     const token = getEnvVar('DISCORD_BOT_TOKEN');
     if (!token) {
-      console.error(`Could not find discord bot token, please set \`$DISCORD_BOT_TOKEN\`.`);
+      log('error', `Could not find discord bot token, please set \`$DISCORD_BOT_TOKEN\`.`);
       return;
     }
     const rest = new REST().setToken(token);
     const currentUser = (await rest.get(Routes.user())) as RESTGetAPICurrentUserResult;
     await rest.put(Routes.applicationCommands(currentUser.id), { body: [] });
-    console.log(`Commands deleted.`);
+    log('purplet', `Application Commands have been deleted`);
     process.exit();
   })
   .command('guild-manager')

@@ -4,5 +4,6 @@
 import './index';
 
 export * from './lib/gateway';
+export * from './lib/env';
 export * from './utils/feature';
 export * from './utils/is-directly-run';

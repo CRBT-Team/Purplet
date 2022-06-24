@@ -1,5 +1,6 @@
+// this file is a bit more of a mess than i'd like it to be, but whatever
 import type { Immutable } from '@davecode/types';
-import { APIGuild, APIUser, RESTAPIPartialCurrentUserGuild, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, RESTGetAPIOAuth2CurrentApplicationResult, Routes } from 'discord-api-types/v10';
+import { APIGuild, APIUser, RESTAPIPartialCurrentUserGuild, RESTGetAPIApplicationCommandsResult, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, RESTGetAPIOAuth2CurrentApplicationResult, Routes } from 'discord-api-types/v10';
 import { Client, Guild } from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
@@ -15,8 +16,9 @@ import { featureRequiresDJS } from '../utils/feature';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 import { getEnvVar } from './env';
-import { log } from './logger';
+import { log, pauseSpinner } from './logger';
 import dedent from 'dedent';
+import inquirer from 'inquirer';
 
 // These `.call()`s are needed due to the way features are created
 /* eslint-disable no-useless-call */
@@ -40,6 +42,11 @@ interface CleanupHandlers {
   djsClient?: Cleanup;
 }
 
+interface AllowedGuildRules {
+  include?: string[];
+  exclude?: string[];
+}
+
 /**
  * A GatewayBot represents a bot that is running on a gateway with Discord.js. Features can be
  * loaded and unloaded with `.loadFeatures` and `.unloadFeatures`, respectively. Features may be
@@ -60,6 +67,7 @@ export class GatewayBot {
   #cachedCommandData?: ApplicationCommandData[];
   #options: Immutable<GatewayBotOptions> = null as any;
   #owners: APIUser[] = [];
+  #guildRules: AllowedGuildRules = {};
 
   get id() {
     return this.#id;
@@ -90,6 +98,17 @@ export class GatewayBot {
   }
 
   constructor() { }
+
+  private isGuildAllowed(id: string) {
+    const { include = [], exclude = [] } = this.#guildRules;
+    if (include.length > 0 && !include.includes(id)) {
+      return false;
+    }
+    if (exclude.length > 0 && exclude.includes(id)) {
+      return false;
+    }
+    return true;
+  }
 
   /** @internal Saves a cleanup handler for a feature in the #cleanupHandlers */
   private setCleanupHandler(feature: Feature, id: keyof CleanupHandlers, handler: Cleanup) {
@@ -180,9 +199,16 @@ export class GatewayBot {
   async start(options: Immutable<GatewayBotOptions>) {
     this.#options = options;
 
-    if (this.#options.gateway === undefined) {
-      this.#options.gateway = true;
+    const include = getEnvVar('PURPLET_INCLUDE_GUILDS') ?? '';
+    const exclude = getEnvVar('PURPLET_EXCLUDE_GUILDS') ?? '';
+
+    if (include && exclude) {
+      throw new Error('Cannot specify both PURPLET_INCLUDE_GUILDS and PURPLET_EXCLUDE_GUILDS');
     }
+    this.#guildRules = {
+      include: include ? include.split(',') : [],
+      exclude: exclude ? exclude.split(',') : [],
+    };
 
     // Remove after Node.js 16 is no longer in LTS
     const botReliesOnDJS = this.#features.some(featureRequiresDJS);
@@ -210,6 +236,29 @@ export class GatewayBot {
     }
     if (currentApplication.team) {
       this.#owners = currentApplication.team.members.map(x => x.user);
+    }
+
+    if (this.#options.checkIfProductionBot !== false) {
+      const globalCommands = (await rest.get(Routes.applicationCommands(this.#id))) as RESTGetAPIApplicationCommandsResult;
+      if (globalCommands.length !== 0) {
+        await pauseSpinner(async () => {
+          console.log();
+          log('warn', `The token provided is for ${currentUser.username}#${currentUser.discriminator} (${currentUser.id}), which has global commands set. Purplet's development mode is not compatible with global commands, and must be removed.`)
+          const confirm = await inquirer.prompt({
+            type: 'confirm',
+            name: 'continue',
+            message: `Delete ALL Global Application Commands?`,
+          });
+          if (confirm.continue) {
+            await rest.put(Routes.applicationCommands(this.#id), {
+              body: []
+            });
+          } else {
+            log('info', 'Aborting startup.');
+            process.exit(1);
+          }
+        })
+      }
     }
 
     await this.runLifecycleHook(this.#features, 'initialize');
@@ -258,6 +307,8 @@ export class GatewayBot {
       return;
     }
 
+    this.#cachedCommandData = commands;
+
     // In production, do nothing.
     if (this.#options.mode !== 'development') {
       return;
@@ -269,9 +320,9 @@ export class GatewayBot {
     if (!this.#cachedCommandData) {
       await rest.put(Routes.applicationCommands(this.#id), { body: [] });
     }
-    this.#cachedCommandData = commands;
 
-    const guildList = await rest.get(Routes.userGuilds()) as RESTAPIPartialCurrentUserGuild[];
+    const guildList = (await rest.get(Routes.userGuilds()) as RESTAPIPartialCurrentUserGuild[])
+      .filter(x => this.isGuildAllowed(x.id));
 
     if (guildList.length > 100) {
       throw new Error("You can't have more than 75 guilds on your development bot.");
@@ -301,7 +352,6 @@ export class GatewayBot {
       throw new Error('No command data cached. Call `.start` first.');
     }
 
-    log('info', 'Updating commands globally');
     await rest.put(Routes.applicationCommands(this.#id), { body: this.#cachedCommandData });
   }
 
@@ -312,6 +362,10 @@ export class GatewayBot {
   private async restartDJSClient() {
     if (!this.#currentDJSOptions) {
       throw new Error('Cannot restart Discord.js client before initializing the configuration.');
+    }
+
+    if (this.#options.gateway === false) {
+      return;
     }
 
     if (this.#djsClient) {
@@ -357,7 +411,9 @@ export class GatewayBot {
 
     if (this.#options.mode === 'development') {
       this.#djsClient.on('guildCreate', (guild) => {
-        this.updateApplicationCommandsGuild(guild);
+        if (this.isGuildAllowed(guild.id)) {
+          this.updateApplicationCommandsGuild(guild);
+        }
       });
     }
 

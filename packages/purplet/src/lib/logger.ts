@@ -23,6 +23,10 @@ const textColors: Partial<LogFormatters> = {
 };
 
 function logString(level: LogLevel, data: string) {
+  if (data === '') {
+    process.stdout.write('\n');
+    return;
+  }
   const terminalWidth = process.stdout.columns;
   const prefix = level === 'purplet' ? '' : chalk.bold(`${colors[level](level.padEnd(5, ' '))}`) + ' ';
   const prefixLength = stringLength(prefix);
@@ -54,4 +58,14 @@ export function injectLogger() {
   console.error = (...args: any[]) => log('error', args);
   console.debug = (...args: any[]) => log('debug', args);
   // TODO: injections for the rest of the log methods, like `time`
+}
+
+export async function pauseSpinner(fn: () => void) {
+  if (status.isSpinning) {
+    status.stop();
+    await fn();
+    status.start();
+  } else {
+    fn();
+  }
 }
