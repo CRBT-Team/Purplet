@@ -24,22 +24,21 @@ DISCORD_BOT_TOKEN=<token>
 
 :::caution
 
-Use separate bot accounts for development and production. This is important as Application Commands may get cleared from your production bot, and interactions may get routed incorrectly if you are running both at once.
+Use separate bot accounts for development and production. Using the same token is an insecure practice, and Application Commands will desync when developing.
 
 :::
 
-To make reloads faster, Purplet only registers to commands to guilds that you specify. This is done through the `UNSTABLE_PURPLET_COMMAND_GUILDS` environment variable, which is a comma separated list of Guild Ids: (TODO: THIS FEATURE WILL CHANGE FOR A BETTER SYSTEM AS I DO RESEARCH)
-
-```
-UNSTABLE_PURPLET_COMMAND_GUILDS=516410163230539837,782584672298729473
-```
-
-You then start development mode with <RunScriptCodeBlock name='dev' />
+You start Purplet's development mode with <RunScriptCodeBlock name='dev' />
 
 ## Package Scripts
 
-- **<RunScriptCodeBlock name='dev' />**: Starts a bot in development mode. Allows live-reloading. Deploys application commands only to specified servers to ensure they are instantly usable.
-- **<RunScriptCodeBlock name='build' />**: Builds a compiled `.js` file with the bot, running application commands globally.
+The default template includes the following scripts, most of which are direct wrappers of the `purplet` CLI:
+
+- **<RunScriptCodeBlock name='dev' />**: Starts a bot in development mode. Allows live-reloading. Deploys application commands only to individual servers for faster development.
+- **<RunScriptCodeBlock name='build' />**: Compiles a Gateway client, for handling events as well as interactions.
+- **<RunScriptCodeBlock name='build-http' />**: Builds an HTTP endpoint for handling interactions, allowing you to deploy interaction handlers as cloud functions. Not Implemented.
+- **<RunScriptCodeBlock name='deploy' />**: Deploys all application commands globally, only usable after `build` or `build-http` has been run.
+- **<RunScriptCodeBlock name='undeploy' />**: Deletes all global application commands, undoing the effects of `deploy`. This can be used if you accidentally deploy global commands on a development token.
 
 ## File Structure
 

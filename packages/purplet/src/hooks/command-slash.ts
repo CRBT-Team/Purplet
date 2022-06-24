@@ -6,7 +6,7 @@ import {
 } from 'discord-api-types/v10';
 import type { ChatInputCommandInteraction, CommandInteractionOptionResolver } from 'discord.js';
 import { $interaction } from './basic';
-import { $applicationCommand } from './command';
+import { $applicationCommand, getFullCommandName } from './command';
 import { $merge } from './merge';
 import {
   getOptionBuilderAutocompleteHandlers,
@@ -16,8 +16,9 @@ import {
 import { camelChoiceToSnake } from '../utils/case';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 import { toJSONValue } from '../utils/plain';
+import { createFeature } from '../lib/feature';
 
-export interface ChatCommandData<T> extends CommandPermissionsInput {
+export interface SlashCommandData<T> extends CommandPermissionsInput {
   name: string;
   nameLocalizations?: LocalizationMap;
   description: string;
@@ -52,7 +53,7 @@ function getResolved(
   }
 }
 
-export function $slashCommand<T>(options: ChatCommandData<T>) {
+export function $slashCommand<T>(options: SlashCommandData<T>) {
   const commandOptions = toJSONValue(options.options ?? []);
   const autocompleteHandlers = getOptionBuilderAutocompleteHandlers(options.options);
 
@@ -79,26 +80,48 @@ export function $slashCommand<T>(options: ChatCommandData<T>) {
       },
     }),
     Object.keys(autocompleteHandlers ?? {}).length > 0 &&
-      $interaction(async i => {
-        // TODO: complete implementing this.
-        if (
-          i.isAutocomplete() &&
-          i.commandName === options.name &&
-          i.commandType === ApplicationCommandType.ChatInput
-        ) {
-          const resolvedOptions = Object.fromEntries(
-            commandOptions.map(option => [option.name, i.options.get(option.name)?.value])
-          ) as unknown as T;
+    $interaction(async i => {
+      // TODO: complete implementing this.
+      if (
+        i.isAutocomplete() &&
+        getFullCommandName(i) === options.name &&
+        i.commandType === ApplicationCommandType.ChatInput
+      ) {
+        const resolvedOptions = Object.fromEntries(
+          commandOptions.map(option => [option.name, i.options.get(option.name)?.value])
+        ) as unknown as T;
 
-          i.respond(
-            (
-              await (autocompleteHandlers as any)[i.options.getFocused(true).name].call(
-                i,
-                resolvedOptions
-              )
-            ).map(camelChoiceToSnake)
-          );
-        }
-      })
+        i.respond(
+          (
+            await (autocompleteHandlers as any)[i.options.getFocused(true).name].call(
+              i,
+              resolvedOptions
+            )
+          ).map(camelChoiceToSnake)
+        );
+      }
+    })
   );
+}
+
+export interface SlashCommandGroupData extends CommandPermissionsInput {
+  name: string;
+  nameLocalizations?: LocalizationMap;
+  description: string;
+  descriptionLocalizations?: LocalizationMap;
+}
+
+export function $slashCommandGroup(data: SlashCommandGroupData) {
+  return createFeature({
+    applicationCommands: [
+      {
+        name: data.name,
+        name_localizations: data.nameLocalizations,
+        description: data.description,
+        description_localizations: data.descriptionLocalizations,
+        options: [],
+        ...resolveCommandPermissions(data),
+      }
+    ]
+  })
 }

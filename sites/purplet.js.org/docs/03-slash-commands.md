@@ -153,12 +153,6 @@ This does not affect the TS type of the interaction passed to `handle`. In the f
 
 ## Subcommands
 
-:::danger Not Implemented
-
-Subcommands and Command Groups are not supported currently. This section just describes how they _would_ work, were they to be added.
-
-:::
-
 Natively, subcommands are represented as the `SUB_COMMAND` and `SUB_COMMAND_GROUP` option types. [Refer to the Discord API Docs to learn how commands are usually structured](https://discord.com/developers/docs/interactions/application-commands#subcommands-and-subcommand-groups), as Purplet takes a different approach.
 
 In Purplet, Subcommands are defined by putting a space in the command's `name`, then defining a separate `$slashCommandGroup` feature to contain metadata about the group.
@@ -188,15 +182,26 @@ export default $slashCommandGroup({
 });
 ```
 
-:::tip
-
-For large commands, you can split the individual exports across multiple files, since `Feature` objects are collected into a project-wide list, then Command Groups are resolved.
-
-:::
-
 Under the hood, these features are merged into one, and a single Application Command is deployed, and interactions are routed to the individual `$slashCommand` `handle()` functions. **Command groups are required for subcommands, as descriptions are mandatory**.
+
+The object passed to `$slashCommandGroup` is the `SlashCommandGroup` object, which has these properties:
+
+| Property | Description |
+| --- | --- |
+| `name` | [1-32 character name](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming) |
+| `description` | 1-100 character description |
+| `permissions?` | Required permissions to use this command, unless overridden by a server admin, see [Permissions](#permissions). Defaults to [] |
+| `allowInDM?` | If `false`, disallow this command in direct messages, see [Permissions](#permissions). |
+
+### Tips
+
+- For large commands, you can split the individual exports across multiple files, since `Feature` objects are collected into a project-wide list, then Command Groups are resolved.
+- If multiple subcommands use the same set of options, you can define the `OptionBuilder` in as a separate variable, then pass the same builder to each subcommand.
+
+### Caveats
+
+- Permissions are only supported on the top-level Command Group, meaning subcommands may not have alternate permissions. The `permissions` and `allowInDM` properties of subcommands are ignored.
 
 ## Deploying Commands
 
-- In development mode, Application Commands are deployed to individual servers, see Commands in Development for more details.
-- In production mode, Application Commands are deployed globally using `purplet deploy`. See Building for Production for more details.
+Commands are not automatically deployed in production, please read Building for Production.

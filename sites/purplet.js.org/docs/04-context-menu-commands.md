@@ -16,5 +16,4 @@ Message commands target Messages inside of Text Channels, which are resolved to 
 
 ## Deploying Commands
 
-- In development mode, Application Commands are deployed to individual servers, see Commands in Development for more details.
-- In production mode, Application Commands are deployed globally using `purplet deploy`. See Building for Production for more details.
+Commands are not automatically deployed in production, please read Building for Production.

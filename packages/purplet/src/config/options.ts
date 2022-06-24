@@ -3,6 +3,7 @@ import type { UserConfig as ViteConfig } from 'vite';
 
 export interface ResolvedConfig {
   alias: Record<string, string>;
+  lang: string;
   paths: {
     features: string;
     output: string;

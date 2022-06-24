@@ -40,7 +40,7 @@ interface MessageComponentOptions<
   Context,
   CreateProps,
   ComponentType extends APIMessageActionRowComponent
-> {
+  > {
   structure?: CustomStructure<Context, JSONValue>;
   serializer?: CustomSerializer;
   create(ctx: Context, createProps: CreateProps): JSONResolvable<ComponentType>;
@@ -52,11 +52,11 @@ type MessageComponentStaticProps<
   Context,
   CreateProps,
   ComponentType extends APIMessageActionRowComponent
-> = IsUnknown<CreateProps> extends true
+  > = IsUnknown<CreateProps> extends true
   ? IsUnknown<Context> extends true
-    ? { create(): ComponentType }
-    : { create(context: Context): ComponentType }
-  : { create(context: Context, props: CreateProps): ComponentType };
+  ? { create(): ComponentType, getCustomId(): string }
+  : { create(context: Context): ComponentType, getCustomId(context: Context): string }
+  : { create(context: Context, props: CreateProps): ComponentType, getCustomId(context: Context): string };
 
 function $messageComponent<
   Context,
@@ -93,6 +93,11 @@ function $messageComponent<
           (context !== undefined ? serializer.toString(structure.toJSON(context)) : '');
         return template;
       },
+      getCustomId(context: Context) {
+        return featureId +
+          ':' +
+          (context !== undefined ? serializer.toString(structure.toJSON(context)) : '');
+      }
       // This cast makes the two parameters optional if the context is `unknown`.
     } as MessageComponentStaticProps<Context, CreateProps, ComponentType>
   );
