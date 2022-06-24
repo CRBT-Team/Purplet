@@ -15,6 +15,8 @@ import { featureRequiresDJS } from '../utils/feature';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 import { getEnvVar } from './env';
+import { log } from './logger';
+import dedent from 'dedent';
 
 // These `.call()`s are needed due to the way features are created
 /* eslint-disable no-useless-call */
@@ -29,6 +31,8 @@ export interface GatewayBotOptions {
    * If set to false, the bot will not attempt to connect to the gateway.
    */
   gateway?: boolean;
+
+  checkIfProductionBot?: boolean;
 }
 
 interface CleanupHandlers {
@@ -79,6 +83,10 @@ export class GatewayBot {
 
   get options() {
     return this.#options;
+  }
+
+  get user() {
+    return this.#djsClient?.user;
   }
 
   constructor() { }
@@ -184,11 +192,13 @@ export class GatewayBot {
     if (this.#token) {
       rest.setToken(this.#token);
     } else {
-      console.warn('No Discord.JS token provided. Bot will not be online.');
-      console.warn('Edit your ".env" file and add a line with the following:');
-      console.warn();
-      console.warn('DISCORD_BOT_TOKEN="your-token-here"');
-      console.warn();
+      log('error', dedent`
+        No Discord token provided. Purplet cannot start up.
+        Edit your ".env" file and add a line with the following:
+
+        DISCORD_BOT_TOKEN="your token here"
+      `);
+      process.exit(1); // TODO: throw an error instead, and have cli handle printing and exiting.
     }
 
     const currentUser = (await rest.get(Routes.user())) as RESTGetAPICurrentUserResult;
@@ -201,9 +211,6 @@ export class GatewayBot {
     if (currentApplication.team) {
       this.#owners = currentApplication.team.members.map(x => x.user);
     }
-
-    console.log('bot owners:')
-    console.log(this.#owners);
 
     await this.runLifecycleHook(this.#features, 'initialize');
 
@@ -223,8 +230,6 @@ export class GatewayBot {
     }
 
     this.#running = true;
-    const tag = `${currentUser.username}#${currentUser.discriminator}`;
-    console.log(`Bot has finished starting up, logged in as @${tag}`);
   }
 
   /** @internal */
@@ -272,7 +277,7 @@ export class GatewayBot {
       throw new Error("You can't have more than 75 guilds on your development bot.");
     }
     if (guildList.length >= 5) {
-      console.warn(`You have more ${guildList.length} guilds on your development bot. This can slow down the bot significantly, as commands are registered per-guild during development.`);
+      log('warn', `You have more ${guildList.length} guilds on your development bot. This can slow down the bot significantly, as commands are registered per-guild during development.`);
     }
 
     await asyncMap(guildList, async guild => {
@@ -285,7 +290,7 @@ export class GatewayBot {
       throw new Error('No command data cached. Call `.start` first.');
     }
 
-    console.log(`Updating commands on ${guild.name}`);
+    log('info', `Updating commands on ${guild.name}`);
     await rest.put(Routes.applicationGuildCommands(this.#id, guild.id), {
       body: this.#cachedCommandData,
     });
@@ -296,7 +301,7 @@ export class GatewayBot {
       throw new Error('No command data cached. Call `.start` first.');
     }
 
-    console.log('Updating commands globally');
+    log('info', 'Updating commands globally');
     await rest.put(Routes.applicationCommands(this.#id), { body: this.#cachedCommandData });
   }
 
@@ -312,9 +317,9 @@ export class GatewayBot {
     if (this.#djsClient) {
       await this.#djsClient.destroy();
       setDJSClient(undefined!);
-      console.log('Restarting Discord.JS client');
+      log('info', 'Restarting Discord.JS client');
     } else {
-      console.log('Starting Discord.JS client...');
+      log('info', 'Starting Discord.JS client...');
     }
 
     // Cleanup the djsClient hook
@@ -442,14 +447,13 @@ export class GatewayBot {
 
     // Clear commands
     if (this.#options.mode === 'development') {
-      const guildList = process.env.UNSTABLE_PURPLET_COMMAND_GUILDS?.split(',');
-      if (guildList) {
-        await asyncMap(guildList, async guildId => {
-          await rest.put(Routes.applicationGuildCommands(this.#id, guildId), {
-            body: [],
-          });
+      const guildList = await rest.get(Routes.userGuilds()) as RESTAPIPartialCurrentUserGuild[];
+
+      await asyncMap(guildList, async guild => {
+        await rest.put(Routes.applicationGuildCommands(this.#id, guild.id), {
+          body: [],
         });
-      }
+      });
     }
 
     this.#running = false;

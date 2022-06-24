@@ -7,7 +7,7 @@ interface MentionCommandData {
   /** Command name, may include spaces. */
   name: string;
   /** A regular expression that matches data after the mention and the command name, defaults to /^$/ aka an empty string. */
-  argMatch?: RegExp;
+  args?: RegExp;
   /** Handler function, where `this` is the message, and the argument passed is the regex match, but also including a `name` property which passes back the command name. */
   handle(this: Message, args: MentionCommandArgs): void;
 }
@@ -17,7 +17,7 @@ export function $mentionCommand(params: MentionCommandData) {
     djsClient(client) {
       const mention = `<@${client.user!.id}>`;
       const command = `${mention} ${params.name}`;
-      const argRegex = params.argMatch ?? /^$/;
+      const argRegex = params.args ?? /^$/;
       function handler(message: Message) {
         if (message.author.bot) return;
 

@@ -9,13 +9,16 @@ import { buildGatewayBot } from './build/build';
 import { startDevelopmentBot } from './dev/dev';
 import type { GatewayBot } from './internal';
 import { getEnvVar, setupEnv } from './lib/env';
+import { injectLogger, log, startSpinner } from './lib/logger';
+import ora from 'ora';
+import { delay } from '@davecode/utils/dist/index.js';
 
 const require = createRequire(import.meta.url);
 
-console.log('');
-console.log(chalk.yellowBright('⚠️ Purplet v__VERSION__ is beta software! ⚠️'));
-console.log(chalk.yellowBright('Report issues to https://github.com/CRBT-Team/purplet/issues'));
-console.log('');
+injectLogger();
+
+log('warn', '⚠️  Purplet v__VERSION__ is beta software! ⚠️')
+log('warn', 'Report issues to https://github.com/CRBT-Team/purplet/issues')
 
 const prog = sade('purplet');
 prog

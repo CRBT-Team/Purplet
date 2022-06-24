@@ -8,6 +8,7 @@ import { moduleToFeatureArray } from '../utils/feature';
 import { isSourceFile } from '../utils/filetypes';
 import { walk } from '../utils/fs';
 import { asyncMap } from '../utils/promise';
+import { log, startSpinner } from '../lib/logger';
 
 const purpletSourceCode = path
   .dirname(createRequire(import.meta.url).resolve('purplet'))
@@ -48,8 +49,7 @@ export async function startDevelopmentBot(options: DevOptions) {
   if (purpletSourceCode.endsWith('packages/purplet/dist')) {
     // Most likely running from inside the monorepo. Maybe we want a better test for this?
     const watcher = watch(path.join(purpletSourceCode, '*.js')).on('change', () => {
-      console.log('');
-      console.log('Purplet itself was rebuilt. Please restart this dev process.');
+      log('warn', 'Purplet library was modified. Please restart this dev process to continue receiving updates.');
       watcher.close();
     });
   }
@@ -65,27 +65,39 @@ export async function startDevelopmentBot(options: DevOptions) {
     await gateway.loadFeatures(...features);
   }
 
-  process.on('SIGINT', () => {
-    console.log('Shutting down.');
-    viteServer.close();
-    gateway.stop();
-  });
-
   const initModules = (await walk(modulesPath)).filter(isSourceFile);
   await asyncMap(initModules, reloadFeatureModule);
-  console.log(`Loaded ${initModules.length} modules for bot start.`);
+  const spinner = startSpinner('Initializing development mode...');
   await gateway.start({ mode: 'development' });
-  console.log('Watching for changes...');
+  spinner.stop();
+  spinner.clear();
+  log('purplet', `Bot is now running in development mode as ${gateway.user?.tag ?? 'unknown user'}`);
+
+  let shuttingDown = false;
+  process.on('SIGINT', async () => {
+    if (shuttingDown) {
+      return;
+    }
+    log('info', 'Shutting down Purplet');
+    setTimeout(() => {
+      log('error', 'Purplet could not shut down gracefully (waited 5 seconds). Forcing exit.');
+      process.exit(1);
+    }, 5000);
+    await Promise.all([
+      viteServer.close(),
+      gateway.stop(),
+    ]);
+    process.exit();
+  });
 
   hmrWatcher.on('resolvedHotUpdate', async (files: string[]) => {
-    console.log(` Hot Update Triggered`);
+    log('info', 'Reloading new changes...');
     const modulesToReload = files.filter(file => file.startsWith(modulesPath));
-
     await asyncMap(modulesToReload, reloadFeatureModule);
   });
 
   viteServer.watcher.on('unlink', filename => {
-    console.log(`File removed: ${filename}`);
+    log('info', 'Reloading new changes...');
     if (filename.startsWith(modulesPath)) {
       gateway.unloadFeaturesFromFile(path.relative(modulesPath, filename));
     }
@@ -93,15 +105,15 @@ export async function startDevelopmentBot(options: DevOptions) {
 
   process.on('uncaughtException', err => {
     viteServer.ssrFixStacktrace(err);
-    console.error('Uncaught Error:');
-    console.error(err);
+    log('error', 'Uncaught Error:');
+    log('error', err);
   });
 
   process.on('unhandledRejection', err => {
     if (err instanceof Error) {
       viteServer.ssrFixStacktrace(err);
     }
-    console.error('Uncaught Error (async):');
-    console.error(err);
+    log('error', 'Uncaught Error (async):');
+    log('error', err);
   });
 }

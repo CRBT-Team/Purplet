@@ -39,10 +39,7 @@ export const helloWorld = $slashCommand({
 
 export default $mentionCommand({
   name: 'explode',
-  argMatch: /(.*)/,
-  async handle(options) {
-    await this.client.application!.fetch();
-    console.log(this.client.application?.owner?.id);
+  async handle(match) {
     this.reply('BOOM!');
   },
 });
