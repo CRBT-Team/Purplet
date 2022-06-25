@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
-import type { CommandInteraction, Interaction } from 'discord.js';
+import { CommandInteraction, Interaction } from 'discord.js';
 import { ApplicationCommandData, createFeature } from '../lib/feature';
 
 function formatCommandName(cmd: ApplicationCommandData) {
@@ -18,15 +18,19 @@ export interface ApplicationCommandHookData {
   handle(this: Interaction): void;
 }
 
-export function getFullCommandName(interaction: Pick<CommandInteraction, 'commandType' | 'commandName' | 'options'>) {
+export function getFullCommandName(interaction: any) {
   return interaction.commandType === ApplicationCommandType.ChatInput
     ? [
-      interaction.commandName,
-      interaction.options.data.find((x) => x.type === ApplicationCommandOptionType.SubcommandGroup)?.name,
-      interaction.options.data.find((x) => x.type === ApplicationCommandOptionType.Subcommand)?.name,
-    ]
-      .filter(Boolean)
-      .join(' ')
+        interaction.commandName,
+        interaction.options.data.find(
+          (x: any) => x.type === ApplicationCommandOptionType.SubcommandGroup
+        )?.name,
+        interaction.options.data.find(
+          (x: any) => x.type === ApplicationCommandOptionType.Subcommand
+        )?.name,
+      ]
+        .filter(Boolean)
+        .join(' ')
     : interaction.commandName;
 }
 
@@ -36,7 +40,7 @@ export function $applicationCommand(opts: ApplicationCommandHookData) {
     applicationCommands: [opts.command],
     interaction(i) {
       if (
-        i.isCommand() &&
+        i instanceof CommandInteraction &&
         i.commandType === opts.command.type &&
         getFullCommandName(i) === opts.command.name
       ) {

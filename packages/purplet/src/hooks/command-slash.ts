@@ -4,7 +4,11 @@ import {
   ApplicationCommandType,
   LocalizationMap,
 } from 'discord-api-types/v10';
-import type { ChatInputCommandInteraction, CommandInteractionOptionResolver } from 'discord.js';
+import {
+  AutocompleteInteraction,
+  ChatInputCommandInteraction,
+  CommandInteractionOptionResolver,
+} from 'discord.js';
 import { $interaction } from './basic';
 import { $applicationCommand, getFullCommandName } from './command';
 import { $merge } from './merge';
@@ -13,10 +17,10 @@ import {
   OptionBuilder,
   OptionBuilderToDJSResolvedObject,
 } from '../builders';
+import { createFeature } from '../lib/feature';
 import { camelChoiceToSnake } from '../utils/case';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 import { toJSONValue } from '../utils/plain';
-import { createFeature } from '../lib/feature';
 
 export interface SlashCommandData<T> extends CommandPermissionsInput {
   name: string;
@@ -80,27 +84,27 @@ export function $slashCommand<T>(options: SlashCommandData<T>) {
       },
     }),
     Object.keys(autocompleteHandlers ?? {}).length > 0 &&
-    $interaction(async i => {
-      // TODO: complete implementing this.
-      if (
-        i.isAutocomplete() &&
-        getFullCommandName(i) === options.name &&
-        i.commandType === ApplicationCommandType.ChatInput
-      ) {
-        const resolvedOptions = Object.fromEntries(
-          commandOptions.map(option => [option.name, i.options.get(option.name)?.value])
-        ) as unknown as T;
+      $interaction(async i => {
+        // TODO: complete implementing this.
+        if (
+          i instanceof AutocompleteInteraction &&
+          getFullCommandName(i) === options.name &&
+          i.commandType === ApplicationCommandType.ChatInput
+        ) {
+          const resolvedOptions = Object.fromEntries(
+            commandOptions.map(option => [option.name, i.options.get(option.name)?.value])
+          ) as unknown as T;
 
-        i.respond(
-          (
-            await (autocompleteHandlers as any)[i.options.getFocused(true).name].call(
-              i,
-              resolvedOptions
-            )
-          ).map(camelChoiceToSnake)
-        );
-      }
-    })
+          i.respond(
+            (
+              await (autocompleteHandlers as any)[i.options.getFocused(true).name].call(
+                i,
+                resolvedOptions
+              )
+            ).map(camelChoiceToSnake)
+          );
+        }
+      })
   );
 }
 
@@ -121,7 +125,7 @@ export function $slashCommandGroup(data: SlashCommandGroupData) {
         description_localizations: data.descriptionLocalizations,
         options: [],
         ...resolveCommandPermissions(data),
-      }
-    ]
-  })
+      },
+    ],
+  });
 }
