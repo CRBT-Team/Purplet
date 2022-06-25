@@ -1,16 +1,18 @@
-import type { Config, ResolvedConfig } from "./types";
-import { string, assert_string, object, validate, pathname } from "./validators";
 import def from './default';
+import type { Config, ResolvedConfig } from './types';
+import { assert_string, object, pathname, string, validate } from './validators';
 
-export function resolveConfig(config: Config): ResolvedConfig {
+export function resolveConfig(root: string, config: Config): ResolvedConfig {
   if (typeof config !== 'object') {
     throw new Error(
       'purplet.config.ts must have a configuration object as its default export. See https://purplet.js.org/docs/configuration'
     );
   }
 
-
-  return options(config, 'config');
+  return {
+    ...options(config, 'config'),
+    root,
+  };
 }
 
 const options = object({
@@ -23,6 +25,16 @@ const options = object({
 
     for (const key in input) {
       assert_string(input[key], `${keypath}.${key}`);
+
+      if (key.startsWith('./') || key.startsWith('../') || key.startsWith('/')) {
+        throw new Error(`${keypath} keys cannot start with './', '../' or '/' — saw '${key}'`);
+      }
+      if (key.endsWith('/')) {
+        throw new Error(`${keypath} keys cannot end with '/' — saw '${key}'`);
+      }
+      if (input[key].endsWith('/') || input[key].endsWith('/*')) {
+        throw new Error(`${keypath}.${key} cannot end with '/*' or '/'`);
+      }
     }
 
     return input;
@@ -50,5 +62,5 @@ const options = object({
 
       return input;
     }
-  )
+  ),
 });

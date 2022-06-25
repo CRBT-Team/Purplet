@@ -2,6 +2,7 @@
 import type { ResolvedConfig } from './types';
 
 const config: ResolvedConfig = {
+  root: '',
   // START CONFIG
   alias: {
     $features: 'src/features',

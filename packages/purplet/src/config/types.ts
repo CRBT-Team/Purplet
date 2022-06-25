@@ -1,7 +1,9 @@
-import type { Awaitable, DeepPartial } from '@davecode/types';
+import type { Awaitable, DeepPartial, ForceSimplify } from '@davecode/types';
 import type { UserConfig as ViteConfig } from 'vite';
 
 export interface ResolvedConfig {
+  /** Not included in user configuration; This is the root directory of the project. */
+  root: string;
   alias: Record<string, string>;
   lang: string;
   paths: {
@@ -13,4 +15,4 @@ export interface ResolvedConfig {
   vite: ViteConfig | (() => Awaitable<ViteConfig>);
 }
 
-export type Config = DeepPartial<ResolvedConfig>;
+export type Config = ForceSimplify<DeepPartial<Omit<ResolvedConfig, 'root'>>>;
