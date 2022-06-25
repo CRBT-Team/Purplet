@@ -4,10 +4,13 @@
 
 ### Patch Changes
 
+- custom logger, which intercepts console.log
 - add command groups
 - fix intents hook not doing anything
 - commands are deleted when dev process exits
 - add config parsing
+- mention commands have been modified significantly
+- add getCustomId() onto components
 
 ## 2.0.0-next.8
 
