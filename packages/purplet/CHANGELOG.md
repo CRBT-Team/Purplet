@@ -1,5 +1,14 @@
 # `purplet`
 
+## 2.0.0-next.9
+
+### Patch Changes
+
+- add command groups
+- fix intents hook not doing anything
+- commands are deleted when dev process exits
+- add config parsing
+
 ## 2.0.0-next.8
 
 ### Patch Changes
@@ -16,10 +25,11 @@
 
 ### Patch Changes
 
-- rename `$chatCommand` to `$slashCommand` ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
-- add `$modal` ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
-- revert to using discord.js structure for everything - the world isn't ready for what i have lol ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
-- move `modules` to `features` ([#3](https://github.com/CRBT-Team/Purplet/pull/3))
+- rename `$chatCommand` to `$slashCommand`
+- add `$modal`
+- revert to using discord.js structure for everything - the world isn't ready for what i have lol
+
+- move `modules` to `features`
 - Updated dependencies [[`38d20aa`](https://github.com/CRBT-Team/Purplet/commit/38d20aa5a4d4e12bac3e05008aac179b866118d3)]:
   - @purplet/serialize@1.0.0-next.0
 
