@@ -23,4 +23,4 @@ We use "$" as a prefix for hooks, as the "$" symbol is valid in variable names, 
 
 :::
 
-The naming of "hooks" was partially inspired off React, which encourages building custom hooks which wrap simpler hooks. Our internal library is built on 5 "core" hooks, and every other feature is built on top of them.
+The naming of "hooks" was partially inspired off React, which encourages building custom hooks which wrap simpler hooks. Our internal library is built on 5 "core" hooks, and everything else is built on top of that base.

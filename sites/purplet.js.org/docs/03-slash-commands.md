@@ -22,7 +22,7 @@ export default $slashCommand({
 });
 ```
 
-The object passed to `$slashCommand` is the `ChatCommandData` interface, which has these properties:
+The object passed to `$slashCommand` is the `SlashCommandData` interface, which has these properties:
 
 | Property | Description |
 | --- | --- |

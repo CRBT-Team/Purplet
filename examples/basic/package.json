@@ -3,7 +3,7 @@
   "private": true,
   "license": "Apache-2.0",
   "type": "module",
-  "main": ".purplet/build",
+  "main": "dist",
   "scripts": {
     "build": "purplet build",
     "dev": "purplet dev"

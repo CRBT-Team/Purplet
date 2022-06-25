@@ -5,8 +5,9 @@ export interface ResolvedConfig {
   alias: Record<string, string>;
   lang: string;
   paths: {
+    build: string;
     features: string;
-    output: string;
+    temp: string;
     translations: string;
   };
   vite: ViteConfig | (() => Awaitable<ViteConfig>);

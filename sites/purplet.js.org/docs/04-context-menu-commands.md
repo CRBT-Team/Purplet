@@ -6,9 +6,31 @@ Context Menu commands appear as an option in the right-click or long-press menu 
 
 User commands target Users or Server Members, which are resolved to a Discord.js [User](https://discord.js.org/#/docs/discord.js/stable/class/User) class.
 
+```ts title='src/features/user-command.ts'
+import { $userCommand } from 'purplet';
+
+export default $userContextCommand({
+  name: 'Get User Info',
+  handle(user) {
+    this.reply(`Selected user is ${user.tag}`);
+  }
+});
+```
+
 ## Message Commands
 
 Message commands target Messages inside of Text Channels, which are resolved to a Discord.js [Message](https://discord.js.org/#/docs/discord.js/stable/class/Message) class.
+
+```ts title='src/features/message-command.ts'
+import { $userCommand } from 'purplet';
+
+export default $messageContextCommand({
+  name: 'Get Author Info',
+  handle(message) {
+    this.reply(`Selected message was sent by ${message.author.tag}`);
+  }
+});
+```
 
 ## Permissions
 

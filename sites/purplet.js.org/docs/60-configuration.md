@@ -15,7 +15,7 @@ import { DefaultConfigCodeBlock } from '@site/src/components/DefaultConfigCodeBl
 
 ## `alias`
 
-An object containing zero or more aliases used to replace values in import statements. These aliases are automatically passed to Vite and TypeScript.
+An object containing zero or more aliases used to replace values in import statements. These aliases are automatically passed to Vite and TypeScript. Built-in, `$lib` and `$features` aliases are provided.
 
 For example, you can add aliases to a components and utils folder:
 
@@ -27,6 +27,10 @@ const config = {
 };
 ```
 
+## `lang`
+
+The primary language that your project is written in. This is only needed if you plan to translate your bot.
+
 ## `paths`
 
 Defines various paths related to your application and the Purplet Core and CLI:
@@ -34,7 +38,7 @@ Defines various paths related to your application and the Purplet Core and CLI:
 - `build`: Path to where built JavaScript files are saved. The bot entry is always `index.js` inside of this folder.
 - `features`: The directory to search and watch for exported `Feature` objects.
 - `output`: A temporary folder that Purplet uses for building and generated types.
-- `translations`: Unused.
+- `translations`: The directory that translation files are stored.
 
 ## `vite`
 
