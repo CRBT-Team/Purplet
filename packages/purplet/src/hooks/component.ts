@@ -4,11 +4,7 @@ import type {
   APIMessageActionRowComponent,
   APISelectMenuComponent,
 } from 'discord-api-types/v10';
-import type {
-  ButtonInteraction,
-  MessageComponentInteraction,
-  SelectMenuInteraction,
-} from 'discord.js';
+import { ButtonInteraction, MessageComponentInteraction, SelectMenuInteraction } from 'discord.js';
 import { createFeature } from '../lib/feature';
 import { JSONResolvable, JSONValue, toJSONValue } from '../utils/plain';
 import type { IsUnknown } from '../utils/types';
@@ -54,9 +50,12 @@ type MessageComponentStaticProps<
   ComponentType extends APIMessageActionRowComponent
 > = IsUnknown<CreateProps> extends true
   ? IsUnknown<Context> extends true
-    ? { create(): ComponentType }
-    : { create(context: Context): ComponentType }
-  : { create(context: Context, props: CreateProps): ComponentType };
+    ? { create(): ComponentType; getCustomId(): string }
+    : { create(context: Context): ComponentType; getCustomId(context: Context): string }
+  : {
+      create(context: Context, props: CreateProps): ComponentType;
+      getCustomId(context: Context): string;
+    };
 
 function $messageComponent<
   Context,
@@ -76,7 +75,7 @@ function $messageComponent<
         featureId = this.featureId;
       },
       interaction(i) {
-        if (i.isMessageComponent() && i.customId.startsWith(featureId + ':')) {
+        if (i instanceof MessageComponentInteraction && i.customId.startsWith(featureId + ':')) {
           const data = i.customId.substring(featureId.length + 1);
           const context = structure.fromJSON(serializer.fromString(data));
           options.handle.call(i, context);
@@ -92,6 +91,13 @@ function $messageComponent<
           ':' +
           (context !== undefined ? serializer.toString(structure.toJSON(context)) : '');
         return template;
+      },
+      getCustomId(context: Context) {
+        return (
+          featureId +
+          ':' +
+          (context !== undefined ? serializer.toString(structure.toJSON(context)) : '')
+        );
       },
       // This cast makes the two parameters optional if the context is `unknown`.
     } as MessageComponentStaticProps<Context, CreateProps, ComponentType>

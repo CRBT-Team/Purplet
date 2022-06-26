@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import wrap from 'wrap-ansi';
 import stringLength from 'string-length';
 import ora from 'ora';
+import { inspect } from 'util';
 
 const status = ora();
 
@@ -30,7 +31,7 @@ function logString(level: LogLevel, data: string) {
   const terminalWidth = process.stdout.columns;
   const prefix = level === 'purplet' ? '' : chalk.bold(`${colors[level](level.padEnd(5, ' '))}`) + ' ';
   const prefixLength = stringLength(prefix);
-  const wrapped = wrap(textColors[level]?.(data) ?? data, terminalWidth - prefixLength).replace(
+  const wrapped = (textColors[level]?.(data) ?? data).replace(
     /\n/g,
     '\n' + ' '.repeat(prefixLength)
   );
@@ -44,8 +45,12 @@ function logString(level: LogLevel, data: string) {
   }
 }
 
+function stringify(...data: any[]) {
+  return data.map(obj => typeof obj === 'string' ? obj : inspect(obj, false, 4, true)).join(' ');
+}
+
 export function log(level: LogLevel, ...data: any[]) {
-  logString(level, data.map(d => String(d)).join(' '));
+  logString(level, stringify(...data));
 }
 
 export function startSpinner(label: string) {
@@ -53,10 +58,10 @@ export function startSpinner(label: string) {
 }
 
 export function injectLogger() {
-  console.log = (...args: any[]) => log('info', args);
-  console.warn = (...args: any[]) => log('warn', args);
-  console.error = (...args: any[]) => log('error', args);
-  console.debug = (...args: any[]) => log('debug', args);
+  console.log = (...args: any[]) => log('info', ...args);
+  console.warn = (...args: any[]) => log('warn', ...args);
+  console.error = (...args: any[]) => log('error', ...args);
+  console.debug = (...args: any[]) => log('debug', ...args);
   // TODO: injections for the rest of the log methods, like `time`
 }
 

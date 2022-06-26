@@ -1,6 +1,6 @@
 import { BasicEncoder, BitArray, GenericSerializer } from '@purplet/serialize';
 import type { APIModalInteractionResponseCallbackData } from 'discord-api-types/v10';
-import type { ModalSubmitInteraction } from 'discord.js';
+import { ModalSubmitInteraction } from 'discord.js';
 import { createFeature } from '../lib/feature';
 import { JSONResolvable, JSONValue, toJSONValue } from '../utils/plain';
 import type { IsUnknown } from '../utils/types';
@@ -61,7 +61,7 @@ export function $modal<Context, CreateProps>(options: ModalComponentOptions<Cont
         featureId = this.featureId;
       },
       interaction(i) {
-        if (i.isModalSubmit() && i.customId.startsWith(featureId + ':')) {
+        if (i instanceof ModalSubmitInteraction && i.customId.startsWith(featureId + ':')) {
           const data = i.customId.substring(featureId.length + 1);
           const context =
             data.length > 0 ? structure.fromJSON(serializer.fromString(data)) : undefined;

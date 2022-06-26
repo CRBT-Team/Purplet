@@ -1,4 +1,4 @@
-import { ButtonBuilder } from '@discordjs/builders';
+import { ButtonBuilder, TextInputBuilder } from '@discordjs/builders';
 import {
   APIActionRowComponent,
   APIActionRowComponentTypes,

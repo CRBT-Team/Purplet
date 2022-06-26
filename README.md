@@ -15,7 +15,7 @@
 
 Purplet is a discord framework where your bot features are defined in small modules that can be reloaded instantly. Iterate your ideas faster than ever with the combined powers of [TypeScript][1], [Vite][2], and [Discord.js][3].
 
-> ⚠️ Purplet v2 is a rewrite of the framework. Most features from [v1][v1] have not yet been ported, and only the core basics function. Proceed with caution.
+> ⚠️ Purplet v2 is a rewrite of the framework. Most features from [v1][v1] have already been ported, but the framework is not fully stable.
 
 [1]: https://www.typescriptlang.org/
 [2]: https://vitejs.dev/
@@ -36,12 +36,13 @@ pnpm create purplet@next
 
 and follow the instructions it gives.
 
-## Repository Contents
+## Monorepo Contents
 
 | Package                                   | Changelog                                         |
 | ----------------------------------------- | ------------------------------------------------- |
 | [purplet](packages/purplet)               | [Changelog](packages/purplet/CHANGELOG.md)        |
 | [create-purplet](packages/create-purplet) | [Changelog](packages/create-purplet/CHANGELOG.md) |
+| [@purplet/serialize](packages/serialize)  | [Changelog](packages/serialize/CHANGELOG.md)      |
 
 | Example Projects        |
 | ----------------------- |

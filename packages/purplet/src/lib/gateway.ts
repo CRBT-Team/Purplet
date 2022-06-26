@@ -1,7 +1,7 @@
 // this file is a bit more of a mess than i'd like it to be, but whatever
 // TODO: split functions into separate things, such as feature loading, gateway connecting, dev mode specific stuff.
 import type { Immutable } from '@davecode/types';
-import { APIGuild, APIUser, RESTAPIPartialCurrentUserGuild, RESTGetAPIApplicationCommandsResult, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, RESTGetAPIOAuth2CurrentApplicationResult, Routes } from 'discord-api-types/v10';
+import { APIApplicationCommandBasicOption, APIGuild, APIUser, ApplicationCommandOptionType, ApplicationCommandType, RESTAPIPartialCurrentUserGuild, RESTGetAPIApplicationCommandsResult, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, RESTGetAPIOAuth2CurrentApplicationResult, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from 'discord-api-types/v10';
 import { Client, Guild } from 'discord.js';
 import { deepEqual } from 'fast-equals';
 import type {
@@ -284,7 +284,7 @@ export class GatewayBot {
 
   /** @internal */
   private async resolveApplicationCommands() {
-    return (
+    const list = (
       await asyncMap(
         this.#features,
         feat =>
@@ -293,6 +293,49 @@ export class GatewayBot {
             : feat.applicationCommands) ?? []
       )
     ).flat();
+
+    const toBeMerged = list.filter(x => x.type === ApplicationCommandType.ChatInput && x.name.includes(' '));
+    const commandNamesToBeMerged = [...new Set(toBeMerged.map(x => x.name.split(' ')[0]))];
+    const rest = list.filter(x => !toBeMerged.includes(x));
+
+    for (const name of commandNamesToBeMerged) {
+      const cmd = rest.find(x => x.name === name);
+      const merged = toBeMerged.filter(x => x.name.startsWith(name + ' ')) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
+
+      if (!cmd) {
+        throw new Error(`Could not find slash command group "${name}"`);
+      }
+      const isTwoLevel = merged.some(x => x.name.split(' ').length === 3);
+
+      if (isTwoLevel) {
+        cmd.options = merged.filter(x => x.name.split(' ').length === 2).map(x => ({
+          name: x.name.split(' ')[1],
+          type: ApplicationCommandOptionType.SubcommandGroup,
+          description: x.description,
+          name_localizations: x.name_localizations,
+          description_localizations: x.description_localizations,
+          options: merged.filter(x => x.name.split(' ').length === 3).map(x => ({
+            name: x.name.split(' ')[2],
+            type: ApplicationCommandOptionType.Subcommand,
+            description: x.description,
+            name_localizations: x.name_localizations,
+            description_localizations: x.description_localizations,
+            options: x.options as APIApplicationCommandBasicOption[],
+          })),
+        }))
+      } else {
+        cmd.options = merged.map(x => ({
+          name: x.name.split(' ')[1],
+          type: ApplicationCommandOptionType.Subcommand,
+          description: x.description,
+          name_localizations: x.name_localizations,
+          description_localizations: x.description_localizations,
+          options: x.options as APIApplicationCommandBasicOption[],
+        }))
+      }
+    }
+
+    return rest;
   }
 
   /** @internal */

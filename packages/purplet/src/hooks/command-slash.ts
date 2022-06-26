@@ -4,20 +4,25 @@ import {
   ApplicationCommandType,
   LocalizationMap,
 } from 'discord-api-types/v10';
-import type { ChatInputCommandInteraction, CommandInteractionOptionResolver } from 'discord.js';
+import {
+  AutocompleteInteraction,
+  ChatInputCommandInteraction,
+  CommandInteractionOptionResolver,
+} from 'discord.js';
 import { $interaction } from './basic';
-import { $applicationCommand } from './command';
+import { $applicationCommand, getFullCommandName } from './command';
 import { $merge } from './merge';
 import {
   getOptionBuilderAutocompleteHandlers,
   OptionBuilder,
   OptionBuilderToDJSResolvedObject,
 } from '../builders';
+import { createFeature } from '../lib/feature';
 import { camelChoiceToSnake } from '../utils/case';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 import { toJSONValue } from '../utils/plain';
 
-export interface ChatCommandData<T> extends CommandPermissionsInput {
+export interface SlashCommandData<T> extends CommandPermissionsInput {
   name: string;
   nameLocalizations?: LocalizationMap;
   description: string;
@@ -52,7 +57,7 @@ function getResolved(
   }
 }
 
-export function $slashCommand<T>(options: ChatCommandData<T>) {
+export function $slashCommand<T>(options: SlashCommandData<T>) {
   const commandOptions = toJSONValue(options.options ?? []);
   const autocompleteHandlers = getOptionBuilderAutocompleteHandlers(options.options);
 
@@ -82,8 +87,8 @@ export function $slashCommand<T>(options: ChatCommandData<T>) {
       $interaction(async i => {
         // TODO: complete implementing this.
         if (
-          i.isAutocomplete() &&
-          i.commandName === options.name &&
+          i instanceof AutocompleteInteraction &&
+          getFullCommandName(i) === options.name &&
           i.commandType === ApplicationCommandType.ChatInput
         ) {
           const resolvedOptions = Object.fromEntries(
@@ -101,4 +106,26 @@ export function $slashCommand<T>(options: ChatCommandData<T>) {
         }
       })
   );
+}
+
+export interface SlashCommandGroupData extends CommandPermissionsInput {
+  name: string;
+  nameLocalizations?: LocalizationMap;
+  description: string;
+  descriptionLocalizations?: LocalizationMap;
+}
+
+export function $slashCommandGroup(data: SlashCommandGroupData) {
+  return createFeature({
+    applicationCommands: [
+      {
+        name: data.name,
+        name_localizations: data.nameLocalizations,
+        description: data.description,
+        description_localizations: data.descriptionLocalizations,
+        options: [],
+        ...resolveCommandPermissions(data),
+      },
+    ],
+  });
 }
