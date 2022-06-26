@@ -1,23 +1,14 @@
-import {
-  APIApplicationCommandOption,
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
-  LocalizationMap,
-} from 'discord-api-types/v10';
-import {
-  AutocompleteInteraction,
-  ChatInputCommandInteraction,
-  CommandInteractionOptionResolver,
-} from 'discord.js';
+import { ApplicationCommandType, LocalizationMap } from 'discord-api-types/v10';
 import { $interaction } from './basic';
-import { $applicationCommand, getFullCommandName } from './command';
+import { $applicationCommand } from './command';
 import { $merge } from './merge';
 import {
   getOptionBuilderAutocompleteHandlers,
   OptionBuilder,
-  OptionBuilderToDJSResolvedObject,
+  OptionBuilderToPurpletResolvedObject,
 } from '../builders';
 import { createFeature } from '../lib/feature';
+import { AutocompleteInteraction, SlashCommandInteraction } from '../structures';
 import { camelChoiceToSnake } from '../utils/case';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 import { toJSONValue } from '../utils/plain';
@@ -28,33 +19,7 @@ export interface SlashCommandData<T> extends CommandPermissionsInput {
   description: string;
   descriptionLocalizations?: LocalizationMap;
   options?: OptionBuilder<T>;
-  handle(this: ChatInputCommandInteraction, options: OptionBuilderToDJSResolvedObject<T>): void;
-}
-
-function getResolved(
-  resolver: CommandInteractionOptionResolver,
-  option: APIApplicationCommandOption
-) {
-  switch (option.type) {
-    case ApplicationCommandOptionType.String:
-    case ApplicationCommandOptionType.Number:
-    case ApplicationCommandOptionType.Integer:
-    case ApplicationCommandOptionType.Boolean:
-      return resolver.get(option.name)?.value;
-    case ApplicationCommandOptionType.Attachment:
-      return resolver.getAttachment(option.name);
-    case ApplicationCommandOptionType.Channel:
-      return resolver.getChannel(option.name);
-    case ApplicationCommandOptionType.Mentionable:
-      return resolver.getMentionable(option.name);
-    case ApplicationCommandOptionType.Role:
-      return resolver.getRole(option.name);
-    case ApplicationCommandOptionType.User:
-      return resolver.getUser(option.name);
-
-    default:
-      return null;
-  }
+  handle(this: SlashCommandInteraction, options: OptionBuilderToPurpletResolvedObject<T>): void;
 }
 
 export function $slashCommand<T>(options: SlashCommandData<T>) {
@@ -72,13 +37,10 @@ export function $slashCommand<T>(options: SlashCommandData<T>) {
         ...resolveCommandPermissions(options),
         options: commandOptions,
       },
-      handle(this: ChatInputCommandInteraction) {
+      handle(this: SlashCommandInteraction) {
         const resolvedOptions = Object.fromEntries(
-          commandOptions.map(option => [
-            option.name,
-            getResolved(this.options as CommandInteractionOptionResolver, option),
-          ])
-        ) as unknown as OptionBuilderToDJSResolvedObject<T>;
+          commandOptions.map(option => [option.name, this.getResolvedOption(option.name)])
+        ) as OptionBuilderToPurpletResolvedObject<T>;
 
         options.handle.call(this, resolvedOptions);
       },
@@ -87,20 +49,17 @@ export function $slashCommand<T>(options: SlashCommandData<T>) {
       $interaction(async i => {
         // TODO: complete implementing this.
         if (
-          i instanceof AutocompleteInteraction &&
-          getFullCommandName(i) === options.name &&
+          AutocompleteInteraction.is(i) &&
+          i.fullCommandName === options.name &&
           i.commandType === ApplicationCommandType.ChatInput
         ) {
           const resolvedOptions = Object.fromEntries(
-            commandOptions.map(option => [option.name, i.options.get(option.name)?.value])
+            commandOptions.map(option => [option.name, i.getOption(option.name)])
           ) as unknown as T;
 
-          i.respond(
+          i.showAutocompleteResponse(
             (
-              await (autocompleteHandlers as any)[i.options.getFocused(true).name].call(
-                i,
-                resolvedOptions
-              )
+              await (autocompleteHandlers as any)[i.focusedOption.name].call(i, resolvedOptions)
             ).map(camelChoiceToSnake)
           );
         }

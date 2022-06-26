@@ -1,7 +1,9 @@
-import type { Awaitable, Dict } from "@davecode/types";
-import { GatewayIntentBits, Message } from "discord.js";
-import { createFeature } from "../lib/feature";
-import { asyncMap } from "../utils/promise";
+import type { Awaitable } from '@davecode/types';
+import { GatewayIntentBits } from 'discord-api-types/v10';
+import { createFeature } from '../lib/feature';
+import { djs } from '../lib/global';
+import { Message } from '../structures';
+import { asyncMap } from '../utils/promise';
 
 interface MentionCommandData {
   name: string;
@@ -9,10 +11,12 @@ interface MentionCommandData {
   handle(this: Message, ...args: any[]): void;
 }
 
-type MentionCommandArgument<To = unknown> = RegExp | {
-  match: RegExp;
-  parse?(opts: MentionCommandArgumentParseOptions): Awaitable<To>
-}
+type MentionCommandArgument<To = unknown> =
+  | RegExp
+  | {
+      match: RegExp;
+      parse?(opts: MentionCommandArgumentParseOptions): Awaitable<To>;
+    };
 
 interface MentionCommandArgumentParseOptions {
   match: RegExpExecArray;
@@ -21,11 +25,13 @@ interface MentionCommandArgumentParseOptions {
 
 export function $mentionCommand(params: MentionCommandData) {
   return createFeature({
-    djsClient(client) {
-      const mention = `<@${client.user!.id}>`;
-      const command = `${mention} ${params.name}`;
-      async function handler(message: Message) {
-        if (message.author.bot) return;
+    gatewayEvent: {
+      async MESSAGE_CREATE(apiMessage) {
+        const message = new Message(apiMessage);
+
+        // TODO: we do not have a way to get our own metadata right now.
+        const mention = `<@${djs.user!.id}>`;
+        const command = `${mention} ${params.name}`;
 
         const prefix = message.content.trim().startsWith(command);
         if (!prefix) return;
@@ -33,7 +39,9 @@ export function $mentionCommand(params: MentionCommandData) {
         let args = message.content.trim().slice(command.length).split(/\s+/).slice(1);
 
         if (params.args) {
-          const definedArgs = params.args.map(arg => arg instanceof RegExp ? { match: arg } : arg);
+          const definedArgs = params.args.map(arg =>
+            arg instanceof RegExp ? { match: arg } : arg
+          );
           const newArgs = await asyncMap(definedArgs, (arg, i) => {
             const match = arg.match.exec(args[i]);
             if (match) {
@@ -46,15 +54,10 @@ export function $mentionCommand(params: MentionCommandData) {
         } else {
           params.handle.call(message, ...args);
         }
-      }
-      client.on("messageCreate", handler);
-      return () => client.off("messageCreate", handler);
+      },
     },
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMessages,
-    ]
-  })
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+  });
 }
 
 export const ArgTypes = {
@@ -64,19 +67,19 @@ export const ArgTypes = {
     match: /^[-+]?[0-9]*\.?[0-9]+$/,
     parse({ match }: MentionCommandArgumentParseOptions) {
       return parseFloat(match[0]);
-    }
+    },
   },
   integer: {
     match: /^[-+]?[0-9]+$/,
     parse({ match }: MentionCommandArgumentParseOptions) {
       return parseInt(match[0]);
-    }
+    },
   },
   boolean: {
     match: /^(t(?:rue)?|f(?:alse)?|y(?:es)?|no?)$/i,
     parse({ match }: MentionCommandArgumentParseOptions) {
       return ['t', 'y'].includes(match[0].toLowerCase());
-    }
+    },
   },
   snowflake: /^[0-9]{18,19}$/,
-}
+};

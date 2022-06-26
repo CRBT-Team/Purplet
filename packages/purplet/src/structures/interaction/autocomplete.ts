@@ -1,6 +1,7 @@
 import {
   APIApplicationCommandAutocompleteInteraction,
   APIInteraction,
+  ApplicationCommandOptionType,
   InteractionType,
 } from 'discord-api-types/v10';
 import { Interaction } from './base';
@@ -17,6 +18,9 @@ export class AutocompleteInteraction<
   static matches(raw: APIInteraction): raw is APIApplicationCommandAutocompleteInteraction {
     return raw.type === InteractionType.ApplicationCommandAutocomplete;
   }
+  static is(obj: unknown): obj is AutocompleteInteraction {
+    return obj instanceof AutocompleteInteraction;
+  }
 
   get commandType() {
     return this.raw.data.type;
@@ -24,6 +28,26 @@ export class AutocompleteInteraction<
 
   get commandName() {
     return this.raw.data.name;
+  }
+
+  get options() {
+    return this.raw.data.options ?? [];
+  }
+
+  get subcommandName() {
+    return this.options.find(x => x.type === ApplicationCommandOptionType.Subcommand)?.name ?? null;
+  }
+
+  get subcommandGroupName() {
+    return (
+      this.options.find(x => x.type === ApplicationCommandOptionType.SubcommandGroup)?.name ?? null
+    );
+  }
+
+  get fullCommandName() {
+    return [this.commandName, this.subcommandGroupName, this.subcommandName]
+      .filter(Boolean)
+      .join(' ');
   }
 
   get focusedOption() {

@@ -14,6 +14,9 @@ export class SelectMenuInteraction<
       ComponentInteraction.matches(raw) && raw.data.component_type === ComponentType.SelectMenu
     );
   }
+  static is(obj: unknown): obj is SelectMenuInteraction {
+    return obj instanceof SelectMenuInteraction;
+  }
 
   get values() {
     return this.raw.data.values;

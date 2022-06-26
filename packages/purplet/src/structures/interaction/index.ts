@@ -2,8 +2,8 @@ import type { Class } from '@davecode/types';
 import type { APIInteraction } from 'discord-api-types/v10';
 import { AutocompleteInteraction } from './autocomplete';
 import type { Interaction, InteractionResponseHandler } from './base';
-import { ChatCommandInteraction } from './command-chat';
 import { MessageCommandInteraction } from './command-message';
+import { SlashCommandInteraction } from './command-slash';
 import { UserCommandInteraction } from './command-user';
 import { ButtonInteraction } from './component-button';
 import { SelectMenuInteraction } from './component-select';
@@ -12,9 +12,9 @@ import { ModalSubmitInteraction } from './modal-submit';
 export * from './autocomplete';
 export * from './base';
 export * from './command';
-export * from './command-chat';
 export * from './command-context';
 export * from './command-message';
+export * from './command-slash';
 export * from './command-user';
 export * from './component';
 export * from './component-button';
@@ -26,7 +26,7 @@ type Matchable = Class<Interaction> & {
 };
 
 const classes: Matchable[] = [
-  ChatCommandInteraction,
+  SlashCommandInteraction,
   UserCommandInteraction,
   MessageCommandInteraction,
   AutocompleteInteraction,

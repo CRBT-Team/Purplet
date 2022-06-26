@@ -5,15 +5,13 @@ import { asyncMap } from '../utils/promise';
 export function $merge(...input: (FeatureData | MarkedFeature | false | null | undefined)[]) {
   const features = input.filter(Boolean) as FeatureData[];
   if (features.length === 0) {
-    return createFeature({ name: 'empty merge' });
+    return createFeature({});
   }
   if (features.length === 1) {
     return features[0];
   }
 
-  const newFeature: FeatureData = {
-    name: 'merged features',
-  };
+  const newFeature: FeatureData = {};
 
   if (features.some(feature => feature.applicationCommands)) {
     newFeature.applicationCommands = async function () {
@@ -31,17 +29,6 @@ export function $merge(...input: (FeatureData | MarkedFeature | false | null | u
     };
   }
 
-  if (features.some(feature => feature.djsOptions)) {
-    newFeature.djsOptions = async function (currentConfig) {
-      for (const feature of features) {
-        if (feature.djsOptions) {
-          currentConfig = (await feature.djsOptions.call(this, currentConfig)) ?? currentConfig;
-        }
-      }
-      return currentConfig;
-    };
-  }
-
   if (features.some(feature => feature.intents)) {
     newFeature.intents = async function () {
       return (
@@ -56,13 +43,6 @@ export function $merge(...input: (FeatureData | MarkedFeature | false | null | u
   if (features.some(feature => feature.initialize)) {
     newFeature.initialize = async function () {
       const cleanup = await asyncMap(features, f => f.initialize?.call(this));
-      return () => asyncMap(cleanup, f => f && f());
-    };
-  }
-
-  if (features.some(feature => feature.djsClient)) {
-    newFeature.djsClient = async function (djsClient) {
-      const cleanup = await asyncMap(features, f => f.djsClient?.call(this, djsClient));
       return () => asyncMap(cleanup, f => f && f());
     };
   }

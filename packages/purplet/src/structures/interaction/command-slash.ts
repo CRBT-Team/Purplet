@@ -6,16 +6,35 @@ import {
 } from 'discord-api-types/v10';
 import { CommandInteraction } from './command';
 
-export class ChatCommandInteraction<
+export class SlashCommandInteraction<
   Data extends APIChatInputApplicationCommandInteraction = APIChatInputApplicationCommandInteraction
 > extends CommandInteraction<Data> {
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIChatInputApplicationCommandInteraction {
     return CommandInteraction.matches(raw) && raw.data.type === ApplicationCommandType.ChatInput;
   }
+  static is(obj: unknown): obj is SlashCommandInteraction {
+    return obj instanceof SlashCommandInteraction;
+  }
 
   get options() {
     return this.raw.data.options ?? [];
+  }
+
+  get subcommandName() {
+    return this.options.find(x => x.type === ApplicationCommandOptionType.Subcommand)?.name ?? null;
+  }
+
+  get subcommandGroupName() {
+    return (
+      this.options.find(x => x.type === ApplicationCommandOptionType.SubcommandGroup)?.name ?? null
+    );
+  }
+
+  get fullCommandName() {
+    return [this.commandName, this.subcommandGroupName, this.subcommandName]
+      .filter(Boolean)
+      .join(' ');
   }
 
   getResolvedOption(name: string) {

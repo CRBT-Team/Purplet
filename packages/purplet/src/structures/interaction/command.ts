@@ -43,6 +43,9 @@ export abstract class CommandInteraction<
   static matches(raw: APIInteraction): raw is APIApplicationCommandInteraction {
     return raw.type === InteractionType.ApplicationCommand;
   }
+  static is(obj: unknown): obj is CommandInteraction {
+    return obj instanceof CommandInteraction;
+  }
 
   get commandType() {
     return this.raw.data.type;

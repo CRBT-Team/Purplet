@@ -1,7 +1,7 @@
 // TODO: This function's types
 
 import { ClientEvents, GatewayIntentBits } from 'discord.js';
-import { createFeature, DJSOptions, FeatureData, IntentResolvable } from '../lib/feature';
+import { createFeature, FeatureData, IntentResolvable } from '../lib/feature';
 
 function getRequiredIntentsForDJSEvent(ev: keyof ClientEvents): IntentResolvable {
   if (ev === 'guildIntegrationsUpdate') return [GatewayIntentBits.GuildIntegrations];
@@ -19,36 +19,22 @@ function getRequiredIntentsForDJSEvent(ev: keyof ClientEvents): IntentResolvable
 }
 
 /** This hook allows you to listen for a Discord.js client event. Required intents for events are provided. */
-export function $onEvent<E extends keyof ClientEvents>(
-  eventName: E,
-  handler: (...args: ClientEvents[E]) => void
-) {
-  return createFeature({
-    name: `discord.js on("${eventName}") handler`,
+// export function $onEvent<E extends keyof ClientEvents>(
+//   eventName: E,
+//   handler: (...args: ClientEvents[E]) => void
+// ) {
+//   return createFeature({
+//     djsClient(client) {
+//       client.on(eventName, handler);
+//       return () => client.off(eventName, handler);
+//     },
 
-    djsClient(client) {
-      client.on(eventName, handler);
-      return () => client.off(eventName, handler);
-    },
-
-    intents: getRequiredIntentsForDJSEvent(eventName),
-  });
-}
-
-/** This hook allows you to modify the Discord.js configuration. You cannot pass `intents` here, see $intents. */
-export function $djsOptions(options: FeatureData['djsOptions'] | DJSOptions) {
-  return createFeature({
-    name: 'discord.js options',
-    djsOptions:
-      typeof options === 'function'
-        ? options
-        : previousOptions => ({ ...previousOptions, ...options }),
-  });
-}
+//     intents: getRequiredIntentsForDJSEvent(eventName),
+//   });
+// }
 
 export function $interaction(handler: FeatureData['interaction']) {
   return createFeature({
-    name: 'interaction handler',
     interaction: handler,
   });
 }

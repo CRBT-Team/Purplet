@@ -13,7 +13,6 @@ export interface ServiceOptions {
  */
 export function $service({ name, start, stop }: ServiceOptions) {
   return createFeature({
-    name: name || 'unnamed service',
     async initialize() {
       const cleanup = await start();
 

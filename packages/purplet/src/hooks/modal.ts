@@ -56,7 +56,6 @@ export function $modal<Context, CreateProps>(options: ModalComponentOptions<Cont
   return createFeature(
     // Feature Data
     {
-      name: 'component',
       initialize() {
         featureId = this.featureId;
       },

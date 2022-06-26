@@ -1,25 +1,41 @@
 // this file is a bit more of a mess than i'd like it to be, but whatever
 // TODO: split functions into separate things, such as feature loading, gateway connecting, dev mode specific stuff.
+import dedent from 'dedent';
+import inquirer from 'inquirer';
 import type { Immutable } from '@davecode/types';
-import { APIApplicationCommandBasicOption, APIGuild, APIUser, ApplicationCommandOptionType, ApplicationCommandType, RESTAPIPartialCurrentUserGuild, RESTGetAPIApplicationCommandsResult, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, RESTGetAPIOAuth2CurrentApplicationResult, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from 'discord-api-types/v10';
-import { Client, Guild } from 'discord.js';
+import {
+  APIApplicationCommandBasicOption,
+  APIGuild,
+  APIInteraction,
+  APIInteractionResponse,
+  APIUser,
+  ApplicationCommandOptionType,
+  ApplicationCommandType,
+  GatewayDispatchEvents,
+  RESTAPIPartialCurrentUserGuild,
+  RESTGetAPIApplicationCommandsResult,
+  RESTGetAPICurrentUserResult,
+  RESTGetAPIOAuth2CurrentApplicationResult,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
+  Routes,
+} from 'discord-api-types/v10';
+import { Client } from 'discord.js';
 import { deepEqual } from 'fast-equals';
+import { getEnvVar } from './env';
 import type {
   ApplicationCommandData,
-  DJSOptions,
   EventHook,
   Feature,
   GatewayEventHook,
   LifecycleHookNames,
 } from './feature';
 import { rest, setDJSClient } from './global';
+import { log, pauseSpinner } from './logger';
+import { createInteraction } from '../structures';
 import { featureRequiresDJS } from '../utils/feature';
+import { JSONValue, toJSONValue } from '../utils/plain';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
-import { getEnvVar } from './env';
-import { log, pauseSpinner } from './logger';
-import dedent from 'dedent';
-import inquirer from 'inquirer';
 
 // These `.call()`s are needed due to the way features are created
 /* eslint-disable no-useless-call */
@@ -30,9 +46,7 @@ export interface GatewayBotOptions {
    * development, commands are only deployed to a specified set of test servers.
    */
   mode: 'production' | 'development';
-  /**
-   * If set to false, the bot will not attempt to connect to the gateway.
-   */
+  /** If set to false, the bot will not attempt to connect to the gateway. */
   gateway?: boolean;
 
   checkIfProductionBot?: boolean;
@@ -40,7 +54,6 @@ export interface GatewayBotOptions {
 
 interface CleanupHandlers {
   initialize?: Cleanup;
-  djsClient?: Cleanup;
 }
 
 interface AllowedGuildRules {
@@ -62,7 +75,6 @@ export class GatewayBot {
   #features: Feature[] = [];
   #cleanupHandlers = new WeakMap<Feature, CleanupHandlers>();
   #djsClient?: Client;
-  #currentDJSOptions?: DJSOptions;
   #currentIntents: number = 0;
   #id: string = '';
   #cachedCommandData?: ApplicationCommandData[];
@@ -98,7 +110,7 @@ export class GatewayBot {
     return this.#djsClient?.user;
   }
 
-  constructor() { }
+  constructor() {}
 
   private isGuildAllowed(id: string) {
     const { include = [], exclude = [] } = this.#guildRules;
@@ -144,38 +156,22 @@ export class GatewayBot {
       .reduce((a: number, b) => a | (b ?? 0), 0);
   }
 
-  /**
-   * @internal Resolves what options should be passed to Discord.js using the `djsOptions` hook.
-   * Properly handles passing an object around and running the hooks in sequence.
-   */
-  private async resolveDJSOptions() {
-    let clientOptions: DJSOptions = {};
-
-    for (const feat of this.#features) {
-      if (feat.djsOptions) {
-        clientOptions = (await feat.djsOptions.call(feat, clientOptions)) ?? clientOptions;
-      }
-    }
-
-    return { ...clientOptions, intents: this.#currentIntents };
-  }
-
   // /** @internal */
-  // private async handleInteraction(i: APIInteraction) {
-  //   const responseHandler = async (response: APIInteractionResponse) => {
-  //     await rest.post(Routes.interactionCallback(i.id, i.token), {
-  //       body: response,
-  //       // TODO: handle file uploads for interaction responses.
-  //       files: [],
-  //     });
-  //   };
+  private async handleInteraction(i: APIInteraction) {
+    const responseHandler = async (response: APIInteractionResponse) => {
+      await rest.post(Routes.interactionCallback(i.id, i.token), {
+        body: response,
+        // TODO: handle file uploads for interaction responses.
+        files: [],
+      });
+    };
 
-  //   const interaction = createInteraction(i, responseHandler);
+    const interaction = createInteraction(i, responseHandler);
 
-  //   // Run handlers
-  //   (await asyncMap(this.#features, feat => feat.interaction?.call?.(feat, interaction))) //
-  //     .forEach(response => response && responseHandler(toJSONValue(response as JSONValue)));
-  // }
+    // Run handlers
+    (await asyncMap(this.#features, feat => feat.interaction?.call?.(feat, interaction))) //
+      .forEach(response => response && responseHandler(toJSONValue(response as JSONValue)));
+  }
 
   // TODO: fix types on this to not have that required `Event` type param, but whatever.
   /**
@@ -219,18 +215,23 @@ export class GatewayBot {
     if (this.#token) {
       rest.setToken(this.#token);
     } else {
-      log('error', dedent`
-        No Discord token provided. Purplet cannot start up.
-        Edit your ".env" file and add a line with the following:
+      log(
+        'error',
+        dedent`
+          No Discord token provided. Purplet cannot start up.
+          Edit your ".env" file and add a line with the following:
 
-        DISCORD_BOT_TOKEN="your token here"
-      `);
+          DISCORD_BOT_TOKEN="your token here"
+        `
+      );
       process.exit(1); // TODO: throw an error instead, and have cli handle printing and exiting.
     }
 
     const currentUser = (await rest.get(Routes.user())) as RESTGetAPICurrentUserResult;
     this.#id = currentUser.id;
-    const currentApplication = (await rest.get(Routes.oauth2CurrentApplication())) as RESTGetAPIOAuth2CurrentApplicationResult;
+    const currentApplication = (await rest.get(
+      Routes.oauth2CurrentApplication()
+    )) as RESTGetAPIOAuth2CurrentApplicationResult;
 
     if (!currentApplication.team && currentApplication.owner) {
       this.#owners = [currentApplication.owner];
@@ -240,11 +241,16 @@ export class GatewayBot {
     }
 
     if (this.#options.checkIfProductionBot !== false) {
-      const globalCommands = (await rest.get(Routes.applicationCommands(this.#id))) as RESTGetAPIApplicationCommandsResult;
+      const globalCommands = (await rest.get(
+        Routes.applicationCommands(this.#id)
+      )) as RESTGetAPIApplicationCommandsResult;
       if (globalCommands.length !== 0) {
         await pauseSpinner(async () => {
           console.log();
-          log('warn', `The token provided is for ${currentUser.username}#${currentUser.discriminator} (${currentUser.id}), which has global commands set. Purplet's development mode is not compatible with global commands, and must be removed.`)
+          log(
+            'warn',
+            `The token provided is for ${currentUser.username}#${currentUser.discriminator} (${currentUser.id}), which has global commands set. Purplet's development mode is not compatible with global commands, and must be removed.`
+          );
           const confirm = await inquirer.prompt({
             type: 'confirm',
             name: 'continue',
@@ -252,13 +258,13 @@ export class GatewayBot {
           });
           if (confirm.continue) {
             await rest.put(Routes.applicationCommands(this.#id), {
-              body: []
+              body: [],
             });
           } else {
             log('info', 'Aborting startup.');
             process.exit(1);
           }
-        })
+        });
       }
     }
 
@@ -271,9 +277,6 @@ export class GatewayBot {
     if (botReliesOnDJS) {
       // Resolve intents
       this.#currentIntents = await this.resolveGatewayIntents();
-
-      // Resolve ClientOptions
-      this.#currentDJSOptions = await this.resolveDJSOptions();
 
       // Start the client
       await this.restartDJSClient();
@@ -294,13 +297,17 @@ export class GatewayBot {
       )
     ).flat();
 
-    const toBeMerged = list.filter(x => x.type === ApplicationCommandType.ChatInput && x.name.includes(' '));
+    const toBeMerged = list.filter(
+      x => x.type === ApplicationCommandType.ChatInput && x.name.includes(' ')
+    );
     const commandNamesToBeMerged = [...new Set(toBeMerged.map(x => x.name.split(' ')[0]))];
     const rest = list.filter(x => !toBeMerged.includes(x));
 
     for (const name of commandNamesToBeMerged) {
       const cmd = rest.find(x => x.name === name);
-      const merged = toBeMerged.filter(x => x.name.startsWith(name + ' ')) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
+      const merged = toBeMerged.filter(x =>
+        x.name.startsWith(name + ' ')
+      ) as RESTPostAPIChatInputApplicationCommandsJSONBody[];
 
       if (!cmd) {
         throw new Error(`Could not find slash command group "${name}"`);
@@ -308,21 +315,25 @@ export class GatewayBot {
       const isTwoLevel = merged.some(x => x.name.split(' ').length === 3);
 
       if (isTwoLevel) {
-        cmd.options = merged.filter(x => x.name.split(' ').length === 2).map(x => ({
-          name: x.name.split(' ')[1],
-          type: ApplicationCommandOptionType.SubcommandGroup,
-          description: x.description,
-          name_localizations: x.name_localizations,
-          description_localizations: x.description_localizations,
-          options: merged.filter(x => x.name.split(' ').length === 3).map(x => ({
-            name: x.name.split(' ')[2],
-            type: ApplicationCommandOptionType.Subcommand,
+        cmd.options = merged
+          .filter(x => x.name.split(' ').length === 2)
+          .map(x => ({
+            name: x.name.split(' ')[1],
+            type: ApplicationCommandOptionType.SubcommandGroup,
             description: x.description,
             name_localizations: x.name_localizations,
             description_localizations: x.description_localizations,
-            options: x.options as APIApplicationCommandBasicOption[],
-          })),
-        }))
+            options: merged
+              .filter(x => x.name.split(' ').length === 3)
+              .map(x => ({
+                name: x.name.split(' ')[2],
+                type: ApplicationCommandOptionType.Subcommand,
+                description: x.description,
+                name_localizations: x.name_localizations,
+                description_localizations: x.description_localizations,
+                options: x.options as APIApplicationCommandBasicOption[],
+              })),
+          }));
       } else {
         cmd.options = merged.map(x => ({
           name: x.name.split(' ')[1],
@@ -331,7 +342,7 @@ export class GatewayBot {
           name_localizations: x.name_localizations,
           description_localizations: x.description_localizations,
           options: x.options as APIApplicationCommandBasicOption[],
-        }))
+        }));
       }
     }
 
@@ -365,14 +376,18 @@ export class GatewayBot {
       await rest.put(Routes.applicationCommands(this.#id), { body: [] });
     }
 
-    const guildList = (await rest.get(Routes.userGuilds()) as RESTAPIPartialCurrentUserGuild[])
-      .filter(x => this.isGuildAllowed(x.id));
+    const guildList = (
+      (await rest.get(Routes.userGuilds())) as RESTAPIPartialCurrentUserGuild[]
+    ).filter(x => this.isGuildAllowed(x.id));
 
     if (guildList.length > 100) {
       throw new Error("You can't have more than 75 guilds on your development bot.");
     }
     if (guildList.length >= 5) {
-      log('warn', `You have more ${guildList.length} guilds on your development bot. This can slow down the bot significantly, as commands are registered per-guild during development.`);
+      log(
+        'warn',
+        `You have more ${guildList.length} guilds on your development bot. This can slow down the bot significantly, as commands are registered per-guild during development.`
+      );
     }
 
     await asyncMap(guildList, async guild => {
@@ -404,10 +419,6 @@ export class GatewayBot {
    * set.
    */
   private async restartDJSClient() {
-    if (!this.#currentDJSOptions) {
-      throw new Error('Cannot restart Discord.js client before initializing the configuration.');
-    }
-
     if (this.#options.gateway === false) {
       return;
     }
@@ -420,13 +431,9 @@ export class GatewayBot {
       log('info', 'Starting Discord.JS client...');
     }
 
-    // Cleanup the djsClient hook
-    await asyncMap(this.#features, feat => this.runCleanupHandler(feat, 'djsClient'));
-
     // Construct and login client
     this.#djsClient = new Client({
       intents: this.#currentIntents,
-      ...structuredClone(this.#currentDJSOptions),
     });
     setDJSClient(this.#djsClient);
 
@@ -444,17 +451,12 @@ export class GatewayBot {
     };
 
     // Listen for raw interaction events for the `interaction` hook.
-    // this.#djsClient.ws.on(GatewayDispatchEvents.InteractionCreate, async i => {
-    //   this.handleInteraction(i);
-    // });
-    this.#djsClient.on('interactionCreate', i => {
-      this.features.forEach(feature => {
-        feature.interaction?.(i);
-      });
+    this.#djsClient.ws.on(GatewayDispatchEvents.InteractionCreate, async i => {
+      this.handleInteraction(i);
     });
 
     if (this.#options.mode === 'development') {
-      this.#djsClient.on('guildCreate', (guild) => {
+      this.#djsClient.on('guildCreate', guild => {
         if (this.isGuildAllowed(guild.id)) {
           this.updateApplicationCommandsGuild(guild);
         }
@@ -462,9 +464,6 @@ export class GatewayBot {
     }
 
     await this.#djsClient.login(this.#token);
-
-    // Run the djsClient hook
-    await this.runLifecycleHook(this.#features, 'djsClient', this.#djsClient);
   }
 
   /** @internal Re-runs `intent` and `djsConfig` hooks and returns a boolean if the Discord.js client should be restarted. */
@@ -477,14 +476,6 @@ export class GatewayBot {
       mustRestart = true;
     }
     this.#currentIntents = newIntents;
-
-    // TODO: if ANY module uses `makeCache` or `jsonTransformer`, it will
-    // reload DJS every time unless they can make sure to pass an IDENTICAL function.
-    const newDJSOptions = await this.resolveDJSOptions();
-    if (!deepEqual(newDJSOptions, this.#currentDJSOptions)) {
-      mustRestart = true;
-    }
-    this.#currentDJSOptions = newDJSOptions;
 
     return mustRestart;
   }
@@ -511,9 +502,6 @@ export class GatewayBot {
     if (await this.shouldRestartDJSClient()) {
       // Restart the bot with new configuration
       await this.restartDJSClient();
-    } else {
-      // Run the djsClient hook
-      await this.runLifecycleHook(features, 'djsClient', this.#djsClient!);
     }
   }
 
@@ -525,7 +513,6 @@ export class GatewayBot {
 
     if (this.#running) {
       await asyncMap(features, async feat => {
-        await this.runCleanupHandler(feat, 'djsClient');
         await this.runCleanupHandler(feat, 'initialize');
       });
     }
@@ -547,7 +534,7 @@ export class GatewayBot {
 
     // Clear commands
     if (this.#options.mode === 'development') {
-      const guildList = await rest.get(Routes.userGuilds()) as RESTAPIPartialCurrentUserGuild[];
+      const guildList = (await rest.get(Routes.userGuilds())) as RESTAPIPartialCurrentUserGuild[];
 
       await asyncMap(guildList, async guild => {
         await rest.put(Routes.applicationGuildCommands(this.#id, guild.id), {

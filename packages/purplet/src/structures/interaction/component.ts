@@ -17,6 +17,9 @@ export abstract class ComponentInteraction<
   static matches(raw: APIInteraction): raw is APIMessageComponentInteraction {
     return raw.type === InteractionType.MessageComponent;
   }
+  static is(obj: unknown): obj is ComponentInteraction {
+    return obj instanceof ComponentInteraction;
+  }
 
   get message() {
     return this.raw.message;

@@ -14,6 +14,10 @@ export type InteractionResponseHandler = (r: APIInteractionResponse) => Awaitabl
 export type APINonPingInteraction = Exclude<APIInteraction, APIPingInteraction>;
 
 export abstract class Interaction<Data extends APINonPingInteraction = APINonPingInteraction> {
+  static is(obj: unknown): obj is Interaction {
+    return obj instanceof Interaction;
+  }
+
   #onRespond: InteractionResponseHandler | undefined;
   #replied = false;
 

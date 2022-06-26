@@ -19,6 +19,9 @@ export class ModalSubmitInteraction<
   static matches(raw: APIInteraction): raw is APIMessageComponentSelectMenuInteraction {
     return raw.type === InteractionType.ModalSubmit;
   }
+  static is(obj: unknown): obj is ModalSubmitInteraction {
+    return obj instanceof ModalSubmitInteraction;
+  }
 
   get customId() {
     return this.raw.data.custom_id;

@@ -12,4 +12,7 @@ export class ButtonInteraction<
   static matches(raw: APIInteraction): raw is APIMessageComponentButtonInteraction {
     return ComponentInteraction.matches(raw) && raw.data.component_type === ComponentType.Button;
   }
+  static is(obj: unknown): obj is ButtonInteraction {
+    return obj instanceof ButtonInteraction;
+  }
 }

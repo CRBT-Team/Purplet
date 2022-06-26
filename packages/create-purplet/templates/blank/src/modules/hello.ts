@@ -2,8 +2,6 @@ import { GatewayIntentBits, Message } from 'discord.js';
 import { createFeature } from 'purplet';
 
 export const logMessages = createFeature({
-  name: 'log messages',
-
   djsClient({ featureId, client }) {
     console.log(`${featureId} loaded and ${client.user.tag}!`);
 

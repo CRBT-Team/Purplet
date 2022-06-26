@@ -1,11 +1,11 @@
-import { APIMessage, ApplicationCommandType, LocalizationMap } from 'discord-api-types/v10';
+import { ApplicationCommandType, LocalizationMap } from 'discord-api-types/v10';
+import { $applicationCommand } from './command';
 import type {
   Message,
-  MessageContextMenuCommandInteraction,
-  User,
-  UserContextMenuCommandInteraction,
-} from 'discord.js';
-import { $applicationCommand } from './command';
+  MessageCommandInteraction,
+  PartialUser,
+  UserCommandInteraction,
+} from '../structures';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
 
 export interface ContextCommandOptions extends CommandPermissionsInput {
@@ -14,7 +14,7 @@ export interface ContextCommandOptions extends CommandPermissionsInput {
 }
 
 export interface UserCommandOptions extends ContextCommandOptions {
-  handle: (this: UserContextMenuCommandInteraction, target: User) => void;
+  handle: (this: UserCommandInteraction, target: PartialUser) => void;
 }
 
 export function $userContextCommand(opts: UserCommandOptions) {
@@ -25,14 +25,14 @@ export function $userContextCommand(opts: UserCommandOptions) {
       name_localizations: opts.nameLocalizations,
       ...resolveCommandPermissions(opts),
     },
-    handle(this: UserContextMenuCommandInteraction) {
+    handle(this: UserCommandInteraction) {
       opts.handle.call(this, this.targetUser);
     },
   });
 }
 
 export interface MessageCommandOptions extends ContextCommandOptions {
-  handle: (this: MessageContextMenuCommandInteraction, target: APIMessage | Message) => void;
+  handle: (this: MessageCommandInteraction, target: Message) => void;
 }
 
 export function $messageContextCommand(opts: MessageCommandOptions) {
@@ -43,8 +43,8 @@ export function $messageContextCommand(opts: MessageCommandOptions) {
       name_localizations: opts.nameLocalizations,
       ...resolveCommandPermissions(opts),
     },
-    handle(this: MessageContextMenuCommandInteraction) {
-      opts.handle.call(this, this.targetMessage);
+    handle(this: MessageCommandInteraction) {
+      opts.handle.call(this, this.target);
     },
   });
 }

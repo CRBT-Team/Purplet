@@ -7,8 +7,7 @@
     "bot",
     "api",
     "framework",
-    "typescript",
-    "discord.js"
+    "typescript"
   ],
   "homepage": "https://github.com/CRBT-Team/Purplet",
   "bugs": "https://github.com/CRBT-Team/Purplet/issues",
@@ -21,7 +20,6 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./build-api": "./dist/build-api.js",
     "./internal": "./dist/internal.js"
   },
   "main": "./dist/index.js",
@@ -36,8 +34,8 @@
   "scripts": {
     "build": "rollup -c && tsc -p . && echo Types Passing",
     "dev": "rollup -c --watch",
-    "lint": "eslint src/**/*.{ts,tsx}",
-    "test": "watchlist src -- tsm node_modules/uvu/bin.js src .*\\.test\\.ts"
+    "format": "prettier --write 'src/**/*.{ts,tsx}'",
+    "lint": "eslint src/**/*.{ts,tsx}"
   },
   "dependencies": {
     "@davecode/utils": "^1.0.0",
@@ -60,9 +58,7 @@
     "rollup-plugin-esbuild": "^4.9.1",
     "sade": "^1.8.1",
     "string-length": "^5.0.1",
-    "uvu": "^0.5.4",
-    "vite": "3.0.0-alpha.7",
-    "wrap-ansi": "^8.0.1"
+    "vite": "3.0.0-alpha.7"
   },
   "devDependencies": {
     "@davecode/types": "^1.0.2",
@@ -73,9 +69,7 @@
     "@types/wrap-ansi": "^8.0.1",
     "discord.js": "14.0.0-dev.1656060492-e24970e",
     "rollup-plugin-add-shebang": "^0.3.1",
-    "tsm": "^2.2.1",
-    "typescript": "^4.7.4",
-    "watchlist": "^0.3.1"
+    "typescript": "^4.7.4"
   },
   "peerDependencies": {
     "discord.js": "^14.0.0"

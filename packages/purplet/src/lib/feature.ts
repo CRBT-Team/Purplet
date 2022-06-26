@@ -1,10 +1,7 @@
 import type * as Discord from 'discord-api-types/v10';
 import type { Awaitable, Dict } from '@davecode/types';
-import type {
-  APIInteractionResponse,
-  RESTPostAPIApplicationCommandsJSONBody,
-} from 'discord-api-types/v10';
-import type { Client, ClientOptions, Interaction } from 'discord.js';
+import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import type { Interaction } from '../structures';
 import type { Cleanup } from '../utils/types';
 
 const IS_FEATURE = Symbol.for('purplet.is-bot-feature');
@@ -16,7 +13,6 @@ export type EventHook<E, R = void> = (this: Feature, ctx: E) => Awaitable<R>;
 /** Data hooks can be either functions that resolve to data, or just data themselves. */
 export type DataHook<T> = ((this: Feature) => Awaitable<T>) | Awaitable<T>;
 
-export type DJSOptions = Omit<ClientOptions, 'intents'>;
 export type ApplicationCommandData = RESTPostAPIApplicationCommandsJSONBody;
 
 export type IntentResolvable = number | number[];
@@ -30,31 +26,16 @@ export type IntentResolvable = number | number[];
  * stray away from using arrow functions for that, plus it looks nicer with the method shorthand.
  */
 export interface FeatureData {
-  /** Name of this feature, as see in some debug menus. */
-  name?: string;
   /**
    * This is the first hook that is called for your bot, and is always called. This hook allows for
    * a cleanup function, which you should use to remove event handlers.
    */
   initialize?: LifecycleHook<void>;
   /**
-   * Called on load with a Discord.js client. Specifying this hook will cause the Discord.js client
-   * to be setup. This hook allows for a cleanup function, which you should use to remove event handlers.
+   * Called for incoming interactions, which are used with the INTERACTION_CREATE event, but also
+   * bundled into HTTP bots.
    */
-  djsClient?: LifecycleHook<Client>;
-  /**
-   * Called before the Discord.js client is created, passing a configuration object. You are able to
-   * return or modify the configuration object, and that will be passed to Discord.js. Do not
-   * configure gateway intents with this hook, and use the separate gateway intents hook instead.
-   *
-   * Note: this hook will only be called if some feature in your project requests the Discord.js client.
-   */
-  djsOptions?: EventHook<DJSOptions, DJSOptions | void>;
-  /**
-   * Called for incoming interactions, and does not explicity rely on Discord.js, meaning bots using
-   * this hook can theoretically be deployed to a cloud function and called over HTTPs.
-   */
-  interaction?: EventHook<Interaction, APIInteractionResponse | void>;
+  interaction?: EventHook<Interaction, void>;
   /**
    * An object mapping gateway event types to functions to handle them, does not explicity rely on
    * Discord.js, meaning bots using this hook instead of `djsClient` can theoretically run without
@@ -66,19 +47,18 @@ export interface FeatureData {
   gatewayEvent?: GatewayEventHook;
   /**
    * Called to resolve this feature's application commands. Return an array of commands to be
-   * registered to Discord. If your command is not returned here, it may be deleted.
+   * registered to Discord. In development, these are deployed per-guild, and in production they
+   * must be managed with the `purplet deploy` CLI.
    *
-   * In development mode, you must set the `UNSTABLE_PURPLET_COMMAND_GUILDS` environment variable to
-   * a comma separated list of guild IDs to register commands to. Commands may also cleared on bot shutdown.
+   * Only global application commands are supported through this API. You can manually use the REST
+   * API to add guild-level ones, but this will interfere with development mode's behavior of
+   * overwriting commands.
    *
-   * Currently, only global application commands are supported. You can manually use the REST API to
-   * add guild-level ones, but this will interfere with development mode's behavior of overwriting commands.
+   * Currently, this hook does some extra processing to allow for space-separated subcommands, but
+   * that will be removed in the future.
    */
   applicationCommands?: DataHook<ApplicationCommandData[]>;
-  /**
-   * This hook allows you to specify what gateway intents your gateway bot requires. Does not assume
-   * a Discord.js environment, and will trigger on either using Discord.js, or the `gatewayEvents` hook.
-   */
+  /** This hook allows you to specify what gateway intents your gateway bot requires. */
   intents?: DataHook<IntentResolvable>;
 }
 
@@ -99,7 +79,7 @@ export interface Feature extends FeatureData {
 }
 
 // TODO: use dyanmic types to get this, i couldn't figure it out in the time I had.
-export type LifecycleHookNames = 'initialize' | 'djsClient';
+export type LifecycleHookNames = 'initialize';
 
 /** `createFeature` annotates a FeatureData with a symbol used to mark what object is actually a Feature. */
 export function createFeature<T extends Dict<unknown>>(

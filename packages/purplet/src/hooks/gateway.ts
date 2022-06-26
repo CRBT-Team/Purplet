@@ -1,5 +1,3 @@
-import type { PresenceData } from 'discord.js';
-import { $djsOptions } from './basic';
 import {
   createFeature,
   FeatureData,
@@ -19,29 +17,26 @@ export function $intents(...intents: IntentResolvable[]): MarkedFeature;
 export function $intents(intents: FeatureData['intents']): MarkedFeature;
 export function $intents(first: FeatureData['intents'], ...rest: IntentResolvable[]) {
   return createFeature({
-    name: 'required intents',
     intents: typeof first === 'function' ? first : rest.flat(),
   });
 }
 
-export function $onRawEvent<K extends keyof GatewayEventHook>(
+export function $onEvent<K extends keyof GatewayEventHook>(
   eventName: K,
   handler: (data: GatewayEventHook[K]) => void
 ) {
   return createFeature({
-    name: `gateway event "${eventName}" handler`,
-
     gatewayEvent: {
       [eventName]: handler,
     },
   });
 }
 
-/**
- * This hook allows you to pass in presence data. It is run only once at startup.
- *
- * This is a wrapper around `$djsOptions` and passing a `presence` object.
- */
-export function $presence(presence: PresenceData) {
-  return $djsOptions({ presence });
-}
+// /**
+//  * This hook allows you to pass in presence data. It is run only once at startup.
+//  *
+//  * This is a wrapper around `$djsOptions` and passing a `presence` object.
+//  */
+// export function $presence(presence: PresenceData) {
+//   return $djsOptions({ presence });
+// }

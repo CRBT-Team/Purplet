@@ -13,6 +13,9 @@ export class MessageCommandInteraction<
   static matches(raw: APIInteraction): raw is APIMessageApplicationCommandInteraction {
     return CommandInteraction.matches(raw) && raw.data.type === ApplicationCommandType.Message;
   }
+  static is(obj: unknown): obj is MessageCommandInteraction {
+    return obj instanceof MessageCommandInteraction;
+  }
 
   get target() {
     return this.getResolved('messages', this.targetId)!;

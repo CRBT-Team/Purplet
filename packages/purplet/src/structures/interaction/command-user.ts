@@ -13,6 +13,9 @@ export class UserCommandInteraction<
   static matches(raw: APIInteraction): raw is APIUserApplicationCommandInteraction {
     return CommandInteraction.matches(raw) && raw.data.type === ApplicationCommandType.User;
   }
+  static is(obj: unknown): obj is UserCommandInteraction {
+    return obj instanceof UserCommandInteraction;
+  }
 
   get targetUser() {
     // Users are always given resolved for user commands.
