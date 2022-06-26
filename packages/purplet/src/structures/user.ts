@@ -4,7 +4,7 @@ import { APIUser, Routes } from 'discord-api-types/v10';
 import { UserFlagsBitfield } from './bit-field';
 import type { Interaction } from './interaction';
 import { rest } from '../lib/global';
-import { createPartialClass, PartialClass } from '../utils/partial';
+import { createPartialClass, PartialClass } from '../utils/class';
 
 /** Structure for APIUser. */
 export class User {

@@ -1,7 +1,7 @@
 import type { Immutable } from '@davecode/types';
 import { APIGuild, Routes } from 'discord-api-types/v10';
 import { rest } from '../lib/global';
-import { createPartialClass, PartialClass } from '../utils/partial';
+import { createPartialClass, PartialClass } from '../utils/class';
 
 /** Structure for APIGuild. */
 export class Guild {

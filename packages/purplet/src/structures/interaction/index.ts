@@ -21,11 +21,11 @@ export * from './component-button';
 export * from './component-select';
 export * from './modal-submit';
 
-type Matchable = Class<Interaction> & {
+type InteractionMatchable = Class<Interaction> & {
   matches(i: APIInteraction): i is APIInteraction;
 };
 
-const classes: Matchable[] = [
+const classes: InteractionMatchable[] = [
   SlashCommandInteraction,
   UserCommandInteraction,
   MessageCommandInteraction,

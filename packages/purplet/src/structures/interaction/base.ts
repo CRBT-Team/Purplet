@@ -7,6 +7,7 @@ import type {
 import { EmptyTextChannel } from '../channel';
 import { EmptyGuild } from '../guild';
 import { InteractionExecutingUser } from '../user';
+import { createInstanceofGuard } from '../../utils/class';
 import { JSONResolvable, toJSONValue } from '../../utils/plain';
 
 export type InteractionResponseHandler = (r: APIInteractionResponse) => Awaitable<void>;
@@ -14,9 +15,7 @@ export type InteractionResponseHandler = (r: APIInteractionResponse) => Awaitabl
 export type APINonPingInteraction = Exclude<APIInteraction, APIPingInteraction>;
 
 export abstract class Interaction<Data extends APINonPingInteraction = APINonPingInteraction> {
-  static is(obj: unknown): obj is Interaction {
-    return obj instanceof Interaction;
-  }
+  static is = createInstanceofGuard<Interaction>(Interaction as any);
 
   #onRespond: InteractionResponseHandler | undefined;
   #replied = false;

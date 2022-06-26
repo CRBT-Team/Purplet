@@ -11,7 +11,7 @@ import {
 import type { Interaction } from './interaction/base';
 import { Message } from './message';
 import { rest } from '../lib/global';
-import { createPartialClass, PartialClass } from '../utils/partial';
+import { createPartialClass, PartialClass } from '../utils/class';
 import { JSONResolvable, toJSONValue } from '../utils/plain';
 
 export class InteractionMessage extends Message {

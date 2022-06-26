@@ -40,3 +40,7 @@ export function createPartialClass<T>(c: any): T extends PartialClass<
   : never {
   return c as any;
 }
+
+export function createInstanceofGuard<T>(def: Class<T>) {
+  return (obj => obj instanceof def) as (obj: unknown) => obj is T;
+}

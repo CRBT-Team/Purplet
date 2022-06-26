@@ -10,16 +10,16 @@ import {
   createInteractionMixinList,
   InteractionResponseMixin,
 } from './response';
+import { createInstanceofGuard } from '../../utils/class';
 
 export class AutocompleteInteraction<
   Data extends APIApplicationCommandAutocompleteInteraction = APIApplicationCommandAutocompleteInteraction
 > extends Interaction<Data> {
+  static is = createInstanceofGuard(AutocompleteInteraction);
+
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIApplicationCommandAutocompleteInteraction {
     return raw.type === InteractionType.ApplicationCommandAutocomplete;
-  }
-  static is(obj: unknown): obj is AutocompleteInteraction {
-    return obj instanceof AutocompleteInteraction;
   }
 
   get commandType() {

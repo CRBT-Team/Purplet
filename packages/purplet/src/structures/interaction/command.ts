@@ -16,6 +16,7 @@ import {
 } from './response';
 import { Message } from '../message';
 import { PartialUser } from '../user';
+import { createInstanceofGuard } from '../../utils/class';
 
 // TODO: build this type based off of what is inside of discord.js
 interface ResolvedData {
@@ -39,12 +40,11 @@ const structures: Record<string, any> = {
 export abstract class CommandInteraction<
   Data extends APIApplicationCommandInteraction = APIApplicationCommandInteraction
 > extends Interaction<Data> {
+  static is = createInstanceofGuard<CommandInteraction>(CommandInteraction as any);
+
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIApplicationCommandInteraction {
     return raw.type === InteractionType.ApplicationCommand;
-  }
-  static is(obj: unknown): obj is CommandInteraction {
-    return obj instanceof CommandInteraction;
   }
 
   get commandType() {

@@ -5,16 +5,16 @@ import {
 } from 'discord-api-types/v10';
 import { CommandInteraction } from './command';
 import { ContextCommandInteraction } from './command-context';
+import { createInstanceofGuard } from '../../utils/class';
 
 export class UserCommandInteraction<
   Data extends APIUserApplicationCommandInteraction = APIUserApplicationCommandInteraction
 > extends ContextCommandInteraction<Data> {
+  static is = createInstanceofGuard(UserCommandInteraction);
+
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIUserApplicationCommandInteraction {
     return CommandInteraction.matches(raw) && raw.data.type === ApplicationCommandType.User;
-  }
-  static is(obj: unknown): obj is UserCommandInteraction {
-    return obj instanceof UserCommandInteraction;
   }
 
   get targetUser() {

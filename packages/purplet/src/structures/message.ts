@@ -2,7 +2,7 @@ import type { Immutable } from '@davecode/types';
 import type { APIMessage } from 'discord-api-types/v10';
 import { ReadonlyMessageFlagsBitfield } from './bit-field';
 import { PartialUser } from './user';
-import { createPartialClass, PartialClass } from '../utils/partial';
+import { createPartialClass, PartialClass } from '../utils/class';
 
 /** This class has a long way to go but its OK right now. */
 export class Message {
@@ -82,10 +82,10 @@ export class Message {
   }
 }
 
-export type MessagePartial = PartialClass<
+export type EmptyMessage = PartialClass<
   //
   typeof Message,
   'id',
   'id'
 >;
-export const MessagePartial = createPartialClass<MessagePartial>(Message);
+export const EmptyMessage = createPartialClass<EmptyMessage>(Message);

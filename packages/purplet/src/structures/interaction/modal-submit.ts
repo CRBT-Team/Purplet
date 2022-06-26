@@ -11,16 +11,16 @@ import {
   createInteractionMixinList,
   InteractionResponseMixin,
 } from './response';
+import { createInstanceofGuard } from '../../utils/class';
 
 export class ModalSubmitInteraction<
   Data extends APIModalSubmitInteraction = APIModalSubmitInteraction
 > extends Interaction<Data> {
+  static is = createInstanceofGuard(ModalSubmitInteraction);
+
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIMessageComponentSelectMenuInteraction {
     return raw.type === InteractionType.ModalSubmit;
-  }
-  static is(obj: unknown): obj is ModalSubmitInteraction {
-    return obj instanceof ModalSubmitInteraction;
   }
 
   get customId() {

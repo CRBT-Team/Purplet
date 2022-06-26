@@ -9,16 +9,16 @@ import {
   createInteractionMixinList,
   InteractionResponseMixin,
 } from './response';
+import { createInstanceofGuard } from '../../utils/class';
 
 export abstract class ComponentInteraction<
   Data extends APIMessageComponentInteraction = APIMessageComponentInteraction
 > extends Interaction<Data> {
+  static is = createInstanceofGuard<ComponentInteraction>(ComponentInteraction as any);
+
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIMessageComponentInteraction {
     return raw.type === InteractionType.MessageComponent;
-  }
-  static is(obj: unknown): obj is ComponentInteraction {
-    return obj instanceof ComponentInteraction;
   }
 
   get message() {
