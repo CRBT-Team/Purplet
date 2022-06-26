@@ -1,4 +1,5 @@
 // this file is a bit more of a mess than i'd like it to be, but whatever
+// TODO: split functions into separate things, such as feature loading, gateway connecting, dev mode specific stuff.
 import type { Immutable } from '@davecode/types';
 import { APIGuild, APIUser, RESTAPIPartialCurrentUserGuild, RESTGetAPIApplicationCommandsResult, RESTGetAPICurrentUserGuildsResult, RESTGetAPICurrentUserResult, RESTGetAPIOAuth2CurrentApplicationResult, Routes } from 'discord-api-types/v10';
 import { Client, Guild } from 'discord.js';
