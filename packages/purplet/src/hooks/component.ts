@@ -1,4 +1,4 @@
-import { BitArray, GenericSerializer } from '@purplet/serialize';
+import { BitSerializer, serializers as S } from '@purplet/serialize';
 import {
   APIButtonComponent,
   APIMessageActionRowComponent,
@@ -7,25 +7,10 @@ import {
 } from 'discord-api-types/v10';
 import { createFeature } from '../lib/feature';
 import { ButtonInteraction, ComponentInteraction, SelectMenuInteraction } from '../structures';
-import { decodeCustomId, encodeCustomId } from '../utils/custom-id-encode';
-import { JSONResolvable, JSONValue, toJSONValue } from '../utils/json';
+import { JSONResolvable, toJSONValue } from '../utils/json';
 import type { IsUnknown } from '../utils/types';
 
 const purpletCustomIdTrigger = '🟣';
-
-interface CustomSerializer {
-  serialize(data: JSONValue): Uint8Array;
-  deserialize(from: Uint8Array): JSONValue;
-}
-
-const defaultSerializer: CustomSerializer = {
-  serialize: data => {
-    return GenericSerializer.serialize(data).asUint8Array();
-  },
-  deserialize: data => {
-    return GenericSerializer.deserialize(BitArray.fromUint8Array(data));
-  },
-};
 
 type ComponentResolvable<Component> = JSONResolvable<Omit<Component, 'type' | 'custom_id'>>;
 
@@ -35,7 +20,7 @@ type MessageComponentOptions<
   ComponentType extends APIMessageActionRowComponent
 > = {
   type: ComponentType['type'];
-  serializer?: CustomSerializer;
+  serializer?: BitSerializer<Context>;
   template:
     | ((ctx: Context, createProps: CreateProps) => ComponentResolvable<ComponentType>)
     | ComponentResolvable<ComponentType>;
@@ -63,10 +48,10 @@ function $messageComponent<
 >(options: MessageComponentOptions<Context, CreateProps, ComponentType>) {
   let featureId: string;
 
-  const serializer = options.serializer ?? defaultSerializer;
+  const serializer = options.serializer ?? S.generic;
 
   function getCustomId(context: Context) {
-    const encodedId = encodeCustomId(new TextEncoder().encode(featureId));
+    const encodedId = S.string.encodeCustomId(featureId);
     if (encodedId.length > 15) {
       throw new Error(`Feature ID is too long: \`${featureId}\``);
     }
@@ -74,7 +59,7 @@ function $messageComponent<
       purpletCustomIdTrigger,
       encodedId.length.toString(36),
       encodedId,
-      context !== undefined ? encodeCustomId(serializer.serialize(context)) : '',
+      context !== undefined ? serializer.encodeCustomId(context as any) : '',
     ].join('');
 
     if ([...id].length > 100) {
@@ -98,13 +83,13 @@ function $messageComponent<
         if (!i.customId.startsWith(purpletCustomIdTrigger)) return;
 
         const length = parseInt(i.customId.charAt(2), 36);
-        const encodedId = new TextDecoder().decode(decodeCustomId(i.customId.slice(3, 3 + length)));
+        const encodedId = S.string.decodeCustomId(i.customId.slice(3, 3 + length));
 
         console.log({ length, encodedId });
 
         if (encodedId !== featureId) return;
 
-        const context = serializer.deserialize(decodeCustomId(i.customId.slice(3 + length)));
+        const context = serializer.decodeCustomId(i.customId.slice(3 + length)) as Context;
         options.handle.call(i, context);
       },
     },

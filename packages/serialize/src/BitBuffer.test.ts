@@ -4,23 +4,23 @@ describe('BitBuffer', () => {
   it('read(1)', () => {
     const arr = new Uint8Array([0b10101010, 0b11100100]);
     const buf = new BitBuffer(arr);
-    expect(buf.read(1)).toBe(0b0);
-    expect(buf.read(1)).toBe(0b1);
-    expect(buf.read(1)).toBe(0b0);
-    expect(buf.read(1)).toBe(0b1);
-    expect(buf.read(1)).toBe(0b0);
-    expect(buf.read(1)).toBe(0b1);
-    expect(buf.read(1)).toBe(0b0);
-    expect(buf.read(1)).toBe(0b1);
+    expect(buf.read()).toBe(0);
+    expect(buf.read()).toBe(1);
+    expect(buf.read()).toBe(0);
+    expect(buf.read()).toBe(1);
+    expect(buf.read()).toBe(0);
+    expect(buf.read()).toBe(1);
+    expect(buf.read()).toBe(0);
+    expect(buf.read()).toBe(1);
 
-    expect(buf.read(1)).toBe(0b0);
-    expect(buf.read(1)).toBe(0b0);
-    expect(buf.read(1)).toBe(0b1);
-    expect(buf.read(1)).toBe(0b0);
-    expect(buf.read(1)).toBe(0b0);
-    expect(buf.read(1)).toBe(0b1);
-    expect(buf.read(1)).toBe(0b1);
-    expect(buf.read(1)).toBe(0b1);
+    expect(buf.read()).toBe(0);
+    expect(buf.read()).toBe(0);
+    expect(buf.read()).toBe(1);
+    expect(buf.read()).toBe(0);
+    expect(buf.read()).toBe(0);
+    expect(buf.read()).toBe(1);
+    expect(buf.read()).toBe(1);
+    expect(buf.read()).toBe(1);
   });
   it('read(n)', () => {
     const arr = new Uint8Array([0b10101010, 0b11100100]);

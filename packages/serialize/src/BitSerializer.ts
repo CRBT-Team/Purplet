@@ -1,5 +1,5 @@
-import { decodeBase1114111, encodeBase1114111 } from './base1114111';
 import { BitBuffer } from './BitBuffer';
+import { decodeCustomId, encodeCustomId } from './custom-id';
 
 export interface BitSerializerOptions<T> {
   write(value: T, buffer: BitBuffer): void;
@@ -25,11 +25,18 @@ export class BitSerializer<T> {
   encode(value: T, bufferLength = 256) {
     const buffer = new BitBuffer(bufferLength);
     this.options.write(value, buffer);
-    return encodeBase1114111(new Uint8Array(buffer.buffer));
+    return new Uint8Array(buffer.buffer.slice(0, Math.ceil(buffer.index / 8)));
   }
 
-  decode(value: string): T {
-    const buffer = decodeBase1114111(value);
-    return this.options.read(new BitBuffer(buffer));
+  decode(value: Uint8Array): T {
+    return this.options.read(new BitBuffer(value));
+  }
+
+  encodeCustomId(value: T, bufferLength = 256) {
+    return encodeCustomId(this.encode(value, bufferLength));
+  }
+
+  decodeCustomId(value: string): T {
+    return this.decode(decodeCustomId(value));
   }
 }

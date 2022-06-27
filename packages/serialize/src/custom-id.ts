@@ -1,6 +1,6 @@
 // using all unicode characters from range 0 to 0x10FFFF, encode two and a half bytes per character
 // This is essentially "base1114111"
-export function encodeBase1114111(data: Uint8Array) {
+export function encodeCustomId(data: Uint8Array) {
   let output = '';
   for (let i = 0; i < data.length; i += 5) {
     const one = data[i];
@@ -20,7 +20,7 @@ export function encodeBase1114111(data: Uint8Array) {
   return output;
 }
 
-export function decodeBase1114111(data: string) {
+export function decodeCustomId(data: string) {
   const codePoints = [...data];
   const output = new Uint8Array(Math.ceil(codePoints.length * 2.5));
   let j = 0;
