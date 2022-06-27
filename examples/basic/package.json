@@ -11,6 +11,7 @@
   "dependencies": {
     "discord-api-types": "^0.33.1",
     "discord.js": "14.0.0-dev.1653480262-68d5169",
-    "purplet": "workspace:*"
+    "purplet": "workspace:*",
+    "string-width": "^5.1.2"
   }
 }

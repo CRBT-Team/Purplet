@@ -1,3 +1,4 @@
+import { GatewayDispatchEvents, GatewayIntentBits } from 'discord.js';
 import {
   createFeature,
   FeatureData,
@@ -5,6 +6,31 @@ import {
   IntentResolvable,
   MarkedFeature,
 } from '../lib/feature';
+
+function getIntents(ev: GatewayDispatchEvents): IntentResolvable {
+  if (ev === GatewayDispatchEvents.GuildIntegrationsUpdate)
+    return [GatewayIntentBits.GuildIntegrations];
+  if (ev === GatewayDispatchEvents.WebhooksUpdate) return [GatewayIntentBits.GuildWebhooks];
+  if (ev.startsWith('INVITE_')) return [GatewayIntentBits.GuildInvites];
+  if (ev.startsWith('MESSAGE_REACTION_')) return [GatewayIntentBits.GuildMessageReactions];
+  if (ev === GatewayDispatchEvents.TypingStart) return [GatewayIntentBits.GuildMessageTyping];
+  if (
+    [
+      GatewayDispatchEvents.MessageCreate,
+      GatewayDispatchEvents.MessageDelete,
+      GatewayDispatchEvents.MessageDeleteBulk,
+    ].includes(ev)
+  )
+    return [GatewayIntentBits.GuildMessages];
+  if (ev.startsWith('GUILD_MEMBER')) return [GatewayIntentBits.GuildMembers];
+  if (ev.startsWith('CHANNEL_')) return [GatewayIntentBits.Guilds];
+  if (ev === GatewayDispatchEvents.GuildEmojisUpdate)
+    return [GatewayIntentBits.GuildEmojisAndStickers];
+  if (ev === GatewayDispatchEvents.GuildStickersUpdate)
+    return [GatewayIntentBits.GuildEmojisAndStickers];
+  if (ev.startsWith('GUILD_')) return [GatewayIntentBits.Guilds];
+  return [];
+}
 
 /**
  * This hook allows you to specify what gateway intents your gateway bot requires. Does not assume a
@@ -29,6 +55,7 @@ export function $onEvent<K extends keyof GatewayEventHook>(
     gatewayEvent: {
       [eventName]: handler,
     },
+    intents: getIntents(eventName as GatewayDispatchEvents),
   });
 }
 

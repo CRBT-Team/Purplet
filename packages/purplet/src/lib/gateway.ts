@@ -33,7 +33,7 @@ import { rest, setDJSClient } from './global';
 import { log, pauseSpinner } from './logger';
 import { createInteraction } from '../structures';
 import { featureRequiresDJS } from '../utils/feature';
-import { JSONValue, toJSONValue } from '../utils/plain';
+import { JSONValue, toJSONValue } from '../utils/json';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 

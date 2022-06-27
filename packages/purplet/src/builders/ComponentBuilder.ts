@@ -1,4 +1,4 @@
-import { ButtonBuilder, TextInputBuilder } from '@discordjs/builders';
+import { ButtonBuilder } from '@discordjs/builders';
 import {
   APIActionRowComponent,
   APIActionRowComponentTypes,
@@ -9,7 +9,7 @@ import {
   ButtonStyle,
   ComponentType,
 } from 'discord-api-types/v10';
-import { JSONResolvable, toJSONValue } from '../utils/plain';
+import { JSONResolvable, toJSONValue } from '../utils/json';
 
 abstract class ComponentBuilder<Type extends APIActionRowComponentTypes> {
   protected components: APIActionRowComponent<Type>[] = [];
@@ -18,7 +18,7 @@ abstract class ComponentBuilder<Type extends APIActionRowComponentTypes> {
    * Adds an Action Row, either by providing an array of components, a single component, or a whole
    * action row.
    */
-  addRow(row: JSONResolvable<APIActionRowComponent<Type> | Type | Type[]>) {
+  addRow(row: JSONResolvable<APIActionRowComponent<Type> | Type | Type[]> = []) {
     const resolved = toJSONValue(row);
     if (Array.isArray(resolved)) {
       this.components.push({
@@ -58,7 +58,7 @@ abstract class ComponentBuilder<Type extends APIActionRowComponentTypes> {
 
 export class MessageComponentBuilder extends ComponentBuilder<APIMessageActionRowComponent> {
   toJSON() {
-    return this.components;
+    return this.components.filter(c => c.components.length > 0);
   }
 }
 

@@ -2,7 +2,7 @@ import { BasicEncoder, BitArray, GenericSerializer } from '@purplet/serialize';
 import type { APIModalInteractionResponseCallbackData } from 'discord-api-types/v10';
 import { ModalSubmitInteraction } from 'discord.js';
 import { createFeature } from '../lib/feature';
-import { JSONResolvable, JSONValue, toJSONValue } from '../utils/plain';
+import { JSONResolvable, JSONValue, toJSONValue } from '../utils/json';
 import type { IsUnknown } from '../utils/types';
 
 // TODO: merge shared behavior between message components and modals

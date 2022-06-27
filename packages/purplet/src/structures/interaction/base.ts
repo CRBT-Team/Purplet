@@ -4,11 +4,10 @@ import type {
   APIInteractionResponse,
   APIPingInteraction,
 } from 'discord-api-types/v10';
-import { EmptyTextChannel } from '../channel';
 import { EmptyGuild } from '../guild';
 import { InteractionExecutingUser } from '../user';
 import { createInstanceofGuard } from '../../utils/class';
-import { JSONResolvable, toJSONValue } from '../../utils/plain';
+import { JSONResolvable, toJSONValue } from '../../utils/json';
 
 export type InteractionResponseHandler = (r: APIInteractionResponse) => Awaitable<void>;
 
@@ -30,10 +29,6 @@ export abstract class Interaction<Data extends APINonPingInteraction = APINonPin
 
   get guild() {
     return this.raw.guild_id ? new EmptyGuild({ id: this.raw.guild_id }) : null;
-  }
-
-  get channel() {
-    return this.raw.channel_id ? new EmptyTextChannel({ id: this.raw.channel_id }) : null;
   }
 
   get guildLocale() {

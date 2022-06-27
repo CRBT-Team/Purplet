@@ -1,6 +1,6 @@
 import type { ImageURLOptions } from '@discordjs/rest';
 import type { APIGroupDMChannel } from 'discord.js';
-import { TextChannelBase } from './base-text';
+import { TextChannel } from './base-text';
 import { User } from '../user';
 import { rest } from '../../lib/global';
 import { createInstanceofGuard } from '../../utils/class';
@@ -9,7 +9,7 @@ type APIGroupDMChannelFixed = Omit<APIGroupDMChannel, 'name'> & { name?: string 
 
 export class GroupDMChannel<
   Data extends APIGroupDMChannelFixed = APIGroupDMChannelFixed
-> extends TextChannelBase<Data> {
+> extends TextChannel<Data> {
   static is = createInstanceofGuard(GroupDMChannel);
 
   get applicationId() {

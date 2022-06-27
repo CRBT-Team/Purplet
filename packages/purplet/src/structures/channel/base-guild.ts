@@ -1,5 +1,6 @@
 import type { APIGuildChannel, ChannelType } from 'discord-api-types/v10';
 import { Channel } from './base';
+import { EmptyCategoryChannel } from './guild-category';
 import { EmptyGuild } from '../guild';
 
 export class GuildChannelBase<
@@ -18,7 +19,7 @@ export class GuildChannelBase<
     return this.raw.position!;
   }
 
-  get parent() {
+  get parent(): EmptyCategoryChannel | null {
     return this.raw.parent_id ? new EmptyCategoryChannel({ id: this.raw.parent_id }) : null;
   }
 
@@ -29,4 +30,10 @@ export class GuildChannelBase<
   compareTo(other: GuildChannelBase) {
     return this.position - other.position;
   }
+}
+
+export interface GuildChannelBase<
+  Data extends APIGuildChannel<ChannelType> = APIGuildChannel<ChannelType>
+> {
+  fetch(): Promise<GuildChannelBase>;
 }

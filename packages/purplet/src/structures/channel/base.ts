@@ -6,10 +6,10 @@ import {
   RESTPatchAPIChannelJSONBody,
   Routes,
 } from 'discord-api-types/v10';
-import { createChannel } from '.';
+import { createChannel } from './create';
 import { ReadonlyChannelFlagsBitfield } from '../bit-field';
 import { rest } from '../../lib/global';
-import { JSONResolvable, toJSONValue } from '../../utils/plain';
+import { JSONResolvable, toJSONValue } from '../../utils/json';
 
 /** Structure for APIChannel. */
 export class Channel<Data extends APIChannelBase<ChannelType> = APIChannelBase<ChannelType>> {

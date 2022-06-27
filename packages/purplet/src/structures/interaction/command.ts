@@ -14,6 +14,7 @@ import {
   createInteractionMixinList,
   InteractionResponseMixin,
 } from './response';
+import { EmptyTextChannel } from '../channel';
 import { Message } from '../message';
 import { PartialUser } from '../user';
 import { createInstanceofGuard } from '../../utils/class';
@@ -45,6 +46,10 @@ export abstract class CommandInteraction<
   /** Partial validator, if this return true, then `createInteraction` will use this class. */
   static matches(raw: APIInteraction): raw is APIApplicationCommandInteraction {
     return raw.type === InteractionType.ApplicationCommand;
+  }
+
+  get channel() {
+    return new EmptyTextChannel({ id: this.raw.channel_id! });
   }
 
   get commandType() {

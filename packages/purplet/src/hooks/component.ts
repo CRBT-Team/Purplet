@@ -1,37 +1,46 @@
-import { BasicEncoder, BitArray, GenericSerializer } from '@purplet/serialize';
-import type {
+import { BitArray, GenericSerializer } from '@purplet/serialize';
+import {
   APIButtonComponent,
   APIMessageActionRowComponent,
   APISelectMenuComponent,
+  ComponentType,
 } from 'discord-api-types/v10';
 import { createFeature } from '../lib/feature';
 import { ButtonInteraction, ComponentInteraction, SelectMenuInteraction } from '../structures';
-import { JSONResolvable, JSONValue, toJSONValue } from '../utils/plain';
+import { decodeCustomId, encodeCustomId } from '../utils/custom-id-encode';
+import { JSONResolvable, JSONValue, toJSONValue } from '../utils/json';
 import type { IsUnknown } from '../utils/types';
 
-type CustomSerializer = {
-  toString(data: JSONValue): string;
-  fromString(from: string): JSONValue;
+const purpletCustomIdTrigger = '🟣';
+
+interface CustomSerializer {
+  serialize(data: JSONValue): Uint8Array;
+  deserialize(from: Uint8Array): JSONValue;
+}
+
+const defaultSerializer: CustomSerializer = {
+  serialize: data => {
+    return GenericSerializer.serialize(data).asUint8Array();
+  },
+  deserialize: data => {
+    return GenericSerializer.deserialize(BitArray.fromUint8Array(data));
+  },
 };
 
-const defaultSerializer = {
-  toString: (data: JSONValue) => {
-    return BasicEncoder.encode(GenericSerializer.serialize(data).asUint8Array());
-  },
-  fromString: (data: string) => {
-    return GenericSerializer.deserialize(BitArray.fromUint8Array(BasicEncoder.decode(data)));
-  },
-};
+type ComponentResolvable<Component> = JSONResolvable<Omit<Component, 'type' | 'custom_id'>>;
 
-interface MessageComponentOptions<
+type MessageComponentOptions<
   Context,
   CreateProps,
   ComponentType extends APIMessageActionRowComponent
-> {
+> = {
+  type: ComponentType['type'];
   serializer?: CustomSerializer;
-  create(ctx: Context, createProps: CreateProps): JSONResolvable<ComponentType>;
+  template:
+    | ((ctx: Context, createProps: CreateProps) => ComponentResolvable<ComponentType>)
+    | ComponentResolvable<ComponentType>;
   handle(this: ComponentInteraction, context: Context): void;
-}
+};
 
 /** @internal This type is used to remove properties of the `create` function if they are not needed. */
 type MessageComponentStaticProps<
@@ -56,6 +65,27 @@ function $messageComponent<
 
   const serializer = options.serializer ?? defaultSerializer;
 
+  function getCustomId(context: Context) {
+    const encodedId = encodeCustomId(new TextEncoder().encode(featureId));
+    if (encodedId.length > 15) {
+      throw new Error(`Feature ID is too long: \`${featureId}\``);
+    }
+    const id = [
+      purpletCustomIdTrigger,
+      encodedId.length.toString(36),
+      encodedId,
+      context !== undefined ? encodeCustomId(serializer.serialize(context)) : '',
+    ].join('');
+
+    if ([...id].length > 100) {
+      throw new Error(
+        `Component custom_id is too long. Please reduce the context size of: \`${featureId}\``
+      );
+    }
+
+    return id;
+  }
+
   return createFeature(
     // Feature Data
     {
@@ -64,24 +94,35 @@ function $messageComponent<
         featureId = this.featureId;
       },
       interaction(i) {
-        if (ComponentInteraction.is(i) && i.customId.startsWith(featureId + ':')) {
-          const data = i.customId.substring(featureId.length + 1);
-          const context = serializer.fromString(data);
-          options.handle.call(i, context);
-        }
+        if (!ComponentInteraction.is(i)) return;
+        if (!i.customId.startsWith(purpletCustomIdTrigger)) return;
+
+        const length = parseInt(i.customId.charAt(2), 36);
+        const encodedId = new TextDecoder().decode(decodeCustomId(i.customId.slice(3, 3 + length)));
+
+        console.log({ length, encodedId });
+
+        if (encodedId !== featureId) return;
+
+        const context = serializer.deserialize(decodeCustomId(i.customId.slice(3 + length)));
+        options.handle.call(i, context);
       },
     },
     // Static Props
     {
       create(context: Context, createProps: CreateProps) {
-        const template = toJSONValue(options.create(context, createProps));
-        (template as any).custom_id =
-          featureId + ':' + (context !== undefined ? serializer.toString(context) : '');
-        return template;
+        const template = toJSONValue(
+          typeof options.template === 'function'
+            ? options.template(context, createProps)
+            : options.template
+        );
+        return {
+          ...template,
+          type: options.type,
+          custom_id: getCustomId(context),
+        };
       },
-      getCustomId(context: Context) {
-        return featureId + ':' + (context !== undefined ? serializer.toString(context) : '');
-      },
+      getCustomId,
       // This cast makes the two parameters optional if the context is `unknown`.
     } as MessageComponentStaticProps<Context, CreateProps, ComponentType>
   );
@@ -90,7 +131,10 @@ function $messageComponent<
 // specific component types. mainly just alter/restrict types.
 
 interface ButtonMessageComponentOptions<Context, CreateProps>
-  extends Omit<MessageComponentOptions<Context, CreateProps, APIButtonComponent>, 'handle'> {
+  extends Omit<
+    MessageComponentOptions<Context, CreateProps, APIButtonComponent>,
+    'handle' | 'type'
+  > {
   handle(this: ButtonInteraction, context: Context): void;
 }
 
@@ -99,6 +143,7 @@ export function $buttonComponent<Context, CreateProps>(
 ) {
   return $messageComponent({
     ...options,
+    type: ComponentType.Button,
     handle(this: ButtonInteraction, context: Context) {
       options.handle.call(this, context);
     },

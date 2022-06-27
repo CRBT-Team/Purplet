@@ -7,7 +7,7 @@ import {
 } from 'discord-api-types/v10';
 import { Interaction } from './base';
 import { OriginalInteractionMessagePartial } from '../message-interaction';
-import type { JSONResolvable } from '../../utils/plain';
+import type { JSONResolvable } from '../../utils/json';
 
 /** Options for `Interaction.deferMessage` */
 export interface DeferMessageOptions {

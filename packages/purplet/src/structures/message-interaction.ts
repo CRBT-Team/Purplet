@@ -12,7 +12,7 @@ import type { Interaction } from './interaction/base';
 import { Message } from './message';
 import { rest } from '../lib/global';
 import { createPartialClass, PartialClass } from '../utils/class';
-import { JSONResolvable, toJSONValue } from '../utils/plain';
+import { JSONResolvable, toJSONValue } from '../utils/json';
 
 export class InteractionMessage extends Message {
   constructor(readonly raw: Immutable<APIMessage>, readonly interaction: Interaction) {

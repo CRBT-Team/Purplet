@@ -6,7 +6,6 @@ import type {
   ChannelType,
   LocalizationMap,
 } from 'discord-api-types/v10';
-import type { Attachment, Channel, Role, User } from 'discord.js';
 import type { BareUser, InteractionUser } from '../_experimental_structures';
 import type { AutocompleteInteraction } from '../interaction';
 
@@ -242,24 +241,4 @@ export type OptionBuilderEntryToPurpletResolved<X> = X extends { type: infer T }
 /** "PurpletResolved" is unused. */
 export type OptionBuilderToPurpletResolvedObject<X> = X extends OptionBuilderOrType<infer T>
   ? { [K in keyof T]: OptionBuilderEntryToPurpletResolved<T[K]> }
-  : never;
-/** "DJSResolved" refers to the resolved value given with `$slashCommand` */
-export type OptionBuilderEntryToDJSResolved<X> = X extends { type: infer T }
-  ? {
-      [ApplicationCommandOptionType.String]: string;
-      [ApplicationCommandOptionType.Integer]: number;
-      [ApplicationCommandOptionType.Boolean]: boolean;
-      [ApplicationCommandOptionType.User]: User;
-      [ApplicationCommandOptionType.Channel]: Channel;
-      [ApplicationCommandOptionType.Role]: Role;
-      [ApplicationCommandOptionType.Mentionable]: User | Role;
-      [ApplicationCommandOptionType.Number]: number;
-      [ApplicationCommandOptionType.Attachment]: Attachment;
-    }[T]
-  : X extends { enum: infer T }
-  ? T
-  : never;
-/** "DJSResolved" refers to the resolved value given with `$slashCommand` */
-export type OptionBuilderToDJSResolvedObject<X> = X extends OptionBuilderOrType<infer T>
-  ? { [K in keyof T]: OptionBuilderEntryToDJSResolved<T[K]> }
   : never;

@@ -1,12 +1,12 @@
 import type { APIGuildTextChannel, GuildTextChannelType } from 'discord-api-types/v10';
-import { Channel } from './base';
 import { GuildChannelBase } from './base-guild';
+import { TextChannel } from './base-text';
 import { createInstanceofGuard } from '../../utils/class';
 import { applyMixin } from '../../utils/mixin';
 
 export class GuildTextChannel<
   Data extends APIGuildTextChannel<GuildTextChannelType> = APIGuildTextChannel<GuildTextChannelType>
-> extends Channel<Data> {
+> extends TextChannel<Data> {
   static is = createInstanceofGuard(GuildTextChannel);
 
   get defaultAutoArchiveDuration() {
@@ -24,6 +24,8 @@ export class GuildTextChannel<
 
 export interface GuildTextChannel<
   Data extends APIGuildTextChannel<GuildTextChannelType> = APIGuildTextChannel<GuildTextChannelType>
-> extends GuildChannelBase<Data> {}
+> extends GuildChannelBase<Data> {
+  fetch(): Promise<GuildTextChannel>;
+}
 
 applyMixin(GuildTextChannel, GuildChannelBase);

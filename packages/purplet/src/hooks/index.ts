@@ -1,4 +1,4 @@
-export * from './basic';
+export * from './interaction';
 export * from './command';
 export * from './command-slash';
 export * from './command-context';

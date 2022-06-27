@@ -1,6 +1,6 @@
 import { ApplicationCommandType, LocalizationMap } from 'discord-api-types/v10';
-import { $interaction } from './basic';
 import { $applicationCommand } from './command';
+import { $interaction } from './interaction';
 import { $merge } from './merge';
 import {
   getOptionBuilderAutocompleteHandlers,
@@ -10,8 +10,8 @@ import {
 import { createFeature } from '../lib/feature';
 import { AutocompleteInteraction, SlashCommandInteraction } from '../structures';
 import { camelChoiceToSnake } from '../utils/case';
+import { toJSONValue } from '../utils/json';
 import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
-import { toJSONValue } from '../utils/plain';
 
 export interface SlashCommandData<T> extends CommandPermissionsInput {
   name: string;

@@ -20,3 +20,7 @@ export class VoiceChannelBase<
     return this.raw.video_quality_mode ?? VideoQualityMode.Auto;
   }
 }
+
+export interface VoiceChannelBase<Data extends APIVoiceChannel = APIVoiceChannel> {
+  fetch(): Promise<VoiceChannelBase>;
+}
