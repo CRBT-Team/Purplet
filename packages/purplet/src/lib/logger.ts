@@ -27,7 +27,7 @@ function logString(level: LogLevel, data: string) {
     process.stdout.write('\n');
     return;
   }
-  const terminalWidth = process.stdout.columns;
+  // const terminalWidth = process.stdout.columns;
   const prefix =
     level === 'purplet' ? '' : chalk.bold(`${colors[level](level.padEnd(5, ' '))}`) + ' ';
   const prefixLength = stringLength(prefix);

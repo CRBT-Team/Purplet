@@ -11,3 +11,5 @@ export type IsUnknown<T> = T extends
   | undefined
   ? false
   : true;
+
+export type Closable = { close: () => void };

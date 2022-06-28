@@ -4,8 +4,8 @@ import sade from 'sade';
 import { REST } from '@discordjs/rest';
 import { RESTGetAPICurrentUserResult, Routes } from 'discord.js';
 import { createRequire } from 'module';
-import { buildGatewayBot } from './build/build';
-import { startDevelopmentBot } from './dev/dev';
+import { buildGatewayBot } from './cli/build';
+import { DevMode } from './cli/dev';
 import type { GatewayBot } from './internal';
 import { getEnvVar, setupEnv } from './lib/env';
 import { injectLogger, log } from './lib/logger';
@@ -25,9 +25,9 @@ prog
   .describe('Start bot in development mode.')
   .action(opts => {
     setupEnv(false);
-    startDevelopmentBot({
+    new DevMode({
       root: path.resolve(opts.project),
-    });
+    }).start();
   })
   .command('build')
   .describe('Build bot for production.')

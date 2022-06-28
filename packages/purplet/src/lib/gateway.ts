@@ -1,7 +1,7 @@
 // this file is a bit more of a mess than i'd like it to be, but whatever
 // TODO: split functions into separate things, such as feature loading, gateway connecting, dev mode specific stuff.
 import dedent from 'dedent';
-import inquirer from 'inquirer';
+import prompt from 'prompts';
 import type { Immutable } from '@davecode/types';
 import {
   APIApplicationCommandBasicOption,
@@ -251,12 +251,12 @@ export class GatewayBot {
             'warn',
             `The token provided is for ${currentUser.username}#${currentUser.discriminator} (${currentUser.id}), which has global commands set. Purplet's development mode is not compatible with global commands, and must be removed.`
           );
-          const confirm = await inquirer.prompt({
+          const { confirm } = await prompt({
             type: 'confirm',
-            name: 'continue',
-            message: `Delete ALL Global Application Commands?`,
+            name: 'confirm',
+            message: 'Delete ALL Global Application Commands?',
           });
-          if (confirm.continue) {
+          if (confirm) {
             await rest.put(Routes.applicationCommands(this.#id), {
               body: [],
             });

@@ -6,9 +6,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build --parallel --output-logs new-only  --ignore=\"examples/**/*\"",
+    "build": "turbo run build --parallel --output-logs new-only --filter=!./examples/*",
     "bump": "changeset version",
-    "dev": "turbo run dev --parallel",
+    "dev": "pnpm turbo run dev --parallel --filter=!./examples/*",
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md,json}\"",
     "lint": "turbo run lint",
     "pub": "pnpm run build && changeset publish"
