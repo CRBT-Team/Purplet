@@ -2,7 +2,7 @@
 
 > Formerly named `@davecode/serialize`
 
-Utilities for binary serialization, used by Purplet, with the goal to cram as much data into Discord's `custom_id` as possible. This is done by using Base1114111 (a 2.5byte/char encoding), then a custom set of serializations that work on the bit-level instead of the byte-level, meaning two `booleans` will occupy not take two separate bytes, and other data that is typically one byte may be spread across multiple.
+Utilities for binary serialization, used by Purplet, with the goal to cram as much data into Discord's `custom_id` as possible. This is done by using Base1114111 (a 2.5byte/char encoding), then a custom set of serializations that work on the bit-level instead of the byte-level, meaning two `booleans` will not occupy two separate bytes, and other data that is typically one byte may be spread across multiple.
 
 This package provides functions to use Base1114111 to encode custom ids from `Uint8Array`s and a handful of serializers for compressing JSON-like data into those `Uint8Array`s. You can either build specialized serializers to go off the shape of your data, or use the `generic` serializer as a drop-in replacement for `JSON.stringify`.
 

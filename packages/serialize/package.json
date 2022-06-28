@@ -4,11 +4,21 @@
   "description": "Utilities for binary serialization, used by Purplet",
   "keywords": [
     "serialization",
+    "base1114111",
     "purplet"
   ],
+  "homepage": "https://github.com/CRBT-Team/Purplet/tree/v2/packages/serialize",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CRBT-Team/Purplet.git",
+    "directory": "packages/serialize"
+  },
   "license": "Apache-2.0",
   "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
   "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
