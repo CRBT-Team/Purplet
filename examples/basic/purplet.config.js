@@ -1,6 +1,4 @@
 /** @type {import('purplet').Config} */
-const config = {
-
-};
+const config = {};
 
 export default config;

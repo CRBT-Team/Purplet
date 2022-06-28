@@ -1,6 +1,6 @@
 {
   "name": "@purplet/serialize",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Utilities for binary serialization, used by Purplet",
   "keywords": [
     "serialization",

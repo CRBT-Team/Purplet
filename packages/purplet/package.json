@@ -1,6 +1,6 @@
 {
   "name": "purplet",
-  "version": "2.0.0-next.9",
+  "version": "2.0.0-next.10",
   "description": "A toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
   "keywords": [
     "discord",
@@ -27,6 +27,7 @@
   "bin": "./dist/cli.js",
   "files": [
     "dist",
+    "src",
     "CHANGELOG.MD",
     "LICENSE",
     "README.md"
@@ -34,14 +35,13 @@
   "scripts": {
     "build": "rollup -c && tsc -p . && echo Types Passing",
     "dev": "rollup -c --watch",
-    "format": "prettier --write 'src/**/*.{ts,tsx}'",
     "lint": "eslint src/**/*.{ts,tsx}"
   },
   "dependencies": {
     "@davecode/utils": "^1.0.0",
     "@discordjs/builders": "^0.13.0",
     "@discordjs/rest": "^0.4.1",
-    "@purplet/serialize": "workspace:^1.0.1",
+    "@purplet/serialize": "workspace:^2.0.0-next.0",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@ungap/structured-clone": "^1.0.1",

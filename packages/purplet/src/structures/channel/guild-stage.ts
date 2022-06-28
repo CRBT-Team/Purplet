@@ -11,6 +11,8 @@ export class StageChannel<
 }
 
 export interface StageChannel<Data extends APIVoiceChannel = APIVoiceChannel>
-  extends GuildChannelBase<Data> {}
+  extends GuildChannelBase<Data> {
+  fetch(): Promise<StageChannel>;
+}
 
 applyMixin(StageChannel, GuildChannelBase);

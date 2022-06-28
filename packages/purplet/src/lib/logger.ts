@@ -1,7 +1,6 @@
 import chalk from 'chalk';
-import wrap from 'wrap-ansi';
-import stringLength from 'string-length';
 import ora from 'ora';
+import stringLength from 'string-length';
 import { inspect } from 'util';
 
 const status = ora();
@@ -29,13 +28,14 @@ function logString(level: LogLevel, data: string) {
     return;
   }
   const terminalWidth = process.stdout.columns;
-  const prefix = level === 'purplet' ? '' : chalk.bold(`${colors[level](level.padEnd(5, ' '))}`) + ' ';
+  const prefix =
+    level === 'purplet' ? '' : chalk.bold(`${colors[level](level.padEnd(5, ' '))}`) + ' ';
   const prefixLength = stringLength(prefix);
   const wrapped = (textColors[level]?.(data) ?? data).replace(
     /\n/g,
     '\n' + ' '.repeat(prefixLength)
   );
-  const output = (prefix + wrapped + '\n') + (level === 'error' ? '\n' : '');
+  const output = prefix + wrapped + '\n' + (level === 'error' ? '\n' : '');
   if (status.isSpinning) {
     status.clear();
     process.stdout.write(output);
@@ -46,7 +46,7 @@ function logString(level: LogLevel, data: string) {
 }
 
 function stringify(...data: any[]) {
-  return data.map(obj => typeof obj === 'string' ? obj : inspect(obj, false, 4, true)).join(' ');
+  return data.map(obj => (typeof obj === 'string' ? obj : inspect(obj, false, 4, true))).join(' ');
 }
 
 export function log(level: LogLevel, ...data: any[]) {

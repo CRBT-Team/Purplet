@@ -1,5 +1,16 @@
 # `purplet`
 
+## 2.0.0-next.10
+
+### Patch Changes
+
+- Remove `djsClient` and `djsOption` hooks, and move all hooks to using purplet structures.
+- Purplet structures are back. They aren't finalized and it's probably harder to use but yeah.
+- Remove `$modal` temporarily. It will be back
+
+- Updated dependencies [[`2a994ea`](https://github.com/CRBT-Team/Purplet/commit/2a994ea9e7e325cf5670f78477a621377c94c29e)]:
+  - @purplet/serialize@2.0.0-next.0
+
 ## 2.0.0-next.9
 
 ### Patch Changes

@@ -13,7 +13,7 @@ const config: ResolvedConfig = {
     build: 'dist',
     features: 'src/features',
     temp: '.purplet',
-    translations: 'lang',
+    translations: 'locales',
   },
   vite: () => ({}),
   // END CONFIG

@@ -1,4 +1,4 @@
-import path from "path";
+import path from 'path';
 
 export type Validator<T = any> = (input: T, keypath: string) => T;
 
@@ -57,7 +57,7 @@ export function string_array(fallback: string[] | undefined): Validator {
   return validate(fallback, (input, keypath) => {
     if (input === undefined) return input;
 
-    if (!Array.isArray(input) || input.some((value) => typeof value !== 'string')) {
+    if (!Array.isArray(input) || input.some(value => typeof value !== 'string')) {
       throw new Error(`${keypath} must be an array of strings, if specified`);
     }
 
@@ -76,6 +76,7 @@ export function number(fallback: number): Validator {
 
 /**
  * @param {boolean} fallback
+ *
  * @returns {Validator}
  */
 export function boolean(fallback: boolean): Validator {

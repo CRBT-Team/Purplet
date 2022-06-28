@@ -6,12 +6,12 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --parallel --output-logs new-only  --ignore=\"examples/**/*\"",
     "bump": "changeset version",
     "dev": "turbo run dev --parallel",
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md,json}\"",
     "lint": "turbo run lint",
-    "pub": "changeset publish"
+    "pub": "pnpm run build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.22.0",

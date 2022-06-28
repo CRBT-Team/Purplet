@@ -1,9 +1,9 @@
 // TODO: My own env solution, or something where we can reload this file.
+import path from 'path';
+import sade from 'sade';
 import { REST } from '@discordjs/rest';
 import { RESTGetAPICurrentUserResult, Routes } from 'discord.js';
 import { createRequire } from 'module';
-import path from 'path';
-import sade from 'sade';
 import { buildGatewayBot } from './build/build';
 import { startDevelopmentBot } from './dev/dev';
 import type { GatewayBot } from './internal';
@@ -14,8 +14,8 @@ const require = createRequire(import.meta.url);
 
 injectLogger();
 
-log('warn', '⚠️  Purplet v__VERSION__ is beta software! ⚠️')
-log('warn', 'Report issues to https://github.com/CRBT-Team/purplet/issues')
+log('warn', '⚠️  Purplet v__VERSION__ is beta software! ⚠️');
+log('warn', 'Report issues to https://github.com/CRBT-Team/purplet/issues');
 
 const prog = sade('purplet');
 prog
@@ -23,7 +23,7 @@ prog
   .option('project', 'The directory of the Purplet project', './')
   .command('dev')
   .describe('Start bot in development mode.')
-  .action((opts) => {
+  .action(opts => {
     setupEnv(false);
     startDevelopmentBot({
       root: path.resolve(opts.project),
@@ -31,7 +31,7 @@ prog
   })
   .command('build')
   .describe('Build bot for production.')
-  .action((opts) => {
+  .action(opts => {
     setupEnv(true);
     buildGatewayBot({
       root: path.resolve(opts.project),
@@ -45,7 +45,9 @@ prog
       resolved = require.resolve(process.cwd());
       console.log(`Deploying commands from current bot build.`);
     } catch (error) {
-      console.error(`Could not resolve bot entry point. Make sure you run \`purplet build\` first.`);
+      console.error(
+        `Could not resolve bot entry point. Make sure you run \`purplet build\` first.`
+      );
       return;
     }
     const bot = (await import('file:///' + resolved)).default as GatewayBot;
