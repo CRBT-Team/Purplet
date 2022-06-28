@@ -23,7 +23,7 @@ const decoded = decodeCustomId(id);
 import { serializers as S } from '@purplet/serialize';
 
 const encoded = S.generic.encodeCustomId({ foo: 'bar', number: 32n }); // works with Dates, BigInts, and other types
-const decoded = S.generic.decodeCustomId(encoded); // works with any type
+const decoded = S.generic.decodeCustomId(encoded);
 ```
 
 ## List of serializers built-in to the library
