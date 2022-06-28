@@ -5,6 +5,8 @@ import { inspect } from 'util';
 
 const status = ora();
 
+let showDebug = false;
+
 type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'purplet';
 type LogFormatters = Record<LogLevel, (content: string) => string>;
 
@@ -23,6 +25,7 @@ const textColors: Partial<LogFormatters> = {
 };
 
 function logString(level: LogLevel, data: string) {
+  if (level === 'debug' && !showDebug) return;
   if (data === '') {
     process.stdout.write('\n');
     return;
@@ -73,4 +76,8 @@ export async function pauseSpinner(fn: () => void) {
   } else {
     fn();
   }
+}
+
+export function setVerbose(verbose: boolean) {
+  showDebug = verbose;
 }

@@ -9,6 +9,7 @@ import { writeTSConfig } from '../config/tsconfig';
 import type { ResolvedConfig } from '../config/types';
 import { createViteConfig } from '../config/vite';
 import { moduleToFeatureArray } from '../internal';
+import { setupEnv } from '../lib/env';
 import { GatewayBot } from '../lib/gateway';
 import { log, startSpinner } from '../lib/logger';
 import { unique } from '../utils/array';
@@ -57,8 +58,8 @@ export class DevMode {
     );
     this.firstRun = false;
 
+    setupEnv(true);
     this.config = await loadConfig(this.options.root);
-
     this.bot = new GatewayBot();
 
     const hmrWatcher = new VitePluginPurpletHMRHook();

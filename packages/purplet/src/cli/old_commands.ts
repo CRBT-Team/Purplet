@@ -20,7 +20,6 @@ log('warn', 'Report issues to https://github.com/CRBT-Team/purplet/issues');
 const prog = sade('purplet');
 prog
   .version('__VERSION__')
-  .option('project', 'The directory of the Purplet project', './')
   .command('dev')
   .describe('Start bot in development mode.')
   .action(opts => {

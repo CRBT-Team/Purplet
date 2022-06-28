@@ -49,6 +49,7 @@
     "chokidar": "^3.5.3",
     "dedent": "^0.7.0",
     "discord-api-types": "^0.33.5",
+    "discord.js": "14.0.0-dev.1656060492-e24970e",
     "dotenv": "^16.0.1",
     "esbuild": "^0.14.47",
     "fast-equals": "^3.0.3",
@@ -57,7 +58,9 @@
     "rollup": "^2.75.7",
     "rollup-plugin-esbuild": "^4.9.1",
     "string-length": "^5.0.1",
-    "vite": "alpha"
+    "vite": "alpha",
+    "wrap-ansi": "^8.0.1",
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
     "@davecode/types": "^1.0.2",
@@ -66,7 +69,7 @@
     "@types/node": "^17.0.45",
     "@types/prompts": "^2.0.14",
     "@types/wrap-ansi": "^8.0.1",
-    "discord.js": "14.0.0-dev.1656060492-e24970e",
+    "@types/yargs": "^17.0.10",
     "rollup-plugin-add-shebang": "^0.3.1",
     "typescript": "^4.7.4"
   },

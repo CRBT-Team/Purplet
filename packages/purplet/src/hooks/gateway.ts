@@ -1,4 +1,4 @@
-import { GatewayDispatchEvents, GatewayIntentBits } from 'discord.js';
+import { GatewayDispatchEvents, GatewayIntentBits } from 'discord-api-types/v10';
 import {
   createFeature,
   FeatureData,
