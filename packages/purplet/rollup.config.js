@@ -34,6 +34,7 @@ const config = [
       cli: 'src/cli/_cli.ts',
       index: 'src/index.ts',
       internal: 'src/internal.ts',
+      'discord-api-types': 'src/discord-api-types.ts',
     },
     output: {
       dir: 'dist',
