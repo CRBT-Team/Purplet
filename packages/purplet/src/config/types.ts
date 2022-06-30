@@ -1,10 +1,15 @@
 import type { Awaitable, DeepPartial, ForceSimplify } from '@davecode/types';
+import type { AllowedMentionsTypes } from 'discord.js';
 import type { UserConfig as ViteConfig } from 'vite';
 
 export interface ResolvedConfig {
   /** Not included in user configuration; This is the root directory of the project. */
   root: string;
   alias: Record<string, string>;
+  allowedMentions: {
+    parse: AllowedMentionsTypes[];
+    repliedUser: boolean;
+  };
   lang: string;
   paths: {
     build: string;

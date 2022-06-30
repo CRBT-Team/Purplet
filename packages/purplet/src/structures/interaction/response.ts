@@ -1,13 +1,16 @@
 import {
   APICommandAutocompleteInteractionResponseCallbackData,
-  APIInteractionResponseCallbackData,
   APIModalInteractionResponseCallbackData,
   InteractionResponseType,
   MessageFlags,
 } from 'discord-api-types/v10';
 import { Interaction } from './base';
 import { OriginalInteractionMessagePartial } from '../message-interaction';
-import type { JSONResolvable } from '../../utils/json';
+import {
+  CreateInteractionMessageData,
+  resolveCreateInteractionMessageData,
+} from '../resolve/create-message';
+import { JSONResolvable, toJSONValue } from '../../utils/json';
 
 /** Options for `Interaction.deferMessage` */
 export interface DeferMessageOptions {
@@ -36,11 +39,12 @@ abstract class InteractionResponseMethods extends Interaction {
    *
    * **Response functions can only be called once per interaction.**
    */
-  // TODO: use a custom structure instead, to allow easy message flags and attachments.
-  async showMessage(message: JSONResolvable<APIInteractionResponseCallbackData>) {
+  async showMessage(message: CreateInteractionMessageData) {
+    const { message: data, files } = resolveCreateInteractionMessageData(message);
     await this.respond({
       type: InteractionResponseType.ChannelMessageWithSource,
-      data: message,
+      data,
+      files,
     });
     return new OriginalInteractionMessagePartial({ id: '@original' }, this);
   }
@@ -70,11 +74,12 @@ abstract class InteractionResponseMethods extends Interaction {
    *
    * **Response functions can only be called once per interaction.**
    */
-  // TODO: use a custom structure instead, to allow easy message flags and attachments.
-  async updateMessage(message: JSONResolvable<APIInteractionResponseCallbackData>) {
+  async updateMessage(message: CreateInteractionMessageData) {
+    const { message: data, files } = resolveCreateInteractionMessageData(message);
     await this.respond({
       type: InteractionResponseType.UpdateMessage,
-      data: message,
+      data,
+      files,
     });
     return new OriginalInteractionMessagePartial({ id: '@original' }, this);
   }
@@ -111,7 +116,7 @@ abstract class InteractionResponseMethods extends Interaction {
   ) {
     this.respond({
       type: InteractionResponseType.ApplicationCommandAutocompleteResult,
-      data: choices,
+      data: toJSONValue(choices),
     });
   }
 
@@ -125,7 +130,7 @@ abstract class InteractionResponseMethods extends Interaction {
   showModal(modal: JSONResolvable<APIModalInteractionResponseCallbackData>) {
     this.respond({
       type: InteractionResponseType.Modal,
-      data: modal,
+      data: toJSONValue(modal),
     });
   }
 }

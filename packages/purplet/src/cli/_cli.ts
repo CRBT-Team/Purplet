@@ -16,6 +16,8 @@ interface CLIProgram {
 function start(cmd: CLIProgram, verbose: boolean) {
   setVerbose(verbose);
   injectLogger();
+  log('warn', '⚠️  Purplet v__VERSION__ is beta software! ⚠️');
+  log('warn', 'Report issues to https://github.com/CRBT-Team/purplet/issues');
   log('debug', `purplet v__VERSION__`);
 
   cmd.start();

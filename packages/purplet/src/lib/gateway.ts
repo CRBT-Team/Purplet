@@ -7,7 +7,6 @@ import {
   APIApplicationCommandBasicOption,
   APIGuild,
   APIInteraction,
-  APIInteractionResponse,
   APIUser,
   ApplicationCommandOptionType,
   ApplicationCommandType,
@@ -31,7 +30,7 @@ import type {
 } from './feature';
 import { rest, setDJSClient } from './global';
 import { log, pauseSpinner } from './logger';
-import { createInteraction } from '../structures';
+import { createInteraction, InteractionResponse } from '../structures';
 import { featureRequiresDJS } from '../utils/feature';
 import { JSONValue, toJSONValue } from '../utils/json';
 import { asyncMap } from '../utils/promise';
@@ -158,11 +157,13 @@ export class GatewayBot {
 
   // /** @internal */
   private async handleInteraction(i: APIInteraction) {
-    const responseHandler = async (response: APIInteractionResponse) => {
+    const responseHandler = async (response: InteractionResponse) => {
       await rest.post(Routes.interactionCallback(i.id, i.token), {
-        body: response,
-        // TODO: handle file uploads for interaction responses.
-        files: [],
+        body: {
+          type: response.type,
+          data: response.data,
+        },
+        files: response.files,
       });
     };
 

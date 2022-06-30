@@ -8,6 +8,10 @@ const config: ResolvedConfig = {
     $features: 'src/features',
     $lib: 'src/lib',
   },
+  allowedMentions: {
+    repliedUser: false,
+    parse: [],
+  },
   lang: 'en-US',
   paths: {
     build: 'dist',

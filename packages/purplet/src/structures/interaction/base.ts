@@ -1,17 +1,21 @@
-import type { Awaitable } from '@davecode/types';
+import type { RawFile } from '@discordjs/rest';
 import type {
   APIInteraction,
-  APIInteractionResponse,
   APIPingInteraction,
+  InteractionResponseType,
 } from 'discord-api-types/v10';
 import { EmptyGuild } from '../guild';
 import { InteractionExecutingUser } from '../user';
 import { createInstanceofGuard } from '../../utils/class';
-import { JSONResolvable, toJSONValue } from '../../utils/json';
 
-export type InteractionResponseHandler = (r: APIInteractionResponse) => Awaitable<void>;
-
+export type InteractionResponseHandler = (r: InteractionResponse) => void;
 export type APINonPingInteraction = Exclude<APIInteraction, APIPingInteraction>;
+
+export interface InteractionResponse {
+  type: InteractionResponseType;
+  data: unknown;
+  files?: RawFile[];
+}
 
 export abstract class Interaction<Data extends APINonPingInteraction = APINonPingInteraction> {
   static is = createInstanceofGuard<Interaction>(Interaction as any);
@@ -59,14 +63,14 @@ export abstract class Interaction<Data extends APINonPingInteraction = APINonPin
     return new InteractionExecutingUser(this.raw.user ?? this.member!.user, this);
   }
 
-  protected async respond(response: JSONResolvable<APIInteractionResponse>) {
+  protected async respond(response: InteractionResponse) {
     if (this.#replied) {
       throw new Error('Cannot respond to an interaction twice');
     }
     this.#replied = true;
 
     if (this.#onRespond) {
-      await this.#onRespond(toJSONValue(response));
+      await this.#onRespond(response);
     } else {
       throw new Error(
         'This interaction cannot be responded to. (onRespond not set in constructor)'
