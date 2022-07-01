@@ -10,14 +10,12 @@ function toBuffer(x: FileData): Buffer {
   return Buffer.from(x as Uint8Array);
 }
 
-export type CreateMessageData = JSONResolvable<
-  | string
+export type CreateMessageData = string | JSONResolvable<
   | CreateMessageObject
   | APIEmbed
   | APIEmbed[]
   | CreateMessageAttachment
   | CreateMessageAttachment[]
-  | CreateMessageObject
 >;
 
 export type CreateInteractionMessageData = CreateMessageData & { ephemeral?: boolean };

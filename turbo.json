@@ -4,7 +4,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".purplet/**"],
+      "outputs": ["dist/**", ".purplet/**", ".docusaurus/**", "build/**"],
       "inputs": ["src/**", "docs/**", "static/**", "blog/**"]
     },
     "lint": {

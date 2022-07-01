@@ -1,3 +1,5 @@
+// TODO: Write this test
+export {};
 // // tests/demo.js
 // import * as assert from 'uvu/assert';
 // import { UserFlags } from 'discord-api-types/v10';
