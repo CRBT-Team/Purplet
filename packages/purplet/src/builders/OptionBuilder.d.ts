@@ -173,15 +173,14 @@ type OptionBuilderMethod<CurrentOptions, MethodName extends keyof OptionInputs> 
         Record<
           Key,
           /**
-           * Here, we need to resolve EnumOptions, aka stuff with a choice array. I'll be honest, I
-           * do not know why we need that extra `T extends string` check, but it breaks everything
-           * if I remove it, so ¯＼_(ツ)_/¯
+           * Normal options are resolved to `ApplicationCommandOptionType.MethodName` except when
+           * its an enum type, where instead it's just that value.
            */
-          OptionOptions extends EnumOption<unknown, unknown, infer T>
-            ? T extends string
-              ? { enum: T }
-              : { type: typeof ApplicationCommandOptionType[Capitalize<MethodName>] }
-            : { type: typeof ApplicationCommandOptionType[Capitalize<MethodName>] }
+          OptionOptions['choices'] extends Record<infer K, string>
+            ? string | number extends K
+              ? typeof ApplicationCommandOptionType[Capitalize<MethodName>]
+              : K
+            : typeof ApplicationCommandOptionType[Capitalize<MethodName>]
         >
       >
   >
@@ -203,7 +202,7 @@ export function getOptionBuilderAutocompleteHandlers(
 type OptionBuilderOrType<T> = OptionBuilder<T> | T;
 
 /** "Unresolved" refers to the raw `value` property given in an interaction. */
-export type OptionBuilderEntryToUnresolved<X> = X extends { type: infer T }
+export type OptionBuilderEntryToUnresolved<X> = X extends ApplicationCommandOptionType
   ? {
       [ApplicationCommandOptionType.String]: string;
       [ApplicationCommandOptionType.Integer]: number;
@@ -214,16 +213,14 @@ export type OptionBuilderEntryToUnresolved<X> = X extends { type: infer T }
       [ApplicationCommandOptionType.Mentionable]: string;
       [ApplicationCommandOptionType.Number]: number;
       [ApplicationCommandOptionType.Attachment]: string;
-    }[T]
-  : X extends { enum: infer T }
-  ? T
-  : never;
+    }[X]
+  : X;
 /** "Unresolved" refers to the raw `value` property given in an interaction. */
 export type OptionBuilderToUnresolvedObject<X> = X extends OptionBuilderOrType<infer T>
   ? { [K in keyof T]: OptionBuilderEntryToUnresolved<T[K]> }
   : never;
 /** "PurpletResolved" is unused. */
-export type OptionBuilderEntryToPurpletResolved<X> = X extends { type: infer T }
+export type OptionBuilderEntryToPurpletResolved<X> = X extends ApplicationCommandOptionType
   ? {
       [ApplicationCommandOptionType.String]: string;
       [ApplicationCommandOptionType.Integer]: number;
@@ -234,10 +231,8 @@ export type OptionBuilderEntryToPurpletResolved<X> = X extends { type: infer T }
       [ApplicationCommandOptionType.Mentionable]: APIUser | APIRole;
       [ApplicationCommandOptionType.Number]: number;
       [ApplicationCommandOptionType.Attachment]: APIAttachment;
-    }[T]
-  : X extends { enum: infer T }
-  ? T
-  : never;
+    }[X]
+  : X;
 /** "PurpletResolved" is unused. */
 export type OptionBuilderToPurpletResolvedObject<X> = X extends OptionBuilderOrType<infer T>
   ? { [K in keyof T]: OptionBuilderEntryToPurpletResolved<T[K]> }
