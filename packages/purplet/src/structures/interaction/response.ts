@@ -116,7 +116,9 @@ abstract class InteractionResponseMethods extends Interaction {
   ) {
     this.respond({
       type: InteractionResponseType.ApplicationCommandAutocompleteResult,
-      data: toJSONValue(choices),
+      data: {
+        choices: toJSONValue(choices),
+      },
     });
   }
 

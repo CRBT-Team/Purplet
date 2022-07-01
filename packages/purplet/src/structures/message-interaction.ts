@@ -2,7 +2,6 @@ import type { Immutable } from '@davecode/types';
 import {
   APIMessage,
   RESTGetAPIWebhookWithTokenMessageResult,
-  RESTPatchAPIWebhookWithTokenMessageJSONBody,
   RESTPatchAPIWebhookWithTokenMessageResult,
   RESTPostAPIWebhookWithTokenJSONBody,
   RESTPostAPIWebhookWithTokenWaitResult,
@@ -10,9 +9,10 @@ import {
 } from 'discord-api-types/v10';
 import type { Interaction } from './interaction/base';
 import { Message } from './message';
+import { CreateMessageData, resolveCreateMessageData } from './resolve/create-message';
 import { rest } from '../lib/global';
 import { createPartialClass, PartialClass } from '../utils/class';
-import { JSONResolvable, toJSONValue } from '../utils/json';
+import { toJSONValue } from '../utils/json';
 
 export class InteractionMessage extends Message {
   constructor(readonly raw: Immutable<APIMessage>, readonly interaction: Interaction) {
@@ -26,16 +26,18 @@ export class InteractionMessage extends Message {
     return new InteractionMessage(data, this.interaction);
   }
 
-  async edit(message: JSONResolvable<RESTPatchAPIWebhookWithTokenMessageJSONBody>) {
-    // TODO: uploading files.
-    const data = (await rest.patch(
+  async edit(message: CreateMessageData) {
+    const { message: body, files } = resolveCreateMessageData(message);
+
+    const result = (await rest.patch(
       Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.raw.id),
       {
-        body: toJSONValue(message),
-        files: [],
+        body,
+        files,
       }
     )) as RESTPatchAPIWebhookWithTokenMessageResult;
-    return data;
+
+    return new InteractionMessage(result, this.interaction);
   }
 
   async delete() {

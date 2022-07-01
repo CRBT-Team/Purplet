@@ -54,7 +54,7 @@ export function $slashCommand<T>(options: SlashCommandData<T>) {
           i.commandType === ApplicationCommandType.ChatInput
         ) {
           const resolvedOptions = Object.fromEntries(
-            commandOptions.map(option => [option.name, i.getOption(option.name)])
+            commandOptions.map(option => [option.name, (i.getOption(option.name) as any)?.value])
           ) as unknown as T;
 
           i.showAutocompleteResponse(
