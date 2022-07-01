@@ -1,33 +1,28 @@
-import { ButtonStyle } from 'discord-api-types/v10';
-import { $buttonComponent, $slashCommand, MessageComponentBuilder } from 'purplet';
+import { OptionBuilder } from 'purplet';
 
-interface Data {
-  id: string;
-}
+const options1 = new OptionBuilder().string('a', 'b');
+const options2 = options1.string('b', 'c');
+const options3 = options2.string('c', 'c');
 
-export const myButton = $buttonComponent({
-  template(data: Data) {
-    return {
-      label: `Set to ${data.id}`,
-      style: ButtonStyle.Primary,
-    };
-  },
-  handle(data) {
-    this.updateMessage({
-      content: `The current id is \`${data.id}\``,
-    });
-  },
-});
+const crash = new OptionBuilder()
+  .string('a', '')
+  .string('n', '', {
+    autocomplete() {
+      return [];
+    },
+  })
+  .string('v', '', { choices: Object.fromEntries([]) })
+  .string('b', '', { choices: { x: 'a', y: 'b' } })
+  .string('c', '', { required: true })
+  .boolean('d', '')
+  .number('e', '')
+  .channel('f', '')
+  .attachment('g', '')
+  .integer('h', '')
+  .mentionable('i', '')
+  .user('j', '')
+  .role('k', '', { required: true })
+  .string('l', '')
+  .string('m', '');
 
-export const command = $slashCommand({
-  name: 'component_test',
-  description: 'framework experiment',
-  async handle() {
-    this.showMessage({
-      content: `Message content`,
-      components: new MessageComponentBuilder()
-        .addInline(myButton.create({ id: 'one' }))
-        .addInline(myButton.create({ id: 'two' })),
-    });
-  },
-});
+declare const x: typeof crash extends OptionBuilder<infer y> ? y : never;
