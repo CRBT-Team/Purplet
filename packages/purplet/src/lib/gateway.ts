@@ -11,6 +11,7 @@ import {
   ApplicationCommandOptionType,
   ApplicationCommandType,
   GatewayDispatchEvents,
+  GatewayIntentBits,
   RESTAPIPartialCurrentUserGuild,
   RESTGetAPIApplicationCommandsResult,
   RESTGetAPICurrentUserResult,
@@ -146,13 +147,18 @@ export class GatewayBot {
 
   /** @internal Resolves what gateway intents are desired using the `intents` hook. */
   private async resolveGatewayIntents() {
-    return (
+    const intents = (
       await asyncMap(this.#features, feat =>
         typeof feat.intents === 'function' ? feat.intents.call(feat) : feat.intents
       )
     )
       .flat()
       .reduce((a: number, b) => a | (b ?? 0), 0);
+
+    if (this.#options.mode === 'development') {
+      return intents | GatewayIntentBits.Guilds;
+    }
+    return intents;
   }
 
   // /** @internal */
@@ -195,6 +201,7 @@ export class GatewayBot {
 
   /** Starts the gateway bot. Run the first set of `.loadFeatures` _before_ using this. */
   async start(options: Immutable<GatewayBotOptions>) {
+    console.debug('validating options');
     this.#options = options;
 
     const include = getEnvVar('PURPLET_INCLUDE_GUILDS') ?? '';
@@ -208,7 +215,6 @@ export class GatewayBot {
       exclude: exclude ? exclude.split(',') : [],
     };
 
-    // Remove after Node.js 16 is no longer in LTS
     const botReliesOnDJS = this.#features.some(featureRequiresDJS);
 
     // TODO: do not use process.env but something else. related to custom env solution.
@@ -228,6 +234,7 @@ export class GatewayBot {
       process.exit(1); // TODO: throw an error instead, and have cli handle printing and exiting.
     }
 
+    console.debug('fetching bot user information');
     const currentUser = (await rest.get(Routes.user())) as RESTGetAPICurrentUserResult;
     this.#id = currentUser.id;
     const currentApplication = (await rest.get(
@@ -242,6 +249,7 @@ export class GatewayBot {
     }
 
     if (this.#options.checkIfProductionBot !== false) {
+      console.debug('performing "is production bot" check');
       const globalCommands = (await rest.get(
         Routes.applicationCommands(this.#id)
       )) as RESTGetAPIApplicationCommandsResult;
@@ -269,6 +277,7 @@ export class GatewayBot {
       }
     }
 
+    console.debug('running initialize hook');
     await this.runLifecycleHook(this.#features, 'initialize');
 
     // Command Sync
@@ -355,11 +364,13 @@ export class GatewayBot {
     const commands = await this.resolveApplicationCommands();
 
     if (commands.length === 0) {
+      console.debug('there are no application commands');
       return;
     }
 
     // Check for sameness, and if so, don't update.
     if (this.#cachedCommandData && deepEqual(commands, this.#cachedCommandData)) {
+      console.debug('application command data identical, skipping update');
       return;
     }
 
@@ -370,18 +381,11 @@ export class GatewayBot {
       return;
     }
 
-    // Overwrite the global command data with nothing, but only on first load.
-    // This line might cause a lot of people some problems. We need to ensure that the docs
-    // scream at people to use separate development and production bots to avoid stuff like this.
-    if (!this.#cachedCommandData) {
-      await rest.put(Routes.applicationCommands(this.#id), { body: [] });
-    }
-
     const guildList = (
       (await rest.get(Routes.userGuilds())) as RESTAPIPartialCurrentUserGuild[]
     ).filter(x => this.isGuildAllowed(x.id));
 
-    if (guildList.length > 100) {
+    if (guildList.length > 75) {
       throw new Error("You can't have more than 75 guilds on your development bot.");
     }
     if (guildList.length >= 5) {
@@ -394,6 +398,8 @@ export class GatewayBot {
     await asyncMap(guildList, async guild => {
       this.updateApplicationCommandsGuild(guild);
     });
+
+    console.debug('development mode app command push done');
   }
 
   private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
@@ -530,11 +536,13 @@ export class GatewayBot {
   async stop() {
     // Stop the bot
     if (this.#djsClient) {
+      console.debug('closing discord client');
       await this.#djsClient.destroy();
     }
 
     // Clear commands
     if (this.#options.mode === 'development') {
+      console.debug('clearing dev application commands');
       const guildList = (await rest.get(Routes.userGuilds())) as RESTAPIPartialCurrentUserGuild[];
 
       await asyncMap(guildList, async guild => {
@@ -545,5 +553,7 @@ export class GatewayBot {
     }
 
     this.#running = false;
+
+    console.debug('GatewayBot stopped');
   }
 }

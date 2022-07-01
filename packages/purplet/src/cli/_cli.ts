@@ -24,9 +24,12 @@ function start(cmd: CLIProgram, verbose: boolean) {
 
   let stopping = false;
   process.on('SIGINT', async () => {
+    log('debug', 'Received SIGINT');
+
     if (stopping) {
       return;
     }
+
     stopping = true;
 
     await cmd.stop?.();
@@ -69,7 +72,7 @@ cli.command(
   args => start(new DevMode(args), args.verbose)
 );
 longDescriptions['dev'] = dedent`
-  Start purplet in development mode. Development mode uses vite to give you fast hot-reloading. The $DISCORD_BOT_TOKEN variable must be set to a bot that is in a few guilds, only intended for testing. Reloads will be slower with bots in over 5 guilds, and does not support bots in over 100 guilds.
+  Start purplet in development mode. Development mode uses vite to give you fast hot-reloading. The $DISCORD_BOT_TOKEN variable must be set to a bot that is in a few guilds, only intended for testing. Reloads will be slower with bots in over 5 guilds, and does not support bots in over 75 guilds.
 `;
 cli.command(
   'build',

@@ -104,7 +104,7 @@ export class DevMode {
 
   async stop() {
     log('info', 'Shutting down Purplet');
-    this.stopInternal();
+    await this.stopInternal();
   }
 
   private async stopInternal() {
