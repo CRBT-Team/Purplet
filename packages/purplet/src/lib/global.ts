@@ -1,11 +1,8 @@
-import { REST } from '@discordjs/rest';
-import type { Client } from 'discord.js';
+import type { REST } from '@discordjs/rest';
 
 /** Global REST client from `@discordjs/rest`. */
-export const rest = new REST();
+export let rest: REST;
 
-export let djs: Client;
-
-export function setDJSClient(newDJS: Client) {
-  djs = newDJS;
+export function setRESTClient(newRest: REST) {
+  rest = newRest;
 }

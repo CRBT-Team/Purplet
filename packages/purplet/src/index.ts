@@ -3,8 +3,7 @@
 export * from './builders';
 export type { Config } from './config/types';
 export * from './hooks';
-export * from './lib/feature';
-export * from './lib/gateway';
+export * from './lib/hook-core';
 export * from './structures';
-export { djs, rest } from './lib/global';
+export { rest } from './lib/global';
 export type { Cleanup } from './utils/types';

@@ -1,11 +1,14 @@
-// import { $presence } from 'purplet';
+import { ActivityType, PresenceUpdateStatus } from 'discord.js';
+import { $presence } from 'purplet';
 
-// export const data = $presence({
-//   status: 'online',
-//   activities: [
-//     {
-//       name: 'Purplet v2',
-//       type: ActivityType.Playing,
-//     },
-//   ],
-// });
+export default $presence({
+  status: PresenceUpdateStatus.Online,
+  activities: [
+    {
+      name: 'Purplet v2',
+      type: ActivityType.Playing,
+    },
+  ],
+  since: null,
+  afk: false,
+});
