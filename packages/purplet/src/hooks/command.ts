@@ -1,8 +1,10 @@
-import { ApplicationCommandData, createFeature } from '../lib/feature';
+import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord.js';
+import { $applicationCommands, $interaction } from '../lib/hook-core';
+import { $merge } from '../lib/hook-merge';
 import { CommandInteraction, SlashCommandInteraction } from '../structures';
 
 export interface ApplicationCommandHookData {
-  command: ApplicationCommandData;
+  command: RESTPostAPIApplicationCommandsJSONBody;
   handle(this: CommandInteraction): void;
 }
 
@@ -12,10 +14,10 @@ function getCommandName(interaction: CommandInteraction) {
     : interaction.commandName;
 }
 
-export function $applicationCommand(opts: ApplicationCommandHookData) {
-  return createFeature({
-    applicationCommands: [opts.command],
-    interaction(i) {
+export function $appCommand(opts: ApplicationCommandHookData) {
+  return $merge([
+    $applicationCommands([opts.command]),
+    $interaction(i => {
       if (
         i instanceof CommandInteraction &&
         i.commandType === opts.command.type &&
@@ -23,6 +25,6 @@ export function $applicationCommand(opts: ApplicationCommandHookData) {
       ) {
         opts.handle.call(i);
       }
-    },
-  });
+    }),
+  ]);
 }

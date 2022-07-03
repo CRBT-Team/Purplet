@@ -9,8 +9,9 @@ import { writeTSConfig } from '../config/tsconfig';
 import type { ResolvedConfig } from '../config/types';
 import { createViteConfig } from '../config/vite';
 import { moduleToFeatureArray } from '../internal';
-import { setupEnv } from '../lib/env';
-import { GatewayBot } from '../lib/gateway';
+import { getEnvVar, setupEnv } from '../lib/env';
+import { GatewayBot } from '../lib/GatewayBot';
+import type { Feature } from '../lib/hook';
 import { log, startSpinner } from '../lib/logger';
 import { unique } from '../utils/array';
 import { isSourceFile } from '../utils/filetypes';
@@ -48,6 +49,7 @@ export class DevMode {
   viteServer!: ViteDevServer;
   bot!: GatewayBot;
   closables: Closable[] = [];
+  featureMap: Map<string, Feature[]> = new Map();
 
   constructor(readonly options: DevModeOptions) {}
 
@@ -60,11 +62,33 @@ export class DevMode {
 
     setupEnv(true);
     this.config = await loadConfig(this.options.root);
-    this.bot = new GatewayBot();
+
+    const token = getEnvVar('DISCORD_BOT_TOKEN');
+
+    if (!token) {
+      throw new Error('Missing DISCORD_BOT_TOKEN environment variable');
+    }
+
+    const include = getEnvVar('PURPLET_INCLUDE_GUILDS') ?? '';
+    const exclude = getEnvVar('PURPLET_EXCLUDE_GUILDS') ?? '';
+
+    if (include && exclude) {
+      throw new Error('Cannot specify both PURPLET_INCLUDE_GUILDS and PURPLET_EXCLUDE_GUILDS');
+    }
+
+    this.bot = new GatewayBot({
+      token,
+      deployGuildCommands: true,
+      guildRules: {
+        include: include ? include.split(',') : [],
+        exclude: exclude ? exclude.split(',') : [],
+      },
+    });
 
     const hmrWatcher = new VitePluginPurpletHMRHook();
 
-    // Excuse the mess, this runs everything concurrently...
+    // Excuse the mess, this runs a lot of init stuff concurrently, but they all resolve nearly
+    // instantly so it's not like it matters much.
     const [initModules] = await Promise.all([
       walk(this.config.paths.features).then(list => list.filter(isSourceFile)),
       Promise.all([
@@ -85,20 +109,15 @@ export class DevMode {
     this.startSourceCodeWatcher();
     this.startConfigWatcher();
 
-    await this.bot.start({
-      mode: 'development',
-      checkIfProductionBot: true,
-      gateway: true,
-    });
+    await this.bot.start();
 
     spinner.stop();
     spinner.clear();
     const duration = performance.now() - startTime;
+    const durationFormat = (duration / 1000).toFixed(1);
     log(
       'purplet',
-      `Bot is now running in development mode as ${this.bot.user!.tag ?? 'unknown user'} (${(
-        duration / 1000
-      ).toFixed(1)}s)`
+      `Bot is now running in development mode as ${'unknown user'} (${durationFormat}s)`
     );
   }
 
@@ -121,10 +140,14 @@ export class DevMode {
     });
 
     // Hot Updates: Removing files
-    this.viteServer.watcher.on('unlink', filename => {
+    this.viteServer.watcher.on('unlink', async filename => {
       log('info', 'Reloading new changes...');
-      if (filename.startsWith(this.config.paths.features)) {
-        this.bot.unloadFeaturesFromFile(path.relative(this.config.paths.features, filename));
+      if (filename.startsWith(this.config.paths.features) && this.featureMap.has(filename)) {
+        await this.bot.patchFeatures({
+          add: [],
+          remove: this.featureMap.get(filename)!,
+        });
+        this.featureMap.delete(filename);
       }
     });
   }
@@ -181,8 +204,11 @@ export class DevMode {
 
     const [features] = await Promise.all([
       moduleToFeatureArray(relativeFilename, await this.viteServer.ssrLoadModule(filename)),
-      this.bot.unloadFeaturesFromFile(relativeFilename),
     ]);
-    await this.bot.loadFeatures(...features);
+    await this.bot.patchFeatures({
+      add: features,
+      remove: this.featureMap.get(filename) ?? [],
+    });
+    this.featureMap.set(filename, features);
   }
 }

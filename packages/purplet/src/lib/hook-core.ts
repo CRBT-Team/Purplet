@@ -1,11 +1,11 @@
 import type {
+  GatewayActivityUpdateData,
   GatewayDispatchPayload,
   GatewayIntentBits,
-  GatewayPresenceUpdateData,
   RESTPutAPIApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { createHook } from './hook';
-import { IntentBitfield, Interaction } from '../structures';
+import type { IntentBitfield, Interaction } from '../structures';
 
 export type InitializeHookEvent = undefined;
 export type InteractionHookEvent = Interaction;
@@ -15,10 +15,19 @@ export type IntentsHookData =
   | IntentBitfield
   | GatewayIntentBits
   | (IntentBitfield | GatewayIntentBits)[];
-export type PresenceHookData = GatewayPresenceUpdateData;
+export interface PresenceHookData {
+  since?: number | null;
+  activities?: GatewayActivityUpdateData[];
+  status?: Status;
+  afk?: boolean;
+}
 
-export function mergeIntents(intents: IntentsHookData[]) {
-  return intents.map(x => IntentBitfield.resolve(x).bitfield).reduce((a, b) => a | b);
+export enum Status {
+  Online = 'online',
+  DoNotDisturb = 'dnd',
+  Idle = 'idle',
+  /** Invisible is shown as offline. */
+  Invisible = 'invisible',
 }
 
 export const $initialize = createHook<InitializeHookEvent, 'lifecycle'>({

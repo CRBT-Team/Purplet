@@ -2,18 +2,18 @@ import { FEATURE, Feature, FeatureMetaData, Hook, HookType } from './hook';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 
-export type MergeFunction<T> = (a: T[]) => T;
+export type MergeFunction<T, Result> = (a: T[]) => Result;
 export type FeatureArrayResolvable = Feature[] | { features: Feature[] };
 
 /**
  * Runs a data hook, given a list of features to operate on (may include non-matching hooks), the
  * hook, and a merge function to combine multiple entries. Returns the merged data.
  */
-export async function runHook<Data>(
+export async function runHook<Data, Result>(
   allFeatures: FeatureArrayResolvable,
   hook: Hook<Data, 'data'>,
-  merge: MergeFunction<Data>
-): Promise<Data>;
+  merge: MergeFunction<Data, Result>
+): Promise<Result>;
 /**
  * Runs a data hook, given a list of features to operate on (may include non-matching hooks), the
  * hook, and no function to combine multiple entries. Returns an array of data.
@@ -21,7 +21,7 @@ export async function runHook<Data>(
 export async function runHook<Data>(
   allFeatures: FeatureArrayResolvable,
   hook: Hook<Data, 'data'>
-): Promise<Data>;
+): Promise<Data[]>;
 /**
  * Runs an event hook, given a list of features to operate on (may include non-matching hooks), the
  * hook, and the event data. Returns nothing.
@@ -47,19 +47,19 @@ export async function runHook<Data>(
  * and either the event data or a merge function, based on the type of hook. Returns different
  * things based on the hook type.
  */
-export async function runHook<Data>(
+export async function runHook<Data, R>(
   allFeatures: FeatureArrayResolvable,
   hook: Hook<Data, HookType>,
-  event?: Data | MergeFunction<Data>
-): Promise<Cleanup>;
+  event?: Data | MergeFunction<Data, R>
+): Promise<Cleanup | Data>;
 // Implementation:
 export async function runHook<Data, Type extends HookType>(
   features: FeatureArrayResolvable,
   hook: Hook<Data, Type>,
-  extraArg?: Data | MergeFunction<Data>
+  extraArg?: Data | MergeFunction<Data, unknown>
 ) {
   const rawList = Array.isArray(features) ? features : features.features;
-  const list = rawList.filter(feature => feature[FEATURE].hook === hook.id);
+  const list = rawList.filter(feature => feature[FEATURE].hook.id === hook.id);
 
   if (hook.type === 'data') {
     const values = await asyncMap(list, feature =>
@@ -68,7 +68,7 @@ export async function runHook<Data, Type extends HookType>(
         : feature[FEATURE].data
     );
 
-    return extraArg ? (extraArg as MergeFunction<Data>)(values) : values;
+    return extraArg ? (extraArg as MergeFunction<Data, unknown>)(values) : values;
   }
 
   if (hook.type === 'event') {

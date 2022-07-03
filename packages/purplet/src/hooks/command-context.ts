@@ -1,5 +1,5 @@
 import { ApplicationCommandType, LocalizationMap } from 'discord-api-types/v10';
-import { $applicationCommand } from './command';
+import { $appCommand } from './command';
 import type {
   Message,
   MessageCommandInteraction,
@@ -18,7 +18,7 @@ export interface UserCommandOptions extends ContextCommandOptions {
 }
 
 export function $userContextCommand(opts: UserCommandOptions) {
-  return $applicationCommand({
+  return $appCommand({
     command: {
       type: ApplicationCommandType.User,
       name: opts.name,
@@ -36,7 +36,7 @@ export interface MessageCommandOptions extends ContextCommandOptions {
 }
 
 export function $messageContextCommand(opts: MessageCommandOptions) {
-  return $applicationCommand({
+  return $appCommand({
     command: {
       type: ApplicationCommandType.Message,
       name: opts.name,

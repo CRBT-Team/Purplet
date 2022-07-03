@@ -1,3 +1,4 @@
+import { REST } from '@discordjs/rest';
 import {
   APIGuild,
   GatewayDispatchEvents,
@@ -6,13 +7,14 @@ import {
   GatewayIntentBits,
   GatewayPresenceUpdateData,
   RESTAPIPartialCurrentUserGuild,
+  RESTGetAPIOAuth2CurrentApplicationResult,
   RESTPutAPIApplicationCommandsJSONBody,
   Routes,
 } from 'discord-api-types/v10';
 import { deepEqual } from 'fast-equals';
 import { FeatureLoader } from './FeatureLoader';
 import { GatewayClient } from './GatewayClient';
-import { rest } from './global';
+import { rest, setRESTClient } from './global';
 import type { Feature } from './hook';
 import {
   $applicationCommands,
@@ -22,9 +24,10 @@ import {
   $interaction,
   $presence,
 } from './hook-core';
+import { mergeIntents, mergePresence } from './hook-core-merge';
 import { runHook } from './hook-run';
 import { log } from './logger';
-import { createInteraction, IntentBitfield, InteractionResponse } from '../structures';
+import { createInteraction, InteractionResponse } from '../structures';
 import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 
@@ -61,7 +64,7 @@ export interface AllowedGuildRules {
  * implements the 6 core hooks.
  */
 // TODO: split off command deploying logic to a `GuildCommandManager` class
-export class GatewayBot2 {
+export class GatewayBot {
   features = new FeatureLoader();
   client: GatewayClient | null = null;
 
@@ -83,8 +86,12 @@ export class GatewayBot2 {
 
   async start() {
     if (this.#running) throw new Error('GatewayBot is already running');
+    this.#running = true;
+    setRESTClient(new REST().setToken(this.options.token));
     if (!this.#id) {
-      throw new Error('optional id is not supported');
+      this.#id = await rest
+        .get(Routes.oauth2CurrentApplication())
+        .then(x => (x as RESTGetAPIOAuth2CurrentApplicationResult).id);
     }
     log('debug', `starting gateway bot, guildCommands=${this.options.deployGuildCommands}`);
     this.#cleanupInitializeHook = await runHook(this.features, $initialize, undefined);
@@ -95,11 +102,10 @@ export class GatewayBot2 {
     // Get gateway configuration
     const [intents, presence] = await Promise.all([
       this.#cachedIntents ?? runHook(this.features, $intents, mergeIntents),
-      this.#cachedPresence ??
-        runHook(this.features, $presence, (a, b) => ({ ...a, ...b }), undefined!),
+      this.#cachedPresence ?? runHook(this.features, $presence, mergePresence),
     ]);
 
-    this.#cachedIntents = IntentBitfield.resolve(intents).bitfield;
+    this.#cachedIntents = intents;
     this.#cachedPresence = presence;
 
     // Create gateway client
@@ -133,12 +139,7 @@ export class GatewayBot2 {
     });
 
     if (this.options.deployGuildCommands) {
-      this.#cachedCommandData = await runHook(
-        this.features,
-        $applicationCommands,
-        (a, b) => [...a, ...b],
-        []
-      );
+      this.#cachedCommandData = await runHook(this.features, $applicationCommands, x => x.flat());
       this.client.on(
         GatewayDispatchEvents.GuildCreate,
         async (guild: GatewayGuildCreateDispatchData) => {
@@ -163,12 +164,6 @@ export class GatewayBot2 {
   private async updateCommands(commands: RESTPutAPIApplicationCommandsJSONBody) {
     if (commands.length === 0) {
       console.debug('there are no application commands');
-      return;
-    }
-
-    // Check for sameness, and if so, don't update.
-    if (this.#cachedCommandData && deepEqual(commands, this.#cachedCommandData)) {
-      console.debug('application command data identical, skipping update');
       return;
     }
 
@@ -218,24 +213,16 @@ export class GatewayBot2 {
     const coreFeaturesRemoved = await this.features.remove(remove);
     const coreFeaturesAdded = await this.features.add(add);
 
+    log('debug', `patching features, ${add.length} add, ${remove.length} remove.`);
+
     if (!this.#running) return;
 
     // TODO: clear lifecycle, but maybe that should be done in .remove()?
     await runHook(coreFeaturesAdded, $initialize, undefined);
 
-    const newIntents = await runHook(this.features, $intents, (a, b) => a | b, 0);
-    const newPresence = await runHook(
-      this.features,
-      $presence,
-      (a, b) => ({ ...a, ...b }),
-      undefined!
-    );
-    const newCommandData = await runHook(
-      this.features,
-      $applicationCommands,
-      (a, b) => [...a, ...b],
-      []
-    );
+    const newIntents = await runHook(this.features, $intents, mergeIntents);
+    const newPresence = await runHook(this.features, $presence, mergePresence);
+    const newCommandData = await runHook(this.features, $applicationCommands, x => x.flat());
 
     if (newIntents !== this.#cachedIntents) {
       this.#cachedIntents = newIntents;

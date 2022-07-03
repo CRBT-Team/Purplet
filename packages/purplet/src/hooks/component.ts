@@ -5,7 +5,8 @@ import {
   APISelectMenuComponent,
   ComponentType,
 } from 'discord-api-types/v10';
-import { createFeature } from '../lib/feature';
+import { $initialize, $interaction } from '../lib/hook-core';
+import { $merge } from '../lib/hook-merge';
 import { ButtonInteraction, ComponentInteraction, SelectMenuInteraction } from '../structures';
 import { JSONResolvable, toJSONValue } from '../utils/json';
 import type { IsUnknown } from '../utils/types';
@@ -71,28 +72,25 @@ function $messageComponent<
     return id;
   }
 
-  return createFeature(
-    // Feature Data
-    {
-      initialize() {
+  return $merge(
+    [
+      $initialize(function () {
         // Extract the feature ID, as it is passed when the feature is created.
         featureId = this.featureId;
-      },
-      interaction(i) {
+      }),
+      $interaction(async i => {
         if (!ComponentInteraction.is(i)) return;
         if (!i.customId.startsWith(purpletCustomIdTrigger)) return;
 
         const length = parseInt(i.customId.charAt(2), 36);
         const encodedId = S.string.decodeCustomId(i.customId.slice(3, 3 + length));
 
-        console.log({ length, encodedId });
-
         if (encodedId !== featureId) return;
 
         const context = serializer.decodeCustomId(i.customId.slice(3 + length)) as Context;
         options.handle.call(i, context);
-      },
-    },
+      }),
+    ],
     // Static Props
     {
       create(context: Context, createProps: CreateProps) {

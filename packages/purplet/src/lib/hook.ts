@@ -16,7 +16,7 @@ export interface Feature {
 
 export interface FeatureMetaData<HookData = unknown, Type extends HookType = HookType> {
   data: HookInput<HookData, Type>;
-  hook: Hook<HookData, Type> | 'core' | 'merge';
+  hook: Hook<HookData, Type>;
 }
 
 export type MarkedFeature<Pass = Record<never, unknown>> = {
@@ -69,6 +69,7 @@ export interface HookHotUpdate<HookData> {
 
 export interface Hook<HookData, Type extends HookType> extends CreateHookData<HookData, Type> {
   <Pass>(data: HookInput<HookData, Type>, passthrough?: Pass): MarkedFeature<Pass>;
+  merge?: boolean;
 }
 
 export type HookInput<HookData, Type extends HookType> = Type extends 'data'
@@ -89,7 +90,7 @@ export function createHook<Data, Type extends HookType>(
     return {
       [FEATURE]: {
         data: instance,
-        hook: (data as any).core ? 'core' : data.id,
+        hook,
       },
       ...passthrough,
     } as MarkedFeature<X>;
@@ -99,6 +100,8 @@ export function createHook<Data, Type extends HookType>(
     value: `hook:${data.id}`,
   });
   hook.id = data.id;
+  hook.type = data.type;
+  hook.core = data.core;
   hook.load = data.load;
   hook.unload = data.unload;
   hook.hotUpdate = data.hotUpdate;

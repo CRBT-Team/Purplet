@@ -1,5 +1,5 @@
 import type { Module } from './types';
-import { Feature, isFeature } from '../lib/feature';
+import { Feature, FEATURE } from '../lib/hook';
 
 /**
  * Converts a module of type `Record<string, MarkedFeature | unknown>` into an array of its
@@ -7,7 +7,7 @@ import { Feature, isFeature } from '../lib/feature';
  */
 export function moduleToFeatureArray(filename: string, module: Module) {
   return Object.entries(module)
-    .filter(([, value]) => isFeature(value))
+    .filter(([, value]) => !!(value as any)[FEATURE])
     .map(([key, value]) => {
       const feature = value as Feature;
       feature.filename = filename;
@@ -16,12 +16,15 @@ export function moduleToFeatureArray(filename: string, module: Module) {
       // I would hash this to get a smaller ID, but I'm scared of collisions.
       // Two modules on the same ID could break certain situations with Buttons
       feature.featureId = `${filenameWithoutExtension.toLowerCase()}#${key}`;
+
+      if (feature[FEATURE].hook.merge) {
+        (feature[FEATURE].data as Feature[]).forEach((subFeature, i) => {
+          subFeature.filename = filename;
+          subFeature.exportId = `${key}[${i}]`;
+          subFeature.featureId = `${feature.featureId}[${i}]`;
+        });
+      }
+
       return feature;
     });
-}
-
-/** Returns weather or not a `Feature` depends on Discord.JS to be present. */
-export function featureRequiresDJS(feature: Feature): boolean {
-  // Note: for now interactions are done through discord.js, so we need that.
-  return 'djsClient' in feature || 'interaction' in feature || 'gatewayEvent' in feature;
 }

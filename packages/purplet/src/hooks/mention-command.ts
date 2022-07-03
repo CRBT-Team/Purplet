@@ -1,7 +1,8 @@
 import type { Awaitable } from '@davecode/types';
-import { GatewayIntentBits } from 'discord-api-types/v10';
-import { createFeature } from '../lib/feature';
-import { djs } from '../lib/global';
+import { GatewayIntentBits } from 'discord.js';
+import { $onEvent } from './onEvent';
+import { $intents } from '../lib/hook-core';
+import { $merge } from '../lib/hook-merge';
 import { Message } from '../structures';
 import { asyncMap } from '../utils/promise';
 
@@ -24,40 +25,36 @@ interface MentionCommandArgumentParseOptions {
 }
 
 export function $mentionCommand(params: MentionCommandData) {
-  return createFeature({
-    gatewayEvent: {
-      async MESSAGE_CREATE(apiMessage) {
-        const message = new Message(apiMessage);
+  return $merge([
+    $onEvent('MESSAGE_CREATE', async function (apiMessage) {
+      const message = new Message(apiMessage);
 
-        // TODO: we do not have a way to get our own metadata right now.
-        const mention = `<@${djs.user!.id}>`;
-        const command = `${mention} ${params.name}`;
+      // TODO: we do not have a way to get our own metadata right now.
+      const mention = `<@${null}>`;
+      const command = `${mention} ${params.name}`;
 
-        const prefix = message.content.trim().startsWith(command);
-        if (!prefix) return;
+      const prefix = message.content.trim().startsWith(command);
+      if (!prefix) return;
 
-        let args = message.content.trim().slice(command.length).split(/\s+/).slice(1);
+      let args = message.content.trim().slice(command.length).split(/\s+/).slice(1);
 
-        if (params.args) {
-          const definedArgs = params.args.map(arg =>
-            arg instanceof RegExp ? { match: arg } : arg
-          );
-          const newArgs = await asyncMap(definedArgs, (arg, i) => {
-            const match = arg.match.exec(args[i]);
-            if (match) {
-              return arg.parse ? arg.parse({ match, message }) : match[0];
-            }
-            return undefined;
-          });
-          if (newArgs.includes(undefined)) return;
-          params.handle.call(message, ...newArgs);
-        } else {
-          params.handle.call(message, ...args);
-        }
-      },
-    },
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
-  });
+      if (params.args) {
+        const definedArgs = params.args.map(arg => (arg instanceof RegExp ? { match: arg } : arg));
+        const newArgs = await asyncMap(definedArgs, (arg, i) => {
+          const match = arg.match.exec(args[i]);
+          if (match) {
+            return arg.parse ? arg.parse({ match, message }) : match[0];
+          }
+          return undefined;
+        });
+        if (newArgs.includes(undefined)) return;
+        params.handle.call(message, ...newArgs);
+      } else {
+        params.handle.call(message, ...args);
+      }
+    }),
+    $intents([GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]),
+  ]);
 }
 
 export const ArgTypes = {
