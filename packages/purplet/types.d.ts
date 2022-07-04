@@ -4,6 +4,6 @@ declare module 'purplet' {
 }
 
 declare module 'purplet/discord-api-types' {
-  const x: typeof import('./dist/discord-api-types');
-  export = x;
+  const y: typeof import('./dist/discord-api-types');
+  export = y;
 }

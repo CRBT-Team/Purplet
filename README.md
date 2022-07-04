@@ -43,10 +43,11 @@ and follow the instructions it gives.
 | [purplet](packages/purplet)               | [Changelog](packages/purplet/CHANGELOG.md)        |
 | [create-purplet](packages/create-purplet) | [Changelog](packages/create-purplet/CHANGELOG.md) |
 | [@purplet/serialize](packages/serialize)  | [Changelog](packages/serialize/CHANGELOG.md)      |
+| [@purplet/builders](packages/builders)    | [Changelog](packages/builders/CHANGELOG.md)       |
 
-| Example Projects        |
-| ----------------------- |
-| [Basic](examples/basic) |
+| Example Projects        | Create                         |
+| ----------------------- | ------------------------------ |
+| [Basic](examples/basic) | `pnpm create purplet -t basic` |
 
 ## License
 
