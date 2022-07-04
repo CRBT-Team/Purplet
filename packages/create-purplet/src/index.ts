@@ -1,3 +1,6 @@
+// TODO:
+// - split this file into multiple files with utility functions, actions, cli parsing, etc
+// - prebuild the 'jsdoc' versions of each template
 import c from 'chalk';
 import dedent from 'dedent';
 import minimatch from 'minimatch';
@@ -13,15 +16,15 @@ import { createRequire } from 'module';
 import { format } from 'prettier';
 import { fileURLToPath } from 'url';
 import { hideBin } from 'yargs/helpers';
-import pkg from '../package.json';
+import { version } from '../package.json';
 
 const require = createRequire(import.meta.url);
 
 const cliFlags = await yargs(hideBin(process.argv))
   .scriptName('create-purplet')
   .usage('$0 [options]')
-  .version(pkg.version)
-  .option('root', {
+  .version(version)
+  .positional('root', {
     alias: 'r',
     describe: 'Where do you want to create your project?',
     type: 'string',
@@ -45,10 +48,18 @@ const cliFlags = await yargs(hideBin(process.argv))
   .option('prettier', {
     type: 'boolean',
   })
+  .option('no-install', {
+    type: 'boolean',
+  })
   .parse();
 
+// Assign the first positional argument as 'root' if it is available.
+if (cliFlags._[0]) {
+  cliFlags.root = cliFlags._[0] as string;
+}
+
 console.log(c.magentaBright.bold(`Welcome to Purplet!`));
-console.log(c.grey(`docs & help: https://purplet.js.org`));
+console.log(c.grey(`A simple framework to build modern Discord apps.`));
 console.log();
 
 console.log(c.yellowBright('⚠️  Purplet is beta software! ⚠️'));
@@ -101,6 +112,24 @@ async function checkEmpty(root: string | string[]) {
   return files.every(file => allowedFiles.includes(file));
 }
 
+function hasGlobalInstallation(pm: string): Promise<boolean> {
+  const proc = spawn(pm, ['--version']);
+  return new Promise((resolve, reject) => {
+    let data = '';
+    proc.stdout.on('data', chunk => (data += chunk.toString()));
+    proc.on('error', reject);
+    proc.on('exit', (code, signal) => {
+      if (code === 0) {
+        if (data.trim()) {
+          resolve(true);
+          return;
+        }
+      }
+      resolve(false);
+    });
+  });
+}
+
 // Calculate initial directory based off of if this directory is 'empty' or not
 // Empty is a loose check that allows some stuff like `.git`
 const files = await readdir('.');
@@ -124,6 +153,7 @@ const root = await doPrompt('root', () => ({
   format: (value: string) => path.resolve(value),
 }));
 
+// Non-empty check
 if (existsSync(root) && !(await checkEmpty(root))) {
   const confirm = await doPrompt('allow-empty', () => ({
     type: 'confirm',
@@ -138,6 +168,7 @@ if (existsSync(root) && !(await checkEmpty(root))) {
   }
 }
 
+// Resolve all template metadata
 const templateNames = await readdir(templatesRoot);
 const templateJSON = (
   await Promise.all(
@@ -156,6 +187,7 @@ const templateJSON = (
   )
 ).filter(Boolean);
 
+// Ask questions
 const template = await doPrompt('template', () => ({
   type: 'select',
   name: 'value',
@@ -198,6 +230,7 @@ const prettier = await doPrompt('prettier', () => ({
   inactive: 'No',
 }));
 
+// Detect Package Manager
 let packageManager = 'npm';
 if (process.env.npm_config_user_agent) {
   if (process.env.npm_config_user_agent.includes('pnpm')) {
@@ -209,24 +242,6 @@ if (process.env.npm_config_user_agent) {
 
 // If not found, attempt to find an *installed* package manager
 if (packageManager === 'npm') {
-  function hasGlobalInstallation(pm: string): Promise<boolean> {
-    const proc = spawn(pm, ['--version']);
-    return new Promise((resolve, reject) => {
-      let data = '';
-      proc.stdout.on('data', chunk => (data += chunk.toString()));
-      proc.on('error', reject);
-      proc.on('exit', (code, signal) => {
-        if (code === 0) {
-          if (data.trim()) {
-            resolve(true);
-            return;
-          }
-        }
-        resolve(false);
-      });
-    });
-  }
-
   const [pnpm, yarn] = await Promise.all([
     hasGlobalInstallation('pnpm'),
     hasGlobalInstallation('yarn'),
@@ -239,16 +254,82 @@ if (packageManager === 'npm') {
   }
 }
 
-packageManager = 'yarn';
-
+// Attempt to convince the user to use pnpm/yarn
 if (packageManager === 'npm') {
-  // TODO: Attempt to convince user to try another package manager
-  console.log('todo npm');
-  process.exit(3);
+  console.log();
+  console.log(dedent`
+    ${c.magentaBright('Notice')}:
+
+    Your current package manager is ${c.redBright('npm')}. We recommend using a faster package
+    manager, such as ${c.yellowBright('pnpm')} or ${c.cyanBright(
+    'yarn'
+  )}, as they run much faster installing,
+    updating, and removing packages. They also support shorter command names for
+    running package scripts, like ${c.greenBright('pnpm dev')}.
+
+  `);
+  packageManager = (
+    await prompt({
+      name: 'value',
+      type: 'select',
+      message: 'Would you like to install a faster package manager?',
+      choices: [
+        {
+          title: 'Yes, install PNPM',
+          value: 'pnpm',
+        },
+        {
+          title: 'Yes, install Yarn',
+          value: 'yarn',
+        },
+        {
+          title: 'No, use NPM',
+          value: 'npm',
+        },
+      ],
+    })
+  ).value;
+  console.log();
+
+  if (packageManager !== 'npm') {
+    await new Promise<void>(done => {
+      const args = ['npm', '--location=global', 'install', packageManager];
+      if (process.platform !== 'win32') {
+        console.log('Running command with sudo: ' + c.magentaBright(args.join(' ')));
+        args.unshift('sudo');
+      }
+      const proc = spawn(args[0], args.slice(1), {
+        stdio: 'inherit',
+      });
+      proc.on('exit', async arg => {
+        if (arg !== 0) {
+          console.error();
+          console.error(c.redBright(`Could not install ${packageManager}`));
+          console.error('See above logs for why. Consider a manual installation instead.');
+          console.error('Cancelling create purplet project');
+          console.error();
+          process.exit(4);
+        }
+
+        if (!(await hasGlobalInstallation(packageManager))) {
+          console.error();
+          console.error(c.redBright(`Installed ${packageManager}, but it isn't available to run.`));
+          console.error(
+            'You may have to re-open your terminal for the new command to be available.'
+          );
+          console.error('Cancelling create purplet project');
+          console.error();
+          process.exit(5);
+        }
+
+        console.log();
+        done();
+      });
+    });
+  }
 }
 
 // END OF PROMPTING
-
 console.log(
   `${c.cyanBright.bold('note')}: will be using '${c.magentaBright(
     packageManager
@@ -256,7 +337,7 @@ console.log(
 );
 console.log();
 
-const spinner = ora('Creating purplet project... May take a minute.').start();
+const spinner = ora('Creating new Purplet project... May take a minute.').start();
 
 async function mkdirp(root: string) {
   try {
@@ -357,26 +438,30 @@ const copyPromise = copy(
   path.join(templatesRoot, template),
   root,
   async (src, dest) => {
-    if (src.endsWith('.ts')) {
-      if (lang === 'jsdoc') {
-        dest = dest.replace(/\.ts$/, '.js');
+    // For ts files without the ts lang set, transpile them to JavaScript.
+    // This might sound like it produces bad looking output, but combined with the prettier
+    // formatter, it actually is really usable.
+    if (src.endsWith('.ts') && lang !== 'ts') {
+      dest = dest.replace(/\.ts$/, '.js');
 
-        const proc = spawn('node', [tsToJsdoc, src, '-o', path.dirname(dest), '-f'], {
-          stdio: 'pipe',
-        });
-        await new Promise(resolve => proc.on('exit', resolve));
+      // tsToJsdoc is sync, meaning it will freeze the spinner, and in general take longer.
+      const proc = spawn('node', [tsToJsdoc, src, '-o', path.dirname(dest), '-f'], {
+        stdio: 'pipe',
+      });
+      await new Promise(resolve => proc.on('exit', resolve));
 
-        const contents = await readFile(dest, 'utf-8');
-        await writeFile(
-          dest,
-          format(contents, { filepath: dest, ...prettierConfig }).replace(
-            /(import.*;\n)(?!import)/,
-            '$1\n'
-          )
-        );
+      // Run Prettier to fix the formatting. Prettier is sync and can sometimes cause spinner jitter
+      // but its overall okay. I am certainly not going to add multi-threadedness to this lol.
+      const contents = await readFile(dest, 'utf-8');
+      await writeFile(
+        dest,
+        format(contents, { filepath: dest, ...prettierConfig }).replace(
+          /(import.*;\n)(?!import)/,
+          '$1\n'
+        )
+      );
 
-        return;
-      }
+      return;
     }
     return copyFile(src, dest);
   },
@@ -394,6 +479,15 @@ const packageJSON = {
 };
 packageJSON.dependencies.purplet = 'next'; // TODO: change to 'latest' when we release 2.0.0
 
+if (prettier) {
+  packageJSON.dependencies.prettier = 'latest';
+  packageJSON.scripts.format = 'prettier --write "**/*.{ts,ts,js,md,json}"';
+}
+if (eslint) {
+  packageJSON.dependencies.eslint = 'latest';
+  packageJSON.scripts.lint = 'eslint src/**/*.{js,ts}';
+}
+
 await writeFile(
   path.join(root, 'package.json'),
   JSON.stringify(sortPackageJSON(packageJSON), null, 2)
@@ -407,13 +501,36 @@ const installPromise = new Promise(resolve => {
   proc.on('exit', resolve);
 });
 
-await Promise.all([copyPromise, installPromise]);
+const eslintPromise = eslint
+  ? (async () => {
+      //
+    })()
+  : Promise.resolve();
 
-spinner.succeed('Created project');
+const prettierPromise = eslint
+  ? (async () => {
+      const ignoreEntries = ['dist', '.purplet', 'LICENSE', 'build'];
+      await writeFile(path.join(root, '.prettierignore'), ignoreEntries.join('\n') + '\n');
+      const configFile = {
+        arrowParens: 'avoid',
+        printWidth: 100,
+        singleQuote: true,
+        tabWidth: 2,
+        trailingComma: 'es5',
+      };
+      await writeFile(path.join(root, '.prettierrc'), JSON.stringify(configFile, null, 2) + '\n');
+    })()
+  : Promise.resolve();
+
+await Promise.all([copyPromise, installPromise, eslintPromise, prettierPromise]);
+
+spinner.succeed('Created Project');
 
 console.log();
 console.log(dedent`
-  ${c.magentaBright.bold(`Your bot has been created inside of the ${path.basename(root)}`)} folder.
+  ${c.magentaBright.bold(
+    `Your bot has been created inside of the ${path.basename(root)} directory.`
+  )}
 
     ${c.whiteBright('$')} ${c.cyanBright('cd')} ${c.greenBright(path.relative(process.cwd(), root))}
 
@@ -434,3 +551,4 @@ console.log(dedent`
   Purplet Documentation: ${c.magentaBright('https://purplet.js.org/docs/getting-started')}
   Discord Server: ${c.magentaBright('http://crbt.app/discord')}
 `);
+console.log();

@@ -12,6 +12,7 @@
   "type": "module",
   "bin": "./dist/index.js",
   "scripts": {
+    "build": "node build.js",
     "dev": "rollup -c rollup.config.js --watch"
   },
   "dependencies": {
