@@ -18,11 +18,11 @@ export type IntentsHookData =
 export interface PresenceHookData {
   since?: number | null;
   activities?: GatewayActivityUpdateData[];
-  status?: Status;
+  status?: PresenceStatus;
   afk?: boolean;
 }
 
-export enum Status {
+export enum PresenceStatus {
   Online = 'online',
   DoNotDisturb = 'dnd',
   Idle = 'idle',

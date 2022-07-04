@@ -1,19 +1,24 @@
 import type { GatewayPresenceUpdateData, PresenceUpdateStatus } from 'discord.js';
-import { IntentsHookData, PresenceHookData, Status } from './hook-core';
+import { IntentsHookData, PresenceHookData, PresenceStatus } from './hook-core';
 import { IntentBitfield } from '../structures';
 
 export function mergeIntents(intents: IntentsHookData[]) {
   return intents.map(x => IntentBitfield.resolve(x).bitfield).reduce((a, b) => a | b, 0);
 }
 
-const statusOrder = [Status.Online, Status.Idle, Status.DoNotDisturb, Status.Invisible];
+const statusOrder = [
+  PresenceStatus.Online,
+  PresenceStatus.Idle,
+  PresenceStatus.DoNotDisturb,
+  PresenceStatus.Invisible,
+];
 
 export function mergePresence(presences: PresenceHookData[]): GatewayPresenceUpdateData {
   const obj: GatewayPresenceUpdateData = {
     afk: false,
     activities: [],
     since: null,
-    status: Status.Online as string as PresenceUpdateStatus,
+    status: PresenceStatus.Online as string as PresenceUpdateStatus,
   };
 
   for (const entry of presences) {
@@ -26,7 +31,8 @@ export function mergePresence(presences: PresenceHookData[]): GatewayPresenceUpd
     }
     if (
       entry.status &&
-      statusOrder.indexOf(entry.status) > statusOrder.indexOf(obj.status as string as Status)
+      statusOrder.indexOf(entry.status) >
+        statusOrder.indexOf(obj.status as string as PresenceStatus)
     ) {
       obj.status = entry.status as string as PresenceUpdateStatus;
     }

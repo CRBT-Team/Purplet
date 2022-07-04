@@ -7,3 +7,5 @@ export * from './lib/hook-core';
 export * from './structures';
 export { rest } from './lib/global';
 export type { Cleanup } from './utils/types';
+
+export const version = 'VERSION';

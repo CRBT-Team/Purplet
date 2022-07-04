@@ -1,12 +1,15 @@
 {
   "name": "example-basic",
   "private": true,
-  "license": "Apache-2.0",
   "type": "module",
   "main": "dist",
   "scripts": {
     "build": "purplet build",
-    "dev": "purplet dev"
+    "build-http": "purplet build-http",
+    "deploy": "purplet deploy",
+    "dev": "purplet dev",
+    "guild-manager": "purplet guild-manager",
+    "sync": "purplet sync"
   },
   "dependencies": {
     "purplet": "workspace:*"

@@ -20,11 +20,13 @@ dist/
 # debug
 *debug*.log*
 
-# local env files
+# env files
 .env
 *.env.*
 
 # turbo
 .turbo
 
+# local examples, prefixed with local if youre testing something custom.
 examples/local*
+my-bot*

@@ -8,10 +8,12 @@
   "scripts": {
     "build": "turbo run build --parallel --output-logs new-only --filter=!./examples/*",
     "bump": "changeset version",
+    "create-purplet": "node ./packages/create-purplet/dist",
     "dev": "pnpm turbo run dev --parallel --filter=!./examples/*",
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md,json}\"",
     "lint": "turbo run lint",
-    "pub": "pnpm run build && changeset publish"
+    "pub": "pnpm run build && changeset publish",
+    "stuff": "node"
   },
   "devDependencies": {
     "@changesets/cli": "^2.22.0",

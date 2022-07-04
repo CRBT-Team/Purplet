@@ -9,7 +9,7 @@
     "framework",
     "typescript"
   ],
-  "homepage": "https://github.com/CRBT-Team/Purplet",
+  "homepage": "https://purplet.js.org",
   "bugs": "https://github.com/CRBT-Team/Purplet/issues",
   "repository": "github:CRBT-Team/Purplet",
   "license": "Apache-2.0",
@@ -24,7 +24,7 @@
     "./discord-api-types": "./dist/discord-api-types.js"
   },
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./types.d.ts",
   "bin": "./dist/cli.js",
   "files": [
     "dist",

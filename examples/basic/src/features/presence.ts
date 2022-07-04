@@ -1,14 +1,11 @@
-import { ActivityType, PresenceUpdateStatus } from 'discord.js';
-import { $presence } from 'purplet';
+import { $presence, version } from 'purplet';
+import { ActivityType } from 'purplet/discord-api-types';
 
 export default $presence({
-  status: PresenceUpdateStatus.Online,
   activities: [
     {
-      name: 'Purplet v2',
+      name: `Purplet v${version}`,
       type: ActivityType.Playing,
     },
   ],
-  since: null,
-  afk: false,
 });
