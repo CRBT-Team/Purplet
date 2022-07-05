@@ -20,7 +20,8 @@ fs.mkdirSync('dist');
 const external = [].concat(
   Object.keys(pkg.dependencies ?? {}),
   Object.keys(pkg.peerDependencies ?? {}),
-  Object.keys(process.binding('natives'))
+  Object.keys(process.binding('natives')),
+  'purplet'
 );
 
 const version = process.argv.includes('--watch')
@@ -34,7 +35,7 @@ const config =
     cli: 'src/cli/_cli.ts',
     index: 'src/index.ts',
     internal: 'src/internal.ts',
-    'discord-api-types': 'src/discord-api-types.ts',
+    'types': 'src/types.ts',
   },
   output: {
     dir: 'dist',

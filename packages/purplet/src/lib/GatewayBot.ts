@@ -1,4 +1,5 @@
 import { REST } from '@discordjs/rest';
+import { deepEqual } from 'fast-equals';
 import {
   APIGuild,
   GatewayDispatchEvents,
@@ -10,8 +11,7 @@ import {
   RESTGetAPIOAuth2CurrentApplicationResult,
   RESTPutAPIApplicationCommandsJSONBody,
   Routes,
-} from 'discord-api-types/v10';
-import { deepEqual } from 'fast-equals';
+} from 'purplet/types';
 import { FeatureLoader } from './FeatureLoader';
 import { GatewayClient } from './GatewayClient';
 import { rest, setRESTClient } from './global';

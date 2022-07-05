@@ -8,7 +8,7 @@ import {
   APIModalInteractionResponseCallbackData,
   ButtonStyle,
   ComponentType,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { JSONResolvable, toJSONValue } from '../utils/json';
 
 abstract class ComponentBuilder<Type extends APIActionRowComponentTypes> {

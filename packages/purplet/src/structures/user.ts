@@ -1,6 +1,6 @@
 import type { Immutable } from '@davecode/types';
 import type { ImageURLOptions } from '@discordjs/rest';
-import { APIUser, Routes } from 'discord-api-types/v10';
+import { APIUser, Routes } from 'purplet/types';
 import { UserFlagsBitfield } from './bit-field';
 import type { Interaction } from './interaction';
 import { rest } from '../lib/global';

@@ -1,5 +1,5 @@
 import type { Immutable } from '@davecode/types';
-import type { APIMessage } from 'discord-api-types/v10';
+import type { APIMessage } from 'purplet/types';
 import { ReadonlyMessageFlagsBitfield } from './bit-field';
 import { PartialUser } from './user';
 import { createPartialClass, PartialClass } from '../utils/class';

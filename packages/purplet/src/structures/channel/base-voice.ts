@@ -1,4 +1,4 @@
-import { APIVoiceChannel, VideoQualityMode } from 'discord-api-types/v10';
+import { APIVoiceChannel, VideoQualityMode } from 'purplet/types';
 import { Channel } from './base';
 
 export class VoiceChannelBase<

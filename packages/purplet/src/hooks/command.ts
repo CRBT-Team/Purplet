@@ -1,4 +1,4 @@
-import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
+import type { RESTPostAPIApplicationCommandsJSONBody } from 'purplet/types';
 import { $applicationCommands, $interaction } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 import { CommandInteraction, SlashCommandInteraction } from '../structures';

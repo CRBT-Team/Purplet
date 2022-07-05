@@ -1,4 +1,4 @@
-import { ChannelType } from 'discord-api-types/v10';
+import { ChannelType } from 'purplet/types';
 import { channelClasses } from './create';
 import { DMChannel } from './dm';
 import { GroupDMChannel } from './dm-group';

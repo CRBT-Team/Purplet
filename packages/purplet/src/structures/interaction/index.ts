@@ -1,5 +1,5 @@
 import type { Class } from '@davecode/types';
-import type { APIInteraction } from 'discord-api-types/v10';
+import type { APIInteraction } from 'purplet/types';
 import { AutocompleteInteraction } from './autocomplete';
 import type { Interaction, InteractionResponseHandler } from './base';
 import { MessageCommandInteraction } from './command-message';

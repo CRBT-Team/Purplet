@@ -93,6 +93,11 @@ export async function writeTSConfig(config: ResolvedConfig) {
       forceConsistentCasingInFileNames: true,
       esModuleInterop: true,
     },
+    include: [
+      //
+      tempRelative('src'),
+      tempRelative('node_modules/purplet/global.d.ts'),
+    ],
   };
 
   await writeIfChanged(

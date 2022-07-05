@@ -3,7 +3,7 @@ import type {
   GatewayDispatchPayload,
   GatewayIntentBits,
   RESTPutAPIApplicationCommandsJSONBody,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { createHook } from './hook';
 import type { IntentBitfield, Interaction } from '../structures';
 

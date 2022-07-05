@@ -1,4 +1,4 @@
-import type { APIGuildChannel, ChannelType } from 'discord-api-types/v10';
+import type { APIGuildChannel, ChannelType } from 'purplet/types';
 import { Channel } from './base';
 import { EmptyCategoryChannel } from './guild-category';
 import { EmptyGuild } from '../guild';

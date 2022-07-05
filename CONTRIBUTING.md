@@ -56,3 +56,9 @@ For Maintainers:
 
 - `pnpm bump` to apply changesets and bump packages
 - `pnpm pub` to publish all packages
+
+## Notes
+
+- When the Discord API version changes, update the following files to fix `purplet/types`
+  - `packages/purplet/global.d.ts`
+  - `packages/purplet/src/types.ts`

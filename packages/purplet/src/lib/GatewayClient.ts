@@ -8,7 +8,8 @@ import {
   GatewayPresenceUpdateData,
   GatewayReceivePayload,
   GatewaySendPayload,
-} from 'discord-api-types/v10';
+  GatewayVersion,
+} from 'purplet/types';
 import { WebSocket } from 'ws';
 import type { Inflate } from 'zlib-sync';
 import { Heartbeater } from './Heartbeater';
@@ -91,7 +92,7 @@ export class GatewayClient extends EventEmitter {
     }
 
     const url = new URL(urlString!);
-    url.searchParams.set('v', '10');
+    url.searchParams.set('v', GatewayVersion);
     url.searchParams.set('encoding', erlpack ? 'etf' : 'json');
     if (zlib) url.searchParams.set('compress', 'zlib-stream');
 

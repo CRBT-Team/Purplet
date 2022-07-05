@@ -1,4 +1,4 @@
-import { ApplicationCommandType, LocalizationMap } from 'discord-api-types/v10';
+import { ApplicationCommandType, LocalizationMap } from 'purplet/types';
 import { $appCommand } from './command';
 import type {
   Message,

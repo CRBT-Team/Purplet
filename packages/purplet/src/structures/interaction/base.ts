@@ -1,9 +1,5 @@
 import type { RawFile } from '@discordjs/rest';
-import type {
-  APIInteraction,
-  APIPingInteraction,
-  InteractionResponseType,
-} from 'discord-api-types/v10';
+import type { APIInteraction, APIPingInteraction, InteractionResponseType } from 'purplet/types';
 import { EmptyGuild } from '../guild';
 import { InteractionExecutingUser } from '../user';
 import { createInstanceofGuard } from '../../utils/class';

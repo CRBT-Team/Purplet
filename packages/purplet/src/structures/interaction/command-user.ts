@@ -2,7 +2,7 @@ import {
   APIInteraction,
   APIUserApplicationCommandInteraction,
   ApplicationCommandType,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { CommandInteraction } from './command';
 import { ContextCommandInteraction } from './command-context';
 import { createInstanceofGuard } from '../../utils/class';

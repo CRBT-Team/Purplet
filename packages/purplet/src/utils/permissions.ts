@@ -1,4 +1,4 @@
-import type { PermissionFlagsBits } from 'discord-api-types/v10';
+import type { PermissionFlagsBits } from 'purplet/types';
 import { BitfieldResolvable, PermissionBitfield } from '../structures';
 
 export interface CommandPermissionsInput {

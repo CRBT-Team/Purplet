@@ -1,4 +1,4 @@
-import type { APIGuildCategoryChannel } from 'discord-api-types/v10';
+import type { APIGuildCategoryChannel } from 'purplet/types';
 import { GuildChannelBase } from './base-guild';
 import { createInstanceofGuard, createPartialClass, PartialClass } from '../../utils/class';
 

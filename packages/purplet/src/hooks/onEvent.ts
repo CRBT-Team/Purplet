@@ -1,5 +1,5 @@
-import type * as Discord from 'discord-api-types/v10';
-import { GatewayDispatchEvents, GatewayIntentBits } from 'discord-api-types/v10';
+import type * as Discord from 'purplet/types';
+import { GatewayDispatchEvents, GatewayIntentBits } from 'purplet/types';
 import { $dispatch, $intents, IntentsHookData } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 

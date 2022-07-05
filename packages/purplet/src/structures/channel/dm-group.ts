@@ -1,5 +1,5 @@
 import type { ImageURLOptions } from '@discordjs/rest';
-import type { APIGroupDMChannel } from 'discord-api-types/v10';
+import type { APIGroupDMChannel } from 'purplet/types';
 import { TextChannel } from './base-text';
 import { User } from '../user';
 import { rest } from '../../lib/global';

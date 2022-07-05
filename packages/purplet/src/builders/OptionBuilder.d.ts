@@ -5,9 +5,8 @@ import type {
   ApplicationCommandOptionType,
   ChannelType,
   LocalizationMap,
-} from 'discord-api-types/v10';
-import type { BareUser, InteractionUser } from '../_experimental_structures';
-import type { AutocompleteInteraction } from '../interaction';
+} from 'purplet/types';
+import type { AutocompleteInteraction, BareUser, InteractionUser } from '../structures';
 
 /**
  * OptionBuilder is a very complex piece of type-code built out of a lot of mapped types to reduce
@@ -101,10 +100,10 @@ export type Autocomplete<Context = null, Type = unknown> = (
 ) => Awaitable<Choice<Type>[]>;
 
 /**
- * Transforms { autocomplete?: Autocomplete<null, T> } to fill that `null`. This type exists so we
+ * @internal Transforms { autocomplete?: Autocomplete<null, T> } to fill that `null`. This type exists so we
  * don't have to pass `CurrentOptions` and `Key` through to each thing in `OptionInputs`
  */
-export type TransformAutocompleteOptions<T, CurrentOptions, Key> = //
+type TransformAutocompleteOptions<T, CurrentOptions, Key> = //
   T extends AutocompleteOption<infer ACType>
     ? Overwrite<
         T,
@@ -139,7 +138,7 @@ export type OptionBuilder<Options = {}> = {
 };
 
 /**
- * Given an object of our current options `CurrentOptions` and the method name `MethodName`, resolve
+ * @internal Given an object of our current options `CurrentOptions` and the method name `MethodName`, resolve
  * to a method with three type parameters, which all get inferred by its usage.
  */
 type OptionBuilderMethod<CurrentOptions, MethodName extends keyof OptionInputs> = <
@@ -186,7 +185,7 @@ type OptionBuilderMethod<CurrentOptions, MethodName extends keyof OptionInputs> 
   >
 >;
 
-/** If `If` is false, then `T` is returned as a partial, otherwise it is returned as normal. */
+/** @internal If `If` is false, then `T` is returned as a partial, otherwise it is returned as normal. */
 type RequiredIf<If, T> = If extends false ? Partial<T> : T;
 
 // the actual class definition
@@ -219,7 +218,7 @@ export type OptionBuilderEntryToUnresolved<X> = X extends ApplicationCommandOpti
 export type OptionBuilderToUnresolvedObject<X> = X extends OptionBuilderOrType<infer T>
   ? { [K in keyof T]: OptionBuilderEntryToUnresolved<T[K]> }
   : never;
-/** "PurpletResolved" is unused. */
+/** "PurpletResolved" is used for the object passed to SlashCommandData.handle. */
 export type OptionBuilderEntryToPurpletResolved<X> = X extends ApplicationCommandOptionType
   ? {
       [ApplicationCommandOptionType.String]: string;
@@ -233,7 +232,7 @@ export type OptionBuilderEntryToPurpletResolved<X> = X extends ApplicationComman
       [ApplicationCommandOptionType.Attachment]: APIAttachment;
     }[X]
   : X;
-/** "PurpletResolved" is unused. */
+/** "PurpletResolved" is used for the object passed to SlashCommandData.handle. */
 export type OptionBuilderToPurpletResolvedObject<X> = X extends OptionBuilderOrType<infer T>
   ? { [K in keyof T]: OptionBuilderEntryToPurpletResolved<T[K]> }
   : never;

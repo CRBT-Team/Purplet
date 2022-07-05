@@ -3,7 +3,7 @@ import {
   RESTPostAPIChannelMessageResult,
   Routes,
   TextChannelType,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { Channel } from './base';
 import { EmptyMessage, Message } from '../message';
 import { CreateMessageData, resolveCreateMessageData } from '../resolve/create-message';

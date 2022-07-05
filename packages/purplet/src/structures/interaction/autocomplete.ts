@@ -3,7 +3,7 @@ import {
   APIInteraction,
   ApplicationCommandOptionType,
   InteractionType,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { Interaction } from './base';
 import {
   applyInteractionResponseMixins,

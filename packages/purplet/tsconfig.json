@@ -23,8 +23,10 @@
     "strictPropertyInitialization": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "paths": {
+      "purplet/*": ["./src/*"]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "./node_modules/discord-api-types"],
-  "exclude": ["**/node_modules", "**/dist"]
+  "include": ["src/**/*", "global.d.ts"]
 }

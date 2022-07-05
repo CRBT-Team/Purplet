@@ -67,8 +67,8 @@ export default function Home(): JSX.Element {
               <h2>Cloud Focused</h2>
               <p>
                 The entire framework is built with exporting to Cloud Functions in mind. The same
-                code handling interactions from the Gateway will work as an HTTP bot without any
-                modification.
+                code handling interactions from the Gateway will work as an HTTP interaction
+                endpoint without any code modification.
               </p>
             </div>
           </div>

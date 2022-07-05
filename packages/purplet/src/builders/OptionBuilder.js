@@ -1,12 +1,12 @@
-import { ApplicationCommandOptionType } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType } from 'purplet/types';
 
 export class OptionBuilder {
-  /** @type {import(discord-api-types/v10).APIApplicationCommandOption[]} */
+  /** @type {import('purplet/types').APIApplicationCommandOption[]} */
   options = [];
   /** @type {Record<string, import('./OptionBuilder').Autocomplete>} */
   autocompleteHandlers = {};
 
-  /** @param {import(discord-api-types/v10).ApplicationCommandOptionType} type */
+  /** @param {import('purplet/types').ApplicationCommandOptionType} type */
   #createOption(type) {
     /**
      * @param {string} name

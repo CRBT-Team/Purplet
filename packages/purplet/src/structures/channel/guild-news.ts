@@ -1,4 +1,4 @@
-import type { APINewsChannel } from 'discord-api-types/v10';
+import type { APINewsChannel } from 'purplet/types';
 import { GuildTextChannel } from './guild-text';
 import { createInstanceofGuard } from '../../utils/class';
 

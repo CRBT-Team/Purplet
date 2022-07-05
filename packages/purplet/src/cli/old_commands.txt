@@ -2,7 +2,7 @@
 import path from 'path';
 import sade from 'sade';
 import { REST } from '@discordjs/rest';
-import { RESTGetAPICurrentUserResult, Routes } from 'discord-api-types/v10';
+import { RESTGetAPICurrentUserResult, Routes } from 'purplet/types';
 import { createRequire } from 'module';
 import { buildGatewayBot } from './cli/build';
 import { DevMode } from './cli/dev';

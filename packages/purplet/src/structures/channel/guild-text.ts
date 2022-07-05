@@ -1,4 +1,4 @@
-import type { APIGuildTextChannel, GuildTextChannelType } from 'discord-api-types/v10';
+import type { APIGuildTextChannel, GuildTextChannelType } from 'purplet/types';
 import { GuildChannelBase } from './base-guild';
 import { TextChannel } from './base-text';
 import { createInstanceofGuard } from '../../utils/class';

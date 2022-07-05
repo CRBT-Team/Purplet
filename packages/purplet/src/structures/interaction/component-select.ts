@@ -2,7 +2,7 @@ import {
   APIInteraction,
   APIMessageComponentSelectMenuInteraction,
   ComponentType,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { ComponentInteraction } from './component';
 import { createInstanceofGuard } from '../../utils/class';
 

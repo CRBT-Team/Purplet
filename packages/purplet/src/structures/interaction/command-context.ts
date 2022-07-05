@@ -1,5 +1,5 @@
 import type { Class } from '@davecode/types';
-import type { APIContextMenuInteraction } from 'discord-api-types/v10';
+import type { APIContextMenuInteraction } from 'purplet/types';
 import { CommandInteraction } from './command';
 import { createInstanceofGuard } from '../../utils/class';
 

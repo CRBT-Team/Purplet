@@ -1,5 +1,5 @@
 /** Represents a plain object, as in the potential return value from `JSON.parse`. No functions or classes. */
-import type { LocaleString } from 'discord-api-types/v10';
+import type { LocaleString } from 'purplet/types';
 
 // @ts-expect-error infinite recursion error but it functions otherwise.
 export type JSONValue =

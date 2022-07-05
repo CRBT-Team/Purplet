@@ -5,7 +5,7 @@ import {
   ChannelType,
   RESTPatchAPIChannelJSONBody,
   Routes,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { createChannel } from './create';
 import { ReadonlyChannelFlagsBitfield } from '../bit-field';
 import { rest } from '../../lib/global';

@@ -4,7 +4,7 @@ import {
   APIMessageActionRowComponent,
   APISelectMenuComponent,
   ComponentType,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { $initialize, $interaction } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 import { ButtonInteraction, ComponentInteraction, SelectMenuInteraction } from '../structures';

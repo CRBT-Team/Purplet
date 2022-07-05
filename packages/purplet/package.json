@@ -21,10 +21,9 @@
   "exports": {
     ".": "./dist/index.js",
     "./internal": "./dist/internal.js",
-    "./discord-api-types": "./dist/discord-api-types.js"
+    "./types": "./dist/types.js"
   },
   "main": "./dist/index.js",
-  "types": "./types.d.ts",
   "bin": "./dist/cli.js",
   "files": [
     "dist",
@@ -82,13 +81,13 @@
     "utf-8-validate": "^5.0.9",
     "zlib-sync": "^0.1.7"
   },
-  "engines": {
-    "node": ">=16.0.0"
-  },
   "optionalDependencies": {
     "bufferutil": "^4.0.6",
     "erlpack": "^0.1.4",
     "utf-8-validate": "^5.0.9",
     "zlib-sync": "^0.1.7"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

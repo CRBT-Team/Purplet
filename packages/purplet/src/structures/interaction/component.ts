@@ -1,8 +1,4 @@
-import {
-  APIInteraction,
-  APIMessageComponentInteraction,
-  InteractionType,
-} from 'discord-api-types/v10';
+import { APIInteraction, APIMessageComponentInteraction, InteractionType } from 'purplet/types';
 import { Interaction } from './base';
 import {
   applyInteractionResponseMixins,

@@ -1,4 +1,4 @@
-import type { APIVoiceChannel } from 'discord-api-types/v10';
+import type { APIVoiceChannel } from 'purplet/types';
 import { GuildChannelBase } from './base-guild';
 import { VoiceChannelBase } from './base-voice';
 import { createInstanceofGuard } from '../../utils/class';

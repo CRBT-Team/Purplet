@@ -8,7 +8,7 @@ import {
   PermissionFlagsBits,
   ThreadMemberFlags,
   UserFlags,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { createBitfieldClass, createReadonlyBitfield } from './bit-field-base';
 
 // For this file, use the workspace snippet "template_bitfield"

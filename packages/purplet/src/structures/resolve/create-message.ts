@@ -1,5 +1,5 @@
 import type { RawFile } from '@discordjs/rest';
-import { APIEmbed, MessageFlags, RESTPostAPIChannelMessageJSONBody } from 'discord-api-types/v10';
+import { APIEmbed, MessageFlags, RESTPostAPIChannelMessageJSONBody } from 'purplet/types';
 import { CamelCasedValue, uncamelCase } from '../../utils/camel-case';
 import { JSONResolvable, toJSONValue } from '../../utils/json';
 
@@ -10,13 +10,15 @@ function toBuffer(x: FileData): Buffer {
   return Buffer.from(x as Uint8Array);
 }
 
-export type CreateMessageData = string | JSONResolvable<
-  | CreateMessageObject
-  | APIEmbed
-  | APIEmbed[]
-  | CreateMessageAttachment
-  | CreateMessageAttachment[]
->;
+export type CreateMessageData =
+  | string
+  | JSONResolvable<
+      | CreateMessageObject
+      | APIEmbed
+      | APIEmbed[]
+      | CreateMessageAttachment
+      | CreateMessageAttachment[]
+    >;
 
 export type CreateInteractionMessageData = CreateMessageData & { ephemeral?: boolean };
 
@@ -79,7 +81,7 @@ export interface CreateMessageResult {
 }
 
 export function resolveCreateMessageData(input: CreateMessageData): CreateMessageResult {
-  const data = toJSONValue(input);
+  const data = toJSONValue(input as JSONResolvable<CreateMessageObject>);
 
   // String
   if (typeof data === 'string') {

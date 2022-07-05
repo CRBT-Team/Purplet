@@ -3,7 +3,7 @@ import {
   APIModalInteractionResponseCallbackData,
   InteractionResponseType,
   MessageFlags,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import { Interaction } from './base';
 import { OriginalInteractionMessagePartial } from '../message-interaction';
 import {

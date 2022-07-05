@@ -6,7 +6,7 @@ import {
   RESTPostAPIWebhookWithTokenJSONBody,
   RESTPostAPIWebhookWithTokenWaitResult,
   Routes,
-} from 'discord-api-types/v10';
+} from 'purplet/types';
 import type { Interaction } from './interaction/base';
 import { Message } from './message';
 import { CreateMessageData, resolveCreateMessageData } from './resolve/create-message';

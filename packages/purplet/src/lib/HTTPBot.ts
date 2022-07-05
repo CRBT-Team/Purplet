@@ -1,4 +1,4 @@
-import type { APIInteraction, APIInteractionResponse } from 'discord-api-types/v10';
+import type { APIInteraction, APIInteractionResponse } from 'purplet/types';
 import { FeatureLoader } from './FeatureLoader';
 import type { PatchFeatureInput } from './GatewayBot';
 import type { Feature } from './hook';

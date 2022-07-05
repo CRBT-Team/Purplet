@@ -1,4 +1,4 @@
-import type { APIDMChannel } from 'discord-api-types/v10';
+import type { APIDMChannel } from 'purplet/types';
 import { TextChannel } from './base-text';
 import { User } from '../user';
 import { createInstanceofGuard } from '../../utils/class';
