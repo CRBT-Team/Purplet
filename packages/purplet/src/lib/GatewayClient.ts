@@ -49,16 +49,18 @@ function stripUndefined(obj: any): any {
 }
 
 /**
- * GatewayClient is a Discord Gateway Client implementation. for now it is literally a wrapper
- * around discord.js.
+ * Implementation of a Discord gateway client. Supports etf and zlib, if installed.
  *
  * Specs:
  *
  * - Pass an GatewayIdentifyData, immediately connects.
  * - Emits gateway events by name.
  * - Emits '*' event to catch all.
+ * - `send()` to manually send packets.
  * - `updatePresence()` to update presence.
  */
+// TODO: Request Guild Members
+// TODO: voice support
 export class GatewayClient extends EventEmitter {
   private seq = 0;
   private ws?: WebSocket;
@@ -68,9 +70,10 @@ export class GatewayClient extends EventEmitter {
 
   constructor(private identify: GatewayClientOptions) {
     super();
+    this.connect();
   }
 
-  /** Connects to the gateway. */
+  /** Connects to the Gateway. */
   private async connect() {
     let urlString = this.identify.gateway ?? gatewayURL;
 
@@ -145,6 +148,11 @@ export class GatewayClient extends EventEmitter {
     });
   }
 
+  /** Send a packet to the Gateway. */
+  send(packet: GatewaySendPayload) {
+    this.ws!.send((erlpack ? erlpack.pack : JSON.stringify)(stripUndefined(packet)));
+  }
+
   /** @internal handles raw packets, decoding etf and gz */
   private onRawMessage(buf: Buffer) {
     let raw: Buffer | string;
@@ -180,10 +188,7 @@ export class GatewayClient extends EventEmitter {
     this.onPacket(packet as GatewayReceivePayload);
   }
 
-  private send(packet: GatewaySendPayload) {
-    this.ws!.send((erlpack ? erlpack.pack : JSON.stringify)(stripUndefined(packet)));
-  }
-
+  /** @internal handle decoded packet data */
   private async onPacket(packet: GatewayReceivePayload) {
     if (packet.s) {
       this.seq = packet.s;
@@ -247,17 +252,20 @@ export class GatewayClient extends EventEmitter {
     }
   }
 
+  /** Reconnects. */
   async reconnect(newOptions: GatewayClientOptions = this.identify) {
     this.close();
     this.identify = newOptions;
     await this.connect();
   }
 
+  /** Close and cleanup. */
   close() {
     this.ws?.close();
     this.hb?.close();
   }
 
+  /** Update the bot's presence. */
   updatePresence(presence: GatewayPresenceUpdateData) {
     this.send({
       op: GatewayOpcodes.PresenceUpdate,
