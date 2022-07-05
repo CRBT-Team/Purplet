@@ -3,6 +3,7 @@ import type { ResolvedConfig } from './types';
 
 const config: ResolvedConfig = {
   root: '',
+  temp: '',
   // START CONFIG
   alias: {
     $features: 'src/features',
@@ -16,7 +17,6 @@ const config: ResolvedConfig = {
   paths: {
     build: 'dist',
     features: 'src/features',
-    temp: '.purplet',
     translations: 'locales',
   },
   vite: () => ({}),

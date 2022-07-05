@@ -13,10 +13,10 @@ export async function writeTSConfig(config: ResolvedConfig) {
   const matched = searchPaths.filter(file => files.includes(file));
 
   const rootRelative = (file: string) => posixify(path.relative(config.root, file));
-  const tempRelative = (file: string) => posixify(path.relative(config.paths.temp, file));
+  const tempRelative = (file: string) => posixify(path.relative(config.temp, file));
 
   const shouldExtends = posixify(
-    './' + path.relative(config.root, path.resolve(config.root, config.paths.temp, 'tsconfig.json'))
+    './' + path.relative(config.root, path.resolve(config.root, config.temp, 'tsconfig.json'))
   );
 
   let userTSConfig;
@@ -100,8 +100,5 @@ export async function writeTSConfig(config: ResolvedConfig) {
     ],
   };
 
-  await writeIfChanged(
-    path.join(config.paths.temp, 'tsconfig.json'),
-    JSON.stringify(tsconfig, null, 2)
-  );
+  await writeIfChanged(path.join(config.temp, 'tsconfig.json'), JSON.stringify(tsconfig, null, 2));
 }

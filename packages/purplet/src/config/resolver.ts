@@ -1,3 +1,4 @@
+import path from 'path';
 import def from './default';
 import type { Config, ResolvedConfig } from './types';
 import { assert_string, object, pathname, string, validate } from './validators';
@@ -12,6 +13,7 @@ export function resolveConfig(root: string, config: Config): ResolvedConfig {
   return {
     ...options(config, 'config'),
     root,
+    temp: path.join(root, '.purplet'),
   };
 }
 
@@ -43,7 +45,6 @@ const options = object({
   paths: object({
     build: pathname(def.paths.build),
     features: pathname(def.paths.features),
-    temp: pathname(def.paths.temp),
     translations: pathname(def.paths.translations),
   }),
   vite: validate(

@@ -37,9 +37,9 @@ export async function loadConfig(root: string) {
 
   try {
     setValidatorBasePath(root);
-    const resolved = resolveConfig(root, config);
 
-    await mkdirp(resolved.paths.temp);
+    const resolved = resolveConfig(root, config);
+    await mkdirp(resolved.temp);
 
     return resolved;
   } catch (error) {

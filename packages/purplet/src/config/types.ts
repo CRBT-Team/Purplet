@@ -5,6 +5,9 @@ import type { UserConfig as ViteConfig } from 'vite';
 export interface ResolvedConfig {
   /** Not included in user configuration; This is the root directory of the project. */
   root: string;
+  /** Not included in user configuration; This is the `.purplet` directory of the project. */
+  temp: string;
+
   alias: Record<string, string>;
   allowedMentions: {
     parse: AllowedMentionsTypes[];
@@ -14,7 +17,6 @@ export interface ResolvedConfig {
   paths: {
     build: string;
     features: string;
-    temp: string;
     translations: string;
   };
   vite: ViteConfig | (() => Awaitable<ViteConfig>);

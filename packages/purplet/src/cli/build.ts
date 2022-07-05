@@ -74,7 +74,7 @@ export async function buildGateway(options: BuildOptions) {
     ``,
   ].join('\n');
 
-  const entryFile = path.join(config.paths.temp, 'entry.mjs');
+  const entryFile = path.join(config.temp, 'entry.mjs');
   await fs.writeFile(entryFile, entrySource);
 
   // The rollup config is similar to the one used to package purplet itself, but we base the

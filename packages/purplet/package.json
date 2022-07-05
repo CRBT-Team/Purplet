@@ -34,6 +34,7 @@
   ],
   "scripts": {
     "build": "rollup -c && tsc -p . && echo Types Passing",
+    "changeset": "cd ../../ && pnpm changeset",
     "dev": "rollup -c --watch",
     "lint": "eslint src/**/*.{ts,tsx}"
   },
