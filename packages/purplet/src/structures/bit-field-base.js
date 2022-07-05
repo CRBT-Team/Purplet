@@ -10,8 +10,8 @@ class Bitfield {
       typeof bitfield === 'string'
         ? BigInt(bitfield)
         : bitfield instanceof Bitfield
-        ? bitfield.bitfield
-        : bitfield;
+          ? bitfield.bitfield
+          : bitfield;
   }
 
   has(...flag) {
@@ -45,7 +45,7 @@ class Bitfield {
     const array = [];
     const start = typeof this.bitfield === 'bigint' ? 1n : 1;
     const inc = typeof this.bitfield === 'bigint' ? 2n : 2;
-    for (let i = start; i < this.bitfield; i *= inc) {
+    for (let i = start; i <= this.bitfield; i *= inc) {
       if (this.has(i)) {
         array.push(i);
       }
@@ -74,7 +74,9 @@ class Bitfield {
   }
 
   filter(callback) {
-    return this.toArray().filter(callback);
+    return new this.constructor(
+      this.reduce((a, b) => (callback(b) ? a | b : a), typeof this.bitfield === 'bigint' ? 0n : 0)
+    );
   }
 
   some(callback) {

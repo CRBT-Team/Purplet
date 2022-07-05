@@ -25,7 +25,7 @@
     "strictFunctionTypes": true,
     "target": "ESNext",
     "paths": {
-      "purplet/*": ["./src/*"]
+      // "purplet/*": ["./src/*"]
     }
   },
   "include": ["src/**/*", "global.d.ts"]

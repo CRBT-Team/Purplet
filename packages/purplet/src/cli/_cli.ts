@@ -6,29 +6,45 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { buildGateway } from './build';
 import { DevMode } from './dev';
-import { injectLogger, log, setVerbose } from '../lib/logger';
+import { CLIError } from '../lib/errors';
+import { injectLogger, log, setVerbose, startSpinner } from '../lib/logger';
 
 interface CLIProgram {
   start(): Promise<void>;
   stop?(): Promise<void>;
 }
 
-function start(cmd: CLIProgram, verbose: boolean) {
+async function start(cmd: CLIProgram, verbose: boolean) {
   setVerbose(verbose);
   injectLogger();
   log('warn', '⚠️  Purplet v__VERSION__ is beta software! ⚠️');
   log('warn', 'Report issues to https://github.com/CRBT-Team/purplet/issues');
-  log('debug', `purplet v__VERSION__`);
+  if (verbose) {
+    log('debug', `purplet v__VERSION__`);
+  } else if ('__VERSION__'.endsWith('-dev')) {
+    // log('info', 'purplet development build v__VERSION__');
+  }
 
-  cmd.start();
+  try {
+    await cmd.start();
+  } catch (error) {
+    startSpinner('Cleaning up...').stop().clear();
+
+    if (error instanceof CLIError) {
+      error.printAndExit();
+    }
+
+    log('error', chalk.redBright(`${error instanceof Error ? error.message : String(error)}`));
+    process.exit(1);
+  }
 
   let stopping = false;
   process.on('SIGINT', async () => {
-    log('debug', 'Received SIGINT');
-
     if (stopping) {
       return;
     }
+    process.stdout.write('\x1b[1G');
+    log('debug', 'Received SIGINT');
 
     stopping = true;
 

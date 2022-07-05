@@ -1,14 +1,13 @@
-import { readdir } from 'fs/promises';
+import path from 'path';
+import { build } from 'esbuild';
+import { readdir, readFile } from 'fs/promises';
 import { resolveConfig } from './resolver';
 import type { Config } from './types';
 import { setValidatorBasePath } from './validators';
 import { log } from '../lib/logger';
 import { mkdirp } from '../utils/fs';
 
-const searchPaths = [
-  // 'purplet.config.ts',
-  'purplet.config.js',
-];
+const searchPaths = ['purplet.config.ts', 'purplet.config.js'];
 
 export async function loadConfig(root: string) {
   const files = await readdir(root);
@@ -30,7 +29,22 @@ export async function loadConfig(root: string) {
   let config: Config;
 
   if (matched[0].endsWith('.ts')) {
-    throw new Error(`Purplet does not support TypeScript configuration files yet.`);
+    const pkg = JSON.parse(await readFile(path.resolve(root, 'package.json'), 'utf8'));
+    await build({
+      entryPoints: [`${root}/${matched[0]}`],
+      outfile: `${root}/.purplet/transpiled-config.js`,
+      bundle: true,
+      format: 'esm',
+      logLevel: 'silent',
+      external: [
+        'purplet',
+        ...Object.keys(pkg.dependencies ?? {}),
+        ...Object.keys(pkg.devDependencies ?? {}),
+        ...Object.keys(pkg.peerDependencies ?? {}),
+        ...Object.keys(pkg.optionalDependencies ?? {}),
+      ],
+    });
+    config = (await import(`file:///${root}/.purplet/transpiled-config.js`)).default;
   } else {
     config = (await import(`file:///${root}/${matched[0]}`)).default;
   }

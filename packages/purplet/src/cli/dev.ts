@@ -5,6 +5,7 @@ import { EventEmitter } from 'events';
 import type { HmrContext, ModuleNode, Plugin } from 'vite';
 import { createServer, ViteDevServer } from 'vite';
 import defaultConfig from '../config/default';
+import { errorNoIncludeAndExcludeGuilds, errorNoToken } from './errors';
 import { loadConfig } from '../config';
 import { writeTSConfig } from '../config/tsconfig';
 import type { ResolvedConfig } from '../config/types';
@@ -65,14 +66,14 @@ export class DevMode {
     const token = getEnvVar('DISCORD_BOT_TOKEN');
 
     if (!token) {
-      throw new Error('Missing DISCORD_BOT_TOKEN environment variable');
+      throw errorNoToken();
     }
 
     const include = getEnvVar('PURPLET_INCLUDE_GUILDS') ?? '';
     const exclude = getEnvVar('PURPLET_EXCLUDE_GUILDS') ?? '';
 
     if (include && exclude) {
-      throw new Error('Cannot specify both PURPLET_INCLUDE_GUILDS and PURPLET_EXCLUDE_GUILDS');
+      throw errorNoIncludeAndExcludeGuilds();
     }
 
     this.bot = new GatewayBot({
@@ -116,7 +117,7 @@ export class DevMode {
     const durationFormat = (duration / 1000).toFixed(1);
     log(
       'purplet',
-      `Bot is now running in development mode as ${'unknown user'} (${durationFormat}s)`
+      `Bot is now running in development mode as ${this.bot.user.tag} (${durationFormat}s)`
     );
   }
 

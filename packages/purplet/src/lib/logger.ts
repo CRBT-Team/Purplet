@@ -1,13 +1,14 @@
 import chalk from 'chalk';
 import ora from 'ora';
 import stringLength from 'string-length';
+import wrapAnsi from 'wrap-ansi';
 import { inspect } from 'util';
 
 const status = ora();
 
 let showDebug = false;
 
-type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'purplet';
+type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'purplet' | 'none';
 type LogFormatters = Record<LogLevel, (content: string) => string>;
 
 const colors: LogFormatters = {
@@ -15,6 +16,7 @@ const colors: LogFormatters = {
   info: chalk.blueBright,
   warn: chalk.yellow,
   error: chalk.red,
+  none: x => x,
   purplet: x => x,
 };
 
@@ -30,14 +32,17 @@ function logString(level: LogLevel, data: string) {
     process.stdout.write('\n');
     return;
   }
-  // const terminalWidth = process.stdout.columns;
   const prefix =
-    level === 'purplet' ? '' : chalk.bold(`${colors[level](level.padEnd(5, ' '))}`) + ' ';
+    level === 'purplet'
+      ? ''
+      : level === 'none'
+      ? ' '.repeat(6)
+      : chalk.bold(`${colors[level](level.padEnd(5, ' '))}`) + ' ';
   const prefixLength = stringLength(prefix);
-  const wrapped = (textColors[level]?.(data) ?? data).replace(
-    /\n/g,
-    '\n' + ' '.repeat(prefixLength)
-  );
+  const wrapped = wrapAnsi(textColors[level]?.(data) ?? data, 80 - 6, {
+    trim: false,
+    hard: true,
+  }).replace(/\n/g, '\n' + ' '.repeat(prefixLength));
   const output = prefix + wrapped + '\n' + (level === 'error' ? '\n' : '');
   if (status.isSpinning) {
     status.clear();

@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+import { deferred } from '@davecode/utils';
 import { REST } from '@discordjs/rest';
 import {
   GatewayCloseCodes,
@@ -6,13 +7,16 @@ import {
   GatewayIdentifyData,
   GatewayOpcodes,
   GatewayPresenceUpdateData,
+  GatewayReadyDispatchData,
   GatewayReceivePayload,
   GatewaySendPayload,
   GatewayVersion,
 } from 'purplet/types';
 import { WebSocket } from 'ws';
 import type { Inflate } from 'zlib-sync';
+import { GatewayClientExitError } from './errors';
 import { Heartbeater } from './Heartbeater';
+import { errorFromGatewayClientExitError } from '../cli/errors';
 
 // zlib-sync is used for fast decompression of gzipped payloads.
 let zlib: typeof import('zlib-sync') | undefined = undefined;
@@ -69,14 +73,14 @@ export class GatewayClient extends EventEmitter {
   private sessionId: string | undefined;
   private inflate?: Inflate;
 
-  constructor(private identify: GatewayClientOptions) {
+  constructor(public options: GatewayClientOptions) {
     super();
     this.connect();
   }
 
   /** Connects to the Gateway. */
   private async connect() {
-    let urlString = this.identify.gateway ?? gatewayURL;
+    let urlString = this.options.gateway ?? gatewayURL;
 
     if (!urlString) {
       // TODO: in the future, use /gateway/bot and automatic sharding.
@@ -98,6 +102,9 @@ export class GatewayClient extends EventEmitter {
 
     this.ws = new WebSocket(url, { handshakeTimeout: 30000 });
     this.ws.on('message', this.onRawMessage.bind(this));
+    this.ws.on('error', error => {
+      this.emit('error', error);
+    });
     this.ws.on('close', code => {
       if (code >= 4000 && code <= 4999) {
         let reconnect = false;
@@ -106,35 +113,21 @@ export class GatewayClient extends EventEmitter {
             console.error("WebSocket closed by Discord. We're not sure what went wrong.");
             reconnect = true;
             break;
-          case GatewayCloseCodes.InvalidAPIVersion:
-            console.error(
-              'WebSocket closed by Discord. Invalid API version. Try updating Purplet to the latest version.'
-            );
-            break;
           case GatewayCloseCodes.UnknownOpcode:
           case GatewayCloseCodes.DecodeError:
           case GatewayCloseCodes.NotAuthenticated:
           case GatewayCloseCodes.AlreadyAuthenticated:
+            reconnect = true;
+            break;
+          case GatewayCloseCodes.InvalidAPIVersion:
           case GatewayCloseCodes.InvalidIntents:
           case GatewayCloseCodes.InvalidShard:
-            console.error(`Invalid data sent to API caused WebSocket to close. Code: ${code}`);
-            reconnect = [GatewayCloseCodes.InvalidShard, GatewayCloseCodes.InvalidIntents].includes(
-              code
-            );
-            break;
           case GatewayCloseCodes.AuthenticationFailed:
-            console.error('Your token is not valid.');
-            break;
           case GatewayCloseCodes.ShardingRequired:
-            console.error('Your bot is too large to use the gateway without sharding.');
-            break;
           case GatewayCloseCodes.DisallowedIntents:
-            console.error(
-              `You sent a disallowed intent for a Gateway Intent. You may have tried to specify an intent that you have not enabled or are not approved for.`
-            );
             break;
           case GatewayCloseCodes.SessionTimedOut:
-            console.error('WebSocket closed by Discord.');
+            console.error('WebSocket closed by Discord. Attempting to reconnect...');
             reconnect = true;
             break;
           case GatewayCloseCodes.InvalidSeq:
@@ -144,6 +137,12 @@ export class GatewayClient extends EventEmitter {
             break;
           default:
             break;
+        }
+
+        if (!reconnect) {
+          this.emit('error', new GatewayClientExitError(code));
+        } else {
+          this.reconnect();
         }
       }
     });
@@ -206,17 +205,17 @@ export class GatewayClient extends EventEmitter {
             d: {
               seq: this.seq,
               session_id: this.sessionId,
-              token: this.identify.token,
+              token: this.options.token,
             },
           });
         } else {
           this.send({
             op: GatewayOpcodes.Identify,
             d: {
-              token: this.identify.token,
-              shard: this.identify.shard,
-              presence: this.identify.presence,
-              intents: this.identify.intents,
+              token: this.options.token,
+              shard: this.options.shard,
+              presence: this.options.presence,
+              intents: this.options.intents,
               compress: !!zlib,
               properties: {
                 os: process.platform,
@@ -229,7 +228,7 @@ export class GatewayClient extends EventEmitter {
         return;
       case GatewayOpcodes.HeartbeatAck:
         // TODO: implement zombie detection
-        console.log('heartbeat ack, thanks', packet);
+        console.debug('heartbeat ack, thanks', packet);
         return;
       case GatewayOpcodes.InvalidSession:
         console.info('Session Invalidated. Reconnecting.');
@@ -252,9 +251,9 @@ export class GatewayClient extends EventEmitter {
   }
 
   /** Reconnects. */
-  async reconnect(newOptions: GatewayClientOptions = this.identify) {
+  async reconnect(newOptions: GatewayClientOptions = this.options) {
     this.close();
-    this.identify = newOptions;
+    this.options = newOptions;
     await this.connect();
   }
 
@@ -271,4 +270,31 @@ export class GatewayClient extends EventEmitter {
       d: presence,
     });
   }
+}
+
+export type CreateGatewayClientResult = [GatewayClient, GatewayReadyDispatchData];
+
+export async function createGatewayClient(identify: GatewayClientOptions) {
+  const [promise, resolve, reject] = deferred<CreateGatewayClientResult>();
+
+  const client = new GatewayClient(identify);
+
+  function errorHandler(e: Error) {
+    if (e instanceof GatewayClientExitError) {
+      reject(errorFromGatewayClientExitError(e, client));
+    } else {
+      reject(e);
+    }
+  }
+
+  function readyHandler(ready: GatewayReadyDispatchData) {
+    resolve([client, ready]);
+    client.removeListener('error', errorHandler);
+    client.removeListener(GatewayDispatchEvents.Ready, readyHandler);
+  }
+
+  client.on('error', errorHandler);
+  client.on(GatewayDispatchEvents.Ready, readyHandler);
+
+  return promise;
 }

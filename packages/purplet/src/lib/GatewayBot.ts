@@ -9,12 +9,11 @@ import {
   GatewayIntentBits,
   GatewayPresenceUpdateData,
   RESTAPIPartialCurrentUserGuild,
-  RESTGetAPIOAuth2CurrentApplicationResult,
   RESTPutAPIApplicationCommandsJSONBody,
   Routes,
 } from 'purplet/types';
 import { FeatureLoader } from './FeatureLoader';
-import { GatewayClient } from './GatewayClient';
+import { createGatewayClient, GatewayClient } from './GatewayClient';
 import { rest, setRESTClient } from './global';
 import type { Feature } from './hook';
 import {
@@ -28,14 +27,17 @@ import {
 import { mergeIntents, mergePresence } from './hook-core-merge';
 import { runHook } from './hook-run';
 import { log } from './logger';
-import { createInteraction, InteractionResponse } from '../structures';
+import {
+  ApplicationFlagsBitfield,
+  createInteraction,
+  InteractionResponse,
+  User,
+} from '../structures';
 import type { Cleanup } from '../utils/types';
 
 interface GatewayBotOptions {
   /** Bot Token. */
   token: string;
-  /** Optional, skips a fetch request if provided. */
-  id?: string;
   /** Initial list of features that this bot has. */
   features?: Feature[];
   /**
@@ -68,17 +70,29 @@ export class GatewayBot {
   features = new FeatureLoader();
   client: GatewayClient | null = null;
 
-  #id!: string;
+  #application?: { id: string; flags: ApplicationFlagsBitfield };
+  #user?: User;
   #running = false;
   #cleanupInitializeHook: Cleanup;
   #cachedIntents?: GatewayIntentBits;
   #cachedPresence?: GatewayPresenceUpdateData;
   #cachedCommandData?: RESTPutAPIApplicationCommandsJSONBody;
 
+  get application() {
+    if (!this.#application) throw new Error('GatewayBot.application is not yet ready');
+    return this.#application;
+  }
+
+  get user() {
+    if (!this.#user) throw new Error('GatewayBot.user is not yet ready');
+    return this.#user;
+  }
+
+  get id() {
+    return this.user.id;
+  }
+
   constructor(readonly options: GatewayBotOptions) {
-    if (options.id) {
-      this.#id = options.id;
-    }
     if (this.options.features) {
       this.features.add(this.options.features);
     }
@@ -87,12 +101,8 @@ export class GatewayBot {
   async start() {
     if (this.#running) throw new Error('GatewayBot is already running');
     this.#running = true;
+    // TODO: see how the global variable is set here. this should probably be somewhere else.
     setRESTClient(new REST().setToken(this.options.token));
-    if (!this.#id) {
-      this.#id = await rest
-        .get(Routes.oauth2CurrentApplication())
-        .then(x => (x as RESTGetAPIOAuth2CurrentApplicationResult).id);
-    }
     log('debug', `starting gateway bot, guildCommands=${this.options.deployGuildCommands}`);
     this.#cleanupInitializeHook = await runHook(this.features, $initialize, undefined);
     await this.startClient();
@@ -109,12 +119,20 @@ export class GatewayBot {
     this.#cachedPresence = presence;
 
     // Create gateway client
-    this.client = new GatewayClient({
+    const [client, readyData] = await createGatewayClient({
       token: this.options.token,
       shard: this.options.shard,
       intents,
       presence,
     });
+    this.client = client;
+    this.#user = new User(readyData.user);
+
+    // TODO: implement Application class
+    this.#application = {
+      id: readyData.application.id,
+      flags: new ApplicationFlagsBitfield(readyData.application.flags),
+    };
 
     // Dispatch Hooks
     this.client.on('*', (payload: GatewayDispatchPayload) => {
@@ -196,7 +214,7 @@ export class GatewayBot {
     }
 
     log('info', `updating commands on ${guild.name}`);
-    await rest.put(Routes.applicationGuildCommands(this.#id, guild.id), {
+    await rest.put(Routes.applicationGuildCommands(this.id, guild.id), {
       body: this.#cachedCommandData,
     });
   }

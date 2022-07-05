@@ -1,4 +1,4 @@
-type CopiedArrayProps = 'forEach' | 'map' | 'reduce' | 'reduceRight' | 'filter' | 'some' | 'every';
+type CopiedArrayProps = 'forEach' | 'map' | 'reduce' | 'reduceRight' | 'some' | 'every';
 
 type BitfieldEnum = Record<string | number, string | number | bigint>;
 
@@ -14,13 +14,14 @@ export type Bitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Pick
     toString(): string;
     toArray(): Value[];
     toStringArray(): Extract<keyof Enum, string>[];
-    clone(): Bitfield<Value>;
+    clone(): Bitfield<Enum>;
     has(bit: Value): boolean;
     add(bit: Value): this;
     remove(bit: Value): this;
-    missing(bit: Value): Bitfield<Value>;
+    filter(fn: (bit: Value) => boolean): Bitfield<Enum>;
+    missing(bit: Value): Bitfield<Enum>;
     any(bit: Value): boolean;
-    equals(other: Bitfield<Value>): boolean;
+    equals(other: Bitfield<Enum>): boolean;
     freeze(): ReadonlyBitfield<Enum>;
   };
 
