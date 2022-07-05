@@ -8,4 +8,4 @@ export { rest } from './lib/global';
 export * from './structures';
 export type { Cleanup } from './utils/types';
 
-export const version = 'VERSION';
+export const version = '__VERSION__';

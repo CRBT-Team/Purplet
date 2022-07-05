@@ -29,7 +29,7 @@ The object passed to `$slashCommand` is the `SlashCommandData` interface, which 
 | `name` | [1-32 character name](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming) |
 | `description` | 1-100 character description |
 | `options?` | An [`OptionBuilder`](#command-options) containing a list of command options. |
-| `handle(args)` | A function that is called when the command is run. The first argument given is an object mapping option names to option values, which is fully typed off of the `options` property. |
+| `handle(args)` | A function that is called when the command is run, with the interaction bound to `this`. The first argument given is an object mapping option names to option values, which is fully typed off of the `options` property. |
 | `permissions?` | Required permissions to use this command, unless overridden by a server admin, see [Permissions](#permissions). Defaults to [] |
 | `allowInDM?` | If `false`, disallow this command in direct messages, see [Permissions](#permissions). |
 

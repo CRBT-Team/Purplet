@@ -1,6 +1,6 @@
 # Purplet Fundamentals
 
-Purplet's core functions around a special object called a _feature_, which represents anything that contributes to your bot's functionality. In Purplet, features achieve action through "hooks", which are functions that return features, which _hook_ into the running Discord.js client. Registering features is done by `export`ing them from any module inside of `src/features`. In development mode, Purplet watches your feature files for changes and is able to load your changes without restarting anything.
+Purplet's core functions around a special object called a _feature_, which represents anything that contributes to your bot's functionality. In Purplet, features achieve action through "hooks", which are functions that return features, which _hook_ into the Discord API. Registering features is done by `export`ing them from any module inside of `src/features`. In development mode, Purplet watches your feature files for changes and is able to load your changes without restarting anything.
 
 ```ts title='src/features/slash-command.ts'
 import { $slashCommand } from 'purplet';

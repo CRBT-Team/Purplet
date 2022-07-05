@@ -178,7 +178,6 @@ export class GatewayClient extends EventEmitter {
       } else {
         packet = JSON.parse(decoder.decode(raw));
       }
-      console.log('packet', packet);
     } catch (error) {
       console.error('error decoding');
       console.error(error);

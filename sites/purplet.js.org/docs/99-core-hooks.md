@@ -1,5 +1,11 @@
 # Core API Hooks
 
+:::danger
+
+this page is outdated
+
+:::
+
 This page documents the seven "core hooks" that Purplet provides. These are hardcoded into the internal `GatewayBot` class, with manual code to support hot-reloading. Thus, anything built on top of it is automatically hot-reloadable. All of these hooks are accessed through `createFeature`, which creates a feature object.
 
 ## `initialize`

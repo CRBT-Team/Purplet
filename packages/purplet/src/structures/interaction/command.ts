@@ -19,7 +19,6 @@ import { Message } from '../message';
 import { PartialUser } from '../user';
 import { createInstanceofGuard } from '../../utils/class';
 
-// TODO: build this type based off of what is inside of discord.js
 interface ResolvedData {
   users: PartialUser;
   roles: APIRole;

@@ -4,7 +4,7 @@ Context Menu commands appear as an option in the right-click or long-press menu 
 
 ## User Commands
 
-User commands target Users or Server Members, which are resolved to a Discord.js [User](https://discord.js.org/#/docs/discord.js/stable/class/User) class.
+User commands target Users or Server Members, which are resolved to a User class.
 
 ```ts title='src/features/user-command.ts'
 import { $userCommand } from 'purplet';
@@ -19,7 +19,7 @@ export default $userContextCommand({
 
 ## Message Commands
 
-Message commands target Messages inside of Text Channels, which are resolved to a Discord.js [Message](https://discord.js.org/#/docs/discord.js/stable/class/Message) class.
+Message commands target Messages inside of Text Channels, which are resolved to a Message class.
 
 ```ts title='src/features/message-command.ts'
 import { $userCommand } from 'purplet';
