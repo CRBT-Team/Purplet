@@ -14,14 +14,14 @@
     "pub": "pnpm run build && changeset publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.22.0",
+    "@changesets/cli": "^2.23.0",
     "@svitejs/changesets-changelog-github-compact": "^0.1.1",
-    "eslint": "^8.16.0",
-    "eslint-config-dave": "^3.0.1",
-    "prettier": "^2.6.2",
-    "prettier-config-dave": "^1.0.1",
+    "eslint": "^8.19.0",
+    "eslint-config-dave": "^3.0.3",
+    "prettier": "^2.7.1",
+    "prettier-config-dave": "^1.0.3",
     "turbo": "latest",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.4"
   },
   "packageManager": "pnpm@7.1.0",
   "engines": {

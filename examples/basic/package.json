@@ -9,7 +9,7 @@
     "deploy": "purplet deploy",
     "dev": "purplet dev",
     "guild-manager": "purplet guild-manager",
-    "sync": "purplet sync"
+    "postinstall": "purplet sync"
   },
   "dependencies": {
     "purplet": "workspace:*"

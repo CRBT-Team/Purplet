@@ -1,8 +1,8 @@
 import path from 'path';
+import { asyncMap } from '@davecode/utils';
 import type { Dirent } from 'fs';
 import { access, mkdir, readdir, stat, writeFile } from 'fs/promises';
 import { createRequire } from 'module';
-import { asyncMap } from './promise';
 
 export async function walk(root: string): Promise<string[]> {
   const files = await readdir(root, { withFileTypes: true });

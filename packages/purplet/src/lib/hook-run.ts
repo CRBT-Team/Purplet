@@ -1,5 +1,5 @@
+import { asyncMap } from '@davecode/utils';
 import { FEATURE, Feature, FeatureMetaData, Hook, HookType } from './hook';
-import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 
 export type MergeFunction<T, Result> = (a: T[]) => Result;

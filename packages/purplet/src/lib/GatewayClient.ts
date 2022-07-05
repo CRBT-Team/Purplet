@@ -222,8 +222,7 @@ export class GatewayClient extends EventEmitter {
                 os: process.platform,
                 browser: 'purplet/v__VERSION__',
                 device: 'purplet/v__VERSION__',
-                // TODO: remove the following line when discord-api-types is updated
-              } as any,
+              },
             },
           });
         }

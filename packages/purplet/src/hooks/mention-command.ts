@@ -1,10 +1,10 @@
 import type { Awaitable } from '@davecode/types';
+import { asyncMap } from '@davecode/utils';
 import { GatewayIntentBits } from 'purplet/types';
 import { $onEvent } from './onEvent';
 import { $intents } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 import { Message } from '../structures';
-import { asyncMap } from '../utils/promise';
 
 interface MentionCommandData {
   name: string;

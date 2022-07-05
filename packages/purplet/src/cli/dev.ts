@@ -1,4 +1,5 @@
 import path from 'path';
+import { asyncMap, unique } from '@davecode/utils';
 import { watch } from 'chokidar';
 import { EventEmitter } from 'events';
 import type { HmrContext, ModuleNode, Plugin } from 'vite';
@@ -13,10 +14,8 @@ import { getEnvVar, setupEnv } from '../lib/env';
 import { GatewayBot } from '../lib/GatewayBot';
 import type { Feature } from '../lib/hook';
 import { log, startSpinner } from '../lib/logger';
-import { unique } from '../utils/array';
 import { isSourceFile } from '../utils/filetypes';
 import { purpletSourceCode, walk } from '../utils/fs';
-import { asyncMap } from '../utils/promise';
 import type { Closable } from '../utils/types';
 
 export interface DevModeOptions {

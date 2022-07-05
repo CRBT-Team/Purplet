@@ -1,10 +1,10 @@
 import dedent from 'dedent';
 import path from 'path';
+import { asyncMap } from '@davecode/utils';
 import { readdir, readFile, writeFile } from 'fs/promises';
 import type { ResolvedConfig } from './types';
 import { log } from '../lib/logger';
 import { isDirectory, posixify, resolveEntrypoint, writeIfChanged } from '../utils/fs';
-import { asyncMap } from '../utils/promise';
 
 const searchPaths = ['tsconfig.json', 'jsconfig.json'];
 

@@ -1,3 +1,4 @@
+import { asyncMap } from '@davecode/utils';
 import { REST } from '@discordjs/rest';
 import { deepEqual } from 'fast-equals';
 import {
@@ -28,7 +29,6 @@ import { mergeIntents, mergePresence } from './hook-core-merge';
 import { runHook } from './hook-run';
 import { log } from './logger';
 import { createInteraction, InteractionResponse } from '../structures';
-import { asyncMap } from '../utils/promise';
 import type { Cleanup } from '../utils/types';
 
 interface GatewayBotOptions {

@@ -1,7 +1,7 @@
 import path from 'path';
+import { unique } from '@davecode/utils';
 import type { InlineConfig as ViteConfig } from 'vite';
 import type { ResolvedConfig } from './types';
-import { unique } from '../utils/array';
 import { purpletSourceCode } from '../utils/fs';
 
 export async function createViteConfig(config: ResolvedConfig, mode: 'development' | 'production') {
@@ -31,13 +31,7 @@ export async function createViteConfig(config: ResolvedConfig, mode: 'developmen
     },
     ssr: {
       ...userViteConfig.ssr,
-      external: unique([
-        ...(userViteConfig.ssr?.external ?? []),
-        'purplet',
-        'discord-api-types',
-        '@discordjs/rest',
-        '@discordjs/builders',
-      ]),
+      external: unique([...(userViteConfig.ssr?.external ?? []), 'purplet', 'discord-api-types']),
       format: 'esm',
     },
     resolve: {

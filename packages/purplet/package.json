@@ -38,7 +38,7 @@
     "lint": "eslint src/**/*.{ts,tsx}"
   },
   "dependencies": {
-    "@davecode/utils": "^1.0.0",
+    "@davecode/utils": "^1.0.1",
     "@discordjs/builders": "^0.13.0",
     "@discordjs/rest": "^0.4.1",
     "@purplet/serialize": "workspace:^2.0.0",
@@ -48,9 +48,9 @@
     "chalk": "^5.0.1",
     "chokidar": "^3.5.3",
     "dedent": "^0.7.0",
-    "discord-api-types": "^0.33.5",
+    "discord-api-types": "^0.36.1",
     "dotenv": "^16.0.1",
-    "esbuild": "^0.14.47",
+    "esbuild": "^0.14.48",
     "fast-equals": "^3.0.3",
     "node-fetch": "^3.2.6",
     "ora": "^6.1.2",
@@ -76,12 +76,6 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "bufferutil": "^4.0.6",
-    "erlpack": "^0.1.4",
-    "utf-8-validate": "^5.0.9",
-    "zlib-sync": "^0.1.7"
-  },
-  "optionalDependencies": {
     "bufferutil": "^4.0.6",
     "erlpack": "^0.1.4",
     "utf-8-validate": "^5.0.9",
