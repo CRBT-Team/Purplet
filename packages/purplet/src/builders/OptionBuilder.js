@@ -1,12 +1,12 @@
 import { ApplicationCommandOptionType } from 'discord-api-types/v10';
 
 export class OptionBuilder {
-  /** @type {import('discord.js').APIApplicationCommandOption[]} */
+  /** @type {import(discord-api-types/v10).APIApplicationCommandOption[]} */
   options = [];
   /** @type {Record<string, import('./OptionBuilder').Autocomplete>} */
   autocompleteHandlers = {};
 
-  /** @param {import('discord.js').ApplicationCommandOptionType} type */
+  /** @param {import(discord-api-types/v10).ApplicationCommandOptionType} type */
   #createOption(type) {
     /**
      * @param {string} name

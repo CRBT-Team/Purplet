@@ -1,5 +1,5 @@
 import type { Awaitable, DeepPartial, ForceSimplify } from '@davecode/types';
-import type { AllowedMentionsTypes } from 'discord.js';
+import type { AllowedMentionsTypes } from 'discord-api-types/v10';
 import type { UserConfig as ViteConfig } from 'vite';
 
 export interface ResolvedConfig {

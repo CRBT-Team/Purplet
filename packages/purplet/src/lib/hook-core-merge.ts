@@ -1,4 +1,4 @@
-import type { GatewayPresenceUpdateData, PresenceUpdateStatus } from 'discord.js';
+import type { GatewayPresenceUpdateData, PresenceUpdateStatus } from 'discord-api-types/v10';
 import { IntentsHookData, PresenceHookData, PresenceStatus } from './hook-core';
 import { IntentBitfield } from '../structures';
 

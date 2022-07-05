@@ -4,7 +4,7 @@ import path from 'path';
 import wrapAnsi from 'wrap-ansi';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { buildGatewayBot } from './build';
+import { buildGateway } from './build';
 import { DevMode } from './dev';
 import { injectLogger, log, setVerbose } from '../lib/logger';
 
@@ -78,7 +78,7 @@ cli.command(
   'build',
   'build a production gateway client',
   yargs => yargs.positional(...rootPositional),
-  args => start({ start: () => buildGatewayBot(args) }, args.verbose)
+  args => start({ start: () => buildGateway(args) }, args.verbose)
 );
 longDescriptions['build'] = dedent`
   Build a production gateway client to './dist', which can be run for an optimized production build without hot-reloading or server limits. Handles interactions unless you have an HTTP endpoint handled.

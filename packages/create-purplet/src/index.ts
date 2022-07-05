@@ -549,6 +549,6 @@ console.log(dedent`
 )}
 
   Purplet Documentation: ${c.magentaBright('https://purplet.js.org/docs/getting-started')}
-  Discord Server: ${c.magentaBright('http://crbt.app/discord')}
+  Discord Server: ${c.magentaBright('https://discord.gg/NFZqTWGVQ4')}
 `);
 console.log();

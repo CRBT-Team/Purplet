@@ -16,7 +16,7 @@ export interface BuildOptions {
   root: string;
 }
 
-export async function buildGatewayBot(options: BuildOptions) {
+export async function buildGateway(options: BuildOptions) {
   const config = await loadConfig(options.root);
 
   // Scan for features
@@ -82,10 +82,9 @@ export async function buildGatewayBot(options: BuildOptions) {
 
   const userPkg = JSON.parse(await fs.readFile(path.join(options.root, 'package.json'), 'utf8'));
   const external: string[] = [
-    // Ensure that under no case that purplet or discord.js are bundled, even though it should
+    // Ensure that under no case that purplet is bundled, even though it should
     // be impossible to run the `purplet` cli without installing it. /shrug
     'purplet',
-    'discord.js',
   ].concat(
     Object.keys(userPkg.dependencies ?? {}),
     Object.keys(userPkg.peerDependencies ?? {}),

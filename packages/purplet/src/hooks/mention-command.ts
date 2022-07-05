@@ -1,5 +1,5 @@
 import type { Awaitable } from '@davecode/types';
-import { GatewayIntentBits } from 'discord.js';
+import { GatewayIntentBits } from 'discord-api-types/v10';
 import { $onEvent } from './onEvent';
 import { $intents } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';

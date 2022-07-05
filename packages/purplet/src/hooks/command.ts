@@ -1,4 +1,4 @@
-import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord.js';
+import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import { $applicationCommands, $interaction } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 import { CommandInteraction, SlashCommandInteraction } from '../structures';

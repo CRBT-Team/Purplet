@@ -1,5 +1,5 @@
 import type { Class } from '@davecode/types';
-import type { APIChannel, ChannelType } from 'discord.js';
+import type { APIChannel, ChannelType } from 'discord-api-types/v10';
 import type { Channel } from '../..';
 
 export const channelClasses = new Map<ChannelType, Class<Channel>>();

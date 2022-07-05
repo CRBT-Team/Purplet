@@ -34,11 +34,11 @@ export async function createViteConfig(config: ResolvedConfig, mode: 'developmen
       external: unique([
         ...(userViteConfig.ssr?.external ?? []),
         'purplet',
-        'discord.js',
         'discord-api-types',
         '@discordjs/rest',
         '@discordjs/builders',
       ]),
+      format: 'esm',
     },
     resolve: {
       ...userViteConfig.resolve,
