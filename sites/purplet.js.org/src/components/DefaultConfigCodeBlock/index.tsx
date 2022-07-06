@@ -1,12 +1,30 @@
-// @ts-ignore
-import tsSource from '!!raw-loader!../../../docs/60-default-config.ts';
+import purpletDefault from '!!raw-loader!../../../../../packages/purplet/src/config/default';
 import CodeBlock from '@theme/CodeBlock';
 import React from 'react';
 import { TabbedCodeBlock, TabItem } from '../TabbedCodeBlock';
 
-const jsSource = `/** @type {import('purplet').Config} */
+const configValues = String(purpletDefault)
+  .match(/\/\/ START CONFIG\n(.*)\/\/ END CONFIG/s)[1]
+  .trim();
+
+const jsSource = `
+/** @type {import('purplet').Config} */
 const config = {
-${tsSource.split('\n').slice(3).join('\n')}`;
+  ${configValues}
+};
+
+export default config
+`;
+
+const tsSource = `
+import { Config } from 'purplet';
+
+const config: Config = {
+  ${configValues}
+};
+
+export default config;
+`;
 
 export function DefaultConfigCodeBlock() {
   return (

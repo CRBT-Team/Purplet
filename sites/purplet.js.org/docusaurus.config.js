@@ -35,8 +35,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          // TODO: fix netlify not building docs when just the doc folder chnages.
-          // path: '../../docs',
+          path: '../../docs',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/CRBT-Team/purplet/tree/main/sites/purplet.crbt.app/',
         },

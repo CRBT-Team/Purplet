@@ -6,6 +6,7 @@ importers:
     specifiers:
       '@changesets/cli': ^2.23.0
       '@svitejs/changesets-changelog-github-compact': ^0.1.1
+      cloc: ^2.10.0
       eslint: ^8.19.0
       eslint-config-dave: ^3.0.3
       prettier: ^2.7.1
@@ -15,6 +16,7 @@ importers:
     devDependencies:
       '@changesets/cli': 2.23.0
       '@svitejs/changesets-changelog-github-compact': 0.1.1
+      cloc: 2.10.0
       eslint: 8.19.0
       eslint-config-dave: 3.0.3_eslint@8.19.0
       prettier: 2.7.1
@@ -3510,7 +3512,7 @@ packages:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
       '@types/minimatch': 3.0.5
-      '@types/node': 18.0.1
+      '@types/node': 18.0.2
 
   /@types/graceful-fs/4.1.5:
     resolution: {integrity: sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==}
@@ -3611,8 +3613,8 @@ packages:
   /@types/node/18.0.0:
     resolution: {integrity: sha512-cHlGmko4gWLVI27cGJntjs/Sj8th9aYwplmZFwmmgYQQvL5NUsgVJG7OddLvNfLqYS31KFN0s3qlaD9qCaxACA==}
 
-  /@types/node/18.0.1:
-    resolution: {integrity: sha512-CmR8+Tsy95hhwtZBKJBs0/FFq4XX7sDZHlGGf+0q+BRZfMbOTkzkj0AFAuTyXbObDIoanaBBW0+KEW+m3N16Wg==}
+  /@types/node/18.0.2:
+    resolution: {integrity: sha512-b947SdS4GH+g2W33wf5FzUu1KLj5FcSIiNWbU1ZyMvt/X7w48ZsVcsQoirIgE/Oq03WT5Qbn/dkY0hePi4ZXcQ==}
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -4991,6 +4993,11 @@ packages:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wrap-ansi: 7.0.0
+
+  /cloc/2.10.0:
+    resolution: {integrity: sha512-iHYXbhKNF+Wy6TNxHozD8WkW0qbZ7WKecyFntyFron4BF4SOX6hp7HEuNJ8iVnjimnf3xpLd81kMwoRj2WiCoA==}
+    hasBin: true
+    dev: true
 
   /clone-deep/4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}

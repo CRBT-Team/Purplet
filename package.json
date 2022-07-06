@@ -7,7 +7,9 @@
   ],
   "scripts": {
     "build": "turbo run build --parallel --output-logs new-only --filter=!./examples/*",
+    "build:purplet.js.org": "turbo run build --parallel --output-logs new-only --filter=./sites/purplet.js.org",
     "bump": "changeset version",
+    "cloc": "cloc ./packages --exclude-dir=dist,.turbo,build,.purplet,node_modules",
     "dev": "pnpm turbo run dev --parallel --filter=!./examples/*",
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md,json}\"",
     "lint": "turbo run lint",
@@ -16,6 +18,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
     "@svitejs/changesets-changelog-github-compact": "^0.1.1",
+    "cloc": "^2.10.0",
     "eslint": "^8.19.0",
     "eslint-config-dave": "^3.0.3",
     "prettier": "^2.7.1",

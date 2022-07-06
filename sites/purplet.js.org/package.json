@@ -1,5 +1,5 @@
 {
-  "name": "purplet.crbt.app",
+  "name": "purplet.js.org",
   "private": true,
   "scripts": {
     "build": "docusaurus build",
