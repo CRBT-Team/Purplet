@@ -1,7 +1,7 @@
 import type { Awaitable } from '@davecode/types';
 import { asyncMap } from '@davecode/utils';
 import { GatewayIntentBits } from 'purplet/types';
-import { $gatewayEvent } from './$gatewayEvent';
+import { $gatewayEvent } from './gateway-event';
 import { $intents } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 import { Message } from '../structures';

@@ -3,7 +3,7 @@ import { IntentsHookData, PresenceHookData, PresenceStatus } from './hook-core';
 import { IntentsBitfield } from '../structures';
 
 export function mergeIntents(intents: IntentsHookData[]) {
-  return intents.map(x => IntentsBitfield.resolve(x).bitfield).reduce((a, b) => a | b, 0);
+  return IntentsBitfield.resolve(intents);
 }
 
 const statusOrder = [

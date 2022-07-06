@@ -44,18 +44,13 @@ export interface CreateHookData<HookData, Type extends HookType> {
    */
   core?: boolean;
   /**
-   * Run on initial ALL load, given a list of feature data. You can also return an array of other
-   * features if your hook needs to do that.
+   * Custom Hook API: Given a list of feature data. You can also return an array of other features
+   * if your hook needs to do that.
+   *
+   * This API is pretty stupid and has some huge limitations, and is only designed to facilitate the
+   * custom application command merging that $slashCommandGroup requires.
    */
-  load?(hooks: HookData[]): Promise<void | UnmarkedFeature[]>;
-  /** Run to unload ALL hooks, given a list of feature data. */
-  unload?(hooks: HookData[]): Promise<void>;
-  /**
-   * For HMR, this is called with a new array plus added/removed. If not specified, the unload and
-   * load function will be used instead. If specified, those other functions will only be called to
-   * setup and teardown the entire hook.
-   */
-  hotUpdate?(update: HookHotUpdate<HookData>): Promise<UnmarkedFeature[]>;
+  transformDataToMoreHooks?(hooks: HookData[]): Promise<void | UnmarkedFeature | UnmarkedFeature[]>;
 }
 
 export interface HookHotUpdate<HookData> {
@@ -102,8 +97,6 @@ export function createHook<Data, Type extends HookType>(
   hook.id = data.id;
   hook.type = data.type;
   hook.core = data.core;
-  hook.load = data.load;
-  hook.unload = data.unload;
-  hook.hotUpdate = data.hotUpdate;
+  hook.load = data.transformDataToMoreHooks;
   return hook as Hook<Data, Type>;
 }

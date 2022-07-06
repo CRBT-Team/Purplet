@@ -5,16 +5,14 @@ import type {
   RESTPutAPIApplicationCommandsJSONBody,
 } from 'purplet/types';
 import { createHook } from './hook';
-import type { Interaction } from '../structures';
+import type { BitfieldResolvable, Interaction } from '../structures';
 
 export type InitializeHookEvent = undefined;
 export type InteractionHookEvent = Interaction;
 export type DispatchHookEvent = GatewayDispatchPayload;
 export type ApplicationCommandsHookData = RESTPutAPIApplicationCommandsJSONBody;
-export type IntentsHookData =
-  | IntentBitfield
-  | GatewayIntentBits
-  | (IntentBitfield | GatewayIntentBits)[];
+export type IntentsHookData = BitfieldResolvable<typeof GatewayIntentBits>;
+
 export interface PresenceHookData {
   since?: number | null;
   activities?: GatewayActivityUpdateData[];

@@ -1,11 +1,11 @@
 import { ApplicationCommandType, LocalizationMap } from 'purplet/types';
-import { $appCommand } from './command';
+import { $appCommand, $appCommandMergeHook } from './command';
 import {
   getOptionBuilderAutocompleteHandlers,
   OptionBuilder,
   OptionBuilderToPurpletResolvedObject,
 } from '../builders';
-import { $applicationCommands, $interaction } from '../lib/hook-core';
+import { $interaction } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 import { AutocompleteInteraction, SlashCommandInteraction } from '../structures';
 import { camelChoiceToSnake } from '../utils/case';
@@ -44,30 +44,24 @@ export function $slashCommand<T>(options: SlashCommandData<T>) {
         options.handle.call(this, resolvedOptions);
       },
     }),
-    ...(Object.keys(autocompleteHandlers ?? {}).length > 0
-      ? [
-          $interaction(async i => {
-            if (
-              AutocompleteInteraction.is(i) &&
-              i.fullCommandName === options.name &&
-              i.commandType === ApplicationCommandType.ChatInput
-            ) {
-              const resolvedOptions = Object.fromEntries(
-                commandOptions.map(option => [
-                  option.name,
-                  (i.getOption(option.name) as any)?.value,
-                ])
-              ) as unknown as T;
+    Object.keys(autocompleteHandlers ?? {}).length > 0 &&
+      $interaction(async i => {
+        if (
+          AutocompleteInteraction.is(i) &&
+          i.fullCommandName === options.name &&
+          i.commandType === ApplicationCommandType.ChatInput
+        ) {
+          const resolvedOptions = Object.fromEntries(
+            commandOptions.map(option => [option.name, (i.getOption(option.name) as any)?.value])
+          ) as unknown as T;
 
-              i.showAutocompleteResponse(
-                (
-                  await (autocompleteHandlers as any)[i.focusedOption.name].call(i, resolvedOptions)
-                ).map(camelChoiceToSnake)
-              );
-            }
-          }),
-        ]
-      : []),
+          i.showAutocompleteResponse(
+            (
+              await (autocompleteHandlers as any)[i.focusedOption.name].call(i, resolvedOptions)
+            ).map(camelChoiceToSnake)
+          );
+        }
+      }),
   ]);
 }
 
@@ -79,14 +73,12 @@ export interface SlashCommandGroupData extends CommandPermissionsInput {
 }
 
 export function $slashCommandGroup(data: SlashCommandGroupData) {
-  return $applicationCommands([
-    {
-      name: data.name,
-      name_localizations: data.nameLocalizations,
-      description: data.description,
-      description_localizations: data.descriptionLocalizations,
-      options: [],
-      ...resolveCommandPermissions(data),
-    },
-  ]);
+  return $appCommandMergeHook({
+    isSlashCommandGroup: true,
+    name: data.name,
+    name_localizations: data.nameLocalizations,
+    description: data.description,
+    description_localizations: data.descriptionLocalizations,
+    ...resolveCommandPermissions(data),
+  });
 }
