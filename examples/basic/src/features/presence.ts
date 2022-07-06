@@ -1,5 +1,5 @@
-import { $intents, $presence, PresenceStatus, version } from 'purplet';
-import { ActivityType, GatewayIntentBits } from 'purplet/types';
+import { $presence, PresenceStatus, version } from 'purplet';
+import { ActivityType } from 'purplet/types';
 
 export default $presence({
   status: PresenceStatus.Online,
@@ -10,5 +10,3 @@ export default $presence({
     },
   ],
 });
-
-export const x = $intents([GatewayIntentBits.MessageContent]);

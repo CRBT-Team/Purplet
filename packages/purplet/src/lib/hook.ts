@@ -19,7 +19,7 @@ export interface FeatureMetaData<HookData = unknown, Type extends HookType = Hoo
   hook: Hook<HookData, Type>;
 }
 
-export type MarkedFeature<Pass = Record<never, unknown>> = {
+export type UnmarkedFeature<Pass = Record<never, unknown>> = {
   [FEATURE]: FeatureMetaData;
 } & Pass &
   Record<never, never>;
@@ -47,7 +47,7 @@ export interface CreateHookData<HookData, Type extends HookType> {
    * Run on initial ALL load, given a list of feature data. You can also return an array of other
    * features if your hook needs to do that.
    */
-  load?(hooks: HookData[]): Promise<void | MarkedFeature[]>;
+  load?(hooks: HookData[]): Promise<void | UnmarkedFeature[]>;
   /** Run to unload ALL hooks, given a list of feature data. */
   unload?(hooks: HookData[]): Promise<void>;
   /**
@@ -55,7 +55,7 @@ export interface CreateHookData<HookData, Type extends HookType> {
    * load function will be used instead. If specified, those other functions will only be called to
    * setup and teardown the entire hook.
    */
-  hotUpdate?(update: HookHotUpdate<HookData>): Promise<MarkedFeature[]>;
+  hotUpdate?(update: HookHotUpdate<HookData>): Promise<UnmarkedFeature[]>;
 }
 
 export interface HookHotUpdate<HookData> {
@@ -68,7 +68,7 @@ export interface HookHotUpdate<HookData> {
 }
 
 export interface Hook<HookData, Type extends HookType> extends CreateHookData<HookData, Type> {
-  <Pass>(data: HookInput<HookData, Type>, passthrough?: Pass): MarkedFeature<Pass>;
+  <Pass>(data: HookInput<HookData, Type>, passthrough?: Pass): UnmarkedFeature<Pass>;
   merge?: boolean;
 }
 
@@ -86,14 +86,14 @@ export function createHook<Data, Type extends HookType>(
   const hook: any = <X>(
     instance: Data | (() => Awaitable<Data>),
     passthrough?: X
-  ): MarkedFeature<X> => {
+  ): UnmarkedFeature<X> => {
     return {
       [FEATURE]: {
         data: instance,
         hook,
       },
       ...passthrough,
-    } as MarkedFeature<X>;
+    } as UnmarkedFeature<X>;
   };
 
   Object.defineProperty(hook, 'name', {

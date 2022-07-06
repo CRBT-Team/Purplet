@@ -1,9 +1,9 @@
 import type { GatewayPresenceUpdateData, PresenceUpdateStatus } from 'purplet/types';
 import { IntentsHookData, PresenceHookData, PresenceStatus } from './hook-core';
-import { IntentBitfield } from '../structures';
+import { IntentsBitfield } from '../structures';
 
 export function mergeIntents(intents: IntentsHookData[]) {
-  return intents.map(x => IntentBitfield.resolve(x).bitfield).reduce((a, b) => a | b, 0);
+  return intents.map(x => IntentsBitfield.resolve(x).bitfield).reduce((a, b) => a | b, 0);
 }
 
 const statusOrder = [

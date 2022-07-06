@@ -18,6 +18,7 @@ Our code style is as follows:
 - Use `pnpm` instead of `yarn` or `npm` (Our own code and examples. Developers may use whatever they want)
 - Functions that return features must be named with a leading `$`.
 - No more than two parameters + an "options" object per function.
+- Files are named either as the exact name of a Class or hook (ex: `GatewayClient.ts`), or a description of what the file contains in kebab-case (ex: `errors.ts`). In some situations, the kebab-case name is written backwards to sort them with similar files (ex: the four `hook-*.ts` files).
 - All files should be formatted with our [Prettier][3] config, which you can run with our `pnpm format`
 - All changes should be documented with [Changesets][4]
 

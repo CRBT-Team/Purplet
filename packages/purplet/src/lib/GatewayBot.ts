@@ -5,7 +5,6 @@ import {
   APIGuild,
   GatewayDispatchEvents,
   GatewayDispatchPayload,
-  GatewayGuildCreateDispatchData,
   GatewayIntentBits,
   GatewayPresenceUpdateData,
   RESTAPIPartialCurrentUserGuild,
@@ -27,6 +26,9 @@ import {
 import { mergeIntents, mergePresence } from './hook-core-merge';
 import { runHook } from './hook-run';
 import { log } from './logger';
+import { errorTooManyGuilds } from '../cli/errors';
+import { $gatewayEvent } from '../hooks';
+import { markFeature } from '../internal';
 import {
   ApplicationFlagsBitfield,
   createInteraction,
@@ -45,6 +47,11 @@ interface GatewayBotOptions {
    * set while in production.
    */
   deployGuildCommands?: boolean;
+  /**
+   * If set to true alongside `deployGuildCommands`, will also clear all commands. Do not set while
+   * in production.
+   */
+  deployGuildCommandsCleanup?: boolean;
   /** Rules for command deployment if `deployGuildCommands` is enabled. */
   guildRules?: AllowedGuildRules;
   /** Bot sharding information. */
@@ -96,6 +103,16 @@ export class GatewayBot {
     if (this.options.features) {
       this.features.add(this.options.features);
     }
+    if (this.options.deployGuildCommands) {
+      this.features.add([
+        markFeature(
+          'dev.deployGuildCommands',
+          $gatewayEvent('GUILD_CREATE', guild => {
+            this.updateApplicationCommandsGuild(guild);
+          })
+        ),
+      ]);
+    }
   }
 
   async start() {
@@ -135,9 +152,9 @@ export class GatewayBot {
     };
 
     // Dispatch Hooks
-    this.client.on('*', (payload: GatewayDispatchPayload) => {
-      runHook(this.features, $dispatch, payload);
-    });
+    this.client.on('*', (payload: GatewayDispatchPayload) =>
+      runHook(this.features, $dispatch, payload)
+    );
 
     // Interaction hooks
     this.client.on(GatewayDispatchEvents.InteractionCreate, async i => {
@@ -152,18 +169,11 @@ export class GatewayBot {
       };
 
       const interaction = createInteraction(i, responseHandler);
-
       runHook(this.features, $interaction, interaction);
     });
 
     if (this.options.deployGuildCommands) {
       this.#cachedCommandData = await runHook(this.features, $applicationCommands, x => x.flat());
-      this.client.on(
-        GatewayDispatchEvents.GuildCreate,
-        async (guild: GatewayGuildCreateDispatchData) => {
-          await this.updateApplicationCommandsGuild(guild);
-        }
-      );
       await this.updateCommands(this.#cachedCommandData);
     }
   }
@@ -192,12 +202,12 @@ export class GatewayBot {
     ).filter(x => this.isGuildAllowed(x.id));
 
     if (guildList.length > 75) {
-      throw new Error("You can't have more than 75 guilds on your development bot.");
+      throw errorTooManyGuilds();
     }
     if (guildList.length >= 5) {
       log(
         'warn',
-        `You have more ${guildList.length} guilds on your development bot. This can slow down the bot significantly, as commands are registered per-guild during development.`
+        `You have ${guildList.length} guilds on your development bot. Many guilds can slow down the bot significantly, as commands are registered per-guild during development.`
       );
     }
 
@@ -209,10 +219,6 @@ export class GatewayBot {
   }
 
   private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
-    if (!this.#cachedCommandData) {
-      throw new Error('No command data cached. Call `.start` first.');
-    }
-
     log('info', `updating commands on ${guild.name}`);
     await rest.put(Routes.applicationGuildCommands(this.id, guild.id), {
       body: this.#cachedCommandData,

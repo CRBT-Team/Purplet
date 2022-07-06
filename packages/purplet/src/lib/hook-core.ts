@@ -5,7 +5,7 @@ import type {
   RESTPutAPIApplicationCommandsJSONBody,
 } from 'purplet/types';
 import { createHook } from './hook';
-import type { IntentBitfield, Interaction } from '../structures';
+import type { Interaction } from '../structures';
 
 export type InitializeHookEvent = undefined;
 export type InteractionHookEvent = Interaction;

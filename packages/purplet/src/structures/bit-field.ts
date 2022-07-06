@@ -45,21 +45,21 @@ export const ReadonlyActivityFlagsBitfield = createReadonlyBitfield(ActivityFlag
 export type ActivityFlagsBitfield = InstanceType<typeof ActivityFlagsBitfield>;
 export type ReadonlyActivityFlagsBitfield = InstanceType<typeof ReadonlyActivityFlagsBitfield>;
 
-export const PermissionBitfield = createBitfieldClass<typeof PermissionFlagsBits>(
+export const PermissionsBitfield = createBitfieldClass<typeof PermissionFlagsBits>(
   'PermissionBitfield',
   PermissionFlagsBits
 );
-export const ReadonlyPermissionBitfield = createReadonlyBitfield(PermissionBitfield);
-export type PermissionBitfield = InstanceType<typeof PermissionBitfield>;
-export type ReadonlyPermissionBitfield = InstanceType<typeof ReadonlyPermissionBitfield>;
+export const ReadonlyPermissionsBitfield = createReadonlyBitfield(PermissionsBitfield);
+export type PermissionsBitfield = InstanceType<typeof PermissionsBitfield>;
+export type ReadonlyPermissionsBitfield = InstanceType<typeof ReadonlyPermissionsBitfield>;
 
-export const IntentBitfield = createBitfieldClass<typeof GatewayIntentBits>(
+export const IntentsBitfield = createBitfieldClass<typeof GatewayIntentBits>(
   'IntentBitfield',
   GatewayIntentBits
 );
-export const ReadonlyIntentBitfield = createReadonlyBitfield(IntentBitfield);
-export type IntentBitfield = InstanceType<typeof IntentBitfield>;
-export type ReadonlyIntentBitfield = InstanceType<typeof ReadonlyIntentBitfield>;
+export const ReadonlyIntentsBitfield = createReadonlyBitfield(IntentsBitfield);
+export type IntentsBitfield = InstanceType<typeof IntentsBitfield>;
+export type ReadonlyIntentsBitfield = InstanceType<typeof ReadonlyIntentsBitfield>;
 
 export const ApplicationFlagsBitfield = createBitfieldClass<typeof ApplicationFlags>(
   'ApplicationFlagsBitfield',

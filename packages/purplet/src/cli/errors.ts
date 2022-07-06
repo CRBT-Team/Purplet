@@ -3,19 +3,19 @@ import dedent from 'dedent';
 import { GatewayCloseCodes, GatewayIntentBits, GatewayVersion } from 'purplet/types';
 import { CLIError, GatewayClientExitError } from '../lib/errors';
 import type { GatewayClient } from '../lib/GatewayClient';
-import { IntentBitfield } from '../structures';
+import { IntentsBitfield } from '../structures';
 import { camelCaseToEnumCase } from '../utils/case';
 
-const link = chalk.magentaBright;
-const filename = chalk.cyanBright;
+const magenta = chalk.magentaBright;
+const cyan = chalk.cyanBright;
 
-const devPortalLink = link('https://discordapp.com/developers/applications');
+const devPortalLink = magenta('https://discordapp.com/developers/applications');
 
 export function errorNoToken() {
   return new CLIError(
     'Missing DISCORD_BOT_TOKEN environment variable!',
     dedent`
-      Please create an ${filename('.env')} file with the following contents:
+      Please create an ${cyan('.env')} file with the following contents:
       
         ${chalk.cyanBright('DISCORD_BOT_TOKEN')}=${chalk.grey('<your bot token>')}
       
@@ -37,7 +37,7 @@ export function errorFromGatewayClientExitError(
       return new CLIError(
         'Invalid Bot Token!',
         dedent`
-          The token inside of ${filename(
+          The token inside of ${cyan(
             '.env'
           )} file is invalid or expired. Please create a new token at ${devPortalLink} and update the environment variable.
         `
@@ -48,7 +48,7 @@ export function errorFromGatewayClientExitError(
         GatewayIntentBits.GuildPresences,
         GatewayIntentBits.MessageContent,
       ];
-      const names = new IntentBitfield(client.options.intents)
+      const names = new IntentsBitfield(client.options.intents)
         .filter(x => specialIntents.includes(x))
         .toStringArray()
         .map(camelCaseToEnumCase);
@@ -84,4 +84,13 @@ export function errorFromGatewayClientExitError(
         `Gateway disconnected with code: ${camelCaseToEnumCase(GatewayCloseCodes[code])} (${code})`
       );
   }
+}
+
+export function errorTooManyGuilds() {
+  return new CLIError(
+    'Too Many Guilds',
+    `You can't have more than 75 guilds during development mode. Please switch bot tokens to a smaller bot, or use ${magenta(
+      'purplet guild-manager'
+    )} to manage your guilds.`
+  );
 }

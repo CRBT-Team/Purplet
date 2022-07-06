@@ -1,5 +1,5 @@
 import type { Module } from './types';
-import { Feature, FEATURE } from '../lib/hook';
+import { Feature, FEATURE, UnmarkedFeature } from '../lib/hook';
 
 /**
  * Converts a module of type `Record<string, MarkedFeature | unknown>` into an array of its
@@ -27,4 +27,11 @@ export function moduleToFeatureArray(filename: string, module: Module) {
 
       return feature;
     });
+}
+
+export function markFeature(id: string, feat: UnmarkedFeature<any>): Feature {
+  feat.featureId = id;
+  feat.exportId = 'unknown';
+  feat.filename = 'unknown';
+  return feat;
 }

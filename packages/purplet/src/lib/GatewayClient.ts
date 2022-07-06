@@ -231,7 +231,7 @@ export class GatewayClient extends EventEmitter {
         console.debug('heartbeat ack, thanks', packet);
         return;
       case GatewayOpcodes.InvalidSession:
-        console.info('Session Invalidated. Reconnecting.');
+        console.warn('Gateway Session Invalidated. Reconnecting.');
         this.reconnect();
         return;
       case GatewayOpcodes.Reconnect:

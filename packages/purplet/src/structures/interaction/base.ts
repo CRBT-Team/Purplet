@@ -1,5 +1,6 @@
 import type { RawFile } from '@discordjs/rest';
 import type { APIInteraction, APIPingInteraction, InteractionResponseType } from 'purplet/types';
+import { PermissionsBitfield } from '../bit-field';
 import { EmptyGuild } from '../guild';
 import { InteractionExecutingUser } from '../user';
 import { createInstanceofGuard } from '../../utils/class';
@@ -25,6 +26,10 @@ export abstract class Interaction<Data extends APINonPingInteraction = APINonPin
 
   get applicationId() {
     return this.raw.application_id;
+  }
+
+  get appPermissions() {
+    return new PermissionsBitfield(this.raw.app_permissions);
   }
 
   get guild() {

@@ -1,7 +1,7 @@
 import type { Awaitable } from '@davecode/types';
 import { asyncMap } from '@davecode/utils';
 import { GatewayIntentBits } from 'purplet/types';
-import { $onEvent } from './onEvent';
+import { $gatewayEvent } from './$gatewayEvent';
 import { $intents } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 import { Message } from '../structures';
@@ -26,7 +26,7 @@ interface MentionCommandArgumentParseOptions {
 
 export function $mentionCommand(params: MentionCommandData) {
   return $merge([
-    $onEvent('MESSAGE_CREATE', async function (apiMessage) {
+    $gatewayEvent('MESSAGE_CREATE', async function (apiMessage) {
       const message = new Message(apiMessage);
 
       // TODO: we do not have a way to get our own metadata right now.
