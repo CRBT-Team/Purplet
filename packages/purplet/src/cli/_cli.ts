@@ -5,7 +5,10 @@ import wrapAnsi from 'wrap-ansi';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { buildGateway } from './build';
+import { deploy } from './deploy';
 import { DevMode } from './dev';
+import { guildManager } from './guild-manager';
+import { sync } from './sync';
 import { CLIError } from '../lib/errors';
 import { injectLogger, log, setVerbose, startSpinner } from '../lib/logger';
 
@@ -120,7 +123,7 @@ cli.command(
         type: 'boolean',
         default: false,
       }),
-  args => {}
+  args => start({ start: () => deploy(args) }, args.verbose)
 );
 longDescriptions['deploy'] = dedent`
   Manage production-deployed application commands, as the production gateway client or http interaction handler does not do this for you. Pass --delete if you need to delete all commands.
@@ -131,7 +134,7 @@ cli.command(
   'sync',
   'generate development-related files',
   yargs => yargs.positional(...rootPositional),
-  args => {}
+  args => start({ start: () => sync(args) }, args.verbose)
 );
 longDescriptions['sync'] = dedent`
   Generate development-related files, such as the generated tsconfig.json file. You don't usually need to run this as 'purplet dev' will do this for you.
@@ -147,7 +150,7 @@ cli.command(
         return path.resolve(x);
       },
     }),
-  args => {}
+  args => start({ start: () => guildManager(args) }, args.verbose)
 );
 longDescriptions['guild-manager'] = dedent`
   Opens an interactive guild manager, which allows you to manage the bot's current guilds. This is useful if you run into issues with 'purplet dev' complaining about the number of guilds your bot is in.

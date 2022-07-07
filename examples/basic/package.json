@@ -6,7 +6,6 @@
   "scripts": {
     "build": "purplet build",
     "build-http": "purplet build-http",
-    "deploy": "purplet deploy",
     "dev": "purplet dev",
     "guild-manager": "purplet guild-manager",
     "postinstall": "purplet sync"
