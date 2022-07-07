@@ -1,5 +1,25 @@
 # `purplet`
 
+## 2.0.0-next.11
+
+### Patch Changes
+
+- drop discord.js dependency, now has a custom gateway client
+- rename `$onEvent` to `$gatewayEvent`
+- fix an issue with subcommands and options not working
+- fix autocomplete handlers
+- fix a performance/nesting issue with OptionBuilder, causing it to fail with the infinite recursion error after four options
+- support purplet.config.ts
+- remove config.paths.temp
+- Add Interaction.appPermissions
+- stop exporting `$appCommand`. it is now an internal tool for us
+- add error messages when startind dev mode
+- add message attachments to Channel.createMessage, Interaction.showMessage, Interaction.updateMessage, and Message.edit
+- add .meta property to all hooks, allowing user-defined metadata to be attached to hooks
+- fix `purplet build`'s output to actually be runnable (due to changes in GatewayBot)
+- new cli interface
+- tweak the naming of some of the Bitfield classes to include the plural `s`
+
 ## 2.0.0-next.10
 
 ### Patch Changes
