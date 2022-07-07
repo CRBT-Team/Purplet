@@ -50,6 +50,7 @@ await Promise.all(
       'node_modules',
       'dist',
       '.purplet',
+      '.env'
     ])
   )
 );

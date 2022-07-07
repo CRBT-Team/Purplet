@@ -3,7 +3,6 @@
 // - prebuild the 'jsdoc' versions of each template
 import c from 'chalk';
 import dedent from 'dedent';
-import minimatch from 'minimatch';
 import ora from 'ora';
 import path from 'path';
 import prompt, { PromptObject } from 'prompts';
@@ -11,7 +10,7 @@ import sortPackageJSON from 'sort-package-json';
 import yargs from 'yargs';
 import { spawn } from 'child_process';
 import { existsSync } from 'fs';
-import { copyFile, mkdir, readdir, readFile, stat, writeFile } from 'fs/promises';
+import { copyFile, mkdir, readdir, readFile, realpath, stat, writeFile } from 'fs/promises';
 import { createRequire } from 'module';
 import { format } from 'prettier';
 import { fileURLToPath } from 'url';
@@ -67,10 +66,10 @@ console.log(c.yellowBright('Report issues to https://github.com/CRBT-Team/purple
 console.log();
 
 const cliRoot = path.resolve(fileURLToPath(import.meta.url), '../../');
-const templatesRoot = [
-  path.join(cliRoot, 'templates'), // Published Case
+let templatesRoot = [
+  path.join(cliRoot, 'dist/templates'), // Published Case
   path.join(cliRoot, '../../examples'), // Monorepo case
-].find(dir => existsSync(dir));
+].find(dir => existsSync(dir))!;
 
 if (!templatesRoot) {
   console.error(c.redBright(`Could not find templates directory.`));
@@ -78,6 +77,8 @@ if (!templatesRoot) {
   console.error(c.redBright(`https://github.com/CRBT-Team/purplet/issues`));
   process.exit(2);
 }
+
+templatesRoot = (await realpath(templatesRoot)) ?? templatesRoot;
 
 async function doPrompt<T extends keyof typeof cliFlags>(
   flagName: T,
@@ -352,9 +353,7 @@ async function mkdirp(root: string) {
 
 await mkdirp(root);
 
-/** Async copy recursive, ignoring content in `.ignore` and `.gitignore` */
-// TODO: use a better matching system since this has no caching at all for the matchers. It's not
-// a huge deal since it still runs nearly instantly on my computer, but it would be better code.
+/** Async copy recursive. */
 async function copy(
   src: string,
   dest: string,
@@ -363,31 +362,12 @@ async function copy(
 ) {
   const stats = await stat(src);
   if (stats.isDirectory()) {
-    let ignoredPaths = ignore.concat();
-    const ignoreFiles = [path.join(src, '.ignore'), path.join(src, '.gitignore')];
-
-    await Promise.all(
-      ignoreFiles.map(async ignoreFile => {
-        if (existsSync(ignoreFile)) {
-          ignoredPaths = ignoredPaths.concat(
-            (await readFile(ignoreFile, 'utf-8'))
-              .split('\n')
-              .filter(x => !x.startsWith('#') && x.trim())
-              .map(x => path.join(src, '**', x).replace(/\\/g, '/').replace(/\/$/, ''))
-          );
-        }
-      })
-    );
-
     await mkdirp(dest);
-    const files = (await readdir(src)).filter(file =>
-      ignoredPaths.every(pattern => {
-        return !minimatch(path.join(src, file), pattern);
-      })
-    );
+    const allFiles = await readdir(src);
+    const files = allFiles.filter(file => !ignore.some(ignore => file === ignore));
     await Promise.all(
       files.map(async file => {
-        await copy(path.join(src, file), path.join(dest, file), copySingleFile, ignoredPaths);
+        await copy(path.join(src, file), path.join(dest, file), copySingleFile, ignore);
       })
     );
   } else {
@@ -466,7 +446,7 @@ const copyPromise = copy(
     }
     return copyFile(src, dest);
   },
-  ['**/.template.json', '**/package.json', '**/pnpm-lock.yaml']
+  ['.template.json', 'package.json', 'pnpm-lock.yaml', '.env']
 );
 
 const templatePackageJSON = require(path.join(templatesRoot, template, 'package.json'));
@@ -524,6 +504,38 @@ const prettierPromise = eslint
   : Promise.resolve();
 
 await Promise.all([copyPromise, installPromise, eslintPromise, prettierPromise]);
+
+// TODO: properly handle this in templates. the issue is npm publish will strip the gitignore file
+await writeFile(
+  path.join(root, '.gitignore'),
+  `# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+
+# testing
+coverage
+
+# build
+.purplet
+dist/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+*debug*.log*
+
+# env files
+.env
+*.env.*
+
+`
+);
+
+// TODO: stylize a better readme / use from template
+await writeFile(path.join(root, 'README.md'), `# ${path.basename(root)}`);
 
 spinner.succeed('Created Project');
 

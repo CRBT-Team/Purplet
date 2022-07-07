@@ -137,7 +137,7 @@ export function resolveCreateInteractionMessageData(
   input: CreateInteractionMessageData
 ): CreateMessageResult {
   const resolved = resolveCreateMessageData(input);
-  if ('ephemeral' in input) {
+  if (typeof input === 'object' && input && 'ephemeral' in input) {
     if (input.ephemeral) {
       resolved.message.flags = (resolved.message.flags ?? 0) | MessageFlags.Ephemeral;
     }
