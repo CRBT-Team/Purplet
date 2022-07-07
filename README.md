@@ -1,6 +1,6 @@
 <div align="center">
   <img alt="Purplet" src="sites/purplet.js.org/static/img/purplet-artwork.png" >
-  <h4>A simple framework to build modern Discord apps.</h4>
+  <h4>A simple framework to build modern Discord bots.</h4>
   <div>
     <img src="https://img.shields.io/npm/v/purplet?color=5865F2&label=version" alt="Version">
     <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=5865F2" alt="License">
@@ -45,13 +45,13 @@ and follow the instructions it gives. Documentation on purplet is available at [
 
 ## Monorepo Contents
 
-| Package                                   | Changelog                                         |
-| ----------------------------------------- | ------------------------------------------------- |
-| [purplet](packages/purplet)               | [Changelog](packages/purplet/CHANGELOG.md)        |
-| [create-purplet](packages/create-purplet) | [Changelog](packages/create-purplet/CHANGELOG.md) |
-| [@purplet/serialize](packages/serialize)  | [Changelog](packages/serialize/CHANGELOG.md)      |
+| Package | Description | Changelog |
+| --- | --- | --- |
+| [purplet](packages/purplet) | Vite + Discord API abstractions + gateway client + more | [Changelog](packages/purplet/CHANGELOG.md) |
+| [create-purplet](packages/create-purplet) | Project generator CLI | [Changelog](packages/create-purplet/CHANGELOG.md) |
+| [@purplet/serialize](packages/serialize) | Utilities for binary serialization | [Changelog](packages/serialize/CHANGELOG.md) |
 
-| Example Projects        | Create                         |
+| Example Projects        | Command to copy                |
 | ----------------------- | ------------------------------ |
 | [Basic](examples/basic) | `pnpm create purplet -t basic` |
 

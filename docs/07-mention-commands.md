@@ -14,7 +14,7 @@ import { $mentionCommand } from 'purplet';
 export default $mentionCommand({
   name: 'ping',
   handle() {
-    this.reply('Pong! 🏓');
+    this.showMessage('Pong! 🏓');
   }
 });
 ```

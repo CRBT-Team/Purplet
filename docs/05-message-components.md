@@ -25,7 +25,7 @@ export const myButton = $buttonComponent({
   },
   // A function handling interactions with the component, receiving the context object.
   handle(ctx: SampleContext) {
-    this.reply(`You clicked the button for ${ctx.name}`);
+    this.showMessage(`You clicked the button for ${ctx.name}`);
   },
 });
 
@@ -35,7 +35,7 @@ export const testCommand = $slashCommand({
   handle() {
     // `myButton.create` is a function that takes the context object, and returns a component.
     // We use `MessageComponentBuilder` to quickly build the UI layout.
-    this.reply({
+    this.showMessage({
       components: new MessageComponentBuilder()
         .addInline(myButton.create({ name: 'Dave' }))
         .addInline(myButton.create({ name: 'Alice' }))
@@ -63,7 +63,7 @@ export const myButton = $buttonComponent({
       .setStyle(renderProps.style);
   },
   handle(ctx: SampleContext) {
-    this.reply(`You clicked the button for ${ctx.name}`);
+    this.showMessage(`You clicked the button for ${ctx.name}`);
   },
 });
 
@@ -82,7 +82,7 @@ export const myButton = $buttonComponent({
     .setStyle(ButtonStyle.Secondary),
 
   handle() {
-    this.reply('You clicked the button');
+    this.showMessage('You clicked the button');
   },
 });
 
@@ -109,7 +109,9 @@ export const mySelect = $selectMenuComponent({
       ]);
   },
   handle(context) {
-    this.reply(`You selected ${context.values.join(' and ')} on the menu for ${context.name}`);
+    this.showMessage(
+      `You selected ${context.values.join(' and ')} on the menu for ${context.name}`
+    );
   },
 });
 ```

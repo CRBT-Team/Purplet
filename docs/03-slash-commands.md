@@ -15,9 +15,7 @@ export default $slashCommand({
   options: new OptionBuilder() //
     .string('name', 'Name to say hello to.'),
   async handle({ name }) {
-    this.reply({
-      content: `Hello, ${name ?? 'World'}!`,
-    });
+    this.showMessage(`Hello, ${name ?? 'World'}!`);
   },
 });
 ```

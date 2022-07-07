@@ -1,7 +1,7 @@
 import path from 'path';
 import def from './default';
 import type { Config, ResolvedConfig } from './types';
-import { assert_string, object, pathname, string, validate } from './validators';
+import { assert_string, boolean, object, pathname, string, validate } from './validators';
 
 export function resolveConfig(root: string, config: Config): ResolvedConfig {
   if (typeof config !== 'object') {
@@ -40,6 +40,23 @@ const options = object({
     }
 
     return input;
+  }),
+  allowedMentions: object({
+    repliedUser: boolean(def.allowedMentions.repliedUser),
+    parse: validate<ResolvedConfig['allowedMentions']['parse']>(
+      def.allowedMentions.parse,
+      (input, keypath) => {
+        if (!Array.isArray(input)) {
+          throw new Error(`${keypath} should be an array of mention types`);
+        }
+
+        for (const key in input) {
+          assert_string(input[key], `${keypath}.${key}`);
+        }
+
+        return input;
+      }
+    ),
   }),
   lang: string(def.lang, false),
   paths: object({

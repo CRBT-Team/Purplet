@@ -1,7 +1,7 @@
 {
   "name": "purplet",
   "version": "2.0.0-next.10",
-  "description": "A toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
+  "description": "A simple framework to build modern Discord bots.",
   "keywords": [
     "discord",
     "bot",

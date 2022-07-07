@@ -1,4 +1,5 @@
 import {
+  APIApplicationCommandSubcommandGroupOption as SubcommandOption,
   APIChatInputApplicationCommandInteraction,
   APIInteraction,
   ApplicationCommandOptionType,
@@ -18,16 +19,33 @@ export class SlashCommandInteraction<
   }
 
   get options() {
-    return this.raw.data.options ?? [];
+    const firstType = this.raw.data.options?.[0]?.type;
+    if (firstType === ApplicationCommandOptionType.Subcommand) {
+      return this.raw.data.options![0].options ?? [];
+    } else if (firstType === ApplicationCommandOptionType.SubcommandGroup) {
+      return this.raw.data.options![0].options[0].options ?? [];
+    } else {
+      return this.raw.data.options ?? [];
+    }
   }
 
   get subcommandName() {
-    return this.options.find(x => x.type === ApplicationCommandOptionType.Subcommand)?.name ?? null;
+    const type = this.raw.data.options?.[0]?.type;
+    if (type === ApplicationCommandOptionType.Subcommand) {
+      return this.raw.data.options![0].name;
+    } else if (type === ApplicationCommandOptionType.SubcommandGroup) {
+      return (this.raw.data.options![0] as SubcommandOption).options?.[0].name;
+    } else {
+      return null;
+    }
   }
 
   get subcommandGroupName() {
     return (
-      this.options.find(x => x.type === ApplicationCommandOptionType.SubcommandGroup)?.name ?? null
+      (this.raw.data.options &&
+        this.raw.data.options[0]?.type === ApplicationCommandOptionType.SubcommandGroup &&
+        this.raw.data.options[0].name) ??
+      null
     );
   }
 
@@ -38,7 +56,7 @@ export class SlashCommandInteraction<
   }
 
   getResolvedOption(name: string) {
-    const opt = this.raw.data.options?.find(option => option.name === name);
+    const opt = this.options.find(opt => opt.name === name);
     if (!opt) {
       return null;
     }

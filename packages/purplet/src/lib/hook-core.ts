@@ -4,7 +4,8 @@ import type {
   GatewayIntentBits,
   RESTPutAPIApplicationCommandsJSONBody,
 } from 'purplet/types';
-import { createHook } from './hook';
+import { createCoreHook } from './hook';
+import type { ApplicationCommandResolvable } from './hook-core-merge';
 import type { BitfieldResolvable, Interaction } from '../structures';
 
 export type InitializeHookEvent = undefined;
@@ -28,25 +29,21 @@ export enum PresenceStatus {
   Invisible = 'invisible',
 }
 
-export const $initialize = createHook<InitializeHookEvent, 'lifecycle'>({
+export const $initialize = createCoreHook<InitializeHookEvent, 'lifecycle'>({
   id: 'initialize',
   type: 'lifecycle',
-  core: true,
 });
-export const $dispatch = createHook<DispatchHookEvent, 'event'>({
+export const $dispatch = createCoreHook<DispatchHookEvent, 'event'>({
   id: 'dispatch',
   type: 'event',
-  core: true,
 });
-export const $interaction = createHook<InteractionHookEvent, 'event'>({
+export const $interaction = createCoreHook<InteractionHookEvent, 'event'>({
   id: 'interaction',
   type: 'event',
-  core: true,
 });
-export const $applicationCommands = createHook<ApplicationCommandsHookData, 'data'>({
+export const $applicationCommands = createCoreHook<ApplicationCommandResolvable, 'data'>({
   id: 'applicationCommands',
   type: 'data',
-  core: true,
 });
 /**
  * This hook allows you to specify what gateway intents your gateway bot requires.
@@ -54,15 +51,13 @@ export const $applicationCommands = createHook<ApplicationCommandsHookData, 'dat
  * Takes either one or more intents (numbers, see `GatewayIntentBits` from `discord-api-types`), one
  * or more arrays of intents, or a function returning that.
  */
-export const $intents = createHook<IntentsHookData, 'data'>({
+export const $intents = createCoreHook<IntentsHookData, 'data'>({
   id: 'intents',
   type: 'data',
-  core: true,
 });
-export const $presence = createHook<PresenceHookData, 'data'>({
+export const $presence = createCoreHook<PresenceHookData, 'data'>({
   id: 'presence',
   type: 'data',
-  core: true,
 });
 
 export type LifecycleHookNames = 'initialize';

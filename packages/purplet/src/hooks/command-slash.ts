@@ -1,11 +1,11 @@
 import { ApplicationCommandType, LocalizationMap } from 'purplet/types';
-import { $appCommand, $appCommandMergeHook } from './command';
+import { $appCommand } from './command';
 import {
   getOptionBuilderAutocompleteHandlers,
   OptionBuilder,
   OptionBuilderToPurpletResolvedObject,
 } from '../builders';
-import { $interaction } from '../lib/hook-core';
+import { $applicationCommands, $interaction } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 import { AutocompleteInteraction, SlashCommandInteraction } from '../structures';
 import { camelChoiceToSnake } from '../utils/case';
@@ -21,6 +21,10 @@ export interface SlashCommandData<T> extends CommandPermissionsInput {
   handle(this: SlashCommandInteraction, options: OptionBuilderToPurpletResolvedObject<T>): void;
 }
 
+/**
+ * Registers a slash command. Use spaces in the name to specify subcommands. Fully detailed usage
+ * guide at https://purplet.js.org/docs/slash-commands.
+ */
 export function $slashCommand<T>(options: SlashCommandData<T>) {
   const commandOptions = toJSONValue(options.options ?? []);
   const autocompleteHandlers = getOptionBuilderAutocompleteHandlers(options.options);
@@ -72,13 +76,19 @@ export interface SlashCommandGroupData extends CommandPermissionsInput {
   descriptionLocalizations?: LocalizationMap;
 }
 
+/**
+ * Defines slash command group metadata. Rationale and usage is described at
+ * https://purplet.js.org/docs/slash-commands/#subcommands.
+ */
 export function $slashCommandGroup(data: SlashCommandGroupData) {
-  return $appCommandMergeHook({
-    isSlashCommandGroup: true,
-    name: data.name,
-    name_localizations: data.nameLocalizations,
-    description: data.description,
-    description_localizations: data.descriptionLocalizations,
-    ...resolveCommandPermissions(data),
-  });
+  return $applicationCommands([
+    {
+      isSlashCommandGroup: true,
+      name: data.name,
+      name_localizations: data.nameLocalizations,
+      description: data.description,
+      description_localizations: data.descriptionLocalizations,
+      ...resolveCommandPermissions(data),
+    },
+  ]);
 }

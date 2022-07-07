@@ -8,8 +8,6 @@ export default $slashCommand({
     .string('who', 'to who you are saying hello to'),
 
   async handle(options) {
-    this.showMessage({
-      content: `Hello ${capitalize(options.who ?? 'World')}!`,
-    });
+    this.showMessage(`Hello ${capitalize(options.who ?? 'World')}!`);
   },
 });

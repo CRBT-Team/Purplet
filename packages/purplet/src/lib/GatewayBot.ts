@@ -23,7 +23,7 @@ import {
   $interaction,
   $presence,
 } from './hook-core';
-import { mergeIntents, mergePresence } from './hook-core-merge';
+import { mergeCommands, mergeIntents, mergePresence } from './hook-core-merge';
 import { runHook } from './hook-run';
 import { log } from './logger';
 import { errorTooManyGuilds } from '../cli/errors';
@@ -173,7 +173,7 @@ export class GatewayBot {
     });
 
     if (this.options.deployGuildCommands) {
-      this.#cachedCommandData = await runHook(this.features, $applicationCommands, x => x.flat());
+      this.#cachedCommandData = await runHook(this.features, $applicationCommands, mergeCommands);
       await this.updateCommands(this.#cachedCommandData);
     }
   }
@@ -246,7 +246,7 @@ export class GatewayBot {
 
     const newIntents = await runHook(this.features, $intents, mergeIntents);
     const newPresence = await runHook(this.features, $presence, mergePresence);
-    const newCommandData = await runHook(this.features, $applicationCommands, x => x.flat());
+    const newCommandData = await runHook(this.features, $applicationCommands, mergeCommands);
 
     if (newIntents !== this.#cachedIntents) {
       this.#cachedIntents = newIntents;

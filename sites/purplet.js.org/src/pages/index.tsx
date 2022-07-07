@@ -1,5 +1,4 @@
 import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import CodeBlock from '@theme/CodeBlock';
 import Layout from '@theme/Layout';
 import clsx from 'clsx';
@@ -11,14 +10,11 @@ const example1 = `export const helloWorld = $slashCommand({
   description: 'A simple "Hello, World" command.',
 
   async handle() {
-    this.reply({
-      content: 'Hello, World!',
-    });
+    this.showMessage('Hello, World!');
   },
 });`;
 
 export default function Home(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout title={`Home`} description='Description will go into a meta tag in <head />'>
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
@@ -74,12 +70,12 @@ export default function Home(): JSX.Element {
           </div>
         </div>
       </section>
-      <section className='padding-vert--lg'>
+      {/* <section className='padding-vert--lg'>
         <div className='container'>
           <h2>Bots Using Purplet</h2>
           <p>CRBT</p>
         </div>
-      </section>
+      </section> */}
     </Layout>
   );
 }

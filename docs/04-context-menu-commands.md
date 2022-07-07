@@ -12,7 +12,7 @@ import { $userCommand } from 'purplet';
 export default $userContextCommand({
   name: 'Get User Info',
   handle(user) {
-    this.reply(`Selected user is ${user.tag}`);
+    this.showMessage(`Selected user is ${user.tag}`);
   }
 });
 ```
@@ -27,7 +27,7 @@ import { $userCommand } from 'purplet';
 export default $messageContextCommand({
   name: 'Get Author Info',
   handle(message) {
-    this.reply(`Selected message was sent by ${message.author.tag}`);
+    this.showMessage(`Selected message was sent by ${message.author.tag}`);
   }
 });
 ```

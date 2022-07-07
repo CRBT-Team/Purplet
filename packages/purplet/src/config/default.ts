@@ -10,8 +10,8 @@ const config: ResolvedConfig = {
     $lib: 'src/lib',
   },
   allowedMentions: {
-    repliedUser: false,
-    parse: [],
+    repliedUser: true,
+    parse: ['users'],
   },
   lang: 'en-US',
   paths: {

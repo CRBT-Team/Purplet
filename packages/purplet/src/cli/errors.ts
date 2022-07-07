@@ -63,6 +63,19 @@ export function errorFromGatewayClientExitError(
           ${chalk.magentaBright('https://discord.com/developers/applications')}
         `
       );
+    case GatewayCloseCodes.InvalidIntents:
+      const names2 = new IntentsBitfield(client.options.intents)
+        .toStringArray()
+        .map(camelCaseToEnumCase);
+
+      return new CLIError(
+        'Disallowed Intents!',
+        dedent`
+          Intents value: ${chalk.cyanBright(client.options.intents)}
+          Flags:
+          ${names2.map(x => `  - ${chalk.cyanBright(x)}`).join('\n')}
+        `
+      );
     case GatewayCloseCodes.ShardingRequired:
       return new CLIError(
         'Sharding Required!',

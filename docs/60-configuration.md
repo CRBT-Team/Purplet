@@ -7,7 +7,10 @@
 
 Your project's configuration lives in a `purplet.config.ts` file. All values are optional. The complete list of options, with defaults, is shown here:
 
-<!-- See ./04-default-config.ts for the actual config. The `.js` variant of it is generated automatically. -->
+<!--
+  Our config file default is automatically generated off of the following file:
+  /packages/purplet/src/config/default.ts
+-->
 
 import { DefaultConfigCodeBlock } from '@site/src/components/DefaultConfigCodeBlock';
 
@@ -27,17 +30,20 @@ const config = {
 };
 ```
 
+## `allowedMentions`
+
+This sets a bot-wide default for the `allowed_mentions` field, passed to functions that send a message. By default, it is an object that only allows user mentions and replies to cause pings.
+
 ## `lang`
 
 The primary language that your project is written in. This is only needed if you plan to translate your bot.
 
 ## `paths`
 
-Defines various paths related to your application and the Purplet Core and CLI:
+Defines various paths related to your application that Purplet uses:
 
 - `build`: Path to where built JavaScript files are saved. The bot entry is always `index.js` inside of this folder.
 - `features`: The directory to search and watch for exported `Feature` objects.
-- `output`: A temporary folder that Purplet uses for building and generated types.
 - `translations`: The directory that translation files are stored.
 
 ## `vite`

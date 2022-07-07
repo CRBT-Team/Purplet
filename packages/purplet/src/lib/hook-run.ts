@@ -1,5 +1,5 @@
 import { asyncMap } from '@davecode/utils';
-import { FEATURE, Feature, FeatureMetaData, Hook, HookType } from './hook';
+import { FEATURE, Feature, FeatureInternalData, Hook, HookType } from './hook';
 import type { Cleanup } from '../utils/types';
 
 export type MergeFunction<T, Result> = (a: T[]) => Result;
@@ -68,20 +68,20 @@ export async function runHook<Data, Type extends HookType>(
         : feature[FEATURE].data
     );
 
-    return extraArg ? (extraArg as MergeFunction<Data, unknown>)(values) : values;
+    return extraArg ? (extraArg as MergeFunction<Data, unknown>)(values.flat()) : values.flat();
   }
 
   if (hook.type === 'event') {
     return Promise.all(
       list.map(feature =>
-        (feature[FEATURE] as FeatureMetaData<unknown, 'event'>).data.call(feature, extraArg)
+        (feature[FEATURE] as FeatureInternalData<unknown, 'event'>).data.call(feature, extraArg)
       )
     );
   }
 
   if (hook.type === 'lifecycle') {
     const allCleanup = await asyncMap(list, feature =>
-      (feature[FEATURE] as FeatureMetaData<unknown, 'lifecycle'>).data.call(feature, extraArg)
+      (feature[FEATURE] as FeatureInternalData<unknown, 'lifecycle'>).data.call(feature, extraArg)
     );
     return () => {
       for (const cleanup of allCleanup) {

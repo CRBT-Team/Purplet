@@ -39,7 +39,7 @@ function logString(level: LogLevel, data: string) {
       ? ' '.repeat(6)
       : chalk.bold(`${colors[level](level.padEnd(5, ' '))}`) + ' ';
   const prefixLength = stringLength(prefix);
-  const wrapped = wrapAnsi(textColors[level]?.(data) ?? data, 80 - 6, {
+  const wrapped = wrapAnsi(textColors[level]?.(data) ?? data, 90 - 6, {
     trim: false,
     hard: true,
   }).replace(/\n/g, '\n' + ' '.repeat(prefixLength));

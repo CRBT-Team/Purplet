@@ -10,9 +10,7 @@ export const helloWorld = $slashCommand({
   description: 'A simple "Hello, World" command.',
 
   async handle() {
-    this.reply({
-      content: 'Hello, World!',
-    });
+    this.showMessage('Hello, World!');
   },
 });
 ```
