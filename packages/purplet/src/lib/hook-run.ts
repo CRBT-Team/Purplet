@@ -3,7 +3,7 @@ import { FEATURE, Feature, FeatureInternalData, Hook, HookType } from './hook';
 import type { Cleanup } from '../utils/types';
 
 export type MergeFunction<T, Result> = (a: T[]) => Result;
-export type FeatureArrayResolvable = Feature[] | { features: Feature[] };
+export type FeatureArrayResolvable = ReadonlyArray<Feature> | { features: ReadonlyArray<Feature> };
 
 /**
  * Runs a data hook, given a list of features to operate on (may include non-matching hooks), the
@@ -58,7 +58,10 @@ export async function runHook<Data, Type extends HookType>(
   hook: Hook<Data, Type>,
   extraArg?: Data | MergeFunction<Data, unknown>
 ) {
-  const rawList = Array.isArray(features) ? features : features.features;
+  const rawList: ReadonlyArray<Feature> = Array.isArray(features)
+    ? features
+    : (features as { features: ReadonlyArray<Feature> }).features;
+
   const list = rawList.filter(feature => feature[FEATURE].hook.id === hook.id);
 
   if (hook.type === 'data') {

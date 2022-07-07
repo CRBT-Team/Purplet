@@ -37,13 +37,13 @@ export class Message {
     return this.raw.channel_id;
   }
 
-  get guildId() {
-    return this.raw.guild_id;
-  }
+  // get guildId() {
+  //   return this.raw.guild_id;
+  // }
 
-  get member() {
-    return this.raw.member;
-  }
+  // get member() {
+  //   return this.raw.member;
+  // }
 
   get attachments() {
     return this.raw.attachments;
