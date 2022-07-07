@@ -1,6 +1,8 @@
 // TODO:
 // - split this file into multiple files with utility functions, actions, cli parsing, etc
 // - prebuild the 'jsdoc' versions of each template
+// - see various comments, a handful of this script was rushed/bugpatched to work for the release
+//   at the CRBT Event 2022.
 import c from 'chalk';
 import dedent from 'dedent';
 import ora from 'ora';
@@ -111,24 +113,6 @@ const allowedFiles = [
 async function checkEmpty(root: string | string[]) {
   const files = Array.isArray(root) ? root : await readdir(root);
   return files.every(file => allowedFiles.includes(file));
-}
-
-function hasGlobalInstallation(pm: string): Promise<boolean> {
-  const proc = spawn(pm, ['--version']);
-  return new Promise((resolve, reject) => {
-    let data = '';
-    proc.stdout.on('data', chunk => (data += chunk.toString()));
-    proc.on('error', reject);
-    proc.on('exit', (code, signal) => {
-      if (code === 0) {
-        if (data.trim()) {
-          resolve(true);
-          return;
-        }
-      }
-      resolve(false);
-    });
-  });
 }
 
 // Calculate initial directory based off of if this directory is 'empty' or not
@@ -242,101 +226,7 @@ if (process.env.npm_config_user_agent) {
   }
 }
 
-// If not found, attempt to find an *installed* package manager
-if (packageManager === 'npm') {
-  const [pnpm, yarn] = await Promise.all([
-    hasGlobalInstallation('pnpm'),
-    hasGlobalInstallation('yarn'),
-  ]);
-
-  if (pnpm) {
-    packageManager = 'pnpm';
-  } else if (yarn) {
-    packageManager = 'yarn';
-  }
-}
-
-// Attempt to convince the user to use pnpm/yarn
-if (packageManager === 'npm') {
-  console.log();
-  console.log(dedent`
-    ${c.magentaBright('Notice')}:
-
-    Your current package manager is ${c.redBright('npm')}. We recommend using a faster package
-    manager, such as ${c.yellowBright('pnpm')} or ${c.cyanBright(
-    'yarn'
-  )}, as they run much faster installing,
-    updating, and removing packages. They also support shorter command names for
-    running package scripts, like ${c.greenBright('pnpm dev')}.
-
-  `);
-  packageManager = (
-    await prompt({
-      name: 'value',
-      type: 'select',
-      message: 'Would you like to install a faster package manager?',
-      choices: [
-        {
-          title: 'Yes, install PNPM',
-          value: 'pnpm',
-        },
-        {
-          title: 'Yes, install Yarn',
-          value: 'yarn',
-        },
-        {
-          title: 'No, use NPM',
-          value: 'npm',
-        },
-      ],
-    })
-  ).value;
-  console.log();
-
-  if (packageManager !== 'npm') {
-    await new Promise<void>(done => {
-      const args = ['npm', '--location=global', 'install', packageManager];
-      if (process.platform !== 'win32') {
-        console.log('Running command with sudo: ' + c.magentaBright(args.join(' ')));
-        args.unshift('sudo');
-      }
-      const proc = spawn(args[0], args.slice(1), {
-        stdio: 'inherit',
-      });
-      proc.on('exit', async arg => {
-        if (arg !== 0) {
-          console.error();
-          console.error(c.redBright(`Could not install ${packageManager}`));
-          console.error('See above logs for why. Consider a manual installation instead.');
-          console.error('Cancelling create purplet project');
-          console.error();
-          process.exit(4);
-        }
-
-        if (!(await hasGlobalInstallation(packageManager))) {
-          console.error();
-          console.error(c.redBright(`Installed ${packageManager}, but it isn't available to run.`));
-          console.error(
-            'You may have to re-open your terminal for the new command to be available.'
-          );
-          console.error('Cancelling create purplet project');
-          console.error();
-          process.exit(5);
-        }
-
-        console.log();
-        done();
-      });
-    });
-  }
-}
-
 // END OF PROMPTING
-console.log(
-  `${c.cyanBright.bold('note')}: will be using '${c.magentaBright(
-    packageManager
-  )}' to install dependencies.`
-);
 console.log();
 
 const spinner = ora('Creating new Purplet project... May take a minute.').start();
@@ -458,10 +348,13 @@ const packageJSON = {
     .replace(/^-+|(-)-+|-+$/g, '$1'),
   version: '1.0.0',
 };
-packageJSON.dependencies.purplet = 'next'; // TODO: change to 'latest' when we release 2.0.0
+
+// TODO: change to 'latest' when we release 2.0.0
+// We can also move to using pnpm update --latest but that requires purplet to be on the latest tag.
+packageJSON.dependencies.purplet = 'next';
 
 if (prettier) {
-  packageJSON.dependencies.prettier = 'latest';
+  packageJSON.dependencies.prettier = '^2.7.1';
   packageJSON.scripts.format = 'prettier --write "**/*.{ts,ts,js,md,json}"';
 }
 if (eslint) {
@@ -473,14 +366,6 @@ await writeFile(
   path.join(root, 'package.json'),
   JSON.stringify(sortPackageJSON(packageJSON), null, 2)
 );
-
-const installPromise = new Promise(resolve => {
-  const proc = spawn(packageManager, ['install'], {
-    cwd: root,
-    stdio: 'ignore',
-  });
-  proc.on('exit', resolve);
-});
 
 const eslintPromise = eslint
   ? (async () => {
@@ -503,7 +388,7 @@ const prettierPromise = eslint
     })()
   : Promise.resolve();
 
-await Promise.all([copyPromise, installPromise, eslintPromise, prettierPromise]);
+await Promise.all([copyPromise, eslintPromise, prettierPromise]);
 
 // TODO: properly handle this in templates. the issue is npm publish will strip the gitignore file
 await writeFile(
@@ -530,7 +415,6 @@ dist/
 # env files
 .env
 *.env.*
-
 `
 );
 
@@ -546,6 +430,9 @@ console.log(dedent`
   )}
 
     ${c.whiteBright('$')} ${c.cyanBright('cd')} ${c.greenBright(path.relative(process.cwd(), root))}
+    ${c.whiteBright('$')} ${c.cyanBright(packageManager)}${c.greenBright(
+  `${packageManager === 'yarn' ? '' : ' install'}`
+)}
 
   Before you can run your bot, you need to create an ${c.cyanBright('.env')} file with a Discord
   bot token, which can be created at ${c.magentaBright(

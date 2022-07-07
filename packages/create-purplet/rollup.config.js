@@ -8,8 +8,6 @@ import shebang from 'rollup-plugin-add-shebang';
 
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 
-const production = process.env.NODE_ENV === 'production';
-
 fs.rmSync('dist', { recursive: true, force: true });
 fs.mkdirSync('dist');
 
@@ -39,7 +37,9 @@ const config = {
     esbuild({
       target: 'esnext'
     }),
-    shebang(),
+    shebang({
+      include: '**/index.js',
+    }),
     {
       name: 'rollup-plugin-no-empty-imports',
       renderChunk(code) {
