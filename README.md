@@ -1,29 +1,37 @@
 <div align="center">
-  <img alt="Purplet" src="https://user-images.githubusercontent.com/67973777/169643730-2b03ecb8-3510-471f-8e3d-2c2485750962.png">
-
-  <h4>A simple framework to build modern Discord apps.</h4>
-  
+  <h1 style='border-bottom:0'><img alt="Purplet" src="https://user-images.githubusercontent.com/67973777/169643730-2b03ecb8-3510-471f-8e3d-2c2485750962.png" style='max-width:300px;margin-bottom:-30px'></h1>
+  <h2 style='font-size:1em;border-bottom:0'>A simple framework to build modern Discord apps.</h2>
   <div>
-    <img src="https://img.shields.io/npm/v/purplet?color=F27187&label=version" alt="Version">
-    <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=F27187" alt="License">
-    <a href="https://npmjs.org/package/purplet"><img src="https://img.shields.io/npm/dt/purplet?color=CB0000&logo=npm&logoColor=white" alt="npm"></a>
+    <img src="https://img.shields.io/npm/v/purplet?color=5865F2&label=version" alt="Version">
+    <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=5865F2" alt="License">
+    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet/v2?color=5865F2">
     <a href="https://discord.gg/AvwhNtsgAC"><img src="https://img.shields.io/discord/782584672298729473?color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
   </div>
 </div>
 
 ## About Purplet
 
-Purplet is a discord framework where your bot features are defined in small modules that can be reloaded instantly. Iterate your ideas faster than ever with the power of [Vite][2].
+Purplet is a Discord bot framework that splits your features into small, hot-reloadable modules, allowing you to move your focus to quickly building your bot ideas. For example, all the code needed for a "Hello World" Slash Command is:
 
-> ⚠️ Purplet v2 is a rewrite of the framework. Most features from [v1][v1] have already been ported, but the framework is not fully stable.
+```ts
+export const helloWorld = $slashCommand({
+  name: 'hello',
+  description: 'A simple "Hello, World" command.',
 
-[1]: https://www.typescriptlang.org/
-[2]: https://vitejs.dev/
+  async handle() {
+    this.showMessage('Hello, World!');
+  },
+});
+```
+
+> ⚠️ Purplet v2 is a complete rewrite and API overhaul. While still experimental, it is more documented and featureful than the [v1 branch][v1]. Please hold off deploying bots built with this to production until the official 2.0.0 releases, but feel free to try it out.
+
+[1]: https://purplet.js.org/docs/slash-commands.html
 [v1]: https://github.com/CRBT-Team/Purplet/tree/main
 
 ## Getting Started
 
-The best way to get started is using `create-purplet` via your package manager's create command:
+The best way to get started is using `create-purplet` via your package manager's `create` command:
 
 ```sh
 npm init purplet@next
@@ -33,7 +41,7 @@ yarn create purplet@next
 pnpm create purplet@next
 ```
 
-and follow the instructions it gives.
+and follow the instructions it gives. Documentation on purplet is available at [purplet.js.org](https://purplet.js.org/docs/getting-started).
 
 ## Monorepo Contents
 
@@ -42,11 +50,16 @@ and follow the instructions it gives.
 | [purplet](packages/purplet)               | [Changelog](packages/purplet/CHANGELOG.md)        |
 | [create-purplet](packages/create-purplet) | [Changelog](packages/create-purplet/CHANGELOG.md) |
 | [@purplet/serialize](packages/serialize)  | [Changelog](packages/serialize/CHANGELOG.md)      |
-| [@purplet/builders](packages/builders)    | [Changelog](packages/builders/CHANGELOG.md)       |
 
 | Example Projects        | Create                         |
 | ----------------------- | ------------------------------ |
 | [Basic](examples/basic) | `pnpm create purplet -t basic` |
+
+## Bots using Purplet
+
+- [CRBT](https://crbt.app/) (closed source)
+
+> Have an open-source bot of your own you'd like to feature? [Open an GitHub issue](https://github.com/CRBT-Team/Purplet/issues) and we may add it here!
 
 ## License
 
