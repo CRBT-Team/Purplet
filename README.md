@@ -1,6 +1,6 @@
 <div align="center">
-  <h1 style='border-bottom:0'><img alt="Purplet" src="https://user-images.githubusercontent.com/67973777/169643730-2b03ecb8-3510-471f-8e3d-2c2485750962.png" style='max-width:300px;margin-bottom:-30px'></h1>
-  <h2 style='font-size:1em;border-bottom:0'>A simple framework to build modern Discord apps.</h2>
+  <img alt="Purplet" src="sites/purplet.js.org/static/img/purplet-artwork.png" >
+  <h4>A simple framework to build modern Discord apps.</h4>
   <div>
     <img src="https://img.shields.io/npm/v/purplet?color=5865F2&label=version" alt="Version">
     <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=5865F2" alt="License">
