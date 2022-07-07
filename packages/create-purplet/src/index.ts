@@ -212,14 +212,15 @@ const lang = await doPrompt('lang', () => ({
   initial: 0,
 }));
 
-const eslint = await doPrompt('eslint', () => ({
-  type: 'toggle',
-  name: 'value',
-  message: 'Add ESLint for code linting?',
-  initial: true,
-  active: 'Yes',
-  inactive: 'No',
-}));
+const eslint = false;
+// const eslint = await doPrompt('eslint', () => ({
+//   type: 'toggle',
+//   name: 'value',
+//   message: 'Add ESLint for code linting?',
+//   initial: true,
+//   active: 'Yes',
+//   inactive: 'No',
+// }));
 
 const prettier = await doPrompt('prettier', () => ({
   type: 'toggle',
