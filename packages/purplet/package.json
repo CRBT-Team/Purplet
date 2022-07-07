@@ -36,7 +36,8 @@
     "build": "rollup -c && tsc -p . && echo Types Passing",
     "changeset": "cd ../../ && pnpm changeset",
     "dev": "rollup -c --watch",
-    "lint": "eslint src/**/*.{ts,tsx}"
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "prepack": "pnpm run build"
   },
   "dependencies": {
     "@davecode/utils": "^1.0.1",
