@@ -34,11 +34,11 @@ export const helloWorld = $slashCommand({
 The best way to get started is using `create-purplet` via your package manager's `create` command:
 
 ```sh
-npm init purplet@next
+npm init purplet
 # or
-yarn create purplet@next
+yarn create purplet
 # or
-pnpm create purplet@next
+pnpm create purplet
 ```
 
 and follow the instructions it gives. Documentation on purplet is available at [purplet.js.org](https://purplet.js.org/docs/getting-started).
