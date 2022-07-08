@@ -61,6 +61,10 @@ and follow the instructions it gives. Documentation on purplet is available at [
 
 > Have an open-source bot of your own you'd like to feature? [Open an GitHub issue](https://github.com/CRBT-Team/Purplet/issues) and we may add it here!
 
+## Contributing
+
+See the [contributing guide](CONTRIBUTING.md) for information on how we accept contributions, as well as an overview of the codebase.
+
 ## License
 
 Purplet is licensed under the [Apache License 2.0](https://github.com/CRBT-Team/Purplet/blob/main/LICENSE).
