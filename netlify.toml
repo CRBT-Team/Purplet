@@ -1,10 +1,7 @@
 [build.environment]
   NPM_FLAGS="--version"
 
-[[plugins]]
-  package = "/.netlify/netlify-plugin-pnpm"
-
 [build]
   base = ""
-  command = "pnpm build:purplet.js.org"
+  command = "cd sites/purplet.js.org && yarn install && yarn build"
   publish = "sites/purplet.js.org/build"
