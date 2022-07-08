@@ -1,5 +1,11 @@
 # `purplet`
 
+## 2.0.0-next.13
+
+### Patch Changes
+
+- add string option .maxLength and .minLength
+
 ## 2.0.0-next.12
 
 Rebuild

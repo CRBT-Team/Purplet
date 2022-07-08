@@ -1,26 +1,36 @@
-## Purplet
+## About Purplet
 
-Purplet is a discord framework where your bot features are defined in small modules that can be reloaded instantly. Iterate your ideas faster than ever with the combined powers of [TypeScript][1] and [Vite][2].
+Purplet is a Discord bot framework that splits your features into small, hot-reloadable modules, allowing you to move your focus to quickly building your bot ideas. For example, all the code needed for a "Hello World" Slash Command is:
 
-> ⚠️ Purplet v2 is a rewrite of the framework. Most features from [v1][v1] have not yet been ported, and only the core basics function. Proceed with caution.
+```ts
+export const helloWorld = $slashCommand({
+  name: 'hello',
+  description: 'A simple "Hello, World" command.',
 
-[1]: https://www.typescriptlang.org/
-[2]: https://vitejs.dev/
+  async handle() {
+    this.showMessage('Hello, World!');
+  },
+});
+```
+
+> ⚠️ Purplet v2 is a complete rewrite and API overhaul. While still experimental, it is more documented and featureful than the [v1 branch][v1]. Please hold off deploying bots built with this to production until the official 2.0.0 releases, but feel free to try it out.
+
+[1]: https://purplet.js.org/docs/slash-commands.html
 [v1]: https://github.com/CRBT-Team/Purplet/tree/main
 
 ## Getting Started
 
-The best way to get started is using `create-purplet` via your package manager's create command:
+The best way to get started is using `create-purplet` via your package manager's `create` command:
 
 ```sh
-npm init purplet@next
+npm init purplet
 # or
-yarn create purplet@next
+yarn create purplet
 # or
-pnpm create purplet@next
+pnpm create purplet
 ```
 
-and follow the instructions it gives.
+and follow the instructions it gives. Documentation on purplet is available at [purplet.js.org](https://purplet.js.org/docs/getting-started).
 
 ## License
 

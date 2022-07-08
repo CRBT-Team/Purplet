@@ -25,7 +25,7 @@ import type { AutocompleteInteraction, BareUser, InteractionUser } from '../stru
  * check is met.
  */
 interface OptionInputs {
-  string: EnumOption<string>;
+  string: StringOption;
   integer: NumericOption;
   boolean: BaseOption;
   channel: ChannelOption;
@@ -69,6 +69,12 @@ export type EnumOption<T extends string | number> =
 interface NumericOption extends EnumOption<number> {
   minValue?: number;
   maxValue?: number;
+}
+
+/** @internal Used for `OptionInputs`. String options have a min and max length, in addition to being enum-able. */
+interface StringOption extends EnumOption<number> {
+  minLength?: number;
+  maxLength?: number;
 }
 
 /** @internal Used for `OptionInputs`. Channels have a channel type limit, but are otherwise basic options. */

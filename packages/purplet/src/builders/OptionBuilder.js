@@ -22,6 +22,8 @@ export class OptionBuilder {
         required: opts.required,
         min_value: opts.minValue ?? undefined,
         max_value: opts.maxValue ?? undefined,
+        min_length: opts.minLength ?? undefined,
+        max_length: opts.maxLength ?? undefined,
         channel_types: opts.channelTypes ?? undefined,
         name_localizations: opts.nameLocalizations ?? undefined,
         description_localizations: opts.descriptionLocalizations ?? undefined,

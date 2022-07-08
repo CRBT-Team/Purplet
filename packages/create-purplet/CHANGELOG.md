@@ -1,5 +1,9 @@
 # `create-purplet`
 
+## 2.0.3
+
+- update template `basic`
+
 ## 2.0.2
 
 - Fix issues running with `yarn` and `npm`

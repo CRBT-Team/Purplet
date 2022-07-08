@@ -1,3 +1,0 @@
-we are currently on this change point
-- https://discord.com/developers/docs/change-log#auto-moderation
-including this and everything above it.
