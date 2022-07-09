@@ -2,10 +2,10 @@
   <img alt="Purplet" src="sites/purplet.js.org/static/img/purplet-artwork.png" >
   <h4>A simple framework to build modern Discord bots.</h4>
   <div>
-    <img src="https://img.shields.io/npm/v/purplet?color=5865F2&label=version" alt="Version">
-    <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=5865F2" alt="License">
-    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet?color=5865F2">
-    <a href="https://discord.gg/AvwhNtsgAC"><img src="https://img.shields.io/discord/782584672298729473?color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
+    <img src="https://img.shields.io/npm/v/purplet?color=c4aaff&label=version" alt="Version">
+    <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=c4aaff" alt="License">
+    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet?color=c4aaff">
+    <a href="https://discord.gg/AvwhNtsgAC"><img src="https://img.shields.io/discord/782584672298729473?color=c4aaff&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
   </div>
 </div>
 
