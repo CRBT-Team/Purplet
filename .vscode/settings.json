@@ -16,7 +16,7 @@
     "readme.MD": "CHANGELOG*"
   },
   "files.associations": {
-    "*.md": "mdx"
+    "docs/*.md": "mdx"
   },
   "files.exclude": {
     "**/.DS_Store": true,
