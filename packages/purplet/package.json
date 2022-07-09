@@ -1,6 +1,6 @@
 {
   "name": "purplet",
-  "version": "2.0.0-next.14",
+  "version": "2.0.0-next.15",
   "description": "A simple framework to build modern Discord bots.",
   "keywords": [
     "discord",
@@ -34,7 +34,7 @@
     "global.d.ts"
   ],
   "scripts": {
-    "build": "rollup -c && tsc -p . && echo Types Passing",
+    "build": "rollup -c && tsc -p . && node post-build && echo Types Passing",
     "changeset": "cd ../../ && pnpm changeset",
     "dev": "rollup -c --watch",
     "lint": "eslint src/**/*.{ts,tsx}",
