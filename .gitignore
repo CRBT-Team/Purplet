@@ -31,5 +31,6 @@ dist/
 .turbo
 
 # local examples, prefixed with local if youre testing something custom.
-examples/local*
+local/
+local-*/
 my-bot*
