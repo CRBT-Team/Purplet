@@ -4,7 +4,7 @@
   <div>
     <img src="https://img.shields.io/npm/v/purplet?color=5865F2&label=version" alt="Version">
     <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=5865F2" alt="License">
-    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet/v2?color=5865F2">
+    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet?color=5865F2">
     <a href="https://discord.gg/AvwhNtsgAC"><img src="https://img.shields.io/discord/782584672298729473?color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
   </div>
 </div>
