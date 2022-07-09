@@ -36,9 +36,8 @@ The default template includes the following scripts, most of which are direct wr
 
 - **<RunScriptCodeBlock name='dev' />**: Starts a bot in development mode. Allows live-reloading. Deploys application commands only to individual servers for faster development.
 - **<RunScriptCodeBlock name='build' />**: Compiles a Gateway client, for handling events as well as interactions.
-- **<RunScriptCodeBlock name='build-http' />**: Builds an HTTP endpoint for handling interactions, allowing you to deploy interaction handlers as cloud functions. Not Implemented.
-- **<RunScriptCodeBlock name='deploy' />**: Deploys all application commands globally, only usable after `build` or `build-http` has been run.
-- **<RunScriptCodeBlock name='undeploy' />**: Deletes all global application commands, undoing the effects of `deploy`. This can be used if you accidentally deploy global commands on a development token.
+- **<RunScriptCodeBlock name='build-http' />**: Builds an HTTP endpoint for handling interactions, allowing you to deploy interaction handlers as cloud functions. [Not Implemented, see this GitHub Issue](https://github.com/CRBT-Team/Purplet/issues/4)
+- **<RunScriptCodeBlock name='purplet deploy' />**: Deploys all application commands globally, only usable after `build` or `build-http` has been run.
 
 ## File Structure
 

@@ -1,5 +1,7 @@
 # Mention Commands
 
+[**Currently Broken. See this GitHub Issue**](https://github.com/CRBT-Team/Purplet/issues/16)
+
 Mention commands. Since they are triggered by `@` mentions of the bot, the [Message Content Intent](https://support-dev.discord.com/hc/en-us/articles/4404772028055-Message-Content-Privileged-Intent-FAQ) is not required to use these.
 
 :::warning

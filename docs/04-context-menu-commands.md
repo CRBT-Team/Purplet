@@ -7,7 +7,7 @@ Context Menu commands appear as an option in the right-click or long-press menu 
 User commands target Users or Server Members, which are resolved to a User class.
 
 ```ts title='src/features/user-command.ts'
-import { $userCommand } from 'purplet';
+import { $userContextCommand } from 'purplet';
 
 export default $userContextCommand({
   name: 'Get User Info',
@@ -22,7 +22,7 @@ export default $userContextCommand({
 Message commands target Messages inside of Text Channels, which are resolved to a Message class.
 
 ```ts title='src/features/message-command.ts'
-import { $userCommand } from 'purplet';
+import { $messageContextCommand } from 'purplet';
 
 export default $messageContextCommand({
   name: 'Get Author Info',

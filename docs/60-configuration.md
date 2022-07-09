@@ -32,6 +32,8 @@ const config = {
 
 ## `allowedMentions`
 
+**[Not Implemented. See this GitHub issue](https://github.com/CRBT-Team/Purplet/issues/24)**
+
 This sets a bot-wide default for the `allowed_mentions` field, passed to functions that send a message. By default, it is an object that only allows user mentions and replies to cause pings.
 
 ## `lang`

@@ -57,12 +57,6 @@ export default $slashCommand({
 });
 ```
 
-:::tip
-
-If you are using Prettier, you can use a blank `//` comment to force the chained methods of any builder to wrap to the next line, as seen above.
-
-:::
-
 The third parameter is an "options for the option" object. Here is a full list of the methods and their extra parameters, which are all optional:
 
 | Method        | Allowed Properties                                            |

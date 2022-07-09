@@ -5,8 +5,8 @@ Discord Message Components are interactable elements that appear in a message. C
 Purplet Message Component definitions define three things at once:
 
 - The type definition of a "context" object, which allows you to pass a small amount of state between messages.
-- A function that converts that context object into a message component object.
-- A function that handles incoming interactions with the component.
+- A function that converts that context object into a message component object (`template`).
+- A function that handles incoming interactions with the component (`handle`).
 
 A basic example defining a button that is used with two different contexts, handled by the same function:
 
@@ -18,7 +18,7 @@ export interface SampleContext {
 
 export const myButton = $buttonComponent({
   // A function converting context -> component.
-  create(ctx: SampleContext) {
+  template(ctx: SampleContext) {
     return new ButtonBuilder() //
       .setLabel(`Button for ${ctx.name}`)
       .setStyle(ButtonStyle.Secondary);
@@ -51,13 +51,19 @@ The way Component Context is implemented is by cramming the data into the compon
 
 :::
 
+:::note
+
+This page uses `ButtonBuilder` from `@discordjs/builders`, though we plan to create our own version of this class. See [this issue](https://github.com/CRBT-Team/Purplet/issues/23) for more details.
+
+:::
+
 ## Render Props
 
 Since the size of the context object is limited, you can use the `renderProps` property to pass additional data to the component that is only used for rendering. It is simply a second argument to the `create` function.
 
 ```ts
 export const myButton = $buttonComponent({
-  create(ctx: SampleContext, renderProps: { style: ButtonStyle }) {
+  template(ctx: SampleContext, renderProps: { style: ButtonStyle }) {
     return new ButtonBuilder() //
       .setLabel(`Button for ${ctx.name}`)
       .setStyle(renderProps.style);
