@@ -39,5 +39,6 @@
   "[markdown, mdx]": {
     "editor.wordWrap": "bounded",
     "editor.wordWrapColumn": 100
-  }
+  },
+  "workspace.isHidden": false
 }

@@ -13,7 +13,11 @@
     "dev": "pnpm turbo run dev --parallel --filter=!./examples/*",
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md,json}\"",
     "lint": "turbo run lint",
-    "pub": "pnpm run build && changeset publish"
+    "prepare": "husky install",
+    "pub": "changeset publish"
+  },
+  "lint-staged": {
+    "*.{ts,ts,js,jsx,md,json}": "prettier --write"
   },
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
@@ -21,6 +25,8 @@
     "cloc": "^2.10.0",
     "eslint": "^8.19.0",
     "eslint-config-dave": "^3.0.3",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "prettier-config-dave": "^1.0.3",
     "turbo": "latest",
