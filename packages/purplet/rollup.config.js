@@ -29,13 +29,12 @@ const version = process.argv.includes('--watch')
   : pkg.version;
 
 /** @type {import('rollup').RollupOptions} */
-const config =
-{
+const config = {
   input: {
     cli: 'src/cli/_cli.ts',
     index: 'src/index.ts',
     internal: 'src/internal.ts',
-    'types': 'src/types.ts',
+    types: 'src/types.ts',
   },
   output: {
     dir: 'dist',
@@ -85,8 +84,8 @@ const config =
       name: 'rollup-plugin-no-empty-imports',
       renderChunk(code, chunk, options) {
         return code.replace(/^import '.*?';$/gm, '');
-      }
-    }
+      },
+    },
   ],
 };
 

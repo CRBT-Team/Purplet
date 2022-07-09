@@ -35,7 +35,7 @@ const config = {
     }),
     json(),
     esbuild({
-      target: 'esnext'
+      target: 'esnext',
     }),
     shebang({
       include: '**/index.js',
@@ -44,7 +44,7 @@ const config = {
       name: 'rollup-plugin-no-empty-imports',
       renderChunk(code) {
         return code.replace(/^import '.*?';$/gm, '');
-      }
+      },
     },
     // production && terser()
   ].filter(Boolean),

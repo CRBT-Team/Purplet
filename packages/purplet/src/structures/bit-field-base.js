@@ -10,8 +10,8 @@ class Bitfield {
       typeof bitfield === 'string'
         ? BigInt(bitfield)
         : bitfield instanceof Bitfield
-          ? bitfield.bitfield
-          : bitfield;
+        ? bitfield.bitfield
+        : bitfield;
   }
 
   has(...flag) {

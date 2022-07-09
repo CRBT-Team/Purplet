@@ -13,7 +13,7 @@
     "readme.md": "CONTRIBUTING*",
     "readme.mD": "SECURITY*",
     "readme.Md": "LICENSE*",
-    "readme.MD": "CHANGELOG*",
+    "readme.MD": "CHANGELOG*"
   },
   "files.associations": {
     "*.md": "mdx"
@@ -28,7 +28,7 @@
     ".eslint{ignore,rc}": true,
     ".gitattributes": true,
     ".prettier{ignore,rc.js}": true,
-    "netlify.toml": true,
+    "netlify.toml": true
   },
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.tsdk": "node_modules\\typescript\\lib",
@@ -39,5 +39,5 @@
   "[markdown, mdx]": {
     "editor.wordWrap": "bounded",
     "editor.wordWrapColumn": 100
-  },
+  }
 }

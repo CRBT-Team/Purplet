@@ -10,9 +10,9 @@ const rollupConfig = (await import('./rollup.config.js')).default;
 const roll = await rollup(rollupConfig);
 await roll.write(rollupConfig.output);
 
-const examples = (await readdir('../../examples')).filter(x =>
-  existsSync(path.join('../../examples', x, '.template.json'))
-).filter(x => !x.startsWith('local-'))
+const examples = (await readdir('../../examples'))
+  .filter(x => existsSync(path.join('../../examples', x, '.template.json')))
+  .filter(x => !x.startsWith('local-'));
 
 async function mkdirp(root) {
   try {
@@ -28,10 +28,11 @@ async function copy(src, dest, ignore = []) {
   const stats = await stat(src);
   if (stats.isDirectory()) {
     await mkdirp(dest);
-    const files = (await readdir(src)).filter(file =>
-      !ignore.some(match => {
-        return match === file;
-      })
+    const files = (await readdir(src)).filter(
+      file =>
+        !ignore.some(match => {
+          return match === file;
+        })
     );
     await Promise.all(
       files.map(async file => {
@@ -49,7 +50,7 @@ await Promise.all(
       'node_modules',
       'dist',
       '.purplet',
-      '.env'
+      '.env',
     ])
   )
 );
