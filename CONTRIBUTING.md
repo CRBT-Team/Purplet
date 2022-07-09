@@ -22,6 +22,18 @@ Our code style is as follows:
 - All files should be formatted with our [Prettier][3] config, which you can run with our `pnpm format`
 - All changes should be documented with [Changesets][4]
 
+## Commit Names
+
+You may commit with whatever messages you want, but I (dave caruso) personally use a prefix followed by a short message. When pull requests are merged, commits will be squashed into one and committed using a prefix and the PR title, keeping the commit list clean no matter what.
+
+My prefixes include but not limited to
+- `feat:` when adding a feature
+- `bugfix:` fixing a bug
+- `docs:` writing and editing documentation, tsdoc or md
+- `bump:` modifying dependencies (dependabot uses this)
+- `tooling:` something related to our dev experience (adding or fixing a script)
+- `chore:` doing a required task that isnt actually programming (setting up a new package)
+
 ## Structure of the Monorepo
 
 - `examples/` contains our example projects. If an example has a `.template.json` file, it will show up in the `create-purplet` CLI.
