@@ -1,6 +1,6 @@
 {
   "name": "purplet",
-  "version": "2.0.0-next.13",
+  "version": "2.0.0-next.14",
   "description": "A simple framework to build modern Discord bots.",
   "keywords": [
     "discord",
@@ -30,7 +30,8 @@
     "src",
     "CHANGELOG.MD",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "global.d.ts"
   ],
   "scripts": {
     "build": "rollup -c && tsc -p . && echo Types Passing",
