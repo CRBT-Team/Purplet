@@ -26,8 +26,7 @@ export const helloWorld = $slashCommand({
 
 > ⚠️ Purplet v2 is a complete rewrite and API overhaul. While still experimental, it is more documented and featureful than the [v1 branch][v1]. Please hold off deploying bots built with this to production until the official 2.0.0 releases, but feel free to try it out.
 
-[1]: https://purplet.js.org/docs/slash-commands.html
-[v1]: https://github.com/CRBT-Team/Purplet/tree/main
+[v1]: https://github.com/CRBT-Team/Purplet/tree/v1
 
 ## Getting Started
 
