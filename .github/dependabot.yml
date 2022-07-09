@@ -1,0 +1,50 @@
+version: 2
+updates:
+  # I am specifically interested in any `discord-api-types` and `vite`
+  - package-ecosystem: "npm"
+    directory: "/packages/purplet"
+    schedule:
+      interval: daily
+    allow:
+      - dependency-name: discord-api-types
+      - dependency-name: vite # until stable is released
+    reviewers:
+      - "davecaruso"
+    commit-message:
+      prefix: "bump: "
+
+  - package-ecosystem: "npm"
+    directory: "/packages/purplet"
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: discord-api-types
+      - dependency-name: vite # until stable is released
+    reviewers:
+      - "davecaruso"
+    commit-message:
+      prefix: "bump: "
+    labels:
+      - "pkg:purplet"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/create-purplet"
+    schedule:
+      interval: monthly
+    reviewers:
+      - "davecaruso"
+    commit-message:
+      prefix: "bump: "
+    labels:
+      - "pkg:create-purplet"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/create-purplet"
+    schedule:
+      interval: monthly
+    reviewers:
+      - "davecaruso"
+    commit-message:
+      prefix: "bump: "
+    labels:
+      - "pkg:serialize"
