@@ -52,10 +52,13 @@ function $messageComponent<
   const serializer = options.serializer ?? S.generic;
 
   function getCustomId(context: Context) {
-    const encodedId = S.string.encodeCustomId(featureId);
-    if (encodedId.length > 15) {
+    if (!featureId) {
+      throw new Error(`Cannot generate ID for unregistered component hook.`);
+    }
+    if (featureId.length > 50) {
       throw new Error(`Feature ID is too long: \`${featureId}\``);
     }
+    const encodedId = S.string.encodeCustomId(featureId);
     const id = [
       purpletCustomIdTrigger,
       encodedId.length.toString(36),
