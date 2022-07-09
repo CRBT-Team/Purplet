@@ -1,0 +1,22 @@
+{
+  "name": "example-basic",
+  "private": true,
+  "type": "module",
+  "main": "dist",
+  "scripts": {
+    "build": "purplet build",
+    "build-http": "purplet build-http",
+    "dev": "purplet dev",
+    "guild-manager": "purplet guild-manager",
+    "postinstall": "purplet sync"
+  },
+  "dependencies": {
+    "purplet": "workspace:*"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.6",
+    "erlpack": "^0.1.4",
+    "utf-8-validate": "^5.0.9",
+    "zlib-sync": "^0.1.7"
+  }
+}

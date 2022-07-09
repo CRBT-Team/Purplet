@@ -1,0 +1,5 @@
+{
+  "title": "Basic",
+  "description": "A bot with a hello world command, and activity status.",
+  "default": true
+}

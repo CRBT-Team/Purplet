@@ -1,0 +1,43 @@
+{
+  "Structure Class": {
+    "prefix": "struct",
+    "body": [
+      "import type { Immutable } from '@davecode/types';",
+      "/** Structure for $2 */",
+      "export class $1 {",
+      "  constructor(readonly raw: Immutable<$2>) {}",
+      "",
+      "  get id() {",
+      "    return this.raw.id;",
+      "  }",
+      "",
+      "  $0",
+      "}"
+    ],
+    "description": "Structure Class"
+  },
+  "Partial Structure": {
+    "prefix": "partial",
+    "description": "",
+    "body": [
+      "import { type PartialClass, createPartialClass } from '../utils/partial';",
+      "export type $1Partial = PartialClass<",
+      "  // Class, Required properties from `raw`, Allowed methods from class",
+      "  typeof $1,",
+      "  'id',",
+      "  'id' | 'fetch'",
+      ">;",
+      "export const $1Partial = createPartialClass<$1Partial>($1);"
+    ],
+    "scope": "typescript"
+  },
+  "BitField template": {
+    "prefix": "template_bitfield",
+    "body": [
+      "export const $1Bitfield = createBitfieldClass<typeof $1>('$1Bitfield', $1);",
+      "export const Readonly$1Bitfield = createReadonlyBitfield($1Bitfield);",
+      "export type $1BitField = InstanceType<typeof $1Bitfield>;",
+      "export type Readonly$1BitField = InstanceType<typeof Readonly$1Bitfield>;"
+    ]
+  }
+}

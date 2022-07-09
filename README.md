@@ -1,57 +1,70 @@
 <div align="center">
-  <img alt="Purplet" src="https://user-images.githubusercontent.com/67973777/169643730-2b03ecb8-3510-471f-8e3d-2c2485750962.png">
-
-  <h4>A simple framework to build modern Discord apps.</h4>
-  
+  <img alt="Purplet" src="sites/purplet.js.org/static/img/purplet-artwork.png" >
+  <h4>A simple framework to build modern Discord bots.</h4>
   <div>
-    <img src="https://img.shields.io/npm/v/purplet?color=F27187&label=version" alt="Version">
-    <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=F27187" alt="License">
-    <a href="https://npmjs.org/package/purplet"><img src="https://img.shields.io/npm/dt/purplet?color=CB0000&logo=npm&logoColor=white" alt="npm"></a>
+    <img src="https://img.shields.io/npm/v/purplet?color=5865F2&label=version" alt="Version">
+    <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=5865F2" alt="License">
+    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet/v2?color=5865F2">
     <a href="https://discord.gg/AvwhNtsgAC"><img src="https://img.shields.io/discord/782584672298729473?color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
   </div>
 </div>
 
 ## About Purplet
 
-Built with [TypeScript](https://typescriptlang.org) and [Discord.js](https://discord.js.org/), this framework provides an easy way to build Discord applications that leverage Discord's interaction API.
+Purplet is a Discord bot framework that splits your features into small, hot-reloadable modules, allowing you to move your focus to quickly building your bot ideas. For example, all the code needed for a "Hello World" Slash Command is:
 
-⚠️ Purplet is still in development, so you may expect bugs and missing features.
-Encountered any? Open an [issue](https://github.com/CRBT-Team/Purplet/issues) or a pull request.
+```ts
+export const helloWorld = $slashCommand({
+  name: 'hello',
+  description: 'A simple "Hello, World" command.',
 
-> Purplet is not affiliated with Discord or Discord.js.
-
-## Development
-
-To install and get started, run
-
+  async handle() {
+    this.showMessage('Hello, World!');
+  },
+});
 ```
+
+> ⚠️ Purplet v2 is a complete rewrite and API overhaul. While still experimental, it is more documented and featureful than the [v1 branch][v1]. Please hold off deploying bots built with this to production until the official 2.0.0 releases, but feel free to try it out.
+
+[1]: https://purplet.js.org/docs/slash-commands.html
+[v1]: https://github.com/CRBT-Team/Purplet/tree/main
+
+## Getting Started
+
+The best way to get started is using `create-purplet` via your package manager's `create` command:
+
+```sh
 npm init purplet
+# or
+yarn create purplet
+# or
+pnpm create purplet
 ```
 
-and follow the instructions.
+and follow the instructions it gives. Documentation on purplet is available at [purplet.js.org](https://purplet.js.org/docs/getting-started).
 
-Part of Purplet is documented [here](/docs/), and we encourage devs to check the [sample project](https://github.com/CRBT-Team/Purplet/tree/main/sample) for inspiration and guidance.
+## Monorepo Contents
+
+| Package | Description | Changelog |
+| --- | --- | --- |
+| [purplet](packages/purplet) | Vite + Discord API abstractions + gateway client + more | [Changelog](packages/purplet/CHANGELOG.md) |
+| [create-purplet](packages/create-purplet) | Project generator CLI | [Changelog](packages/create-purplet/CHANGELOG.md) |
+| [@purplet/serialize](packages/serialize) | Utilities for binary serialization | [Changelog](packages/serialize/CHANGELOG.md) |
+
+| Example Projects        | Command to copy                |
+| ----------------------- | ------------------------------ |
+| [Basic](examples/basic) | `pnpm create purplet -t basic` |
+
+## Bots using Purplet
+
+- [CRBT](https://crbt.app/) (closed source)
+
+> Have an open-source bot of your own you'd like to feature? [Open an GitHub issue](https://github.com/CRBT-Team/Purplet/issues) and we may add it here!
+
+## Contributing
+
+See the [contributing guide](CONTRIBUTING.md) for information on how we accept contributions, as well as an overview of the codebase.
 
 ## License
 
-Purplet is licensed under the [Apache 2.0 license](/LICENSE).
-
-## Roadmap
-
-- [x] Chat/Slash command handler
-- [x] Context commands
-- [x] Chat subcommands
-- [x] Text command handler
-- [x] Event handler
-- [x] Configuration file
-- [x] Service Handler
-- [ ] Global Handler
-- [x] PresenceProvider Handler
-- [x] Component Handler
-- [x] Modals
-- [ ] Optimize cramming method
-- [ ] Dev mode
-- [ ] Revise configuration
-- [ ] Utils
-- [x] Init command to create a new project
-- [ ] Finish documentation
+Purplet is licensed under the [Apache License 2.0](https://github.com/CRBT-Team/Purplet/blob/main/LICENSE).

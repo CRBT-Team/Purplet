@@ -1,0 +1,3 @@
+{
+  "extends": "./.purplet/tsconfig.json"
+}

@@ -1,13 +1,35 @@
-/node_modules
-/dist
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-sample/dist
+# dependencies
+node_modules
+.pnp
+.pnp.js
+yarn.lock
+package-lock.json
+bun.lockb
 
-*.env
-*.env.*
-sample/*.env
-sample/*.env.*
+# testing
+coverage
 
+# build
 .purplet
+out/
+dist/
 
-.yarn-integrity
+# misc
+.DS_Store
+*.pem
+
+# debug
+*debug*.log*
+
+# env files
+.env
+*.env.*
+
+# turbo
+.turbo
+
+# local examples, prefixed with local if youre testing something custom.
+examples/local*
+my-bot*

@@ -1,0 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+
+# testing
+coverage
+
+# build
+.purplet
+dist/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+*debug*.log*
+
+# env files
+.env
+*.env.*
+

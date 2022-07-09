@@ -1,0 +1,23 @@
+.tabs {
+    margin-bottom: 0!important;
+    height: 2.5rem;
+    background-color: var(--ifm-pre-background);
+    border-top-left-radius: var(--ifm-pre-border-radius);
+    border-top-right-radius: var(--ifm-pre-border-radius);
+}
+.tabs + * {
+    margin-top: 0!important;
+}
+.tabs + * [role="tabpanel"] > :first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.tabs :global(.tabs__item) {
+    border-bottom-left-radius: 0!important;
+    border-bottom-right-radius: 0!important;
+    height: 2.5rem;
+    padding: 0 1rem;
+    margin-top: 0;
+    align-items: center;
+}

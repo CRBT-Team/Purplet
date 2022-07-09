@@ -1,0 +1,43 @@
+{
+  "name": "@purplet/serialize",
+  "version": "2.0.0",
+  "description": "Utilities for binary serialization, used by Purplet",
+  "keywords": [
+    "serialization",
+    "base1114111",
+    "purplet"
+  ],
+  "homepage": "https://github.com/CRBT-Team/Purplet/tree/v2/packages/serialize",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CRBT-Team/Purplet.git",
+    "directory": "packages/serialize"
+  },
+  "license": "Apache-2.0",
+  "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c && tsc -p . && echo Types Passing",
+    "dev": "rollup -c --watch",
+    "lint": "eslint src/**/*.{ts,tsx}"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@types/jest": "^28.1.3",
+    "esbuild": "^0.14.47",
+    "esbuild-jest": "^0.5.0",
+    "jest": "^28.1.1",
+    "rollup": "^2.75.5",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "typescript": "^4.7.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "extends": "dave",
+  "rules": {
+    "no-redeclare": "off"
+  }
+}

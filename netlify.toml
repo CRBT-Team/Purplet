@@ -1,0 +1,7 @@
+[build.environment]
+  NPM_FLAGS="--version"
+
+[build]
+  base = ""
+  command = "cd sites/purplet.js.org && yarn install && yarn build"
+  publish = "sites/purplet.js.org/build"
