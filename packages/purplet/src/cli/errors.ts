@@ -1,8 +1,8 @@
+import type { Gateway, GatewayExitError } from '@purplet/gateway';
 import chalk from 'chalk';
 import dedent from 'dedent';
 import { GatewayCloseCodes, GatewayIntentBits, GatewayVersion } from 'purplet/types';
-import { CLIError, GatewayClientExitError } from '../lib/errors';
-import type { GatewayClient } from '../lib/GatewayClient';
+import { CLIError } from '../lib/errors';
 import { IntentsBitfield } from '../structures';
 import { camelCaseToEnumCase } from '../utils/case';
 
@@ -29,8 +29,8 @@ export function errorNoIncludeAndExcludeGuilds() {
 }
 
 export function errorFromGatewayClientExitError(
-  { code }: GatewayClientExitError,
-  client: GatewayClient
+  { code }: GatewayExitError,
+  client: Gateway
 ) {
   switch (code) {
     case GatewayCloseCodes.AuthenticationFailed:

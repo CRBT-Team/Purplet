@@ -44,6 +44,7 @@
     "@davecode/utils": "^1.0.1",
     "@discordjs/builders": "^0.13.0",
     "@discordjs/rest": "^0.4.1",
+    "@purplet/gateway": "workspace:1.0.0-next.2",
     "@purplet/serialize": "workspace:^2.0.0",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-node-resolve": "^13.3.0",

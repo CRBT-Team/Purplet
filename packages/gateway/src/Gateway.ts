@@ -9,7 +9,7 @@ import {
   GatewaySendPayload,
   GatewayVersion,
 } from 'discord-api-types/gateway';
-import { RESTGetAPIGatewayResult, RouteBases, Routes } from 'discord-api-types/v10';
+import { PermissionFlagsBits, RESTGetAPIGatewayResult, RouteBases, Routes } from 'discord-api-types/v10';
 import { Inflate } from 'zlib-sync';
 import { GatewayEventMap } from './GatewayEventMap';
 import { GatewayExitError } from './GatewayExitError';

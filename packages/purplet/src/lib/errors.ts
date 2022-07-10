@@ -15,9 +15,3 @@ export class CLIError extends Error {
     process.exit(1);
   }
 }
-
-export class GatewayClientExitError extends Error {
-  constructor(public code: GatewayCloseCodes) {
-    super(`Gateway disconnected with code: ${code}`);
-  }
-}

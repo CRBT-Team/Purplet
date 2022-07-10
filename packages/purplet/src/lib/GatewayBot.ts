@@ -1,4 +1,4 @@
-import { asyncMap } from '@davecode/utils';
+import { asyncMap, deferred } from '@davecode/utils';
 import { REST } from '@discordjs/rest';
 import { deepEqual } from 'fast-equals';
 import {
@@ -7,12 +7,12 @@ import {
   GatewayDispatchPayload,
   GatewayIntentBits,
   GatewayPresenceUpdateData,
+  GatewayReadyDispatchData,
   RESTAPIPartialCurrentUserGuild,
   RESTPutAPIApplicationCommandsJSONBody,
   Routes,
 } from 'purplet/types';
 import { FeatureLoader } from './FeatureLoader';
-import { createGatewayClient, GatewayClient } from './GatewayClient';
 import { rest, setRESTClient } from './global';
 import type { Feature } from './hook';
 import {
@@ -26,7 +26,7 @@ import {
 import { mergeCommands, mergeIntents, mergePresence } from './hook-core-merge';
 import { runHook } from './hook-run';
 import { log } from './logger';
-import { errorTooManyGuilds } from '../cli/errors';
+import { errorFromGatewayClientExitError, errorTooManyGuilds } from '../cli/errors';
 import { $gatewayEvent } from '../hooks';
 import { markFeature } from '../internal';
 import {
@@ -68,14 +68,44 @@ export interface AllowedGuildRules {
   exclude?: string[];
 }
 
+export type CreateGatewayClientResult = [Gateway, GatewayReadyDispatchData];
+import { Gateway, GatewayExitError } from '@purplet/gateway';
+import type { GatewayOptions } from '@purplet/gateway/src/Gateway';
+
+export async function createGatewayClient(identify: GatewayOptions) {
+  const [promise, resolve, reject] = deferred<CreateGatewayClientResult>();
+
+  const client = new Gateway(identify);
+
+  function errorHandler(e: Error) {
+    if (e instanceof GatewayExitError) {
+      reject(errorFromGatewayClientExitError(e, client));
+    } else {
+      reject(e);
+    }
+  }
+
+  function readyHandler(ready: GatewayReadyDispatchData) {
+    resolve([client, ready]);
+    client.off('error', errorHandler);
+    client.off(GatewayDispatchEvents.Ready, readyHandler);
+  }
+
+  client.on('error', errorHandler);
+  client.on(GatewayDispatchEvents.Ready, readyHandler);
+
+  return promise;
+}
+
 /**
  * GatewayBot is a class that contains a feature loader and a gateway client, and properly
  * implements the 6 core hooks.
  */
+// TODO: Rename this class to avoid confusion with `Gateway`
 // TODO: split off command deploying logic to a `GuildCommandManager` class
 export class GatewayBot {
   features = new FeatureLoader();
-  client: GatewayClient | null = null;
+  client: Gateway | null = null;
 
   #application?: { id: string; flags: ApplicationFlagsBitfield };
   #user?: User;
