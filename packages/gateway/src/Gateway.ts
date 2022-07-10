@@ -11,30 +11,31 @@ import {
 } from 'discord-api-types/gateway';
 import { RESTGetAPIGatewayResult, RouteBases, Routes } from 'discord-api-types/v10';
 import { Inflate } from 'zlib-sync';
-import { GatewayClientEventMap } from './GatewayClientEventMap';
-import { GatewayClientExitError } from './GatewayClientExitError';
+import { GatewayEventMap } from './GatewayEventMap';
+import { GatewayExitError } from './GatewayExitError';
 import { Heartbeater } from './Heartbeater';
 
 // zlib-sync is used for fast decompression of gzipped payloads.
 let zlib: typeof import('zlib-sync') | undefined = undefined;
-try {
-  zlib = (await import('zlib-sync')).default;
-  if (zlib.Inflate === undefined) {
-    zlib = undefined;
-  }
-} catch {}
-
 // Erlpack is used for payload compression.
 let erlpack: typeof import('erlpack') | undefined = undefined;
-try {
-  erlpack = (await import('erlpack')).default;
-} catch {}
+
+// @ts-expect-error I cannot use bun-types or else the rest of the library gets type errors.
+if (typeof Bun === 'undefined') {
+  try {
+    zlib = (await import('zlib-sync')).default;
+  } catch {}
+  
+  try {
+    erlpack = (await import('erlpack')).default;
+  } catch {}
+}
 
 const decoder = new TextDecoder();
 
 let gatewayURL: string | undefined;
 
-export interface GatewayClientOptions
+export interface GatewayOptions
   extends Pick<GatewayIdentifyData, 'token' | 'shard' | 'presence' | 'intents'> {
   gateway?: string;
 }
@@ -66,7 +67,7 @@ function stripUndefined(obj: any): any {
  */
 // TODO: Request Guild Members
 // TODO: voice support
-export class GatewayClient extends Emitter<GatewayClientEventMap> {
+export class Gateway extends Emitter<GatewayEventMap> {
   private seq = 0;
   private ws?: WebSocket;
   private hb?: Heartbeater;
@@ -82,19 +83,20 @@ export class GatewayClient extends Emitter<GatewayClientEventMap> {
     return erlpack !== undefined;
   }
 
-  constructor(public options: GatewayClientOptions) {
+  constructor(public options: GatewayOptions) {
     super();
+    this.connect();
   }
 
   /** Connects to the Gateway. */
-  async connect() {
+   async connect() {
     let urlString = this.options.gateway ?? gatewayURL;
 
     if (!urlString) {
       // TODO: in the future, use /gateway/bot and automatic sharding.
-      urlString = gatewayURL = await fetch(RouteBases.api + Routes.gateway())
-        .then(x => x.json())
-        .then((res: RESTGetAPIGatewayResult) => res.url);
+      let request = await fetch(RouteBases.api + Routes.gateway());
+      let json = await request.json();
+      urlString = gatewayURL = json.url;
     }
 
     if (zlib) {
@@ -110,11 +112,9 @@ export class GatewayClient extends Emitter<GatewayClientEventMap> {
 
     this.gotHello = false;
 
-    this.ws = new WebSocket(url);
-    this.ws.binaryType = 'arraybuffer';
-    this.ws.onmessage = event => {
-      this.onRawPacket(event.data);
-    };
+    this.ws = new WebSocket(url.toString());
+    // this.ws.binaryType = 'arraybuffer';
+    this.ws.onmessage = event => this.onRawPacket(event.data);
     this.ws.onclose = event => this.onClose(event);
     this.ws.onerror = event => this.emit('error', new Error('WebSocket error'));
 
@@ -203,7 +203,7 @@ export class GatewayClient extends Emitter<GatewayClientEventMap> {
       }
 
       if (!reconnect) {
-        this.emit('error', new GatewayClientExitError(code));
+        this.emit('error', new GatewayExitError(code));
       } else {
         this.reconnect();
       }
@@ -277,7 +277,7 @@ export class GatewayClient extends Emitter<GatewayClientEventMap> {
   }
 
   /** Reconnects. */
-  async reconnect(newOptions: GatewayClientOptions = this.options) {
+  async reconnect(newOptions: GatewayOptions = this.options) {
     this.close();
     this.options = newOptions;
     await this.connect();

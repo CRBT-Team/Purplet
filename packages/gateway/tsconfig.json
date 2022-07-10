@@ -24,5 +24,6 @@
     "strictFunctionTypes": true,
     "target": "ESNext"
   },
-  "exclude": ["**/dist"]
+  "exclude": ["**/dist"],
+  "include": ["src/**/*.ts", "src/**/*.js"]
 }

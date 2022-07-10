@@ -1,3 +1,3 @@
-export { GatewayClient, type GatewayClientOptions } from './GatewayClient';
-export { GatewayClientExitError } from './GatewayClientExitError';
-export { type GatewayClientEventMap } from './GatewayClientEventMap';
+export { Gateway, type GatewayOptions as GatewayClientOptions } from './Gateway';
+export { GatewayExitError } from './GatewayExitError';
+export { type GatewayEventMap } from './GatewayEventMap';

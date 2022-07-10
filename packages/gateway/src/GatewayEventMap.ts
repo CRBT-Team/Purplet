@@ -1,6 +1,6 @@
 import { GatewayDispatchEvents, GatewayDispatchPayload } from 'discord-api-types/gateway';
 
-export type GatewayClientEventMap = {
+export type GatewayEventMap = {
   // star event for full payloads of everything
   '*': GatewayDispatchPayload;
   // passthrough websocket and gateway disconnect errors
