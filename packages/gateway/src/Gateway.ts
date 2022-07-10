@@ -9,23 +9,23 @@ import {
   GatewaySendPayload,
   GatewayVersion,
 } from 'discord-api-types/gateway';
-import { PermissionFlagsBits, RESTGetAPIGatewayResult, RouteBases, Routes } from 'discord-api-types/v10';
+import { RouteBases, Routes } from 'discord-api-types/v10';
 import { Inflate } from 'zlib-sync';
 import { GatewayEventMap } from './GatewayEventMap';
 import { GatewayExitError } from './GatewayExitError';
 import { Heartbeater } from './Heartbeater';
 
 // zlib-sync is used for fast decompression of gzipped payloads.
-let zlib: typeof import('zlib-sync') | undefined = undefined;
+let zlib: typeof import('zlib-sync') | undefined;
 // Erlpack is used for payload compression.
-let erlpack: typeof import('erlpack') | undefined = undefined;
+let erlpack: typeof import('erlpack') | undefined;
 
 // @ts-expect-error I cannot use bun-types or else the rest of the library gets type errors.
 if (typeof Bun === 'undefined') {
   try {
     zlib = (await import('zlib-sync')).default;
   } catch {}
-  
+
   try {
     erlpack = (await import('erlpack')).default;
   } catch {}
@@ -89,7 +89,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
   }
 
   /** Connects to the Gateway. */
-   async connect() {
+  async connect() {
     let urlString = this.options.gateway ?? gatewayURL;
 
     if (!urlString) {
