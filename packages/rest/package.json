@@ -14,7 +14,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/CRBT-Team/Purplet.git",
-    "directory": "packages/gateway"
+    "directory": "packages/rest"
   },
   "license": "Apache-2.0",
   "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",

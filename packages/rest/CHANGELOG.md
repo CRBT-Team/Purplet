@@ -1,4 +1,4 @@
-# `@purplet/gateway`
+# `@purplet/rest`
 
 ## 1.0.0
 

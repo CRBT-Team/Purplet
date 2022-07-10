@@ -74,10 +74,6 @@ export class RestFetcher {
     if (options.files && options.files.length > 0) {
       // Files are to be sent as multipart/form-data as specified by
       // https://discord.com/developers/docs/reference#uploading-files
-
-      // @purplet/polyfill will use `form-data` for form-data, which is not supported by fetch.
-      // So we have to use it's non-standard getBuffer method and manually set the Content-Type
-      // With the standard FormData and fetch standards, you do NOT pass Content-Type
       const form = new FormData();
 
       if (body) {
@@ -88,22 +84,12 @@ export class RestFetcher {
       for (const [index, file] of options.files.entries()) {
         form.append(
           file.key ?? `files[${index}]`,
-          // `form-data` alternate thing: pass the data directly cause it can't handle blobs.
-          ('getBuffer' in form
-            ? file.data instanceof Blob
-              ? file.data.arrayBuffer
-              : file.data
-            : new Blob([file.data instanceof Uint8Array ? file.data.buffer : file.data])) as Blob,
+          new Blob([file.data instanceof Uint8Array ? file.data.buffer : file.data]),
           file.name
         );
       }
 
-      if ('getBuffer' in form) {
-        body = await (form as any).getBuffer();
-        headers.set('Content-Type', (form as any).getHeaders()['content-type']);
-      } else {
-        body = form;
-      }
+      body = form;
     } else if (body) {
       // JSON body is to be sent as application/json
       headers.set('Content-Type', 'application/json');

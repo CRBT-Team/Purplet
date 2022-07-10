@@ -6,8 +6,8 @@ Modifies global scope to apply polyfills for Node.js and Bun for Web Standards t
   - provided by `undici`
   - includes `Request`, `Response`, `FormData`, `Headers`, `File` globals in addition to `fetch`
 - `FormData`
-  - provided by `form-data`
-  - only applied for Bun, since they are the only runtime that has `fetch` but not `FormData`. We use a separate package since Bun overrides `undici` and does not yet support `FormData`.
+  - provided by `formdata-node`, only applied in cases where `fetch` exists but `FormData` is not.
+  - `fetch` and `Blob` are patched to support passing `FormData` as a body, with code provided by `form-data-encoder`. (This might break some other uses of `Blob`).
 - `WebSocket`
   - provided by `ws`
 - `structuredClone`
