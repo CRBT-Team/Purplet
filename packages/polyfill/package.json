@@ -15,7 +15,7 @@
   },
   "license": "Apache-2.0",
   "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
-  "sideEffects": false,
+  "sideEffects": true,
   "type": "module",
   "exports": {
     ".": "./src/index.js"
