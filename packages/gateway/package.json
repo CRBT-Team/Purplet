@@ -1,8 +1,15 @@
 {
   "name": "@purplet/gateway",
-  "version": "1.0.0-next.2",
+  "version": "1.0.0",
   "description": "Cross-runtime Discord Gateway client",
-  "keywords": [],
+  "keywords": [
+    "discord",
+    "bot",
+    "api",
+    "gateway",
+    "typescript",
+    "bun"
+  ],
   "homepage": "https://github.com/CRBT-Team/Purplet/tree/v2/packages/gateway",
   "repository": {
     "type": "git",
@@ -24,8 +31,7 @@
     "lint": "eslint src/**/*.{ts,tsx}"
   },
   "dependencies": {
-    "@davecode/events": "^1.0.0",
-    "ws": "^8.8.0"
+    "@davecode/events": "^1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
