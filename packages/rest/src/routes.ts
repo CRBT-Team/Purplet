@@ -53,7 +53,7 @@ export const autoModeration = group({
 export const channel = group({
   createMessage: route({
     method: 'POST',
-    route: Routes.channelMessage,
+    route: Routes.channelMessages,
     params: ['channelId'],
     result: type<REST.RESTPostAPIChannelMessageResult>(),
     body: type<REST.RESTPostAPIChannelMessageJSONBody>(),

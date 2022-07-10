@@ -15,16 +15,17 @@ export interface RestOptions {
   userAgent?: string;
 }
 
-export interface RequestOptions<Body = unknown, Params = Record<never, never>> {
+export interface RequestOptions<Body = unknown, Query = Record<never, never>> {
   body?: Body;
   auth?: boolean; // default true
   headers?: HeadersInit;
   files?: RawFile[];
-  query?: Params | URLSearchParams;
+  query?: Query | URLSearchParams;
+  reason?: string;
 }
 
-export interface RequestOptionsWithMethod<Body = unknown, Params = Record<never, never>>
-  extends RequestOptions<Body, Params> {
+export interface RequestOptionsWithMethod<Body = unknown, Query = Record<never, never>>
+  extends RequestOptions<Body, Query> {
   method: HTTPMethod;
 }
 

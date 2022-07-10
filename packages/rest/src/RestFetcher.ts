@@ -28,6 +28,8 @@ export class RestFetcher {
   private async runRequest(req: RequestData) {
     const response = await fetch(req.url, req.init);
 
+    console.log(...response.headers.entries());
+
     if (response.ok) {
       return response.json();
     }
@@ -56,26 +58,66 @@ export class RestFetcher {
       this.options.base +
         (endpoint.startsWith('/oauth2') ? '' : `/v${this.options.version}`) +
         endpoint +
-        (options.query ? `?${new URLSearchParams(options.query).toString()}` : '')
+        (options.query ? `?${new URLSearchParams(options.query)}` : '')
     );
 
     const headers = new Headers(options.headers);
     if (options.auth !== false) {
       headers.set('Authorization', `${this.options.tokenType} ${this.options.token}`);
     }
-    // TODO: Uploading Files (https://discord.com/developers/docs/reference#uploading-files)
-    if (options.body && !(options.files && options.files.length > 0)) {
-      headers.set('Content-Type', 'application/json');
-    }
     if (!headers.has('User-Agent')) {
       headers.set('User-Agent', this.options.userAgent);
+    }
+
+    let body: BodyInit | undefined = options.body ? JSON.stringify(options.body) : undefined;
+
+    if (options.files && options.files.length > 0) {
+      // Files are to be sent as multipart/form-data as specified by
+      // https://discord.com/developers/docs/reference#uploading-files
+
+      // @purplet/polyfill will use `form-data` for form-data, which is not supported by fetch.
+      // So we have to use it's non-standard getBuffer method and manually set the Content-Type
+      // With the standard FormData and fetch standards, you do NOT pass Content-Type
+      const form = new FormData();
+
+      if (body) {
+        console.log('body', body);
+        form.append('payload_json', body);
+      }
+
+      for (const [index, file] of options.files.entries()) {
+        form.append(
+          file.key ?? `files[${index}]`,
+          // `form-data` alternate thing: pass the data directly cause it can't handle blobs.
+          ('getBuffer' in form
+            ? file.data instanceof Blob
+              ? file.data.arrayBuffer
+              : file.data
+            : new Blob([file.data instanceof Uint8Array ? file.data.buffer : file.data])) as Blob,
+          file.name
+        );
+      }
+
+      if ('getBuffer' in form) {
+        body = await (form as any).getBuffer();
+        headers.set('Content-Type', (form as any).getHeaders()['content-type']);
+      } else {
+        body = form;
+      }
+    } else if (body) {
+      // JSON body is to be sent as application/json
+      headers.set('Content-Type', 'application/json');
+    }
+
+    if (options.reason?.length) {
+      headers.set('X-Audit-Log-Reason', options.reason);
     }
 
     return this.queueRequest({
       url: url.toString(),
       init: {
         method: options.method,
-        body: options.body ? JSON.stringify(options.body) : undefined,
+        body,
         headers,
       },
     });
