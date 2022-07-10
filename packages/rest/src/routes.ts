@@ -1,8 +1,5 @@
-import {
-  RESTGetAPIAuditLogResult,
-  RESTGetAPICurrentUserResult,
-  Routes,
-} from 'discord-api-types/v10';
+import * as REST from 'discord-api-types/rest';
+import { Routes } from 'discord-api-types/rest';
 import { group, route, type } from './route-group';
 
 export const auditLog = group({
@@ -10,7 +7,7 @@ export const auditLog = group({
     method: 'GET',
     route: Routes.guildAuditLog,
     params: ['guildId'],
-    result: type<RESTGetAPIAuditLogResult>(),
+    result: type<REST.RESTGetAPIAuditLogResult>(),
   }),
 });
 
@@ -37,7 +34,49 @@ export const user = group({
   getCurrentUser: route({
     method: 'GET',
     route: Routes.user(),
-    result: type<RESTGetAPICurrentUserResult>(),
+    result: type<REST.RESTGetAPICurrentUserResult>(),
+  }),
+  /** https://discord.com/developers/docs/resources/user#modify-current-user. */
+  modifyCurrentUser: route({
+    method: 'PATCH',
+    route: Routes.user(),
+    body: type<REST.RESTPatchAPICurrentUserJSONBody>(),
+    result: type<REST.RESTPatchAPICurrentUserResult>(),
+  }),
+  /** https://discord.com/developers/docs/resources/user#get-current-user-guilds. */
+  getCurrentUserGuilds: route({
+    method: 'GET',
+    route: Routes.userGuilds(),
+    result: type<REST.RESTGetAPICurrentUserGuildsResult>(),
+    query: type<REST.RESTGetAPICurrentUserGuildsQuery>(),
+  }),
+  /** https://discord.com/developers/docs/resources/user#get-current-user-guild-member. */
+  getCurrentUserGuildMember: route({
+    method: 'GET',
+    route: Routes.userGuildMember,
+    params: ['guildId'],
+    result: type<REST.RESTGetAPIGuildMemberResult>(),
+  }),
+  /** https://discord.com/developers/docs/resources/user#leave-guild. */
+  leaveGuild: route({
+    method: 'DELETE',
+    route: Routes.userGuild,
+    params: ['guildId'],
+    result: type<REST.RESTDeleteAPIGuildResult>(),
+  }),
+  /** https://discord.com/developers/docs/resources/user#create-dm. */
+  createDM: route({
+    method: 'POST',
+    route: Routes.userChannels(),
+    body: type<REST.RESTPostAPICurrentUserCreateDMChannelJSONBody>(),
+    result: type<REST.RESTPostAPICurrentUserCreateDMChannelResult>(),
+  }),
+  // Excluded: https://discord.com/developers/docs/resources/user#create-group-dm
+  /** https://discord.com/developers/docs/resources/user#get-user-connections. */
+  getUserConnections: route({
+    method: 'GET',
+    route: Routes.userConnections(),
+    result: type<REST.RESTGetAPICurrentUserConnectionsResult>(),
   }),
 });
 

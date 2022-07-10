@@ -38,6 +38,10 @@ export class RestFetcher {
       throw new Error('429 Ratelimited. ');
     }
 
+    console.log(response.status);
+    console.log(req);
+    console.log(await response.json());
+
     // TODO: custom error object, handle certain types of errors
     throw new Error(`${response.status} ${response.statusText}`);
   }

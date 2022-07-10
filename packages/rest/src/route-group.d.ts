@@ -5,7 +5,7 @@ import { HTTPMethod, RawFile } from './types';
 interface Route<Params extends string, Body, Query, Files extends boolean, Result> {
   method: HTTPMethod;
   route: string | ((...args: string[]) => string);
-  params?: Params[];
+  params?: ReadonlyArray<Params>;
   hasFiles?: Files;
   body?: Body;
   query?: Query;
@@ -43,6 +43,6 @@ export function route<Params extends string, Body, Query, Files extends boolean,
   routeData: Route<Params, Body, Query, Files, Result>
 ): Route<Params, Body, Query, Files, Result>;
 
-export function group<Routes extends Dict<Route<string, unknown, unknown, boolean, unknown>>>(
+export function group<Routes extends Dict<any>>(
   routes: Routes
 ): (bindTo: Rest) => RouteGroup<Routes>;
