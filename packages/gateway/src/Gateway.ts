@@ -54,6 +54,9 @@ function stripUndefined(obj: any): any {
   return obj;
 }
 
+export const supportsZlib = typeof zlib !== 'undefined';
+export const supportsETF = typeof erlpack !== 'undefined';
+
 /**
  * Implementation of a Discord gateway client. Supports etf and zlib, if installed.
  *
@@ -74,14 +77,6 @@ export class Gateway extends Emitter<GatewayEventMap> {
   private sessionId: string | undefined;
   private inflate?: Inflate;
   private gotHello = false;
-
-  get hasZlib() {
-    return zlib !== undefined;
-  }
-
-  get hasETF() {
-    return erlpack !== undefined;
-  }
 
   constructor(public options: GatewayOptions) {
     super();
@@ -138,6 +133,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
     let raw: Uint8Array | string;
     if (this.inflate) {
       const l = buf.length;
+      // TODO: use a single equals check instead of four separate ones.
       const flush =
         l >= 4 &&
         buf[l - 4] === 0x00 &&
