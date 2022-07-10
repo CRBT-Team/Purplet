@@ -20,6 +20,8 @@ export class Rest {
     return this;
   }
 
+  applicationCommand = routes.applicationCommand(this);
+  interactionResponse = routes.interactionResponse(this);
   auditLog = routes.auditLog(this);
   autoModeration = routes.autoModeration(this);
   channel = routes.channel(this);
@@ -33,4 +35,6 @@ export class Rest {
   user = routes.user(this);
   voice = routes.voice(this);
   webhook = routes.webhook(this);
+  gateway = routes.gateway(this);
+  oauth2 = routes.oauth2(this);
 }
