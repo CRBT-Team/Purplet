@@ -11,7 +11,7 @@ import { writeTSConfig } from '../config/tsconfig';
 import type { ResolvedConfig } from '../config/types';
 import { createViteConfig } from '../config/vite';
 import { moduleToFeatureArray } from '../internal';
-import { getEnvVar, setupEnv } from '../lib/env';
+import { getEnvVar } from '../lib/env';
 import { GatewayBot } from '../lib/GatewayBot';
 import type { Feature } from '../lib/hook';
 import { log, startSpinner } from '../lib/logger';
@@ -60,7 +60,6 @@ export class DevMode {
     );
     this.firstRun = false;
 
-    setupEnv(true);
     this.config = await loadConfig(this.options.root);
 
     const token = getEnvVar('DISCORD_BOT_TOKEN');

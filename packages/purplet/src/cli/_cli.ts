@@ -1,3 +1,4 @@
+import '@purplet/polyfill';
 import chalk from 'chalk';
 import dedent from 'dedent';
 import path from 'path';

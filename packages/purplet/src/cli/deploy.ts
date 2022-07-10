@@ -8,7 +8,7 @@ import {
 import { pathToFileURL } from 'url';
 import { errorNoToken } from './errors';
 import { loadConfig } from '../config';
-import { getEnvVar, setupEnv } from '../lib/env';
+import { getEnvVar } from '../lib/env';
 import { CLIError } from '../lib/errors';
 import type { GatewayBot } from '../lib/GatewayBot';
 import { $applicationCommands } from '../lib/hook-core';
@@ -24,7 +24,6 @@ export interface DeployOptions {
 }
 
 export async function deploy(options: DeployOptions) {
-  setupEnv(false);
   log('info', `Preparing to ${options.delete ? 'delete' : 'deploy'} commands.`);
 
   const config = await loadConfig(options.root);

@@ -80,12 +80,12 @@ const config = {
         }
       },
     },
-    {
-      name: 'rollup-plugin-no-empty-imports',
-      renderChunk(code, chunk, options) {
-        return code.replace(/^import '.*?';$/gm, '');
-      },
-    },
+    // {
+    //   name: 'rollup-plugin-no-empty-imports',
+    //   renderChunk(code, chunk, options) {
+    //     return code.replace(/^import '.*?';$/gm, '');
+    //   },
+    // },
   ],
 };
 

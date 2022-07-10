@@ -1,0 +1,36 @@
+{
+  "name": "@purplet/polyfill",
+  "version": "1.0.0",
+  "description": "Polyfills for node.js and bun.js",
+  "keywords": [
+    "polyfill",
+    "nodejs",
+    "bun"
+  ],
+  "homepage": "https://github.com/CRBT-Team/Purplet/tree/main/packages/polyfill",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CRBT-Team/Purplet.git",
+    "directory": "packages/polyfill"
+  },
+  "license": "Apache-2.0",
+  "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "main": "./src/index.js",
+  "scripts": {
+    "lint": "eslint src/**/*.{ts,tsx}"
+  },
+  "dependencies": {
+    "@ungap/structured-clone": "^1.0.1",
+    "dotenv": "^16.0.1",
+    "undici": "^5.6.1",
+    "ws": "^1.0.31"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
