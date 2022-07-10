@@ -19,7 +19,7 @@ export class RestFetcher {
       ...options,
     };
 
-    const versionSuffix = `/${this.options.version}`;
+    const versionSuffix = `/v${this.options.version}`;
     if (this.options.base.endsWith(versionSuffix)) {
       this.options.base = this.options.base.slice(0, -versionSuffix.length);
     }
