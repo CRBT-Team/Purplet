@@ -14,4 +14,14 @@ bun add @purplet/gateway discord-api-types
 
 ### Node.js support
 
-Until v18, node.js does not support `fetch`, and no version of node has `WebSocket` built-in. You will need a polyfill to use this library (TODO: introduce `@purplet/node-polyfills`).
+Until v18, node.js does not support `fetch`, and no version of node has `WebSocket` built-in. You will need a polyfill to use this library.
+
+An example polyfill:
+
+```ts
+import { WebSocket } from 'ws';
+import fetch from 'node-fetch';
+
+globalThis.WebSocket = WebSocket;
+globalThis.fetch = fetch;
+```

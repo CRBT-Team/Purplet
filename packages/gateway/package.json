@@ -1,6 +1,6 @@
 {
   "name": "@purplet/gateway",
-  "version": "1.0.0-next.1",
+  "version": "1.0.0-next.2",
   "description": "Cross-runtime Discord Gateway client",
   "keywords": [],
   "homepage": "https://github.com/CRBT-Team/Purplet/tree/v2/packages/gateway",
@@ -43,6 +43,14 @@
     "discord-api-types": "^0.36.1",
     "erlpack": "^0.1.4",
     "zlib-sync": "^0.1.7"
+  },
+  "peerDependenciesMeta": {
+    "erlpack": {
+      "optional": true
+    },
+    "zlib-sync": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public"
