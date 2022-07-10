@@ -21,6 +21,10 @@
     ".": "./src/index.js"
   },
   "main": "./src/index.js",
+  "files": [
+    "src/index.js",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "lint": "eslint src/**/*.{ts,tsx}"
   },
