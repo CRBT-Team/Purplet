@@ -6,14 +6,51 @@ export const auditLog = group({
   getGuildAuditLog: route({
     method: 'GET',
     route: Routes.guildAuditLog,
-    params: ['guildId'],
+    params: ['guildId'] as const,
     result: type<REST.RESTGetAPIAuditLogResult>(),
   }),
 });
 
-export const autoModeration = group({});
+export const autoModeration = group({
+  // TODO: uncomment when discord
+  // listAutoModerationRulesForGuild: route({
+  //   method: 'GET',
+  //   route: guild => `/guilds/${guild}/auto-moderation/rules`,
+  //   params: ['guildId'],
+  //   result: type<REST.RESTGetAPIGuildAutoModerationRulesResult>(),
+  // } as const),
+  // getAutoModerationRule: route({
+  //   method: 'GET',
+  //   route: (guild, rule) => `/guilds/${guild}/auto-moderation/rules/${rule}`,
+  //   params: ['guildId', 'autoModerationRuleId'],
+  //   result: type<REST.RESTGetAPIGuildAutoModerationRuleResult>(),
+  // } as const),
+  // createAutoModerationRule: route({
+  //   method: 'POST',
+  //   route: guild => `/guilds/${guild}/auto-moderation/rules`,
+  //   params: ['guildId'],
+  //   result: type<REST.RESTPostAPIGuildAutoModerationRuleResult>(),
+  //   body: type<REST.RESTPostAPIGuildAutoModerationRuleJSONBody>(),
+  // } as const),
+  // modifyAutoModerationRule: route({
+  //   method: 'PATCH',
+  //   route: (guild, rule) => `/guilds/${guild}/auto-moderation/rules/${rule}`,
+  //   params: ['guildId', 'autoModerationRuleId'],
+  //   result: type<REST.RESTPatchAPIGuildAutoModerationRuleResult>(),
+  //   body: type<REST.RESTPatchAPIGuildAutoModerationRuleJSONBody>(),
+  // } as const),
+});
 
-export const channel = group({});
+export const channel = group({
+  createMessage: route({
+    method: 'POST',
+    route: Routes.channelMessage,
+    params: ['channelId'],
+    result: type<REST.RESTPostAPIChannelMessageResult>(),
+    body: type<REST.RESTPostAPIChannelMessageJSONBody>(),
+    files: true,
+  } as const),
+});
 
 export const emoji = group({});
 
@@ -54,7 +91,7 @@ export const user = group({
   getCurrentUserGuildMember: route({
     method: 'GET',
     route: Routes.userGuildMember,
-    params: ['guildId'],
+    params: ['guildId'] as const,
     result: type<REST.RESTGetAPIGuildMemberResult>(),
   }),
   /** https://discord.com/developers/docs/resources/user#leave-guild. */
@@ -80,6 +117,12 @@ export const user = group({
   }),
 });
 
-export const voice = group({});
+export const voice = group({
+  listVoiceRegions: route({
+    method: 'GET',
+    route: Routes.voiceRegions(),
+    result: type<REST.RESTGetAPIGuildVoiceRegionsResult>(),
+  }),
+});
 
 export const webhook = group({});

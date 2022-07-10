@@ -1,31 +1,34 @@
-import { Dict } from '@davecode/types';
+import { Dict, ForceSimplify } from '@davecode/types';
 import { Rest } from './Rest';
 import { HTTPMethod, RawFile } from './types';
 
-interface Route<Params extends string, Body, Query, Files extends boolean, Result> {
+interface Route<
+  Params extends string,
+  Body,
+  Query,
+  Files extends boolean,
+  Reason extends boolean,
+  Result
+> {
   method: HTTPMethod;
   route: string | ((...args: string[]) => string);
-  params?: ReadonlyArray<Params>;
+  params?: Array<Params> | ReadonlyArray<Params>;
   hasFiles?: Files;
   body?: Body;
   query?: Query;
   result?: Result;
+  reason?: Reason;
 }
 
-type RouteGroup<Routes extends Dict<Route<string, unknown, unknown, boolean, unknown>>> = {
-  [K in keyof Routes]: Routes[K] extends Route<
-    infer Params,
-    infer Body,
-    infer Query,
-    infer Files,
-    infer Result
-  >
+type RouteGroup<Routes extends Dict<Route>> = {
+  [K in keyof Routes]: Routes[K] extends Route
     ? RemoveParamIfEmpty<
         (
-          options: Record<Params, string> &
-            (Body extends {} ? { body: Body } : {}) &
-            (Query extends {} ? { query: Query } : {}) &
-            (Files extends true ? { files: RawFile[] } : {})
+          options: Record<Routes[K]['params'][number], string> &
+            (Routes[K]['body'] extends {} ? { body: Routes[K]['body'] } : {}) &
+            (Routes[K]['query'] extends {} ? { query: Routes[K]['query'] } : {}) &
+            (Routes[K]['files'] extends true ? { files?: RawFile[] } : {}) &
+            (Routes[K]['reason'] extends true ? { reason?: string } : {})
         ) => Promise<null | undefined | unknown extends Result ? void : Result>
       >
     : never;
@@ -34,15 +37,13 @@ type RouteGroup<Routes extends Dict<Route<string, unknown, unknown, boolean, unk
 type RemoveParamIfEmpty<T> = T extends (options: infer Options) => Promise<infer Result>
   ? {} extends Options
     ? () => Promise<Result>
-    : (options: Options) => Promise<Result>
+    : (options: ForceSimplify<Options>) => Promise<Result>
   : never;
 
 export function type<T>(): T;
 
-export function route<Params extends string, Body, Query, Files extends boolean, Result>(
-  routeData: Route<Params, Body, Query, Files, Result>
-): Route<Params, Body, Query, Files, Result>;
+export function route<R extends Route>(routeData: R): R;
 
 export function group<Routes extends Dict<any>>(
   routes: Routes
-): (bindTo: Rest) => RouteGroup<Routes>;
+): (bindTo: Rest) => ForceSimplify<RouteGroup<Routes>>;
