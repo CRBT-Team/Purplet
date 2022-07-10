@@ -1,40 +1,41 @@
-import EventEmitter from 'events';
-import { deferred } from '@davecode/utils';
-import { REST } from '@discordjs/rest';
+import { Emitter } from '@davecode/events';
 import {
   GatewayCloseCodes,
   GatewayDispatchEvents,
   GatewayIdentifyData,
   GatewayOpcodes,
   GatewayPresenceUpdateData,
-  GatewayReadyDispatchData,
   GatewayReceivePayload,
   GatewaySendPayload,
   GatewayVersion,
-} from 'purplet/types';
-import { WebSocket } from 'ws';
-import type { Inflate } from 'zlib-sync';
-import { GatewayClientExitError } from './errors';
+} from 'discord-api-types/gateway';
+import { PermissionFlagsBits, RESTGetAPIGatewayResult, RouteBases, Routes } from 'discord-api-types/v10';
+import { Inflate } from 'zlib-sync';
+import { GatewayEventMap } from './GatewayEventMap';
+import { GatewayExitError } from './GatewayExitError';
 import { Heartbeater } from './Heartbeater';
-import { errorFromGatewayClientExitError } from '../cli/errors';
 
 // zlib-sync is used for fast decompression of gzipped payloads.
 let zlib: typeof import('zlib-sync') | undefined = undefined;
-try {
-  zlib = (await import('zlib-sync')).default;
-} catch {}
-
-// Erlpack is used for faster encoding/decoding of payloads.
+// Erlpack is used for payload compression.
 let erlpack: typeof import('erlpack') | undefined = undefined;
-try {
-  erlpack = (await import('erlpack')).default;
-} catch {}
+
+// @ts-expect-error I cannot use bun-types or else the rest of the library gets type errors.
+if (typeof Bun === 'undefined') {
+  try {
+    zlib = (await import('zlib-sync')).default;
+  } catch {}
+  
+  try {
+    erlpack = (await import('erlpack')).default;
+  } catch {}
+}
 
 const decoder = new TextDecoder();
 
 let gatewayURL: string | undefined;
 
-export interface GatewayClientOptions
+export interface GatewayOptions
   extends Pick<GatewayIdentifyData, 'token' | 'shard' | 'presence' | 'intents'> {
   gateway?: string;
 }
@@ -66,27 +67,36 @@ function stripUndefined(obj: any): any {
  */
 // TODO: Request Guild Members
 // TODO: voice support
-export class GatewayClient extends EventEmitter {
+export class Gateway extends Emitter<GatewayEventMap> {
   private seq = 0;
   private ws?: WebSocket;
   private hb?: Heartbeater;
   private sessionId: string | undefined;
   private inflate?: Inflate;
+  private gotHello = false;
 
-  constructor(public options: GatewayClientOptions) {
+  get hasZlib() {
+    return zlib !== undefined;
+  }
+
+  get hasETF() {
+    return erlpack !== undefined;
+  }
+
+  constructor(public options: GatewayOptions) {
     super();
     this.connect();
   }
 
   /** Connects to the Gateway. */
-  private async connect() {
+   async connect() {
     let urlString = this.options.gateway ?? gatewayURL;
 
     if (!urlString) {
       // TODO: in the future, use /gateway/bot and automatic sharding.
-      urlString = gatewayURL = await new REST()
-        .get('/gateway', { auth: false })
-        .then(res => (res as { url: string }).url);
+      let request = await fetch(RouteBases.api + Routes.gateway());
+      let json = await request.json();
+      urlString = gatewayURL = json.url;
     }
 
     if (zlib) {
@@ -100,52 +110,22 @@ export class GatewayClient extends EventEmitter {
     url.searchParams.set('encoding', erlpack ? 'etf' : 'json');
     if (zlib) url.searchParams.set('compress', 'zlib-stream');
 
-    this.ws = new WebSocket(url, { handshakeTimeout: 30000 });
-    this.ws.on('message', this.onRawMessage.bind(this));
-    this.ws.on('error', error => {
-      this.emit('error', error);
-    });
-    this.ws.on('close', code => {
-      if (code >= 4000 && code <= 4999) {
-        let reconnect = false;
-        switch (code) {
-          case GatewayCloseCodes.UnknownError:
-            console.error("WebSocket closed by Discord. We're not sure what went wrong.");
-            reconnect = true;
-            break;
-          case GatewayCloseCodes.UnknownOpcode:
-          case GatewayCloseCodes.DecodeError:
-          case GatewayCloseCodes.NotAuthenticated:
-          case GatewayCloseCodes.AlreadyAuthenticated:
-            reconnect = true;
-            break;
-          case GatewayCloseCodes.InvalidAPIVersion:
-          case GatewayCloseCodes.InvalidIntents:
-          case GatewayCloseCodes.InvalidShard:
-          case GatewayCloseCodes.AuthenticationFailed:
-          case GatewayCloseCodes.ShardingRequired:
-          case GatewayCloseCodes.DisallowedIntents:
-            break;
-          case GatewayCloseCodes.SessionTimedOut:
-            console.error('WebSocket closed by Discord. Attempting to reconnect...');
-            reconnect = true;
-            break;
-          case GatewayCloseCodes.InvalidSeq:
-            // Do not log for this one
-            this.sessionId = undefined;
-            reconnect = true;
-            break;
-          default:
-            break;
-        }
+    this.gotHello = false;
 
-        if (!reconnect) {
-          this.emit('error', new GatewayClientExitError(code));
-        } else {
-          this.reconnect();
+    this.ws = new WebSocket(url.toString());
+    // this.ws.binaryType = 'arraybuffer';
+    this.ws.onmessage = event => this.onRawPacket(event.data);
+    this.ws.onclose = event => this.onClose(event);
+    this.ws.onerror = event => this.emit('error', new Error('WebSocket error'));
+
+    // TODO: Remove this code once `https://github.com/Jarred-Sumner/bun/issues/521` is resolved.
+    this.ws.onopen = () => {
+      setTimeout(() => {
+        if (!this.gotHello) {
+          this.onPacket({ t: null, s: null, op: 10, d: { heartbeat_interval: 41250 } });
         }
-      }
-    });
+      }, 250);
+    };
   }
 
   /** Send a packet to the Gateway. */
@@ -154,8 +134,8 @@ export class GatewayClient extends EventEmitter {
   }
 
   /** @internal handles raw packets, decoding etf and gz */
-  private onRawMessage(buf: Buffer) {
-    let raw: Buffer | string;
+  private onRawPacket(buf: string | Uint8Array) {
+    let raw: Uint8Array | string;
     if (this.inflate) {
       const l = buf.length;
       const flush =
@@ -164,9 +144,9 @@ export class GatewayClient extends EventEmitter {
         buf[l - 3] === 0x00 &&
         buf[l - 2] === 0xff &&
         buf[l - 1] === 0xff;
-      this.inflate.push(buf, flush && zlib!.Z_SYNC_FLUSH);
+      this.inflate.push(buf as Buffer, flush && zlib!.Z_SYNC_FLUSH);
       if (!flush) return;
-      raw = this.inflate.result as Buffer;
+      raw = this.inflate.result as Uint8Array;
     } else {
       raw = buf;
     }
@@ -174,9 +154,9 @@ export class GatewayClient extends EventEmitter {
     let packet;
     try {
       if (erlpack) {
-        packet = erlpack.unpack(raw);
+        packet = erlpack.unpack(raw as Buffer);
       } else {
-        packet = JSON.parse(decoder.decode(raw));
+        packet = JSON.parse(typeof raw === 'string' ? raw : decoder.decode(raw));
       }
     } catch (error) {
       console.error('error decoding');
@@ -187,6 +167,53 @@ export class GatewayClient extends EventEmitter {
     this.onPacket(packet as GatewayReceivePayload);
   }
 
+  /** @internal handles close */
+  private onClose({ code }: CloseEvent) {
+    if (code >= 4000 && code <= 4999) {
+      let reconnect = false;
+      switch (code) {
+        case GatewayCloseCodes.UnknownError:
+          console.error("WebSocket closed by Discord. We're not sure what went wrong.");
+          reconnect = true;
+          break;
+        case GatewayCloseCodes.UnknownOpcode:
+        case GatewayCloseCodes.DecodeError:
+        case GatewayCloseCodes.NotAuthenticated:
+        case GatewayCloseCodes.AlreadyAuthenticated:
+          reconnect = true;
+          break;
+        case GatewayCloseCodes.InvalidAPIVersion:
+        case GatewayCloseCodes.InvalidIntents:
+        case GatewayCloseCodes.InvalidShard:
+        case GatewayCloseCodes.AuthenticationFailed:
+        case GatewayCloseCodes.ShardingRequired:
+        case GatewayCloseCodes.DisallowedIntents:
+          break;
+        case GatewayCloseCodes.SessionTimedOut:
+          console.error('WebSocket closed by Discord. Attempting to reconnect...');
+          reconnect = true;
+          break;
+        case GatewayCloseCodes.InvalidSeq:
+          // Do not log for this one
+          this.sessionId = undefined;
+          reconnect = true;
+          break;
+        default:
+          break;
+      }
+
+      if (!reconnect) {
+        this.emit('error', new GatewayExitError(code));
+      } else {
+        this.reconnect();
+      }
+    }
+  }
+
+  private onHeartbeat() {
+    this.send({ op: GatewayOpcodes.Heartbeat, d: this.seq });
+  }
+
   /** @internal handle decoded packet data */
   private async onPacket(packet: GatewayReceivePayload) {
     if (packet.s) {
@@ -195,9 +222,8 @@ export class GatewayClient extends EventEmitter {
 
     switch (packet.op) {
       case GatewayOpcodes.Hello:
-        this.hb = new Heartbeater(packet.d.heartbeat_interval, () =>
-          this.send({ op: GatewayOpcodes.Heartbeat, d: this.seq })
-        );
+        this.gotHello = true;
+        this.hb = new Heartbeater(packet.d.heartbeat_interval, () => this.onHeartbeat());
 
         if (this.sessionId) {
           this.send({
@@ -218,9 +244,9 @@ export class GatewayClient extends EventEmitter {
               intents: this.options.intents,
               compress: !!zlib,
               properties: {
-                os: process.platform,
-                browser: 'purplet/v__VERSION__',
-                device: 'purplet/v__VERSION__',
+                os: typeof process !== 'undefined' ? process.platform : 'web',
+                browser: 'purplet',
+                device: 'purplet',
               },
             },
           });
@@ -251,7 +277,7 @@ export class GatewayClient extends EventEmitter {
   }
 
   /** Reconnects. */
-  async reconnect(newOptions: GatewayClientOptions = this.options) {
+  async reconnect(newOptions: GatewayOptions = this.options) {
     this.close();
     this.options = newOptions;
     await this.connect();
@@ -270,31 +296,4 @@ export class GatewayClient extends EventEmitter {
       d: presence,
     });
   }
-}
-
-export type CreateGatewayClientResult = [GatewayClient, GatewayReadyDispatchData];
-
-export async function createGatewayClient(identify: GatewayClientOptions) {
-  const [promise, resolve, reject] = deferred<CreateGatewayClientResult>();
-
-  const client = new GatewayClient(identify);
-
-  function errorHandler(e: Error) {
-    if (e instanceof GatewayClientExitError) {
-      reject(errorFromGatewayClientExitError(e, client));
-    } else {
-      reject(e);
-    }
-  }
-
-  function readyHandler(ready: GatewayReadyDispatchData) {
-    resolve([client, ready]);
-    client.removeListener('error', errorHandler);
-    client.removeListener(GatewayDispatchEvents.Ready, readyHandler);
-  }
-
-  client.on('error', errorHandler);
-  client.on(GatewayDispatchEvents.Ready, readyHandler);
-
-  return promise;
 }

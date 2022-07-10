@@ -1,4 +1,5 @@
 import type { Immutable } from '@davecode/types';
+import { REST } from '@discordjs/rest';
 import { APIGuild, Routes } from 'purplet/types';
 import { rest } from '../lib/global';
 import { createPartialClass, PartialClass } from '../utils/class';
