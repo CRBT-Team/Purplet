@@ -9,11 +9,7 @@
     "*.tsx": "${capture}.ts",
     "tsconfig.json": "tsconfig.*.json",
     "package.json": "pnpm-*.yaml",
-    // Use capitalization to allow multiple patterns.
-    "readme.md": "CONTRIBUTING*",
-    "readme.mD": "SECURITY*",
-    "readme.Md": "LICENSE*",
-    "readme.MD": "CHANGELOG*"
+    "README.md": "*.md",
   },
   "files.associations": {
     "docs/*.md": "mdx"
@@ -40,5 +36,9 @@
     "editor.wordWrap": "bounded",
     "editor.wordWrapColumn": 100
   },
-  "workspace.isHidden": false
+  "workspace.isHidden": false,
+  "explorer.fileNesting.expand": false,
+  "search.exclude": {
+    "**/dist": true
+  }
 }
