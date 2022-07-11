@@ -30,7 +30,7 @@
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "[javascript, typescript, javascriptreact, typescriptreact, json, jsonc, mdx]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[markdown, mdx]": {
     "editor.wordWrap": "bounded",
