@@ -1,16 +1,17 @@
 # Routes
 ### I set all endpoints to false, do NOT check off any endpoint until you have tested it and ensured it works.
-- [ ] [Audit Log](https://discord.com/developers/docs/resources/audit-log) [`0/1`]
-  - [ ] [`Get Guild Audit Log`](https://discord.com/developers/docs/resources/audit-log#get-guild-audit-log)
+- [x] [Audit Log](https://discord.com/developers/docs/resources/audit-log) [1/1`]
+  - [x] [`Get Guild Audit Log`](https://discord.com/developers/docs/resources/audit-log#get-guild-audit-log)
 - [ ] [Auto Moderation](https://discord.com/developers/docs/resources/auto-moderation) [`0/6`]
   - [ ] [`Get Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#get-auto-moderation-rule)
   - [ ] [`Create Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#create-auto-moderation-rule)
   - [ ] [`Modify Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#modify-auto-moderation-rule)
   - [ ] [`Delete Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#delete-auto-moderation-rule)
   - [ ] `Wait for` [discordjs/discord-api-types#418](https://github.com/discordjs/discord-api-types/pull/418) `to get merged`
-- [ ] [Channel](https://discord.com/developers/docs/resources/channel) [`0/37`]
-  - [ ] [`Modify Channel`](https://discord.com/developers/docs/resources/channel#modify-channel)
-  - [ ] [`Delete/Close Channel`](https://discord.com/developers/docs/resources/channel#deleteclose-channel)
+- [ ] [Channel](https://discord.com/developers/docs/resources/channel) [`2/38`]
+  - [x] [`Get Channel`](https://discord.com/developers/docs/resources/channel#get-channel)
+  - [x] [`Modify Channel`](https://discord.com/developers/docs/resources/channel#modify-channel)
+  - [x] [`Delete/Close Channel`](https://discord.com/developers/docs/resources/channel#deleteclose-channel)
   - [ ] [`Get Channel Messages`](https://discord.com/developers/docs/resources/channel#get-channel-messages)
   - [ ] [`Get Channel Message`](https://discord.com/developers/docs/resources/channel#create-message)
   - [ ] [`Crosspost Message`](https://discord.com/developers/docs/resources/channel#crosspost-message)
