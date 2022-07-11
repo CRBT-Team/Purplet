@@ -1,5 +1,5 @@
 export function type() {
-  return;
+  
 }
 
 export function route(routeData) {
@@ -9,8 +9,7 @@ export function route(routeData) {
 export function group(routes) {
   return rest =>
     Object.fromEntries(
-      Object.entries(routes).map(([k, meta]) => {
-        return [
+      Object.entries(routes).map(([k, meta]) => [
           k,
           (obj = {}) => {
             const endpoint =
@@ -19,7 +18,6 @@ export function group(routes) {
                 : meta.route;
             return rest.fetcher.request(endpoint, { method: meta.method, ...obj });
           },
-        ];
-      })
+        ])
     );
 }
