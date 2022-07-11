@@ -92,10 +92,10 @@ export class Fetcher {
       if (!this.#globalRateLimited) {
         this.#globalCount++;
         const now = Date.now();
-        if (this.#globalCount > 2) {
+        if (this.#globalCount > 49) {
           this.#globalRateLimited = [];
           setTimeout(() => {
-            const toRun = this.#globalRateLimited!.splice(0, 2);
+            const toRun = this.#globalRateLimited!.splice(0, 49);
             this.#globalCount = toRun.length;
             if (this.#globalRateLimited!.length === 0) {
               this.#globalRateLimited = undefined;
