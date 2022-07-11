@@ -4,13 +4,13 @@ The Purplet CLI (Command Line Interface) is a tool that allows you to interact w
 Each one of the commands is explained below, as well as the options that may be passed to the CLI.
 
 ## `dev`
-Starts Purplet in development mode. The development mode uses Vite to allow for fast hot-reloading. To use it, the $DISCORD_BOT_TOKEN variable must be set to the token of a bot that is in few guilds, only intended for testing. Reloads will be slower with bots in over 5 guilds, and do not support bots in over 75 guilds.
+Starts Purplet in development mode. The development mode uses Vite to allow for fast hot-reloading. To use it, you must set the `DISCORD_BOT_TOKEN` environment variable must be set to the token of a bot that is in few guilds, only intended for testing. Reloads will be slower with bots in over 5 guilds, and do not support bots in over 75 guilds.
 
 ## `build`
-Builds a production gateway client to './dist', which can be run for an optimized production build without hot-reloading or server limits. Handles interactions unless you have an HTTP endpoint handled.
+Builds a production gateway client to './dist', which can be run for an optimized production build without hot-reloading or server limits. Handles interactions unless you have an HTTP endpoint set.
 
 ## `build-http`
-Build a production HTTP interaction handler to './dist', which can be run for an optimized production build without hot-reloading or server limits. Handles interactions unless you have a gateway client handled.
+Build a production HTTP interaction handler to './dist', which can be run for an optimized production build without hot-reloading or server limits. Handles interactions unless you have a gateway client set.
 
 ## `deploy`
 Manage production-deployed application commands, as the production gateway client or HTTP interaction handler do not do this for you. Pass `--delete` if you need to delete all commands.
