@@ -10,7 +10,7 @@ export interface RestOptions {
   /** API Version. */
   version?: string;
   /** Token type, 'Bot' or 'Bearer' */
-  tokenType?: 'Bot' | 'Bearer';
+  tokenType?: TokenType;
   /** User agent, must be in the form of `DiscordBot ($url, $versionNumber)` */
   userAgent?: string;
 }
@@ -30,7 +30,7 @@ export interface RequestOptionsWithMethod<Body = unknown, Query = Record<never, 
 }
 
 export interface RequestData {
-  url: string;
+  url: URL;
   init: RequestInit;
 }
 

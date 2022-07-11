@@ -13,7 +13,7 @@ interface Route<
   method: HTTPMethod;
   route: string | ((...args: string[]) => string);
   params?: Array<Params> | ReadonlyArray<Params>;
-  hasFiles?: Files;
+  files?: Files;
   body?: Body;
   query?: Query;
   result?: Result;

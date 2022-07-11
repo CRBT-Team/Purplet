@@ -9,7 +9,7 @@
     "*.tsx": "${capture}.ts",
     "tsconfig.json": "tsconfig.*.json",
     "package.json": "pnpm-*.yaml",
-    "README.md": "*.md",
+    "README.md": "*.md"
   },
   "files.associations": {
     "docs/*.md": "mdx"
@@ -29,8 +29,7 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "[javascript, typescript, javascriptreact, typescriptreact, json, jsonc, mdx]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": false
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown, mdx]": {
     "editor.wordWrap": "bounded",
