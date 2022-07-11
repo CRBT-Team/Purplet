@@ -73,8 +73,8 @@ export class Fetcher {
   }
 
   private setBucketTimer(bucket: Bucket, subBucket: SubBucket) {
-    if (subBucket.refresh === Infinity) return;
-    if (subBucket.timer) return;
+    if (subBucket.refresh === Infinity) {return;}
+    if (subBucket.timer) {return;}
     subBucket.timer = setTimeout(() => {
       subBucket.timer = undefined;
       subBucket.remaining = bucket.limit;
@@ -100,7 +100,7 @@ export class Fetcher {
             if (this.#globalRateLimited!.length === 0) {
               this.#globalRateLimited = undefined;
             }
-            toRun.forEach(entry => this.runRequest(entry, true).catch(entry.reject));
+            toRun.forEach(queueEntry => this.runRequest(queueEntry, true).catch(entry.reject));
           }, 1100);
         }
         if (now - this.#lastSecond > 1000) {
@@ -113,10 +113,8 @@ export class Fetcher {
       }
     }
 
-    let bucket = this.#buckets.get(entry.bucketId)!;
-    let subBucket = bucket.sub.get(entry.majorId)!;
-
-    console.log(!!bucket, !!subBucket, 'ok');
+    const bucket = this.#buckets.get(entry.bucketId)!;
+    const subBucket = bucket.sub.get(entry.majorId)!;
 
     const req = entry.request;
     const response = await fetch(req.url.toString(), req.init);
@@ -131,8 +129,8 @@ export class Fetcher {
         this.#buckets.set(xBucket, bucket);
         this.#buckets.delete(entry.bucketId);
         this.#bucketIds.set(entry.endpointId, xBucket);
-        bucket.sub.forEach(subBucket => {
-          subBucket.queue.forEach(obj => {
+        bucket.sub.forEach(sBucket => {
+          sBucket.queue.forEach(obj => {
             obj.bucketId = xBucket;
           });
         });
@@ -140,7 +138,6 @@ export class Fetcher {
 
       bucket.limit = parseInt(xLimit!, 10);
 
-      const subBucket = bucket.sub.get(entry.majorId)!;
       subBucket.remaining = parseInt(xRemaining!, 10);
       subBucket.refresh = parseInt(xReset!, 10) * 1000;
 
@@ -149,8 +146,8 @@ export class Fetcher {
           this.setBucketTimer(bucket, subBucket);
         } else {
           subBucket.remaining--;
-          const entry = subBucket.queue.shift()!;
-          this.runRequest(entry).catch(entry.reject);
+          const queueEntry = subBucket.queue.shift()!;
+          this.runRequest(queueEntry).catch(queueEntry.reject);
         }
       } else {
         subBucket.running = false;
@@ -164,12 +161,13 @@ export class Fetcher {
     if (response.status === 429) {
       const { global } = await response.json();
       // TODO: handle `global` properly
+      // eslint-disable-next-line consistent-return
       return;
     }
 
-    console.log(response.status);
-    console.log(req);
-    console.log(await response.json());
+    // console.log(response.status);
+    // console.log(req);
+    // console.log(await response.json());
 
     // TODO: custom error object, handle certain types of errors
     throw new Error(`${response.status} ${response.statusText}`);
