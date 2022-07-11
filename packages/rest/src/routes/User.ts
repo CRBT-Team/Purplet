@@ -1,19 +1,6 @@
 import * as REST from 'discord-api-types/rest';
 import { Routes } from 'discord-api-types/rest';
-import { Rest } from '../Rest';
 import { group, route, type } from '../route-group';
-
-/** Routes on https://discord.com/developers/docs/resources/user. */
-export const user = group({
-  getCurrentUser,
-  modifyCurrentUser,
-  getCurrentUserGuilds,
-  getCurrentUserGuildMember,
-  leaveGuild,
-  createDm,
-  //createGroupDm,
-  getUserConnections,
-});
 
 /** https://discord.com/developers/docs/resources/user#get-current-user. */
 const getCurrentUser = route({
@@ -55,14 +42,14 @@ const leaveGuild = route({
 } as const);
 
 /** https://discord.com/developers/docs/resources/user#create-dm. */
-const createDM = route({
+const createDm = route({
   method: 'POST',
   route: Routes.userChannels(),
   body: type<REST.RESTPostAPICurrentUserCreateDMChannelJSONBody>(),
   result: type<REST.RESTPostAPICurrentUserCreateDMChannelResult>(),
 } as const);
 
-// This doesn't work, not sure why it's on the developer docs. Whatever. 
+// This doesn't work, not sure why it's on the developer docs. Whatever.
 // Method is implemented in case discord ever decides to make it work.
 // /** https://discord.com/developers/docs/resources/user#create-group-dm. */
 // const createGroupDm = route({
@@ -78,3 +65,15 @@ const getUserConnections = route({
   route: Routes.userConnections(),
   result: type<REST.RESTGetAPICurrentUserConnectionsResult>(),
 } as const);
+
+/** Routes on https://discord.com/developers/docs/resources/user. */
+export const user = group({
+  getCurrentUser,
+  modifyCurrentUser,
+  getCurrentUserGuilds,
+  getCurrentUserGuildMember,
+  leaveGuild,
+  createDm,
+  //createGroupDm,
+  getUserConnections,
+});
