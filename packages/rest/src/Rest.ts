@@ -1,4 +1,4 @@
-import * as routes from './routes';
+import * as routes from './routes/index';
 import { RestFetcher } from './RestFetcher';
 import { RestOptions, TokenType } from './types';
 

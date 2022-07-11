@@ -1,4 +1,2 @@
-import '../RouteImports';
-
-/** Routes on https://discord.com/developers/docs/resources/invite. */
+import { group } from '../route-group';
 export const invite = group({});

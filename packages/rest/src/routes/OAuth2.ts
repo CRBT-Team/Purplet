@@ -1,4 +1,2 @@
-import '../RouteImports';
-
-/** Routes on https://discord.com/developers/docs/topics/oauth2. */
+import { group } from '../route-group';
 export const oauth2 = group({});

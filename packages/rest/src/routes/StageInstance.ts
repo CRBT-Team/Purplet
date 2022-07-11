@@ -1,4 +1,2 @@
-import '../RouteImports';
-
-/** Routes on https://discord.com/developers/docs/resources/stage-instance. */
+import { group } from '../route-group';
 export const stageInstance = group({});

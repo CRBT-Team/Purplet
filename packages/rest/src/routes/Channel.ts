@@ -1,4 +1,6 @@
-import '../RouteImports';
+import * as REST from 'discord-api-types/rest';
+import { group, route, type } from '../route-group';
+import { Routes } from 'discord-api-types/rest';
 
 /** Routes on https://discord.com/developers/docs/resources/channel. */
 export const channel = group({

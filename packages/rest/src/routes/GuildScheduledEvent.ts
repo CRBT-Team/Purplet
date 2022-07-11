@@ -1,4 +1,2 @@
-import '../RouteImports';
-
-/** Routes on https://discord.com/developers/docs/resources/guild-scheduled-event. */
+import { group } from '../route-group';
 export const guildScheduledEvent = group({});
