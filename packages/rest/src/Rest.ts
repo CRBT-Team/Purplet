@@ -9,6 +9,8 @@ const sourceURL = 'https://github.com/CRBT-Team/Purplet/tree/main/packages/rest'
 const version = '1.0.0';
 const defaultUserAgent = `DiscordBot (${sourceURL}, ${version})`;
 
+const methodsWithBody = new Set(['POST', 'PUT', 'PATCH']);
+
 export class Rest {
   options: Required<RestOptions>;
 
@@ -73,7 +75,11 @@ export class Rest {
       headers.set('User-Agent', this.options.userAgent);
     }
 
-    let body: BodyInit | undefined = options.body ? JSON.stringify(options.body) : undefined;
+    let body: BodyInit | undefined = options.body
+      ? JSON.stringify(options.body)
+      : methodsWithBody.has(options.method)
+      ? '{}'
+      : undefined;
 
     if (options.files && options.files.length > 0) {
       // Files are to be sent as multipart/form-data as specified by
@@ -93,12 +99,14 @@ export class Rest {
     } else if (body) {
       // JSON body is to be sent as application/json
       headers.set('Content-Type', 'application/json');
+      headers.set('Content-Length', body.length.toString());
     }
 
     if (options.reason?.length) {
       headers.set('X-Audit-Log-Reason', options.reason);
     }
 
+    console.log('headers', ...headers.entries());
     return this.fetcher.queue({
       url,
       init: {

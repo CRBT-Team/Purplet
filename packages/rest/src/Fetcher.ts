@@ -171,10 +171,17 @@ export class Fetcher {
       const { global } = await response.json();
       // TODO: handle `global` properly
       // eslint-disable-next-line consistent-return
+      throw new Error("Rate limited! This shouldn't happen wtf.");
       return;
     }
 
-    const json = await response.json();
-    throw new DiscordAPIError(json, response);
+    const text = await response.text();
+    let error;
+    try {
+      error = new DiscordAPIError(JSON.parse(text), response);
+    } catch (error) {
+      error = new Error(text);
+    }
+    throw error;
   }
 }
