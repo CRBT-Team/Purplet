@@ -1,4 +1,5 @@
 import { deferred } from '@davecode/utils';
+import { DiscordAPIError } from './DiscordAPIError';
 import { RequestData } from './types';
 import { classifyEndpoint } from './utils';
 
@@ -25,6 +26,8 @@ export interface SubBucket {
 }
 
 /** Implements fetching Discord API endpoints, given endpoints and options. */
+// TODO: handle the 10000 errors per 10 min limit
+// TODO: handle 429 errors
 export class Fetcher {
   #buckets = new Map<string, Bucket>();
   #bucketIds = new Map<string, string>();
@@ -171,11 +174,7 @@ export class Fetcher {
       return;
     }
 
-    // console.log(response.status);
-    // console.log(req);
-    // console.log(await response.json());
-
-    // TODO: custom error object, handle certain types of errors
-    throw new Error(`${response.status} ${response.statusText}`);
+    const json = await response.json();
+    throw new DiscordAPIError(json, response);
   }
 }
