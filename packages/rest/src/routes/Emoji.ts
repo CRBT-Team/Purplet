@@ -26,7 +26,7 @@ const createGuildEmoji = route({
   body: type<REST.RESTPostAPIGuildEmojiJSONBody>(),
   result: type<REST.RESTPostAPIGuildEmojiResult>(),
   reason: true,
-});
+} as const);
 
 /** https://discord.com/developers/docs/resources/emoji#modify-guild-emoji. */
 const modifyGuildEmoji = route({
@@ -36,7 +36,7 @@ const modifyGuildEmoji = route({
   body: type<REST.RESTPatchAPIGuildEmojiJSONBody>(),
   result: type<REST.RESTPatchAPIGuildEmojiResult>(),
   reason: true,
-});
+} as const);
 
 /** https://discord.com/developers/docs/resources/emoji#delete-guild-emoji. */
 const deleteGuildEmoji = route({
@@ -53,5 +53,5 @@ export const emoji = group({
   getGuildEmoji,
   createGuildEmoji,
   modifyGuildEmoji,
-  deleteGuildEmoji
+  deleteGuildEmoji,
 });
