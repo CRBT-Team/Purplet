@@ -1,26 +1,28 @@
 # Routes
+
 ### I set all endpoints to false, do NOT check off any endpoint until you have tested it and ensured it works.
-- [x] [Audit Log](https://discord.com/developers/docs/resources/audit-log) [1/1`]
+
+- [x] [Audit Log](https://discord.com/developers/docs/resources/audit-log)
   - [x] [`Get Guild Audit Log`](https://discord.com/developers/docs/resources/audit-log#get-guild-audit-log)
-- [ ] [Auto Moderation](https://discord.com/developers/docs/resources/auto-moderation) [`0/6`]
+- [ ] [Auto Moderation](https://discord.com/developers/docs/resources/auto-moderation)
   - [ ] [`Get Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#get-auto-moderation-rule)
   - [ ] [`Create Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#create-auto-moderation-rule)
   - [ ] [`Modify Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#modify-auto-moderation-rule)
   - [ ] [`Delete Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#delete-auto-moderation-rule)
   - [ ] `Wait for` [discordjs/discord-api-types#418](https://github.com/discordjs/discord-api-types/pull/418) `to get merged`
-- [ ] [Channel](https://discord.com/developers/docs/resources/channel) [`2/38`]
+- [ ] [Channel](https://discord.com/developers/docs/resources/channel)
   - [x] [`Get Channel`](https://discord.com/developers/docs/resources/channel#get-channel)
   - [x] [`Modify Channel`](https://discord.com/developers/docs/resources/channel#modify-channel)
   - [x] [`Delete/Close Channel`](https://discord.com/developers/docs/resources/channel#deleteclose-channel)
-  - [ ] [`Get Channel Messages`](https://discord.com/developers/docs/resources/channel#get-channel-messages)
-  - [ ] [`Get Channel Message`](https://discord.com/developers/docs/resources/channel#create-message)
-  - [ ] [`Crosspost Message`](https://discord.com/developers/docs/resources/channel#crosspost-message)
-  - [ ] [`Create Reaction`](https://discord.com/developers/docs/resources/channel#create-reaction)
-  - [ ] [`Delete Own Reaction`](https://discord.com/developers/docs/resources/channel#delete-own-reaction)
-  - [ ] [`Delete User Reaction`](https://discord.com/developers/docs/resources/channel#delete-user-reaction)
-  - [ ] [`Get Reactions`](https://discord.com/developers/docs/resources/channel#get-reactions)
-  - [ ] [`Delete All Reactions`](https://discord.com/developers/docs/resources/channel#delete-all-reactions)
-  - [ ] [`Delete All Reactions For Emoji`](https://discord.com/developers/docs/resources/channel#delete-all-reactions-for-emoji)
+  - [x] [`Get Channel Messages`](https://discord.com/developers/docs/resources/channel#get-channel-messages)
+  - [x] [`Get Channel Message`](https://discord.com/developers/docs/resources/channel#create-message)
+  - [x] [`Crosspost Message`](https://discord.com/developers/docs/resources/channel#crosspost-message)
+  - [x] [`Create Reaction`](https://discord.com/developers/docs/resources/channel#create-reaction)
+  - [x] [`Delete Own Reaction`](https://discord.com/developers/docs/resources/channel#delete-own-reaction)
+  - [x] [`Delete User Reaction`](https://discord.com/developers/docs/resources/channel#delete-user-reaction)
+  - [x] [`Get Reactions`](https://discord.com/developers/docs/resources/channel#get-reactions)
+  - [x] [`Delete All Reactions`](https://discord.com/developers/docs/resources/channel#delete-all-reactions)
+  - [x] [`Delete All Reactions For Emoji`](https://discord.com/developers/docs/resources/channel#delete-all-reactions-for-emoji)
   - [ ] [`Edit Message`](https://discord.com/developers/docs/resources/channel#edit-message)
   - [ ] [`Delete Message`](https://discord.com/developers/docs/resources/channel#delete-message)
   - [ ] [`Bulk Delete Messages`](https://discord.com/developers/docs/resources/channel#bulk-delete-messages)
@@ -47,13 +49,13 @@
   - [ ] [`List Public Archived Threads`](https://discord.com/developers/docs/resources/channel#list-public-archived-threads)
   - [ ] [`List Private Archived Threads`](https://discord.com/developers/docs/resources/channel#list-private-archived-threads)
   - [ ] [`List Joined Private Archived Threads`](https://discord.com/developers/docs/resources/channel#list-joined-private-archived-threads)
-- [ ] [Emoji](https://discord.com/developers/docs/resources/emoji) [`0/5`]
+- [ ] [Emoji](https://discord.com/developers/docs/resources/emoji)
   - [ ] [`List Guild Emojis`](https://discord.com/developers/docs/resources/emoji#list-guild-emojis)
   - [ ] [`Get Guild Emoji`](https://discord.com/developers/docs/resources/emoji#get-guild-emoji)
   - [ ] [`Create Guild Emoji`](https://discord.com/developers/docs/resources/emoji#create-guild-emoji)
   - [ ] [`Modify Guild Emoji`](https://discord.com/developers/docs/resources/emoji#modify-guild-emoji)
   - [ ] [`Delete Guild Emoji`](https://discord.com/developers/docs/resources/emoji#delete-guild-emoji)
-- [ ] [Guild](https://discord.com/developers/docs/resources/guild) [`0/43`]
+- [ ] [Guild](https://discord.com/developers/docs/resources/guild)
   - [ ] [`Create Guild`](https://discord.com/developers/docs/resources/guild#create-guild)
   - [ ] [`Get Guild`](https://discord.com/developers/docs/resources/guild#get-guild)
   - [ ] [`Get Guild Preview`](https://discord.com/developers/docs/resources/guild#get-guild-preview)
@@ -97,14 +99,14 @@
   - [ ] [`Modify Guild Welcome Screen`](https://discord.com/developers/docs/resources/guild#modify-guild-welcome-screen)
   - [ ] [`Modify Current User Voice State`](https://discord.com/developers/docs/resources/guild#modify-current-user-voice-state)
   - [ ] [`Modify User Voice State`](https://discord.com/developers/docs/resources/guild#modify-user-voice-state)
-- [ ] [Guild Scheduled Event](https://discord.com/developers/docs/resources/guild-scheduled-event) [`0/6`]
+- [ ] [Guild Scheduled Event](https://discord.com/developers/docs/resources/guild-scheduled-event)
   - [ ] [`List Scheduled Events For Guild`](https://discord.com/developers/docs/resources/guild-scheduled-event#list-scheduled-events-for-guild)
   - [ ] [`Create guild Scheduled Event`](https://discord.com/developers/docs/resources/guild-scheduled-event#create-guild-scheduled-event)
   - [ ] [`Get Guild Scheduled Event`](https://discord.com/developers/docs/resources/guild-scheduled-event#get-guild-scheduled-event)
   - [ ] [`Modify Guild Scheduled Event`](https://discord.com/developers/docs/resources/guild-scheduled-event#modify-guild-scheduled-event)
   - [ ] [`Delete Guild Scheduled Event`](https://discord.com/developers/docs/resources/guild-scheduled-event#delete-guild-scheduled-event)
   - [ ] [`Get Guild Scheduled Event Users`](https://discord.com/developers/docs/resources/guild-scheduled-event#get-guild-scheduled-event-users)
-- [ ] [Guild Template](https://discord.com/developers/docs/resources/guild-template) [`0/7`]
+- [ ] [Guild Template](https://discord.com/developers/docs/resources/guild-template)
   - [ ] [`Get Guild Template`](https://discord.com/developers/docs/resources/guild-template#get-guild-template)
   - [ ] [`Create Guild From Guild Template`](https://discord.com/developers/docs/resources/guild-template#create-guild-from-guild-template)
   - [ ] [`Get Guild Templates`](https://discord.com/developers/docs/resources/guild-template#get-guild-templates)
@@ -112,15 +114,15 @@
   - [ ] [`Sync Guild Template`](https://discord.com/developers/docs/resources/guild-template#sync-guild-template)
   - [ ] [`Modify Guild Template`](https://discord.com/developers/docs/resources/guild-template#modify-guild-template)
   - [ ] [`Delete Guild Template`](https://discord.com/developers/docs/resources/guild-template#delete-guild-template)
-- [ ] [Invite](https://discord.com/developers/docs/resources/invite) [`0/2`]
+- [ ] [Invite](https://discord.com/developers/docs/resources/invite)
   - [ ] [`Get Invite`](https://discord.com/developers/docs/resources/invite#get-invite)
   - [ ] [`Delete Invite`](https://discord.com/developers/docs/resources/invite#delete-invite)
-- [ ] [Stage Instance](https://discord.com/developers/docs/resources/stage-instance) [`0/4`]
+- [ ] [Stage Instance](https://discord.com/developers/docs/resources/stage-instance)
   - [ ] [`Create Stage Instance`](https://discord.com/developers/docs/resources/stage-instance#create-stage-instance)
   - [ ] [`Get Stage Instance`](https://discord.com/developers/docs/resources/stage-instance#get-stage-instance)
   - [ ] [`Modify Stage Instance`](https://discord.com/developers/docs/resources/stage-instance#modify-stage-instance)
   - [ ] [`Delete Stage Instance`](https://discord.com/developers/docs/resources/stage-instance#delete-stage-instance)
-- [ ] [Sticker](https://discord.com/developers/docs/resources/sticker) [`0/7`]
+- [ ] [Sticker](https://discord.com/developers/docs/resources/sticker)
   - [ ] [`Get Sticker`](https://discord.com/developers/docs/resources/sticker#get-sticker)
   - [ ] [`List Nitro Sticker Packs`](https://discord.com/developers/docs/resources/sticker#list-nitro-sticker-packs)
   - [ ] [`List Guild Stickers`](https://discord.com/developers/docs/resources/sticker#list-guild-stickers)
@@ -128,7 +130,7 @@
   - [ ] [`Create Guild Sticker`](https://discord.com/developers/docs/resources/sticker#create-guild-sticker)
   - [ ] [`Modify Guild Sticker`](https://discord.com/developers/docs/resources/sticker#modify-guild-sticker)
   - [ ] [`Delete Guild Sticker`](https://discord.com/developers/docs/resources/sticker#delete-guild-sticker)
-- [ ] [User](https://discord.com/developers/docs/resources/user) [`0/9`]
+- [ ] [User](https://discord.com/developers/docs/resources/user)
   - [ ] [`Get Current User`](https://discord.com/developers/docs/resources/user#get-current-user)
   - [ ] [`Get User`](https://discord.com/developers/docs/resources/user#get-user)
   - [ ] [`Modify Current User`](https://discord.com/developers/docs/resources/user#modify-current-user)
@@ -138,9 +140,9 @@
   - [ ] [`Create DM`](https://discord.com/developers/docs/resources/user#create-dm)
   - [ ] [`Create Group DM`](https://discord.com/developers/docs/resources/user#create-group-dm) (No Functionality, Not Implemented)
   - [ ] [`Get User Connections`](https://discord.com/developers/docs/resources/user#get-user-connections)
-- [ ] [Voice](https://discord.com/developers/docs/resources/voice) [`0/1`]
+- [ ] [Voice](https://discord.com/developers/docs/resources/voice)
   - [ ] [`List Voice Regions`](https://discord.com/developers/docs/resources/voice#list-voice-regions)
-- [Webhook](https://discord.com/developers/docs/resources/webhook) [`0/15`]
+- [Webhook](https://discord.com/developers/docs/resources/webhook)
   - [ ] [`Create Webhook`](https://discord.com/developers/docs/resources/webhook#create-webhook)
   - [ ] [`Get Channel Webhooks`](https://discord.com/developers/docs/resources/webhook#get-channel-webhooks)
   - [ ] [`Get Guild Webhooks`](https://discord.com/developers/docs/resources/webhook#get-guild-webhooks)

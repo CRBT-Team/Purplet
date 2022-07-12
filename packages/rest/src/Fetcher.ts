@@ -170,7 +170,6 @@ export class Fetcher {
     if (response.status === 429) {
       const { global } = await response.json();
       // TODO: handle `global` properly
-      // eslint-disable-next-line consistent-return
       throw new Error("Rate limited! This shouldn't happen wtf.");
       return;
     }
@@ -179,7 +178,7 @@ export class Fetcher {
     let error;
     try {
       error = new DiscordAPIError(JSON.parse(text), response);
-    } catch (error) {
+    } catch (e) {
       error = new Error(text);
     }
     throw error;

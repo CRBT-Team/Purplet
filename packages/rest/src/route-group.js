@@ -4,7 +4,7 @@ export function type() {
 
 export function route(routeData) {
   return routeData;
-}
+} 
 
 export function group(routes) {
   return rest =>
