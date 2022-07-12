@@ -106,7 +106,6 @@ export class Rest {
       headers.set('X-Audit-Log-Reason', options.reason);
     }
 
-    console.log('headers', ...headers.entries());
     return this.fetcher.queue({
       url,
       init: {
