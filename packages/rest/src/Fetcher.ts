@@ -1,6 +1,6 @@
 import { deferred } from '@davecode/utils';
-import { classifyEndpoint } from './classify-endpoint';
 import { RequestData } from './types';
+import { classifyEndpoint } from './utils';
 
 export interface QueueEntry {
   request: RequestData;
@@ -72,9 +72,13 @@ export class Fetcher {
     return promise;
   }
 
-  private setBucketTimer(bucket: Bucket, subBucket: SubBucket) {
-    if (subBucket.refresh === Infinity) {return;}
-    if (subBucket.timer) {return;}
+  private setBucketTimer(bucket: Bucket, subBucket: SubBucket, now = Date.now()) {
+    if (subBucket.refresh === Infinity) {
+      return;
+    }
+    if (subBucket.timer) {
+      return;
+    }
     subBucket.timer = setTimeout(() => {
       subBucket.timer = undefined;
       subBucket.remaining = bucket.limit;
@@ -119,6 +123,9 @@ export class Fetcher {
     const req = entry.request;
     const response = await fetch(req.url.toString(), req.init);
 
+    const serverNow = response.headers.has('Date')
+      ? new Date(response.headers.get('Date')!).getTime()
+      : Date.now();
     const xReset = response.headers.get('X-RateLimit-Reset');
     const xBucket = response.headers.get('X-RateLimit-Bucket');
     const xLimit = response.headers.get('X-RateLimit-Limit');
@@ -137,13 +144,12 @@ export class Fetcher {
       }
 
       bucket.limit = parseInt(xLimit!, 10);
-
       subBucket.remaining = parseInt(xRemaining!, 10);
       subBucket.refresh = parseInt(xReset!, 10) * 1000;
 
       if (subBucket.queue.length > 0) {
         if (subBucket.remaining === 0) {
-          this.setBucketTimer(bucket, subBucket);
+          this.setBucketTimer(bucket, subBucket, serverNow);
         } else {
           subBucket.remaining--;
           const queueEntry = subBucket.queue.shift()!;

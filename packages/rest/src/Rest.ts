@@ -2,6 +2,7 @@ import * as routes from './routes';
 import { APIVersion, RouteBases } from 'discord-api-types/rest';
 import { Fetcher } from './Fetcher';
 import { RequestOptions, RequestOptionsWithMethod, RestOptions, TokenType } from './types';
+import { toBlob } from './utils';
 
 const sourceURL = 'https://github.com/CRBT-Team/Purplet/tree/main/packages/rest';
 // TODO: Add rollup define plugin for __VERSION__, like we have in main purplet package.
@@ -85,11 +86,7 @@ export class Rest {
       }
 
       for (const [index, file] of options.files.entries()) {
-        form.append(
-          file.key ?? `files[${index}]`,
-          new Blob([file.data instanceof Uint8Array ? file.data.buffer : file.data]),
-          file.name
-        );
+        form.append(file.key ?? `files[${index}]`, await toBlob(file.data), file.name);
       }
 
       body = form;
