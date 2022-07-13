@@ -99,6 +99,7 @@
   - [ ] [`Modify Guild Welcome Screen`](https://discord.com/developers/docs/resources/guild#modify-guild-welcome-screen)
   - [ ] [`Modify Current User Voice State`](https://discord.com/developers/docs/resources/guild#modify-current-user-voice-state)
   - [ ] [`Modify User Voice State`](https://discord.com/developers/docs/resources/guild#modify-user-voice-state)
+    - api types and discord docs do not document the return type of this, but it seems it would be `never`. please double check.
 - [ ] [Guild Scheduled Event](https://discord.com/developers/docs/resources/guild-scheduled-event)
   - [ ] [`List Scheduled Events For Guild`](https://discord.com/developers/docs/resources/guild-scheduled-event#list-scheduled-events-for-guild)
   - [ ] [`Create guild Scheduled Event`](https://discord.com/developers/docs/resources/guild-scheduled-event#create-guild-scheduled-event)
@@ -138,7 +139,8 @@
   - [ ] [`Get Current User Guild Member`](https://discord.com/developers/docs/resources/user#get-current-user-guild-member)
   - [ ] [`Leave Guild`](https://discord.com/developers/docs/resources/user#leave-guild)
   - [ ] [`Create DM`](https://discord.com/developers/docs/resources/user#create-dm)
-  - [ ] [`Create Group DM`](https://discord.com/developers/docs/resources/user#create-group-dm) (No Functionality, Not Implemented)
+  - [x] [`Create Group DM`](https://discord.com/developers/docs/resources/user#create-group-dm)
+    - left untested and marked deprecated.
   - [ ] [`Get User Connections`](https://discord.com/developers/docs/resources/user#get-user-connections)
 - [ ] [Voice](https://discord.com/developers/docs/resources/voice)
   - [ ] [`List Voice Regions`](https://discord.com/developers/docs/resources/voice#list-voice-regions)

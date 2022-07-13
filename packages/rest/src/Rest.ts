@@ -1,4 +1,4 @@
-import * as routes from './routes';
+import * as routes from './routes.generated';
 import { APIVersion, RouteBases } from 'discord-api-types/rest';
 import { Fetcher } from './Fetcher';
 import { RequestOptions, RequestOptionsWithMethod, RestOptions, TokenType } from './types';
