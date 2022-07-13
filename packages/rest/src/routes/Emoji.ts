@@ -7,7 +7,7 @@ const listGuildEmojis = route({
   method: 'GET',
   route: Routes.guildEmojis,
   params: ['guildId'],
-  result: type<REST.RESTGetAPIGuildEmojiResult[]>(),
+  result: type<REST.RESTGetAPIGuildEmojisResult>(),
 } as const);
 
 /** https://discord.com/developers/docs/resources/emoji#get-guild-emoji. */
