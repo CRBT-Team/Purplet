@@ -26,12 +26,12 @@ export function group(routes) {
   }
 
   for (const routeName in routes) {
-    const { route, params, method } = routes[routeName];
+    const { route, params, method, auth } = routes[routeName];
     RouteGroup.prototype[routeName] = function (request = {}) {
       const endpoint =
         typeof route === 'string' ? route : route(...params.map(param => request[param]));
 
-      return this.rest.request(endpoint, { method, ...request });
+      return this.rest.request(endpoint, { method, auth, ...request });
     };
   }
 

@@ -6,10 +6,11 @@ import { capitalize } from '@davecode/utils';
 
 if (!existsSync('discord-api-docs')) {
   execSync('git clone https://github.com/discord/discord-api-doc');
+} else {
+  process.chdir('discord-api-docs');
+  execSync('git pull');
+  process.chdir('../');
 }
-process.chdir('discord-api-docs');
-// execSync('git pull');
-process.chdir('../');
 
 const routeMap = {
   ApplicationCommand: 'discord-api-docs/docs/interactions/Application_Commands.md',
@@ -99,6 +100,7 @@ const overrides = {
   deprecated: {
     createGroupDM: 'DMs created with this endpoint will not be shown in the Discord client',
   },
+  noAuth: ['getGateway'],
 };
 
 const docBaseURL = 'https://discordapp.com/developers/docs';
@@ -242,6 +244,8 @@ function transformContents({ contents, exportName, filename }) {
             ? `file: true,`
             : '';
 
+        const noAuth = overrides.noAuth.includes(camelCasedName) ? 'auth: false,' : '';
+
         const reasonValueJS = mdContent.includes('X-Audit-Log-Reason') ? `reason: true,` : '';
 
         const queryValueJS = mdContent.includes('###### Query String Params')
@@ -268,7 +272,9 @@ function transformContents({ contents, exportName, filename }) {
    */
   ${camelCasedName}: {
     method: '${currentEndpoint[2]}',
-    route: ${routeValueJS},${paramValueJS ? '\n    ' + paramValueJS : ''}
+    route: ${routeValueJS},${paramValueJS ? '\n    ' + paramValueJS : ''}${
+          noAuth ? '\n    ' + noAuth : ''
+        }
   } as unknown as Route<{
 ${[paramValueJS, queryValueJS, bodyValueJS, resultValueJS, fileValueJS, reasonValueJS, formValueJS]
   .filter(Boolean)

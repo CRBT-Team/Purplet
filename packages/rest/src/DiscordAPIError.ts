@@ -30,6 +30,8 @@ function getErrorList(error: APIErrorObject, keypath = ''): APIErrorWithKeypath[
 }
 
 export class DiscordAPIError extends Error {
+  #errorList: APIErrorWithKeypath[];
+
   status: number;
   statusText: string;
   code: RESTJSONErrorCodes;
@@ -45,5 +47,10 @@ export class DiscordAPIError extends Error {
     this.statusText = response.statusText;
     this.code = rawError.code;
     this.url = response.url;
+    this.#errorList = errors;
+  }
+
+  get errors() {
+    return this.#errorList;
   }
 }
