@@ -2,9 +2,10 @@
 
 ### I set all endpoints to false, do NOT check off any endpoint until you have tested it and ensured it works.
 
-- [ ] [Audit Log](https://discord.com/developers/docs/resources/audit-log)
-  - [ ] [`Get Guild Audit Log`](https://discord.com/developers/docs/resources/audit-log#get-guild-audit-log)
+- [x] [Audit Log](https://discord.com/developers/docs/resources/audit-log)
+  - [x] [`Get Guild Audit Log`](https://discord.com/developers/docs/resources/audit-log#get-guild-audit-log)
 - [ ] [Auto Moderation](https://discord.com/developers/docs/resources/auto-moderation)
+  - [x] [`List Auto Moderation Rules For Guild`](https://discord.com/developers/docs/resources/auto-moderation#list-auto-moderation-rules-for-guild) 
   - [ ] [`Get Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#get-auto-moderation-rule)
   - [ ] [`Create Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#create-auto-moderation-rule)
   - [ ] [`Modify Auto Moderation Rule`](https://discord.com/developers/docs/resources/auto-moderation#modify-auto-moderation-rule)
