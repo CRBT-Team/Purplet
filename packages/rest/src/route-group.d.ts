@@ -20,6 +20,8 @@ interface Route<
   reason?: Reason;
 }
 
+type RouteX = Route<string, unknown, unknown, boolean, boolean, unknown>;
+
 type RouteGroup<Routes extends Dict<Route>> = {
   [K in keyof Routes]: Routes[K] extends Route
     ? RemoveParamIfEmpty<
@@ -29,7 +31,7 @@ type RouteGroup<Routes extends Dict<Route>> = {
             (Routes[K]['query'] extends {} ? { query: Routes[K]['query'] } : {}) &
             (Routes[K]['files'] extends true ? { files?: RawFile[] } : {}) &
             (Routes[K]['reason'] extends true ? { reason?: string } : {})
-        ) => Promise<null | undefined | unknown extends Result ? void : Result>
+        ) => Promise<undefined | unknown extends Routes[K]['result'] ? void : Routes[K]['result']>
       >
     : never;
 };
@@ -42,7 +44,7 @@ type RemoveParamIfEmpty<T> = T extends (options: infer Options) => Promise<infer
 
 export function type<T>(): T;
 
-export function route<R extends Route>(routeData: R): R;
+export function route<R extends RouteX>(routeData: R): R;
 
 export function group<Routes extends Dict<any>>(
   routes: Routes
