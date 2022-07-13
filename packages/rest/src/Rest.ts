@@ -40,23 +40,23 @@ export class Rest {
     return this;
   }
 
-  applicationCommand = routes.applicationCommand(this);
-  interactionResponse = routes.interactionResponse(this);
-  auditLog = routes.auditLog(this);
-  autoModeration = routes.autoModeration(this);
-  channel = routes.channel(this);
-  emoji = routes.emoji(this);
-  guild = routes.guild(this);
-  guildScheduledEvent = routes.guildScheduledEvent(this);
-  guildTemplate = routes.guildTemplate(this);
-  invite = routes.invite(this);
-  stageInstance = routes.stageInstance(this);
-  sticker = routes.sticker(this);
-  user = routes.user(this);
-  voice = routes.voice(this);
-  webhook = routes.webhook(this);
-  gateway = routes.gateway(this);
-  oauth2 = routes.oauth2(this);
+  applicationCommand = new routes.ApplicationCommand(this);
+  interactionResponse = new routes.InteractionResponse(this);
+  auditLog = new routes.AuditLog(this);
+  autoModeration = new routes.AutoModeration(this);
+  channel = new routes.Channel(this);
+  emoji = new routes.Emoji(this);
+  guild = new routes.Guild(this);
+  guildScheduledEvent = new routes.GuildScheduledEvent(this);
+  guildTemplate = new routes.GuildTemplate(this);
+  invite = new routes.Invite(this);
+  stageInstance = new routes.StageInstance(this);
+  sticker = new routes.Sticker(this);
+  user = new routes.User(this);
+  voice = new routes.Voice(this);
+  webhook = new routes.Webhook(this);
+  gateway = new routes.Gateway(this);
+  oauth2 = new routes.Oauth2(this);
 
   /** Runs a request against the Discord API. */
   async request<Output>(endpoint: string, options: RequestOptionsWithMethod): Promise<Output> {

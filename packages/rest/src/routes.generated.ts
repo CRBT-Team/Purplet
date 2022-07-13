@@ -3,9 +3,9 @@
 
 import * as Discord from 'discord-api-types/rest';
 import { FileData } from './types';
-import { group, route, type } from './route-group';
+import { group, Route } from './route-group';
 
-export const applicationCommand = group({
+export const ApplicationCommand = group({
   /**
    * ## [Get Global Application Commands](https://discordapp.com/developers/docs/interactions/application-commands#get-global-application-commands)
    * 
@@ -13,13 +13,15 @@ export const applicationCommand = group({
    * 
    * Fetch all of the global commands for your application. Returns an array of [application command](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/application-command-object) objects.
    */
-  getGlobalApplicationCommands: route({
+  getGlobalApplicationCommands: {
     method: 'GET',
     route: (applicationId: string) => `/applications/${applicationId}/commands`,
     params: ["applicationId"],
-    query: type<Discord.RESTGetAPIApplicationCommandsQuery>(),
-    result: type<Discord.RESTGetAPIApplicationCommandsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId"],
+    query: { with_localizations?: boolean },
+    result: Discord.RESTGetAPIApplicationCommandsResult,
+  }>,
   /**
    * ## [Create Global Application Command](https://discordapp.com/developers/docs/interactions/application-commands#create-global-application-command)
    * 
@@ -27,24 +29,28 @@ export const applicationCommand = group({
    * 
    * Create a new global command. Returns `201` and an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object.
    */
-  createGlobalApplicationCommand: route({
+  createGlobalApplicationCommand: {
     method: 'POST',
     route: (applicationId: string) => `/applications/${applicationId}/commands`,
     params: ["applicationId"],
-    body: type<Discord.RESTPostAPIApplicationCommandsJSONBody>(),
-    result: type<Discord.RESTPostAPIApplicationCommandsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId"],
+    body: Discord.RESTPostAPIApplicationCommandsJSONBody,
+    result: Discord.RESTPostAPIApplicationCommandsResult,
+  }>,
   /**
    * ## [Get Global Application Command](https://discordapp.com/developers/docs/interactions/application-commands#get-global-application-command)
    * 
    * Fetch a global command for your application. Returns an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object.
    */
-  getGlobalApplicationCommand: route({
+  getGlobalApplicationCommand: {
     method: 'GET',
     route: (applicationId: string, commandId: string) => `/applications/${applicationId}/commands/${commandId}`,
     params: ["applicationId", "commandId"],
-    result: type<Discord.RESTGetAPIApplicationCommandResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "commandId"],
+    result: Discord.RESTGetAPIApplicationCommandResult,
+  }>,
   /**
    * ## [Edit Global Application Command](https://discordapp.com/developers/docs/interactions/application-commands#edit-global-application-command)
    * 
@@ -52,24 +58,28 @@ export const applicationCommand = group({
    * 
    * Edit a global command. Returns `200` and an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object. All fields are optional, but any fields provided will entirely overwrite the existing values of those fields.
    */
-  editGlobalApplicationCommand: route({
+  editGlobalApplicationCommand: {
     method: 'PATCH',
     route: (applicationId: string, commandId: string) => `/applications/${applicationId}/commands/${commandId}`,
     params: ["applicationId", "commandId"],
-    body: type<Discord.RESTPatchAPIApplicationCommandJSONBody>(),
-    result: type<Discord.RESTPatchAPIApplicationCommandResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "commandId"],
+    body: Discord.RESTPatchAPIApplicationCommandJSONBody,
+    result: Discord.RESTPatchAPIApplicationCommandResult,
+  }>,
   /**
    * ## [Delete Global Application Command](https://discordapp.com/developers/docs/interactions/application-commands#delete-global-application-command)
    * 
    * Deletes a global command. Returns `204 No Content` on success.
    */
-  deleteGlobalApplicationCommand: route({
+  deleteGlobalApplicationCommand: {
     method: 'DELETE',
     route: (applicationId: string, commandId: string) => `/applications/${applicationId}/commands/${commandId}`,
     params: ["applicationId", "commandId"],
-    result: type<never>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "commandId"],
+    result: never,
+  }>,
   /**
    * ## [Bulk Overwrite Global Application Commands](https://discordapp.com/developers/docs/interactions/application-commands#bulk-overwrite-global-application-commands)
    * 
@@ -77,13 +87,15 @@ export const applicationCommand = group({
    * 
    * This will overwrite **all** types of application commands: slash commands, user commands, and message commands.
    */
-  bulkOverwriteGlobalApplicationCommands: route({
+  bulkOverwriteGlobalApplicationCommands: {
     method: 'PUT',
     route: (applicationId: string) => `/applications/${applicationId}/commands`,
     params: ["applicationId"],
-    body: type<Discord.RESTPutAPIApplicationCommandsJSONBody>(),
-    result: type<Discord.RESTPutAPIApplicationCommandsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId"],
+    body: Discord.RESTPutAPIApplicationCommandsJSONBody,
+    result: Discord.RESTPutAPIApplicationCommandsResult,
+  }>,
   /**
    * ## [Get Guild Application Commands](https://discordapp.com/developers/docs/interactions/application-commands#get-guild-application-commands)
    * 
@@ -91,13 +103,15 @@ export const applicationCommand = group({
    * 
    * Fetch all of the guild commands for your application for a specific guild. Returns an array of [application command](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/application-command-object) objects.
    */
-  getGuildApplicationCommands: route({
+  getGuildApplicationCommands: {
     method: 'GET',
     route: (applicationId: string, guildId: string) => `/applications/${applicationId}/guilds/${guildId}/commands`,
     params: ["applicationId", "guildId"],
-    query: type<{ with_localizations?: boolean }>(),
-    result: type<Discord.RESTGetAPIApplicationGuildCommandsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId"],
+    query: { with_localizations?: boolean },
+    result: Discord.RESTGetAPIApplicationGuildCommandsResult,
+  }>,
   /**
    * ## [Create Guild Application Command](https://discordapp.com/developers/docs/interactions/application-commands#create-guild-application-command)
    * 
@@ -105,24 +119,28 @@ export const applicationCommand = group({
    * 
    * Create a new guild command. New guild commands will be available in the guild immediately. Returns `201` and an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object. If the command did not already exist, it will count toward daily application command create limits.
    */
-  createGuildApplicationCommand: route({
+  createGuildApplicationCommand: {
     method: 'POST',
     route: (applicationId: string, guildId: string) => `/applications/${applicationId}/guilds/${guildId}/commands`,
     params: ["applicationId", "guildId"],
-    body: type<Discord.RESTPostAPIApplicationGuildCommandsJSONBody>(),
-    result: type<Discord.RESTPostAPIApplicationGuildCommandsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId"],
+    body: Discord.RESTPostAPIApplicationGuildCommandsJSONBody,
+    result: Discord.RESTPostAPIApplicationGuildCommandsResult,
+  }>,
   /**
    * ## [Get Guild Application Command](https://discordapp.com/developers/docs/interactions/application-commands#get-guild-application-command)
    * 
    * Fetch a guild command for your application. Returns an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object.
    */
-  getGuildApplicationCommand: route({
+  getGuildApplicationCommand: {
     method: 'GET',
     route: (applicationId: string, guildId: string, commandId: string) => `/applications/${applicationId}/guilds/${guildId}/commands/${commandId}`,
     params: ["applicationId", "guildId", "commandId"],
-    result: type<Discord.RESTGetAPIApplicationGuildCommandResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId", "commandId"],
+    result: Discord.RESTGetAPIApplicationGuildCommandResult,
+  }>,
   /**
    * ## [Edit Guild Application Command](https://discordapp.com/developers/docs/interactions/application-commands#edit-guild-application-command)
    * 
@@ -130,24 +148,28 @@ export const applicationCommand = group({
    * 
    * Edit a guild command. Updates for guild commands will be available immediately. Returns `200` and an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object. All fields are optional, but any fields provided will entirely overwrite the existing values of those fields.
    */
-  editGuildApplicationCommand: route({
+  editGuildApplicationCommand: {
     method: 'PATCH',
     route: (applicationId: string, guildId: string, commandId: string) => `/applications/${applicationId}/guilds/${guildId}/commands/${commandId}`,
     params: ["applicationId", "guildId", "commandId"],
-    body: type<Discord.RESTPatchAPIApplicationGuildCommandJSONBody>(),
-    result: type<Discord.RESTPatchAPIApplicationGuildCommandResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId", "commandId"],
+    body: Discord.RESTPatchAPIApplicationGuildCommandJSONBody,
+    result: Discord.RESTPatchAPIApplicationGuildCommandResult,
+  }>,
   /**
    * ## [Delete Guild Application Command](https://discordapp.com/developers/docs/interactions/application-commands#delete-guild-application-command)
    * 
    * Delete a guild command. Returns `204 No Content` on success.
    */
-  deleteGuildApplicationCommand: route({
+  deleteGuildApplicationCommand: {
     method: 'DELETE',
     route: (applicationId: string, guildId: string, commandId: string) => `/applications/${applicationId}/guilds/${guildId}/commands/${commandId}`,
     params: ["applicationId", "guildId", "commandId"],
-    result: type<never>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId", "commandId"],
+    result: never,
+  }>,
   /**
    * ## [Bulk Overwrite Guild Application Commands](https://discordapp.com/developers/docs/interactions/application-commands#bulk-overwrite-guild-application-commands)
    * 
@@ -155,35 +177,41 @@ export const applicationCommand = group({
    * 
    * This will overwrite **all** types of application commands: slash commands, user commands, and message commands.
    */
-  bulkOverwriteGuildApplicationCommands: route({
+  bulkOverwriteGuildApplicationCommands: {
     method: 'PUT',
     route: (applicationId: string, guildId: string) => `/applications/${applicationId}/guilds/${guildId}/commands`,
     params: ["applicationId", "guildId"],
-    body: type<Discord.RESTPutAPIApplicationGuildCommandsJSONBody>(),
-    result: type<Discord.RESTPutAPIApplicationGuildCommandsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId"],
+    body: Discord.RESTPutAPIApplicationGuildCommandsJSONBody,
+    result: Discord.RESTPutAPIApplicationGuildCommandsResult,
+  }>,
   /**
    * ## [Get Guild Application Command Permissions](https://discordapp.com/developers/docs/interactions/application-commands#get-guild-application-command-permissions)
    * 
    * Fetches permissions for all commands for your application in a guild. Returns an array of [guild application command permissions](https://discordapp.com/developers/docs/interactions/application-commands#application-command-permissions-object-guild-application-command-permissions-structure) objects.
    */
-  getGuildApplicationCommandPermissions: route({
+  getGuildApplicationCommandPermissions: {
     method: 'GET',
     route: (applicationId: string, guildId: string) => `/applications/${applicationId}/guilds/${guildId}/commands/permissions`,
     params: ["applicationId", "guildId"],
-    result: type<Discord.RESTGetAPIGuildApplicationCommandsPermissionsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId"],
+    result: Discord.RESTGetAPIGuildApplicationCommandsPermissionsResult,
+  }>,
   /**
    * ## [Get Application Command Permissions](https://discordapp.com/developers/docs/interactions/application-commands#get-application-command-permissions)
    * 
    * Fetches permissions for a specific command for your application in a guild. Returns a [guild application command permissions](https://discordapp.com/developers/docs/interactions/application-commands#application-command-permissions-object-guild-application-command-permissions-structure) object.
    */
-  getApplicationCommandPermissions: route({
+  getApplicationCommandPermissions: {
     method: 'GET',
     route: (applicationId: string, guildId: string, commandId: string) => `/applications/${applicationId}/guilds/${guildId}/commands/${commandId}/permissions`,
     params: ["applicationId", "guildId", "commandId"],
-    result: type<Discord.RESTGetAPIApplicationCommandPermissionsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId", "commandId"],
+    result: Discord.RESTGetAPIApplicationCommandPermissionsResult,
+  }>,
   /**
    * ## [Edit Application Command Permissions](https://discordapp.com/developers/docs/interactions/application-commands#edit-application-command-permissions)
    * 
@@ -197,45 +225,51 @@ export const applicationCommand = group({
    * 
    * Deleting or renaming a command will permanently delete all permissions for the command
    */
-  editApplicationCommandPermissions: route({
+  editApplicationCommandPermissions: {
     method: 'PUT',
     route: (applicationId: string, guildId: string, commandId: string) => `/applications/${applicationId}/guilds/${guildId}/commands/${commandId}/permissions`,
     params: ["applicationId", "guildId", "commandId"],
-    body: type<Discord.RESTPutAPIApplicationCommandPermissionsJSONBody>(),
-    result: type<Discord.RESTPutAPIApplicationCommandPermissionsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId", "commandId"],
+    body: Discord.RESTPutAPIApplicationCommandPermissionsJSONBody,
+    result: Discord.RESTPutAPIApplicationCommandPermissionsResult,
+  }>,
   /**
    * ## [Batch Edit Application Command Permissions](https://discordapp.com/developers/docs/interactions/application-commands#batch-edit-application-command-permissions)
    * 
    * This endpoint has been disabled with [updates to command permissions (Permissions v2)](https://discordapp.com/developers/docs/change/log#updated-command-permissions). Instead, you can [edit each application command permissions](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/edit-application-command-permissions) (though you should be careful to handle any potential [rate limits](#DOCS_TOPICS_RATE_LIMITS)).
    */
-  batchEditApplicationCommandPermissions: route({
+  batchEditApplicationCommandPermissions: {
     method: 'PUT',
     route: (applicationId: string, guildId: string) => `/applications/${applicationId}/guilds/${guildId}/commands/permissions`,
     params: ["applicationId", "guildId"],
-    body: type<Discord.RESTPutAPIGuildApplicationCommandsPermissionsJSONBody>(),
-    result: type<Discord.RESTPutAPIGuildApplicationCommandsPermissionsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "guildId"],
+    body: Discord.RESTPutAPIGuildApplicationCommandsPermissionsJSONBody,
+    result: Discord.RESTPutAPIGuildApplicationCommandsPermissionsResult,
+  }>,
 });
 
 
-export const auditLog = group({
+export const AuditLog = group({
   /**
    * ## [Get Guild Audit Log](https://discordapp.com/developers/docs/resources/audit-log#get-guild-audit-log)
    * 
    * Returns an [audit log](https://discordapp.com/developers/docs/resources/audit-log#audit-log-object) object for the guild. Requires the [`VIEW_AUDIT_LOG`](#DOCS_TOPICS_PERMISSIONS/permissions-bitwise-permission-flags) permission.
    */
-  getGuildAuditLog: route({
+  getGuildAuditLog: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/audit-logs`,
     params: ["guildId"],
-    query: type<Discord.RESTGetAPIAuditLogQuery>(),
-    result: type<Discord.RESTGetAPIAuditLogResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    query: Discord.RESTGetAPIAuditLogQuery,
+    result: Discord.RESTGetAPIAuditLogResult,
+  }>,
 });
 
 
-export const autoModeration = group({
+export const AutoModeration = group({
   /**
    * ## [List Auto Moderation Rules for Guild](https://discordapp.com/developers/docs/resources/auto-moderation#list-auto-moderation-rules-for-guild)
    * 
@@ -243,12 +277,14 @@ export const autoModeration = group({
    * 
    * This endpoint requires the `MANAGE_GUILD` [permission](#DOCS_RESOURCES_AUTO_MODERATION/auto-moderation-permission-requirements).
    */
-  listAutoModerationRulesForGuild: route({
+  listAutoModerationRulesForGuild: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/auto-moderation/rules`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildAutoModerationRulesResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildAutoModerationRulesResult,
+  }>,
   /**
    * ## [Get Auto Moderation Rule](https://discordapp.com/developers/docs/resources/auto-moderation#get-auto-moderation-rule)
    * 
@@ -256,12 +292,14 @@ export const autoModeration = group({
    * 
    * This endpoint requires the `MANAGE_GUILD` [permission](#DOCS_RESOURCES_AUTO_MODERATION/auto-moderation-permission-requirements).
    */
-  getAutoModerationRule: route({
+  getAutoModerationRule: {
     method: 'GET',
     route: (guildId: string, autoModerationRuleId: string) => `/guilds/${guildId}/auto-moderation/rules/${autoModerationRuleId}`,
     params: ["guildId", "autoModerationRuleId"],
-    result: type<Discord.RESTGetAPIGuildAutoModerationRuleResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "autoModerationRuleId"],
+    result: Discord.RESTGetAPIGuildAutoModerationRuleResult,
+  }>,
   /**
    * ## [Create Auto Moderation Rule](https://discordapp.com/developers/docs/resources/auto-moderation#create-auto-moderation-rule)
    * 
@@ -269,14 +307,16 @@ export const autoModeration = group({
    * 
    * This endpoint requires the `MANAGE_GUILD` [permission](#DOCS_RESOURCES_AUTO_MODERATION/auto-moderation-permission-requirements).
    */
-  createAutoModerationRule: route({
+  createAutoModerationRule: {
     method: 'POST',
     route: (guildId: string) => `/guilds/${guildId}/auto-moderation/rules`,
     params: ["guildId"],
-    body: type<Discord.RESTPostAPIGuildAutoModerationRulesJSONBody>(),
-    result: type<Discord.RESTPostAPIGuildAutoModerationRulesResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPostAPIGuildAutoModerationRulesJSONBody,
+    result: Discord.RESTPostAPIGuildAutoModerationRulesResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Modify Auto Moderation Rule](https://discordapp.com/developers/docs/resources/auto-moderation#modify-auto-moderation-rule)
    * 
@@ -286,14 +326,16 @@ export const autoModeration = group({
    * 
    * All parameters for this endpoint are optional.
    */
-  modifyAutoModerationRule: route({
+  modifyAutoModerationRule: {
     method: 'PATCH',
     route: (guildId: string, autoModerationRuleId: string) => `/guilds/${guildId}/auto-moderation/rules/${autoModerationRuleId}`,
     params: ["guildId", "autoModerationRuleId"],
-    body: type<Discord.RESTPatchAPIGuildAutoModerationRuleJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildAutoModerationRuleResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "autoModerationRuleId"],
+    body: Discord.RESTPatchAPIGuildAutoModerationRuleJSONBody,
+    result: Discord.RESTPatchAPIGuildAutoModerationRuleResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Auto Moderation Rule](https://discordapp.com/developers/docs/resources/auto-moderation#delete-auto-moderation-rule)
    * 
@@ -301,41 +343,47 @@ export const autoModeration = group({
    * 
    * This endpoint requires the `MANAGE_GUILD` [permission](https://discordapp.com/developers/docs/resources/auto-moderation#auto-moderation-permission-requirements).
    */
-  deleteAutoModerationRule: route({
+  deleteAutoModerationRule: {
     method: 'DELETE',
     route: (guildId: string, autoModerationRuleId: string) => `/guilds/${guildId}/auto-moderation/rules/${autoModerationRuleId}`,
     params: ["guildId", "autoModerationRuleId"],
-    result: type<Discord.RESTDeleteAPIGuildAutoModerationRuleResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "autoModerationRuleId"],
+    result: Discord.RESTDeleteAPIGuildAutoModerationRuleResult,
     reason: true,
-  } as const),
+  }>,
 });
 
 
-export const channel = group({
+export const Channel = group({
   /**
    * ## [Get Channel](https://discordapp.com/developers/docs/resources/channel#get-channel)
    * 
    * Get a channel by ID. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) object.  If the channel is a thread, a [thread member](#DOCS_RESOURCES_CHANNEL/thread-member-object) object is included in the returned result.
    */
-  getChannel: route({
+  getChannel: {
     method: 'GET',
     route: (channelId: string) => `/channels/${channelId}`,
     params: ["channelId"],
-    result: type<Discord.RESTGetAPIChannelResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTGetAPIChannelResult,
+  }>,
   /**
    * ## [Modify Channel](https://discordapp.com/developers/docs/resources/channel#modify-channel)
    * 
    * Update a channel's settings. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) on success, and a 400 BAD REQUEST on invalid parameters. All JSON parameters are optional.
    */
-  modifyChannel: route({
+  modifyChannel: {
     method: 'PATCH',
     route: (channelId: string) => `/channels/${channelId}`,
     params: ["channelId"],
-    body: type<Discord.RESTPatchAPIChannelJSONBody>(),
-    result: type<Discord.RESTPatchAPIChannelResult>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    body: Discord.RESTPatchAPIChannelJSONBody,
+    result: Discord.RESTPatchAPIChannelResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Delete/Close Channel](https://discordapp.com/developers/docs/resources/channel#deleteclose-channel)
    * 
@@ -345,13 +393,15 @@ export const channel = group({
    * 
    * For Community guilds, the Rules or Guidelines channel and the Community Updates channel cannot be deleted.
    */
-  deleteOrCloseChannel: route({
+  deleteOrCloseChannel: {
     method: 'DELETE',
     route: (channelId: string) => `/channels/${channelId}`,
     params: ["channelId"],
-    result: type<Discord.RESTDeleteAPIChannelResult>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTDeleteAPIChannelResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Channel Messages](https://discordapp.com/developers/docs/resources/channel#get-channel-messages)
    * 
@@ -359,24 +409,28 @@ export const channel = group({
    * 
    * The `before`, `after`, and `around` parameters are mutually exclusive, only one may be passed at a time.
    */
-  getChannelMessages: route({
+  getChannelMessages: {
     method: 'GET',
     route: (channelId: string) => `/channels/${channelId}/messages`,
     params: ["channelId"],
-    query: type<Discord.RESTGetAPIChannelMessagesQuery>(),
-    result: type<Discord.RESTGetAPIChannelMessagesResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    query: Discord.RESTGetAPIChannelMessagesQuery,
+    result: Discord.RESTGetAPIChannelMessagesResult,
+  }>,
   /**
    * ## [Get Channel Message](https://discordapp.com/developers/docs/resources/channel#get-channel-message)
    * 
    * Returns a specific message in the channel. If operating on a guild channel, this endpoint requires the `READ_MESSAGE_HISTORY` permission to be present on the current user. Returns a [message](https://discordapp.com/developers/docs/resources/channel#message-object) object on success.
    */
-  getChannelMessage: route({
+  getChannelMessage: {
     method: 'GET',
     route: (channelId: string, messageId: string) => `/channels/${channelId}/messages/${messageId}`,
     params: ["channelId", "messageId"],
-    result: type<Discord.RESTGetAPIChannelMessageResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "messageId"],
+    result: Discord.RESTGetAPIChannelMessageResult,
+  }>,
   /**
    * ## [Create Message](https://discordapp.com/developers/docs/resources/channel#create-message)
    * 
@@ -388,14 +442,16 @@ export const channel = group({
    * 
    * Files must be attached using a `multipart/form-data` body as described in [Uploading Files](#DOCS_REFERENCE/uploading-files).
    */
-  createMessage: route({
+  createMessage: {
     method: 'POST',
     route: (channelId: string) => `/channels/${channelId}/messages`,
     params: ["channelId"],
-    body: type<Discord.RESTPostAPIChannelMessageJSONBody>(),
-    result: type<Discord.RESTPostAPIChannelMessageResult>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    body: Discord.RESTPostAPIChannelMessageJSONBody,
+    result: Discord.RESTPostAPIChannelMessageResult,
     file: true,
-  } as const),
+  }>,
   /**
    * ## [Crosspost Message](https://discordapp.com/developers/docs/resources/channel#crosspost-message)
    * 
@@ -403,84 +459,98 @@ export const channel = group({
    * 
    * Returns a [message](https://discordapp.com/developers/docs/resources/channel#message-object) object.
    */
-  crosspostMessage: route({
+  crosspostMessage: {
     method: 'POST',
     route: (channelId: string, messageId: string) => `/channels/${channelId}/messages/${messageId}/crosspost`,
     params: ["channelId", "messageId"],
-    result: type<Discord.RESTPostAPIChannelMessageCrosspostResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "messageId"],
+    result: Discord.RESTPostAPIChannelMessageCrosspostResult,
+  }>,
   /**
    * ## [Create Reaction](https://discordapp.com/developers/docs/resources/channel#create-reaction)
    * 
    * Create a reaction for the message. This endpoint requires the `READ_MESSAGE_HISTORY` permission to be present on the current user. Additionally, if nobody else has reacted to the message using this emoji, this endpoint requires the `ADD_REACTIONS` permission to be present on the current user. Returns a 204 empty response on success.
    * The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it in the format `name:id` with the emoji name and emoji id.
    */
-  createReaction: route({
+  createReaction: {
     method: 'PUT',
     route: (channelId: string, messageId: string, emoji: string) => `/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me`,
     params: ["channelId", "messageId", "emoji"],
-    result: type<Discord.RESTPutAPIChannelMessageReactionResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "messageId", "emoji"],
+    result: Discord.RESTPutAPIChannelMessageReactionResult,
+  }>,
   /**
    * ## [Delete Own Reaction](https://discordapp.com/developers/docs/resources/channel#delete-own-reaction)
    * 
    * Delete a reaction the current user has made for the message. Returns a 204 empty response on success.
    * The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it in the format `name:id` with the emoji name and emoji id.
    */
-  deleteOwnReaction: route({
+  deleteOwnReaction: {
     method: 'DELETE',
     route: (channelId: string, messageId: string, emoji: string) => `/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me`,
     params: ["channelId", "messageId", "emoji"],
-    result: type<Discord.RESTDeleteAPIChannelMessageReactionResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "messageId", "emoji"],
+    result: Discord.RESTDeleteAPIChannelMessageReactionResult,
+  }>,
   /**
    * ## [Delete User Reaction](https://discordapp.com/developers/docs/resources/channel#delete-user-reaction)
    * 
    * Deletes another user's reaction. This endpoint requires the `MANAGE_MESSAGES` permission to be present on the current user. Returns a 204 empty response on success.
    * The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it in the format `name:id` with the emoji name and emoji id.
    */
-  deleteUserReaction: route({
+  deleteUserReaction: {
     method: 'DELETE',
     route: (channelId: string, messageId: string, emoji: string, userId: string) => `/channels/${channelId}/messages/${messageId}/reactions/${emoji}/${userId}`,
     params: ["channelId", "messageId", "emoji", "userId"],
-    result: type<Discord.RESTDeleteAPIChannelMessageReactionResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "messageId", "emoji", "userId"],
+    result: Discord.RESTDeleteAPIChannelMessageReactionResult,
+  }>,
   /**
    * ## [Get Reactions](https://discordapp.com/developers/docs/resources/channel#get-reactions)
    * 
    * Get a list of users that reacted with this emoji. Returns an array of [user](https://discordapp.com/developers/docs/resources/user#user-object) objects on success.
    * The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it in the format `name:id` with the emoji name and emoji id.
    */
-  getReactions: route({
+  getReactions: {
     method: 'GET',
     route: (channelId: string, messageId: string, emoji: string) => `/channels/${channelId}/messages/${messageId}/reactions/${emoji}`,
     params: ["channelId", "messageId", "emoji"],
-    query: type<Discord.RESTGetAPIChannelMessageReactionUsersQuery>(),
-    result: type<Discord.RESTGetAPIChannelMessageReactionUsersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "messageId", "emoji"],
+    query: Discord.RESTGetAPIChannelMessageReactionUsersQuery,
+    result: Discord.RESTGetAPIChannelMessageReactionUsersResult,
+  }>,
   /**
    * ## [Delete All Reactions](https://discordapp.com/developers/docs/resources/channel#delete-all-reactions)
    * 
    * Deletes all reactions on a message. This endpoint requires the `MANAGE_MESSAGES` permission to be present on the current user. Fires a [Message Reaction Remove All](https://discordapp.com/developers/docs/topics/gateway#message-reaction-remove-all) Gateway event.
    */
-  deleteAllReactions: route({
+  deleteAllReactions: {
     method: 'DELETE',
     route: (channelId: string, messageId: string) => `/channels/${channelId}/messages/${messageId}/reactions`,
     params: ["channelId", "messageId"],
-    result: type<Discord.RESTDeleteAPIChannelAllMessageReactionsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "messageId"],
+    result: Discord.RESTDeleteAPIChannelAllMessageReactionsResult,
+  }>,
   /**
    * ## [Delete All Reactions for Emoji](https://discordapp.com/developers/docs/resources/channel#delete-all-reactions-for-emoji)
    * 
    * Deletes all the reactions for a given emoji on a message. This endpoint requires the `MANAGE_MESSAGES` permission to be present on the current user. Fires a [Message Reaction Remove Emoji](https://discordapp.com/developers/docs/topics/gateway#message-reaction-remove-emoji) Gateway event.
    * The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it in the format `name:id` with the emoji name and emoji id.
    */
-  deleteAllReactionsForEmoji: route({
+  deleteAllReactionsForEmoji: {
     method: 'DELETE',
     route: (channelId: string, messageId: string, emoji: string) => `/channels/${channelId}/messages/${messageId}/reactions/${emoji}`,
     params: ["channelId", "messageId", "emoji"],
-    result: type<Discord.RESTDeleteAPIChannelMessageReactionResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "messageId", "emoji"],
+    result: Discord.RESTDeleteAPIChannelMessageReactionResult,
+  }>,
   /**
    * ## [Edit Message](https://discordapp.com/developers/docs/resources/channel#edit-message)
    * 
@@ -497,26 +567,30 @@ export const channel = group({
    * 
    * All parameters to this endpoint are optional and nullable.
    */
-  editMessage: route({
+  editMessage: {
     method: 'PATCH',
     route: (channelId: string, messageId: string) => `/channels/${channelId}/messages/${messageId}`,
     params: ["channelId", "messageId"],
-    body: type<Discord.RESTPatchAPIChannelMessageJSONBody>(),
-    result: type<Discord.RESTPatchAPIChannelMessageResult>(),
+  } as unknown as Route<{
+    params: ["channelId", "messageId"],
+    body: Discord.RESTPatchAPIChannelMessageJSONBody,
+    result: Discord.RESTPatchAPIChannelMessageResult,
     file: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Message](https://discordapp.com/developers/docs/resources/channel#delete-message)
    * 
    * Delete a message. If operating on a guild channel and trying to delete a message that was not sent by the current user, this endpoint requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success. Fires a [Message Delete](https://discordapp.com/developers/docs/topics/gateway#message-delete) Gateway event.
    */
-  deleteMessage: route({
+  deleteMessage: {
     method: 'DELETE',
     route: (channelId: string, messageId: string) => `/channels/${channelId}/messages/${messageId}`,
     params: ["channelId", "messageId"],
-    result: type<Discord.RESTDeleteAPIChannelMessageResult>(),
+  } as unknown as Route<{
+    params: ["channelId", "messageId"],
+    result: Discord.RESTDeleteAPIChannelMessageResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Bulk Delete Messages](https://discordapp.com/developers/docs/resources/channel#bulk-delete-messages)
    * 
@@ -526,97 +600,113 @@ export const channel = group({
    * 
    * This endpoint will not delete messages older than 2 weeks, and will fail with a 400 BAD REQUEST if any message provided is older than that or if any duplicate message IDs are provided.
    */
-  bulkDeleteMessages: route({
+  bulkDeleteMessages: {
     method: 'POST',
     route: (channelId: string) => `/channels/${channelId}/messages/bulk-delete`,
     params: ["channelId"],
-    body: type<Discord.RESTPostAPIChannelMessagesBulkDeleteJSONBody>(),
-    result: type<Discord.RESTPostAPIChannelMessagesBulkDeleteResult>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    body: Discord.RESTPostAPIChannelMessagesBulkDeleteJSONBody,
+    result: Discord.RESTPostAPIChannelMessagesBulkDeleteResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Edit Channel Permissions](https://discordapp.com/developers/docs/resources/channel#edit-channel-permissions)
    * 
    * Edit the channel permission overwrites for a user or role in a channel. Only usable for guild channels. Requires the `MANAGE_ROLES` permission. Only permissions your bot has in the guild or parent channel (if applicable) can be allowed/denied (unless your bot has a `MANAGE_ROLES` overwrite in the channel). Returns a 204 empty response on success. For more information about permissions, see [permissions](https://discordapp.com/developers/docs/topics/permissions#permissions).
    */
-  editChannelPermissions: route({
+  editChannelPermissions: {
     method: 'PUT',
     route: (channelId: string, overwriteId: string) => `/channels/${channelId}/permissions/${overwriteId}`,
     params: ["channelId", "overwriteId"],
-    body: type<Discord.RESTPutAPIChannelPermissionJSONBody>(),
-    result: type<Discord.RESTPutAPIChannelPermissionResult>(),
+  } as unknown as Route<{
+    params: ["channelId", "overwriteId"],
+    body: Discord.RESTPutAPIChannelPermissionJSONBody,
+    result: Discord.RESTPutAPIChannelPermissionResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Channel Invites](https://discordapp.com/developers/docs/resources/channel#get-channel-invites)
    * 
    * Returns a list of [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) objects (with [invite metadata](#DOCS_RESOURCES_INVITE/invite-metadata-object)) for the channel. Only usable for guild channels. Requires the `MANAGE_CHANNELS` permission.
    */
-  getChannelInvites: route({
+  getChannelInvites: {
     method: 'GET',
     route: (channelId: string) => `/channels/${channelId}/invites`,
     params: ["channelId"],
-    result: type<Discord.RESTGetAPIChannelInvitesResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTGetAPIChannelInvitesResult,
+  }>,
   /**
    * ## [Create Channel Invite](https://discordapp.com/developers/docs/resources/channel#create-channel-invite)
    * 
    * Create a new [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) object for the channel. Only usable for guild channels. Requires the `CREATE_INSTANT_INVITE` permission. All JSON parameters for this route are optional, however the request body is not. If you are not sending any fields, you still have to send an empty JSON object (`{}`). Returns an [invite](#DOCS_RESOURCES_INVITE/invite-object) object. Fires an [Invite Create](#DOCS_TOPICS_GATEWAY/invite-create) Gateway event.
    */
-  createChannelInvite: route({
+  createChannelInvite: {
     method: 'POST',
     route: (channelId: string) => `/channels/${channelId}/invites`,
     params: ["channelId"],
-    body: type<Discord.RESTPostAPIChannelInviteJSONBody>(),
-    result: type<Discord.RESTPostAPIChannelInviteResult>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    body: Discord.RESTPostAPIChannelInviteJSONBody,
+    result: Discord.RESTPostAPIChannelInviteResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Channel Permission](https://discordapp.com/developers/docs/resources/channel#delete-channel-permission)
    * 
    * Delete a channel permission overwrite for a user or role in a channel. Only usable for guild channels. Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. For more information about permissions, see [permissions](https://discordapp.com/developers/docs/topics/permissions#permissions)
    */
-  deleteChannelPermission: route({
+  deleteChannelPermission: {
     method: 'DELETE',
     route: (channelId: string, overwriteId: string) => `/channels/${channelId}/permissions/${overwriteId}`,
     params: ["channelId", "overwriteId"],
-    result: type<Discord.RESTDeleteAPIChannelPermissionResult>(),
+  } as unknown as Route<{
+    params: ["channelId", "overwriteId"],
+    result: Discord.RESTDeleteAPIChannelPermissionResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Follow News Channel](https://discordapp.com/developers/docs/resources/channel#follow-news-channel)
    * 
    * Follow a News Channel to send messages to a target channel. Requires the `MANAGE_WEBHOOKS` permission in the target channel. Returns a [followed channel](https://discordapp.com/developers/docs/resources/channel#followed-channel-object) object.
    */
-  followNewsChannel: route({
+  followNewsChannel: {
     method: 'POST',
     route: (channelId: string) => `/channels/${channelId}/followers`,
     params: ["channelId"],
-    body: type<Discord.RESTPostAPIChannelFollowersJSONBody>(),
-    result: type<Discord.RESTPostAPIChannelFollowersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    body: Discord.RESTPostAPIChannelFollowersJSONBody,
+    result: Discord.RESTPostAPIChannelFollowersResult,
+  }>,
   /**
    * ## [Trigger Typing Indicator](https://discordapp.com/developers/docs/resources/channel#trigger-typing-indicator)
    * 
    * Post a typing indicator for the specified channel. Generally bots should **not** implement this route. However, if a bot is responding to a command and expects the computation to take a few seconds, this endpoint may be called to let the user know that the bot is processing their message. Returns a 204 empty response on success. Fires a [Typing Start](https://discordapp.com/developers/docs/topics/gateway#typing-start) Gateway event.
    */
-  triggerTypingIndicator: route({
+  triggerTypingIndicator: {
     method: 'POST',
     route: (channelId: string) => `/channels/${channelId}/typing`,
     params: ["channelId"],
-    result: type<Discord.RESTPostAPIChannelTypingResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTPostAPIChannelTypingResult,
+  }>,
   /**
    * ## [Get Pinned Messages](https://discordapp.com/developers/docs/resources/channel#get-pinned-messages)
    * 
    * Returns all pinned messages in the channel as an array of [message](https://discordapp.com/developers/docs/resources/channel#message-object) objects.
    */
-  getPinnedMessages: route({
+  getPinnedMessages: {
     method: 'GET',
     route: (channelId: string) => `/channels/${channelId}/pins`,
     params: ["channelId"],
-    result: type<Discord.RESTGetAPIChannelPinsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTGetAPIChannelPinsResult,
+  }>,
   /**
    * ## [Pin Message](https://discordapp.com/developers/docs/resources/channel#pin-message)
    * 
@@ -624,48 +714,56 @@ export const channel = group({
    * 
    * The max pinned messages is 50.
    */
-  pinMessage: route({
+  pinMessage: {
     method: 'PUT',
     route: (channelId: string, messageId: string) => `/channels/${channelId}/pins/${messageId}`,
     params: ["channelId", "messageId"],
-    result: type<Discord.RESTPutAPIChannelPinResult>(),
+  } as unknown as Route<{
+    params: ["channelId", "messageId"],
+    result: Discord.RESTPutAPIChannelPinResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Unpin Message](https://discordapp.com/developers/docs/resources/channel#unpin-message)
    * 
    * Unpin a message in a channel. Requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success.
    */
-  unpinMessage: route({
+  unpinMessage: {
     method: 'DELETE',
     route: (channelId: string, messageId: string) => `/channels/${channelId}/pins/${messageId}`,
     params: ["channelId", "messageId"],
-    result: type<Discord.RESTDeleteAPIChannelPinResult>(),
+  } as unknown as Route<{
+    params: ["channelId", "messageId"],
+    result: Discord.RESTDeleteAPIChannelPinResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Group DM Add Recipient](https://discordapp.com/developers/docs/resources/channel#group-dm-add-recipient)
    * 
    * Adds a recipient to a Group DM using their access token.
    */
-  groupDMAddRecipient: route({
+  groupDMAddRecipient: {
     method: 'PUT',
     route: (channelId: string, userId: string) => `/channels/${channelId}/recipients/${userId}`,
     params: ["channelId", "userId"],
-    body: type<Discord.RESTPutAPIChannelRecipientJSONBody>(),
-    result: type<Discord.RESTPutAPIChannelRecipientResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "userId"],
+    body: Discord.RESTPutAPIChannelRecipientJSONBody,
+    result: Discord.RESTPutAPIChannelRecipientResult,
+  }>,
   /**
    * ## [Group DM Remove Recipient](https://discordapp.com/developers/docs/resources/channel#group-dm-remove-recipient)
    * 
    * Removes a recipient from a Group DM.
    */
-  groupDMRemoveRecipient: route({
+  groupDMRemoveRecipient: {
     method: 'DELETE',
     route: (channelId: string, userId: string) => `/channels/${channelId}/recipients/${userId}`,
     params: ["channelId", "userId"],
-    result: type<Discord.RESTDeleteAPIChannelRecipientResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "userId"],
+    result: Discord.RESTDeleteAPIChannelRecipientResult,
+  }>,
   /**
    * ## [Start Thread from Message](https://discordapp.com/developers/docs/resources/channel#start-thread-from-message)
    * 
@@ -673,14 +771,16 @@ export const channel = group({
    * 
    * When called on a `GUILD_TEXT` channel, creates a `GUILD_PUBLIC_THREAD`. When called on a `GUILD_NEWS` channel, creates a `GUILD_NEWS_THREAD`. Does not work on a [`GUILD_FORUM`](#DOCS_RESOURCES_CHANNEL/start-thread-in-forum-channel) channel. The id of the created thread will be the same as the id of the source message, and as such a message can only have a single thread created from it.
    */
-  startThreadFromMessage: route({
+  startThreadFromMessage: {
     method: 'POST',
     route: (channelId: string, messageId: string) => `/channels/${channelId}/messages/${messageId}/threads`,
     params: ["channelId", "messageId"],
-    body: type<Discord.RESTPostAPIChannelMessagesThreadsJSONBody>(),
-    result: type<Discord.RESTPostAPIChannelMessagesThreadsResult>(),
+  } as unknown as Route<{
+    params: ["channelId", "messageId"],
+    body: Discord.RESTPostAPIChannelMessagesThreadsJSONBody,
+    result: Discord.RESTPostAPIChannelMessagesThreadsResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Start Thread without Message](https://discordapp.com/developers/docs/resources/channel#start-thread-without-message)
    * 
@@ -688,14 +788,16 @@ export const channel = group({
    * 
    * Creating a private thread requires the server to be boosted. The [guild features](#DOCS_RESOURCES_GUILD/guild-object-guild-features) will indicate if that is possible for the guild.
    */
-  startThreadWithoutMessage: route({
+  startThreadWithoutMessage: {
     method: 'POST',
     route: (channelId: string) => `/channels/${channelId}/threads`,
     params: ["channelId"],
-    body: type<Discord.RESTPostAPIChannelThreadsJSONBody>(),
-    result: type<Discord.RESTPostAPIChannelThreadsResult>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    body: Discord.RESTPostAPIChannelThreadsJSONBody,
+    result: Discord.RESTPostAPIChannelThreadsResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Start Thread in Forum Channel](https://discordapp.com/developers/docs/resources/channel#start-thread-in-forum-channel)
    * 
@@ -712,70 +814,82 @@ export const channel = group({
    * 
    * Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing `allowed_mentions` to prevent unexpected mentions.
    */
-  startThreadInForumChannel: route({
+  startThreadInForumChannel: {
     method: 'POST',
     route: (channelId: string) => `/channels/${channelId}/threads`,
     params: ["channelId"],
-    body: type<Discord.RESTPostAPIChannelThreadsJSONBody>(),
-    result: type<Discord.RESTPostAPIChannelThreadsResult>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    body: Discord.RESTPostAPIChannelThreadsJSONBody,
+    result: Discord.RESTPostAPIChannelThreadsResult,
     file: true,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Join Thread](https://discordapp.com/developers/docs/resources/channel#join-thread)
    * 
    * Adds the current user to a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway#thread-members-update) Gateway event.
    */
-  joinThread: route({
+  joinThread: {
     method: 'PUT',
     route: (channelId: string) => `/channels/${channelId}/thread-members/@me`,
     params: ["channelId"],
-    result: type<Discord.RESTPutAPIChannelThreadMembersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTPutAPIChannelThreadMembersResult,
+  }>,
   /**
    * ## [Add Thread Member](https://discordapp.com/developers/docs/resources/channel#add-thread-member)
    * 
    * Adds another member to a thread. Requires the ability to send messages in the thread. Also requires the thread is not archived. Returns a 204 empty response if the member is successfully added or was already a member of the thread. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway#thread-members-update) Gateway event.
    */
-  addThreadMember: route({
+  addThreadMember: {
     method: 'PUT',
     route: (channelId: string, userId: string) => `/channels/${channelId}/thread-members/${userId}`,
     params: ["channelId", "userId"],
-    result: type<Discord.RESTPutAPIChannelThreadMembersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "userId"],
+    result: Discord.RESTPutAPIChannelThreadMembersResult,
+  }>,
   /**
    * ## [Leave Thread](https://discordapp.com/developers/docs/resources/channel#leave-thread)
    * 
    * Removes the current user from a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway#thread-members-update) Gateway event.
    */
-  leaveThread: route({
+  leaveThread: {
     method: 'DELETE',
     route: (channelId: string) => `/channels/${channelId}/thread-members/@me`,
     params: ["channelId"],
-    result: type<Discord.RESTDeleteAPIChannelThreadMembersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTDeleteAPIChannelThreadMembersResult,
+  }>,
   /**
    * ## [Remove Thread Member](https://discordapp.com/developers/docs/resources/channel#remove-thread-member)
    * 
    * Removes another member from a thread. Requires the `MANAGE_THREADS` permission, or the creator of the thread if it is a `GUILD_PRIVATE_THREAD`. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway#thread-members-update) Gateway event.
    */
-  removeThreadMember: route({
+  removeThreadMember: {
     method: 'DELETE',
     route: (channelId: string, userId: string) => `/channels/${channelId}/thread-members/${userId}`,
     params: ["channelId", "userId"],
-    result: type<Discord.RESTDeleteAPIChannelThreadMembersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "userId"],
+    result: Discord.RESTDeleteAPIChannelThreadMembersResult,
+  }>,
   /**
    * ## [Get Thread Member](https://discordapp.com/developers/docs/resources/channel#get-thread-member)
    * 
    * Returns a [thread member](https://discordapp.com/developers/docs/resources/channel#thread-member-object) object for the specified user if they are a member of the thread, returns a 404 response otherwise.
    */
-  getThreadMember: route({
+  getThreadMember: {
     method: 'GET',
     route: (channelId: string, userId: string) => `/channels/${channelId}/thread-members/${userId}`,
     params: ["channelId", "userId"],
-    result: type<Discord.RESTGetAPIChannelThreadMembersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId", "userId"],
+    result: Discord.RESTGetAPIChannelThreadMembersResult,
+  }>,
   /**
    * ## [List Thread Members](https://discordapp.com/developers/docs/resources/channel#list-thread-members)
    * 
@@ -783,74 +897,86 @@ export const channel = group({
    * 
    * This endpoint is restricted according to whether the `GUILD_MEMBERS` [Privileged Intent](#DOCS_TOPICS_GATEWAY/privileged-intents) is enabled for your application.
    */
-  listThreadMembers: route({
+  listThreadMembers: {
     method: 'GET',
     route: (channelId: string) => `/channels/${channelId}/thread-members`,
     params: ["channelId"],
-    result: type<Discord.RESTGetAPIChannelThreadMembersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTGetAPIChannelThreadMembersResult,
+  }>,
   /**
    * ## [List Public Archived Threads](https://discordapp.com/developers/docs/resources/channel#list-public-archived-threads)
    * 
    * Returns archived threads in the channel that are public. When called on a `GUILD_TEXT` channel, returns threads of [type](https://discordapp.com/developers/docs/resources/channel#channel-object-channel-types) `GUILD_PUBLIC_THREAD`. When called on a `GUILD_NEWS` channel returns threads of [type](#DOCS_RESOURCES_CHANNEL/channel-object-channel-types) `GUILD_NEWS_THREAD`. Threads are ordered by `archive_timestamp`, in descending order. Requires the `READ_MESSAGE_HISTORY` permission.
    */
-  listPublicArchivedThreads: route({
+  listPublicArchivedThreads: {
     method: 'GET',
     route: (channelId: string) => `/channels/${channelId}/threads/archived/public`,
     params: ["channelId"],
-    query: type<Discord.RESTGetAPIChannelThreadsArchivedPublicQuery>(),
-    result: type<Discord.RESTGetAPIChannelThreadsArchivedPublicResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    query: Discord.RESTGetAPIChannelThreadsArchivedPublicQuery,
+    result: Discord.RESTGetAPIChannelThreadsArchivedPublicResult,
+  }>,
   /**
    * ## [List Private Archived Threads](https://discordapp.com/developers/docs/resources/channel#list-private-archived-threads)
    * 
    * Returns archived threads in the channel that are of [type](https://discordapp.com/developers/docs/resources/channel#channel-object-channel-types) `GUILD_PRIVATE_THREAD`. Threads are ordered by `archive_timestamp`, in descending order. Requires both the `READ_MESSAGE_HISTORY` and `MANAGE_THREADS` permissions.
    */
-  listPrivateArchivedThreads: route({
+  listPrivateArchivedThreads: {
     method: 'GET',
     route: (channelId: string) => `/channels/${channelId}/threads/archived/private`,
     params: ["channelId"],
-    query: type<Discord.RESTGetAPIChannelThreadsArchivedPrivateQuery>(),
-    result: type<Discord.RESTGetAPIChannelThreadsArchivedPrivateResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    query: Discord.RESTGetAPIChannelThreadsArchivedPrivateQuery,
+    result: Discord.RESTGetAPIChannelThreadsArchivedPrivateResult,
+  }>,
   /**
    * ## [List Joined Private Archived Threads](https://discordapp.com/developers/docs/resources/channel#list-joined-private-archived-threads)
    * 
    * Returns archived threads in the channel that are of [type](https://discordapp.com/developers/docs/resources/channel#channel-object-channel-types) `GUILD_PRIVATE_THREAD`, and the user has joined. Threads are ordered by their `id`, in descending order. Requires the `READ_MESSAGE_HISTORY` permission.
    */
-  listJoinedPrivateArchivedThreads: route({
+  listJoinedPrivateArchivedThreads: {
     method: 'GET',
     route: (channelId: string) => `/channels/${channelId}/users/@me/threads/archived/private`,
     params: ["channelId"],
-    query: type<Discord.RESTGetAPIChannelCurrentUserThreadsArchivedPrivateQuery>(),
-    result: type<Discord.RESTGetAPIChannelCurrentUserThreadsArchivedPrivateResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    query: Discord.RESTGetAPIChannelCurrentUserThreadsArchivedPrivateQuery,
+    result: Discord.RESTGetAPIChannelCurrentUserThreadsArchivedPrivateResult,
+  }>,
 });
 
 
-export const emoji = group({
+export const Emoji = group({
   /**
    * ## [List Guild Emojis](https://discordapp.com/developers/docs/resources/emoji#list-guild-emojis)
    * 
    * Returns a list of [emoji](https://discordapp.com/developers/docs/resources/emoji#emoji-object) objects for the given guild.
    */
-  listGuildEmojis: route({
+  listGuildEmojis: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/emojis`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildEmojisResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildEmojisResult,
+  }>,
   /**
    * ## [Get Guild Emoji](https://discordapp.com/developers/docs/resources/emoji#get-guild-emoji)
    * 
    * Returns an [emoji](https://discordapp.com/developers/docs/resources/emoji#emoji-object) object for the given guild and emoji IDs.
    */
-  getGuildEmoji: route({
+  getGuildEmoji: {
     method: 'GET',
     route: (guildId: string, emojiId: string) => `/guilds/${guildId}/emojis/${emojiId}`,
     params: ["guildId", "emojiId"],
-    result: type<Discord.RESTGetAPIGuildEmojiResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "emojiId"],
+    result: Discord.RESTGetAPIGuildEmojiResult,
+  }>,
   /**
    * ## [Create Guild Emoji](https://discordapp.com/developers/docs/resources/emoji#create-guild-emoji)
    * 
@@ -858,14 +984,16 @@ export const emoji = group({
    * 
    * Emojis and animated emojis have a maximum file size of 256kb. Attempting to upload an emoji larger than this limit will fail and return 400 Bad Request and an error message, but not a [JSON status code](#DOCS_TOPICS_OPCODES_AND_STATUS_CODES/json).
    */
-  createGuildEmoji: route({
+  createGuildEmoji: {
     method: 'POST',
     route: (guildId: string) => `/guilds/${guildId}/emojis`,
     params: ["guildId"],
-    body: type<Discord.RESTPostAPIGuildEmojiJSONBody>(),
-    result: type<Discord.RESTPostAPIGuildEmojiResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPostAPIGuildEmojiJSONBody,
+    result: Discord.RESTPostAPIGuildEmojiResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Modify Guild Emoji](https://discordapp.com/developers/docs/resources/emoji#modify-guild-emoji)
    * 
@@ -873,30 +1001,34 @@ export const emoji = group({
    * 
    * All parameters to this endpoint are optional.
    */
-  modifyGuildEmoji: route({
+  modifyGuildEmoji: {
     method: 'PATCH',
     route: (guildId: string, emojiId: string) => `/guilds/${guildId}/emojis/${emojiId}`,
     params: ["guildId", "emojiId"],
-    body: type<Discord.RESTPatchAPIGuildEmojiJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildEmojiResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "emojiId"],
+    body: Discord.RESTPatchAPIGuildEmojiJSONBody,
+    result: Discord.RESTPatchAPIGuildEmojiResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Guild Emoji](https://discordapp.com/developers/docs/resources/emoji#delete-guild-emoji)
    * 
    * Delete the given emoji. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns `204 No Content` on success. Fires a [Guild Emojis Update](https://discordapp.com/developers/docs/topics/gateway#guild-emojis-update) Gateway event.
    */
-  deleteGuildEmoji: route({
+  deleteGuildEmoji: {
     method: 'DELETE',
     route: (guildId: string, emojiId: string) => `/guilds/${guildId}/emojis/${emojiId}`,
     params: ["guildId", "emojiId"],
-    result: type<never>(),
+  } as unknown as Route<{
+    params: ["guildId", "emojiId"],
+    result: never,
     reason: true,
-  } as const),
+  }>,
 });
 
 
-export const gateway = group({
+export const Gateway = group({
   /**
    * ## [Get Gateway](https://discordapp.com/developers/docs/topics/gateway#get-gateway)
    * 
@@ -904,11 +1036,12 @@ export const gateway = group({
    * 
    * Returns an object with a single valid WSS URL, which the client can use for [Connecting](https://discordapp.com/developers/docs/topics/gateway#connecting). Clients **should** cache this value and only call this endpoint to retrieve a new URL if they are unable to properly establish a connection using the cached version of the URL.
    */
-  getGateway: route({
+  getGateway: {
     method: 'GET',
     route: "/gateway",
-    result: type<Discord.RESTGetAPIGatewayResult>(),
-  } as const),
+  } as unknown as Route<{
+    result: Discord.RESTGetAPIGatewayResult,
+  }>,
   /**
    * ## [Get Gateway Bot](https://discordapp.com/developers/docs/topics/gateway#get-gateway-bot)
    * 
@@ -916,15 +1049,16 @@ export const gateway = group({
    * 
    * Returns an object based on the information in [Get Gateway](https://discordapp.com/developers/docs/topics/gateway#get-gateway), plus additional metadata that can help during the operation of large or [sharded](#DOCS_TOPICS_GATEWAY/sharding) bots. Unlike the [Get Gateway](#DOCS_TOPICS_GATEWAY/get-gateway), this route should not be cached for extended periods of time as the value is not guaranteed to be the same per-call, and changes as the bot joins/leaves guilds.
    */
-  getGatewayBot: route({
+  getGatewayBot: {
     method: 'GET',
     route: "/gateway/bot",
-    result: type<Discord.RESTGetAPIGatewayBotResult>(),
-  } as const),
+  } as unknown as Route<{
+    result: Discord.RESTGetAPIGatewayBotResult,
+  }>,
 });
 
 
-export const guild = group({
+export const Guild = group({
   /**
    * ## [Create Guild](https://discordapp.com/developers/docs/resources/guild#create-guild)
    * 
@@ -932,35 +1066,40 @@ export const guild = group({
    * 
    * This endpoint can be used only by bots in less than 10 guilds.
    */
-  createGuild: route({
+  createGuild: {
     method: 'POST',
     route: "/guilds",
-    body: type<Discord.RESTPostAPIGuildsJSONBody>(),
-    result: type<Discord.RESTPostAPIGuildsResult>(),
-  } as const),
+  } as unknown as Route<{
+    body: Discord.RESTPostAPIGuildsJSONBody,
+    result: Discord.RESTPostAPIGuildsResult,
+  }>,
   /**
    * ## [Get Guild](https://discordapp.com/developers/docs/resources/guild#get-guild)
    * 
    * Returns the [guild](https://discordapp.com/developers/docs/resources/guild#guild-object) object for the given id. If `with_counts` is set to `true`, this endpoint will also return `approximate_member_count` and `approximate_presence_count` for the guild.
    */
-  getGuild: route({
+  getGuild: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}`,
     params: ["guildId"],
-    query: type<Discord.RESTGetAPIGuildQuery>(),
-    result: type<Discord.RESTGetAPIGuildResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    query: Discord.RESTGetAPIGuildQuery,
+    result: Discord.RESTGetAPIGuildResult,
+  }>,
   /**
    * ## [Get Guild Preview](https://discordapp.com/developers/docs/resources/guild#get-guild-preview)
    * 
    * Returns the [guild preview](https://discordapp.com/developers/docs/resources/guild#guild-preview-object) object for the given id. If the user is not in the guild, then the guild must be lurkable.
    */
-  getGuildPreview: route({
+  getGuildPreview: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/preview`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildPreviewResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildPreviewResult,
+  }>,
   /**
    * ## [Modify Guild](https://discordapp.com/developers/docs/resources/guild#modify-guild)
    * 
@@ -970,36 +1109,42 @@ export const guild = group({
    * 
    * Attempting to add or remove the `COMMUNITY` [guild feature](#DOCS_RESOURCES_GUILD/guild-object-guild-features) requires the `ADMINISTRATOR` permission.
    */
-  modifyGuild: route({
+  modifyGuild: {
     method: 'PATCH',
     route: (guildId: string) => `/guilds/${guildId}`,
     params: ["guildId"],
-    body: type<Discord.RESTPatchAPIGuildJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPatchAPIGuildJSONBody,
+    result: Discord.RESTPatchAPIGuildResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Guild](https://discordapp.com/developers/docs/resources/guild#delete-guild)
    * 
    * Delete a guild permanently. User must be owner. Returns `204 No Content` on success. Fires a [Guild Delete](https://discordapp.com/developers/docs/topics/gateway#guild-delete) Gateway event.
    */
-  deleteGuild: route({
+  deleteGuild: {
     method: 'DELETE',
     route: (guildId: string) => `/guilds/${guildId}`,
     params: ["guildId"],
-    result: type<never>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: never,
+  }>,
   /**
    * ## [Get Guild Channels](https://discordapp.com/developers/docs/resources/guild#get-guild-channels)
    * 
    * Returns a list of guild [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) objects. Does not include threads.
    */
-  getGuildChannels: route({
+  getGuildChannels: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/channels`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildChannelsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildChannelsResult,
+  }>,
   /**
    * ## [Create Guild Channel](https://discordapp.com/developers/docs/resources/guild#create-guild-channel)
    * 
@@ -1007,14 +1152,16 @@ export const guild = group({
    * 
    * All parameters to this endpoint are optional and nullable excluding `name`
    */
-  createGuildChannel: route({
+  createGuildChannel: {
     method: 'POST',
     route: (guildId: string) => `/guilds/${guildId}/channels`,
     params: ["guildId"],
-    body: type<Discord.RESTPostAPIGuildChannelJSONBody>(),
-    result: type<Discord.RESTPostAPIGuildChannelResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPostAPIGuildChannelJSONBody,
+    result: Discord.RESTPostAPIGuildChannelResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Modify Guild Channel Positions](https://discordapp.com/developers/docs/resources/guild#modify-guild-channel-positions)
    * 
@@ -1022,35 +1169,41 @@ export const guild = group({
    * 
    * Only channels to be modified are required.
    */
-  modifyGuildChannelPositions: route({
+  modifyGuildChannelPositions: {
     method: 'PATCH',
     route: (guildId: string) => `/guilds/${guildId}/channels`,
     params: ["guildId"],
-    body: type<Discord.RESTPatchAPIGuildChannelPositionsJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildChannelPositionsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPatchAPIGuildChannelPositionsJSONBody,
+    result: Discord.RESTPatchAPIGuildChannelPositionsResult,
+  }>,
   /**
    * ## [List Active Guild Threads](https://discordapp.com/developers/docs/resources/guild#list-active-guild-threads)
    * 
    * Returns all active threads in the guild, including public and private threads. Threads are ordered by their `id`, in descending order.
    */
-  listActiveGuildThreads: route({
+  listActiveGuildThreads: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/threads/active`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildThreadsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildThreadsResult,
+  }>,
   /**
    * ## [Get Guild Member](https://discordapp.com/developers/docs/resources/guild#get-guild-member)
    * 
    * Returns a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object) object for the specified user.
    */
-  getGuildMember: route({
+  getGuildMember: {
     method: 'GET',
     route: (guildId: string, userId: string) => `/guilds/${guildId}/members/${userId}`,
     params: ["guildId", "userId"],
-    result: type<Discord.RESTGetAPIGuildMemberResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "userId"],
+    result: Discord.RESTGetAPIGuildMemberResult,
+  }>,
   /**
    * ## [List Guild Members](https://discordapp.com/developers/docs/resources/guild#list-guild-members)
    * 
@@ -1060,13 +1213,15 @@ export const guild = group({
    * 
    * All parameters to this endpoint are optional
    */
-  listGuildMembers: route({
+  listGuildMembers: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/members`,
     params: ["guildId"],
-    query: type<Discord.RESTGetAPIGuildMembersQuery>(),
-    result: type<Discord.RESTGetAPIGuildMembersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    query: Discord.RESTGetAPIGuildMembersQuery,
+    result: Discord.RESTGetAPIGuildMembersResult,
+  }>,
   /**
    * ## [Search Guild Members](https://discordapp.com/developers/docs/resources/guild#search-guild-members)
    * 
@@ -1074,13 +1229,15 @@ export const guild = group({
    * 
    * All parameters to this endpoint except for `query` are optional
    */
-  searchGuildMembers: route({
+  searchGuildMembers: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/members/search`,
     params: ["guildId"],
-    query: type<Discord.RESTGetAPIGuildMembersSearchQuery>(),
-    result: type<Discord.RESTGetAPIGuildMembersSearchResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    query: Discord.RESTGetAPIGuildMembersSearchQuery,
+    result: Discord.RESTGetAPIGuildMembersSearchResult,
+  }>,
   /**
    * ## [Add Guild Member](https://discordapp.com/developers/docs/resources/guild#add-guild-member)
    * 
@@ -1092,13 +1249,15 @@ export const guild = group({
    * 
    * The Authorization header must be a Bot token (belonging to the same application used for authorization), and the bot must be a member of the guild with `CREATE_INSTANT_INVITE` permission.
    */
-  addGuildMember: route({
+  addGuildMember: {
     method: 'PUT',
     route: (guildId: string, userId: string) => `/guilds/${guildId}/members/${userId}`,
     params: ["guildId", "userId"],
-    body: type<Discord.RESTPutAPIGuildMemberJSONBody>(),
-    result: type<never>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "userId"],
+    body: Discord.RESTPutAPIGuildMemberJSONBody,
+    result: never,
+  }>,
   /**
    * ## [Modify Guild Member](https://discordapp.com/developers/docs/resources/guild#modify-guild-member)
    * 
@@ -1106,27 +1265,31 @@ export const guild = group({
    * 
    * All parameters to this endpoint are optional and nullable. When moving members to channels, the API user _must_ have permissions to both connect to the channel and have the `MOVE_MEMBERS` permission.
    */
-  modifyGuildMember: route({
+  modifyGuildMember: {
     method: 'PATCH',
     route: (guildId: string, userId: string) => `/guilds/${guildId}/members/${userId}`,
     params: ["guildId", "userId"],
-    body: type<Discord.RESTPatchAPIGuildMemberJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildMemberResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "userId"],
+    body: Discord.RESTPatchAPIGuildMemberJSONBody,
+    result: Discord.RESTPatchAPIGuildMemberResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Modify Current Member](https://discordapp.com/developers/docs/resources/guild#modify-current-member)
    * 
    * Modifies the current member in a guild. Returns a 200 with the updated member object on success. Fires a [Guild Member Update](https://discordapp.com/developers/docs/topics/gateway#guild-member-update) Gateway event.
    */
-  modifyCurrentMember: route({
+  modifyCurrentMember: {
     method: 'PATCH',
     route: (guildId: string) => `/guilds/${guildId}/members/@me`,
     params: ["guildId"],
-    body: type<Discord.RESTPatchAPICurrentGuildMemberJSONBody>(),
-    result: type<Discord.RESTGetAPIGuildMemberResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPatchAPICurrentGuildMemberJSONBody,
+    result: Discord.RESTGetAPIGuildMemberResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * @deprecated **Deprecated in favor of [Modify Current Member](https://discordapp.com/developers/docs/resources/guild#modify-current-member).**
    * 
@@ -1134,135 +1297,157 @@ export const guild = group({
    * 
    * Modifies the nickname of the current user in a guild. Returns a 200 with the nickname on success. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY/guild-member-update) Gateway event.
    */
-  modifyCurrentUserNick: route({
+  modifyCurrentUserNick: {
     method: 'PATCH',
     route: (guildId: string) => `/guilds/${guildId}/members/@me/nick`,
     params: ["guildId"],
-    body: type<Discord.RESTPatchAPICurrentGuildMemberNicknameJSONBody>(),
-    result: type<Discord.RESTPatchAPICurrentGuildMemberNicknameResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPatchAPICurrentGuildMemberNicknameJSONBody,
+    result: Discord.RESTPatchAPICurrentGuildMemberNicknameResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Add Guild Member Role](https://discordapp.com/developers/docs/resources/guild#add-guild-member-role)
    * 
    * Adds a role to a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object). Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY/guild-member-update) Gateway event.
    */
-  addGuildMemberRole: route({
+  addGuildMemberRole: {
     method: 'PUT',
     route: (guildId: string, userId: string, roleId: string) => `/guilds/${guildId}/members/${userId}/roles/${roleId}`,
     params: ["guildId", "userId", "roleId"],
-    result: type<Discord.RESTPutAPIGuildMemberRoleResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "userId", "roleId"],
+    result: Discord.RESTPutAPIGuildMemberRoleResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Remove Guild Member Role](https://discordapp.com/developers/docs/resources/guild#remove-guild-member-role)
    * 
    * Removes a role from a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object). Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY/guild-member-update) Gateway event.
    */
-  removeGuildMemberRole: route({
+  removeGuildMemberRole: {
     method: 'DELETE',
     route: (guildId: string, userId: string, roleId: string) => `/guilds/${guildId}/members/${userId}/roles/${roleId}`,
     params: ["guildId", "userId", "roleId"],
-    result: type<Discord.RESTDeleteAPIGuildMemberRoleResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "userId", "roleId"],
+    result: Discord.RESTDeleteAPIGuildMemberRoleResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Remove Guild Member](https://discordapp.com/developers/docs/resources/guild#remove-guild-member)
    * 
    * Remove a member from a guild. Requires `KICK_MEMBERS` permission. Returns a 204 empty response on success. Fires a [Guild Member Remove](https://discordapp.com/developers/docs/topics/gateway#guild-member-remove) Gateway event.
    */
-  removeGuildMember: route({
+  removeGuildMember: {
     method: 'DELETE',
     route: (guildId: string, userId: string) => `/guilds/${guildId}/members/${userId}`,
     params: ["guildId", "userId"],
-    result: type<Discord.RESTDeleteAPIGuildMemberResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "userId"],
+    result: Discord.RESTDeleteAPIGuildMemberResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Guild Bans](https://discordapp.com/developers/docs/resources/guild#get-guild-bans)
    * 
    * Returns a list of [ban](https://discordapp.com/developers/docs/resources/guild#ban-object) objects for the users banned from this guild. Requires the `BAN_MEMBERS` permission.
    */
-  getGuildBans: route({
+  getGuildBans: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/bans`,
     params: ["guildId"],
-    query: type<Discord.RESTGetAPIGuildBansQuery>(),
-    result: type<Discord.RESTGetAPIGuildBansResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    query: Discord.RESTGetAPIGuildBansQuery,
+    result: Discord.RESTGetAPIGuildBansResult,
+  }>,
   /**
    * ## [Get Guild Ban](https://discordapp.com/developers/docs/resources/guild#get-guild-ban)
    * 
    * Returns a [ban](https://discordapp.com/developers/docs/resources/guild#ban-object) object for the given user or a 404 not found if the ban cannot be found. Requires the `BAN_MEMBERS` permission.
    */
-  getGuildBan: route({
+  getGuildBan: {
     method: 'GET',
     route: (guildId: string, userId: string) => `/guilds/${guildId}/bans/${userId}`,
     params: ["guildId", "userId"],
-    result: type<Discord.RESTGetAPIGuildBanResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "userId"],
+    result: Discord.RESTGetAPIGuildBanResult,
+  }>,
   /**
    * ## [Create Guild Ban](https://discordapp.com/developers/docs/resources/guild#create-guild-ban)
    * 
    * Create a guild ban, and optionally delete previous messages sent by the banned user. Requires the `BAN_MEMBERS` permission. Returns a 204 empty response on success. Fires a [Guild Ban Add](https://discordapp.com/developers/docs/topics/gateway#guild-ban-add) Gateway event.
    */
-  createGuildBan: route({
+  createGuildBan: {
     method: 'PUT',
     route: (guildId: string, userId: string) => `/guilds/${guildId}/bans/${userId}`,
     params: ["guildId", "userId"],
-    body: type<Discord.RESTPutAPIGuildBanJSONBody>(),
-    result: type<Discord.RESTPutAPIGuildBanResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "userId"],
+    body: Discord.RESTPutAPIGuildBanJSONBody,
+    result: Discord.RESTPutAPIGuildBanResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Remove Guild Ban](https://discordapp.com/developers/docs/resources/guild#remove-guild-ban)
    * 
    * Remove the ban for a user. Requires the `BAN_MEMBERS` permissions. Returns a 204 empty response on success. Fires a [Guild Ban Remove](https://discordapp.com/developers/docs/topics/gateway#guild-ban-remove) Gateway event.
    */
-  removeGuildBan: route({
+  removeGuildBan: {
     method: 'DELETE',
     route: (guildId: string, userId: string) => `/guilds/${guildId}/bans/${userId}`,
     params: ["guildId", "userId"],
-    result: type<Discord.RESTDeleteAPIGuildBanResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "userId"],
+    result: Discord.RESTDeleteAPIGuildBanResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Guild Roles](https://discordapp.com/developers/docs/resources/guild#get-guild-roles)
    * 
    * Returns a list of [role](https://discordapp.com/developers/docs/topics/permissions#role-object) objects for the guild.
    */
-  getGuildRoles: route({
+  getGuildRoles: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/roles`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildRolesResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildRolesResult,
+  }>,
   /**
    * ## [Create Guild Role](https://discordapp.com/developers/docs/resources/guild#create-guild-role)
    * 
    * Create a new [role](https://discordapp.com/developers/docs/topics/permissions#role-object) for the guild. Requires the `MANAGE_ROLES` permission. Returns the new [role](#DOCS_TOPICS_PERMISSIONS/role-object) object on success. Fires a [Guild Role Create](#DOCS_TOPICS_GATEWAY/guild-role-create) Gateway event. All JSON params are optional.
    */
-  createGuildRole: route({
+  createGuildRole: {
     method: 'POST',
     route: (guildId: string) => `/guilds/${guildId}/roles`,
     params: ["guildId"],
-    body: type<Discord.RESTPostAPIGuildRoleJSONBody>(),
-    result: type<Discord.RESTPostAPIGuildRoleResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPostAPIGuildRoleJSONBody,
+    result: Discord.RESTPostAPIGuildRoleResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Modify Guild Role Positions](https://discordapp.com/developers/docs/resources/guild#modify-guild-role-positions)
    * 
    * Modify the positions of a set of [role](https://discordapp.com/developers/docs/topics/permissions#role-object) objects for the guild. Requires the `MANAGE_ROLES` permission. Returns a list of all of the guild's [role](#DOCS_TOPICS_PERMISSIONS/role-object) objects on success. Fires multiple [Guild Role Update](#DOCS_TOPICS_GATEWAY/guild-role-update) Gateway events.
    */
-  modifyGuildRolePositions: route({
+  modifyGuildRolePositions: {
     method: 'PATCH',
     route: (guildId: string) => `/guilds/${guildId}/roles`,
     params: ["guildId"],
-    body: type<Discord.RESTPatchAPIGuildRoleJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildRoleResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPatchAPIGuildRoleJSONBody,
+    result: Discord.RESTPatchAPIGuildRoleResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Modify Guild Role](https://discordapp.com/developers/docs/resources/guild#modify-guild-role)
    * 
@@ -1270,38 +1455,44 @@ export const guild = group({
    * 
    * All parameters to this endpoint are optional and nullable.
    */
-  modifyGuildRole: route({
+  modifyGuildRole: {
     method: 'PATCH',
     route: (guildId: string, roleId: string) => `/guilds/${guildId}/roles/${roleId}`,
     params: ["guildId", "roleId"],
-    body: type<Discord.RESTPatchAPIGuildRoleJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildRoleResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "roleId"],
+    body: Discord.RESTPatchAPIGuildRoleJSONBody,
+    result: Discord.RESTPatchAPIGuildRoleResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Modify Guild MFA Level](https://discordapp.com/developers/docs/resources/guild#modify-guild-mfa-level)
    * 
    * Modify a guild's MFA level. Requires guild ownership. Returns the updated [level](https://discordapp.com/developers/docs/resources/guild#guild-object-mfa-level) on success. Fires a [Guild Update](#DOCS_TOPICS_GATEWAY/guild-update) Gateway event.
    */
-  modifyGuildMFALevel: route({
+  modifyGuildMFALevel: {
     method: 'POST',
     route: (guildId: string) => `/guilds/${guildId}/mfa`,
     params: ["guildId"],
-    body: type<Discord.RESTPostAPIGuildsMFAJSONBody>(),
-    result: type<Discord.RESTPostAPIGuildsMFAResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPostAPIGuildsMFAJSONBody,
+    result: Discord.RESTPostAPIGuildsMFAResult,
+  }>,
   /**
    * ## [Delete Guild Role](https://discordapp.com/developers/docs/resources/guild#delete-guild-role)
    * 
    * Delete a guild role. Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Guild Role Delete](https://discordapp.com/developers/docs/topics/gateway#guild-role-delete) Gateway event.
    */
-  deleteGuildRole: route({
+  deleteGuildRole: {
     method: 'DELETE',
     route: (guildId: string, roleId: string) => `/guilds/${guildId}/roles/${roleId}`,
     params: ["guildId", "roleId"],
-    result: type<Discord.RESTDeleteAPIGuildRoleResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "roleId"],
+    result: Discord.RESTDeleteAPIGuildRoleResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Guild Prune Count](https://discordapp.com/developers/docs/resources/guild#get-guild-prune-count)
    * 
@@ -1309,13 +1500,15 @@ export const guild = group({
    * 
    * By default, prune will not remove users with roles. You can optionally include specific roles in your prune by providing the `include_roles` parameter. Any inactive user that has a subset of the provided role(s) will be counted in the prune and users with additional roles will not.
    */
-  getGuildPruneCount: route({
+  getGuildPruneCount: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/prune`,
     params: ["guildId"],
-    query: type<Discord.RESTGetAPIGuildPruneCountQuery>(),
-    result: type<Discord.RESTGetAPIGuildPruneCountResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    query: Discord.RESTGetAPIGuildPruneCountQuery,
+    result: Discord.RESTGetAPIGuildPruneCountResult,
+  }>,
   /**
    * ## [Begin Guild Prune](https://discordapp.com/developers/docs/resources/guild#begin-guild-prune)
    * 
@@ -1323,105 +1516,123 @@ export const guild = group({
    * 
    * By default, prune will not remove users with roles. You can optionally include specific roles in your prune by providing the `include_roles` parameter. Any inactive user that has a subset of the provided role(s) will be included in the prune and users with additional roles will not.
    */
-  beginGuildPrune: route({
+  beginGuildPrune: {
     method: 'POST',
     route: (guildId: string) => `/guilds/${guildId}/prune`,
     params: ["guildId"],
-    body: type<Discord.RESTPostAPIGuildPruneJSONBody>(),
-    result: type<Discord.RESTPostAPIGuildPruneResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPostAPIGuildPruneJSONBody,
+    result: Discord.RESTPostAPIGuildPruneResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Guild Voice Regions](https://discordapp.com/developers/docs/resources/guild#get-guild-voice-regions)
    * 
    * Returns a list of [voice region](https://discordapp.com/developers/docs/resources/voice#voice-region-object) objects for the guild. Unlike the similar `/voice` route, this returns VIP servers when the guild is VIP-enabled.
    */
-  getGuildVoiceRegions: route({
+  getGuildVoiceRegions: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/regions`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildVoiceRegionsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildVoiceRegionsResult,
+  }>,
   /**
    * ## [Get Guild Invites](https://discordapp.com/developers/docs/resources/guild#get-guild-invites)
    * 
    * Returns a list of [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) objects (with [invite metadata](#DOCS_RESOURCES_INVITE/invite-metadata-object)) for the guild. Requires the `MANAGE_GUILD` permission.
    */
-  getGuildInvites: route({
+  getGuildInvites: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/invites`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildInvitesResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildInvitesResult,
+  }>,
   /**
    * ## [Get Guild Integrations](https://discordapp.com/developers/docs/resources/guild#get-guild-integrations)
    * 
    * Returns a list of [integration](https://discordapp.com/developers/docs/resources/guild#integration-object) objects for the guild. Requires the `MANAGE_GUILD` permission.
    */
-  getGuildIntegrations: route({
+  getGuildIntegrations: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/integrations`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildIntegrationsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildIntegrationsResult,
+  }>,
   /**
    * ## [Delete Guild Integration](https://discordapp.com/developers/docs/resources/guild#delete-guild-integration)
    * 
    * Delete the attached [integration](https://discordapp.com/developers/docs/resources/guild#integration-object) object for the guild. Deletes any associated webhooks and kicks the associated bot if there is one. Requires the `MANAGE_GUILD` permission. Returns a 204 empty response on success. Fires a [Guild Integrations Update](#DOCS_TOPICS_GATEWAY/guild-integrations-update) Gateway event.
    */
-  deleteGuildIntegration: route({
+  deleteGuildIntegration: {
     method: 'DELETE',
     route: (guildId: string, integrationId: string) => `/guilds/${guildId}/integrations/${integrationId}`,
     params: ["guildId", "integrationId"],
-    result: type<Discord.RESTDeleteAPIGuildIntegrationResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "integrationId"],
+    result: Discord.RESTDeleteAPIGuildIntegrationResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Guild Widget Settings](https://discordapp.com/developers/docs/resources/guild#get-guild-widget-settings)
    * 
    * Returns a [guild widget settings](https://discordapp.com/developers/docs/resources/guild#guild-widget-settings-object) object. Requires the `MANAGE_GUILD` permission.
    */
-  getGuildWidgetSettings: route({
+  getGuildWidgetSettings: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/widget`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildWidgetSettingsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildWidgetSettingsResult,
+  }>,
   /**
    * ## [Modify Guild Widget](https://discordapp.com/developers/docs/resources/guild#modify-guild-widget)
    * 
    * Modify a [guild widget settings](https://discordapp.com/developers/docs/resources/guild#guild-widget-settings-object) object for the guild. All attributes may be passed in with JSON and modified. Requires the `MANAGE_GUILD` permission. Returns the updated [guild widget](#DOCS_RESOURCES_GUILD/guild-widget-settings-object) object.
    */
-  modifyGuildWidget: route({
+  modifyGuildWidget: {
     method: 'PATCH',
     route: (guildId: string) => `/guilds/${guildId}/widget`,
     params: ["guildId"],
-    body: type<Discord.RESTPatchAPIGuildWidgetSettingsJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildWidgetSettingsResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPatchAPIGuildWidgetSettingsJSONBody,
+    result: Discord.RESTPatchAPIGuildWidgetSettingsResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Guild Widget](https://discordapp.com/developers/docs/resources/guild#get-guild-widget)
    * 
    * Returns the [widget](https://discordapp.com/developers/docs/resources/guild#guild-widget-object) for the guild.
    */
-  getGuildWidget: route({
+  getGuildWidget: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/widget.json`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildWidgetJSONResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildWidgetJSONResult,
+  }>,
   /**
    * ## [Get Guild Vanity URL](https://discordapp.com/developers/docs/resources/guild#get-guild-vanity-url)
    * 
    * Returns a partial [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) object for guilds with that feature enabled. Requires the `MANAGE_GUILD` permission. `code` will be null if a vanity url for the guild is not set.
    */
-  getGuildVanityURL: route({
+  getGuildVanityURL: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/vanity-url`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildVanityUrlResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildVanityUrlResult,
+  }>,
   /**
    * ## [Get Guild Widget Image](https://discordapp.com/developers/docs/resources/guild#get-guild-widget-image)
    * 
@@ -1429,24 +1640,28 @@ export const guild = group({
    * 
    * All parameters to this endpoint are optional.
    */
-  getGuildWidgetImage: route({
+  getGuildWidgetImage: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/widget.png`,
     params: ["guildId"],
-    query: type<Discord.RESTGetAPIGuildWidgetImageQuery>(),
-    result: type<Discord.RESTGetAPIGuildWidgetImageResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    query: Discord.RESTGetAPIGuildWidgetImageQuery,
+    result: Discord.RESTGetAPIGuildWidgetImageResult,
+  }>,
   /**
    * ## [Get Guild Welcome Screen](https://discordapp.com/developers/docs/resources/guild#get-guild-welcome-screen)
    * 
    * Returns the [Welcome Screen](https://discordapp.com/developers/docs/resources/guild#welcome-screen-object) object for the guild. If the welcome screen is not enabled, the `MANAGE_GUILD` permission is required.
    */
-  getGuildWelcomeScreen: route({
+  getGuildWelcomeScreen: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/welcome-screen`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildWelcomeScreenResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildWelcomeScreenResult,
+  }>,
   /**
    * ## [Modify Guild Welcome Screen](https://discordapp.com/developers/docs/resources/guild#modify-guild-welcome-screen)
    * 
@@ -1454,54 +1669,62 @@ export const guild = group({
    * 
    * All parameters to this endpoint are optional and nullable
    */
-  modifyGuildWelcomeScreen: route({
+  modifyGuildWelcomeScreen: {
     method: 'PATCH',
     route: (guildId: string) => `/guilds/${guildId}/welcome-screen`,
     params: ["guildId"],
-    body: type<Discord.RESTPatchAPIGuildWelcomeScreenJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildWelcomeScreenResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPatchAPIGuildWelcomeScreenJSONBody,
+    result: Discord.RESTPatchAPIGuildWelcomeScreenResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Modify Current User Voice State](https://discordapp.com/developers/docs/resources/guild#modify-current-user-voice-state)
    * 
    * Updates the current user's voice state. Returns `204 No Content` on success.
    */
-  modifyCurrentUserVoiceState: route({
+  modifyCurrentUserVoiceState: {
     method: 'PATCH',
     route: (guildId: string) => `/guilds/${guildId}/voice-states/@me`,
     params: ["guildId"],
-    body: type<Discord.RESTPatchAPIGuildVoiceStateCurrentMemberJSONBody>(),
-    result: type<never>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPatchAPIGuildVoiceStateCurrentMemberJSONBody,
+    result: never,
+  }>,
   /**
    * ## [Modify User Voice State](https://discordapp.com/developers/docs/resources/guild#modify-user-voice-state)
    * 
    * Updates another user's voice state.
    */
-  modifyUserVoiceState: route({
+  modifyUserVoiceState: {
     method: 'PATCH',
     route: (guildId: string, userId: string) => `/guilds/${guildId}/voice-states/${userId}`,
     params: ["guildId", "userId"],
-    body: type<Discord.RESTPatchAPIGuildVoiceStateUserJSONBody>(),
-    result: type<never>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "userId"],
+    body: Discord.RESTPatchAPIGuildVoiceStateUserJSONBody,
+    result: never,
+  }>,
 });
 
 
-export const guildScheduledEvent = group({
+export const GuildScheduledEvent = group({
   /**
    * ## [List Scheduled Events for Guild](https://discordapp.com/developers/docs/resources/guild-scheduled-event#list-scheduled-events-for-guild)
    * 
    * Returns a list of [guild scheduled event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object) objects for the given guild.
    */
-  listScheduledEventsForGuild: route({
+  listScheduledEventsForGuild: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/scheduled-events`,
     params: ["guildId"],
-    query: type<Discord.RESTGetAPIGuildScheduledEventsQuery>(),
-    result: type<Discord.RESTGetAPIGuildScheduledEventsResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    query: Discord.RESTGetAPIGuildScheduledEventsQuery,
+    result: Discord.RESTGetAPIGuildScheduledEventsResult,
+  }>,
   /**
    * ## [Create Guild Scheduled Event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#create-guild-scheduled-event)
    * 
@@ -1509,26 +1732,30 @@ export const guildScheduledEvent = group({
    * 
    * A guild can have a maximum of 100 events with `SCHEDULED` or `ACTIVE` status at any time.
    */
-  createGuildScheduledEvent: route({
+  createGuildScheduledEvent: {
     method: 'POST',
     route: (guildId: string) => `/guilds/${guildId}/scheduled-events`,
     params: ["guildId"],
-    body: type<Discord.RESTPostAPIGuildScheduledEventJSONBody>(),
-    result: type<Discord.RESTPostAPIGuildScheduledEventResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPostAPIGuildScheduledEventJSONBody,
+    result: Discord.RESTPostAPIGuildScheduledEventResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Guild Scheduled Event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#get-guild-scheduled-event)
    * 
    * Get a guild scheduled event. Returns a [guild scheduled event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object) object on success.
    */
-  getGuildScheduledEvent: route({
+  getGuildScheduledEvent: {
     method: 'GET',
     route: (guildId: string, guildScheduledEventId: string) => `/guilds/${guildId}/scheduled-events/${guildScheduledEventId}`,
     params: ["guildId", "guildScheduledEventId"],
-    query: type<Discord.RESTGetAPIGuildScheduledEventQuery>(),
-    result: type<Discord.RESTGetAPIGuildScheduledEventResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "guildScheduledEventId"],
+    query: Discord.RESTGetAPIGuildScheduledEventQuery,
+    result: Discord.RESTGetAPIGuildScheduledEventResult,
+  }>,
   /**
    * ## [Modify Guild Scheduled Event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#modify-guild-scheduled-event)
    * 
@@ -1538,52 +1765,60 @@ export const guildScheduledEvent = group({
    * 
    * This endpoint silently discards `entity_metadata` for non-`EXTERNAL` events.
    */
-  modifyGuildScheduledEvent: route({
+  modifyGuildScheduledEvent: {
     method: 'PATCH',
     route: (guildId: string, guildScheduledEventId: string) => `/guilds/${guildId}/scheduled-events/${guildScheduledEventId}`,
     params: ["guildId", "guildScheduledEventId"],
-    body: type<Discord.RESTPatchAPIGuildScheduledEventJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildScheduledEventResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "guildScheduledEventId"],
+    body: Discord.RESTPatchAPIGuildScheduledEventJSONBody,
+    result: Discord.RESTPatchAPIGuildScheduledEventResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Guild Scheduled Event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#delete-guild-scheduled-event)
    * 
    * Delete a guild scheduled event. Returns a `204` on success.
    */
-  deleteGuildScheduledEvent: route({
+  deleteGuildScheduledEvent: {
     method: 'DELETE',
     route: (guildId: string, guildScheduledEventId: string) => `/guilds/${guildId}/scheduled-events/${guildScheduledEventId}`,
     params: ["guildId", "guildScheduledEventId"],
-    result: type<Discord.RESTDeleteAPIGuildScheduledEventResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "guildScheduledEventId"],
+    result: Discord.RESTDeleteAPIGuildScheduledEventResult,
+  }>,
   /**
    * ## [Get Guild Scheduled Event Users](https://discordapp.com/developers/docs/resources/guild-scheduled-event#get-guild-scheduled-event-users)
    * 
    * Get a list of guild scheduled event users subscribed to a guild scheduled event. Returns a list of [guild scheduled event user](https://discordapp.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-user-object) objects on success. Guild member data, if it exists, is included if the `with_member` query parameter is set.
    */
-  getGuildScheduledEventUsers: route({
+  getGuildScheduledEventUsers: {
     method: 'GET',
     route: (guildId: string, guildScheduledEventId: string) => `/guilds/${guildId}/scheduled-events/${guildScheduledEventId}/users`,
     params: ["guildId", "guildScheduledEventId"],
-    query: type<Discord.RESTGetAPIGuildScheduledEventUsersQuery>(),
-    result: type<Discord.RESTGetAPIGuildScheduledEventUsersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "guildScheduledEventId"],
+    query: Discord.RESTGetAPIGuildScheduledEventUsersQuery,
+    result: Discord.RESTGetAPIGuildScheduledEventUsersResult,
+  }>,
 });
 
 
-export const guildTemplate = group({
+export const GuildTemplate = group({
   /**
    * ## [Get Guild Template](https://discordapp.com/developers/docs/resources/guild-template#get-guild-template)
    * 
    * Returns a [guild template](https://discordapp.com/developers/docs/resources/guild-template#guild-template-object) object for the given code.
    */
-  getGuildTemplate: route({
+  getGuildTemplate: {
     method: 'GET',
     route: (templateCode: string) => `/guilds/templates/${templateCode}`,
     params: ["templateCode"],
-    result: type<Discord.RESTGetAPITemplateResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["templateCode"],
+    result: Discord.RESTGetAPITemplateResult,
+  }>,
   /**
    * ## [Create Guild from Guild Template](https://discordapp.com/developers/docs/resources/guild-template#create-guild-from-guild-template)
    * 
@@ -1591,74 +1826,86 @@ export const guildTemplate = group({
    * 
    * This endpoint can be used only by bots in less than 10 guilds.
    */
-  createGuildFromGuildTemplate: route({
+  createGuildFromGuildTemplate: {
     method: 'POST',
     route: (templateCode: string) => `/guilds/templates/${templateCode}`,
     params: ["templateCode"],
-    body: type<Discord.RESTPostAPITemplateCreateGuildJSONBody>(),
-    result: type<Discord.RESTPostAPITemplateCreateGuildResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["templateCode"],
+    body: Discord.RESTPostAPITemplateCreateGuildJSONBody,
+    result: Discord.RESTPostAPITemplateCreateGuildResult,
+  }>,
   /**
    * ## [Get Guild Templates](https://discordapp.com/developers/docs/resources/guild-template#get-guild-templates)
    * 
    * Returns an array of [guild template](https://discordapp.com/developers/docs/resources/guild-template#guild-template-object) objects. Requires the `MANAGE_GUILD` permission.
    */
-  getGuildTemplates: route({
+  getGuildTemplates: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/templates`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildTemplatesResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildTemplatesResult,
+  }>,
   /**
    * ## [Create Guild Template](https://discordapp.com/developers/docs/resources/guild-template#create-guild-template)
    * 
    * Creates a template for the guild. Requires the `MANAGE_GUILD` permission. Returns the created [guild template](https://discordapp.com/developers/docs/resources/guild-template#guild-template-object) object on success.
    */
-  createGuildTemplate: route({
+  createGuildTemplate: {
     method: 'POST',
     route: (guildId: string) => `/guilds/${guildId}/templates`,
     params: ["guildId"],
-    body: type<Discord.RESTPostAPIGuildTemplatesJSONBody>(),
-    result: type<Discord.RESTPostAPIGuildTemplatesResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    body: Discord.RESTPostAPIGuildTemplatesJSONBody,
+    result: Discord.RESTPostAPIGuildTemplatesResult,
+  }>,
   /**
    * ## [Sync Guild Template](https://discordapp.com/developers/docs/resources/guild-template#sync-guild-template)
    * 
    * Syncs the template to the guild's current state. Requires the `MANAGE_GUILD` permission. Returns the [guild template](https://discordapp.com/developers/docs/resources/guild-template#guild-template-object) object on success.
    */
-  syncGuildTemplate: route({
+  syncGuildTemplate: {
     method: 'PUT',
     route: (guildId: string, templateCode: string) => `/guilds/${guildId}/templates/${templateCode}`,
     params: ["guildId", "templateCode"],
-    result: type<Discord.RESTPutAPIGuildTemplateSyncResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "templateCode"],
+    result: Discord.RESTPutAPIGuildTemplateSyncResult,
+  }>,
   /**
    * ## [Modify Guild Template](https://discordapp.com/developers/docs/resources/guild-template#modify-guild-template)
    * 
    * Modifies the template's metadata. Requires the `MANAGE_GUILD` permission. Returns the [guild template](https://discordapp.com/developers/docs/resources/guild-template#guild-template-object) object on success.
    */
-  modifyGuildTemplate: route({
+  modifyGuildTemplate: {
     method: 'PATCH',
     route: (guildId: string, templateCode: string) => `/guilds/${guildId}/templates/${templateCode}`,
     params: ["guildId", "templateCode"],
-    body: type<Discord.RESTPatchAPIGuildTemplateJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildTemplateResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "templateCode"],
+    body: Discord.RESTPatchAPIGuildTemplateJSONBody,
+    result: Discord.RESTPatchAPIGuildTemplateResult,
+  }>,
   /**
    * ## [Delete Guild Template](https://discordapp.com/developers/docs/resources/guild-template#delete-guild-template)
    * 
    * Deletes the template. Requires the `MANAGE_GUILD` permission. Returns the deleted [guild template](https://discordapp.com/developers/docs/resources/guild-template#guild-template-object) object on success.
    */
-  deleteGuildTemplate: route({
+  deleteGuildTemplate: {
     method: 'DELETE',
     route: (guildId: string, templateCode: string) => `/guilds/${guildId}/templates/${templateCode}`,
     params: ["guildId", "templateCode"],
-    result: type<Discord.RESTDeleteAPIGuildTemplateResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "templateCode"],
+    result: Discord.RESTDeleteAPIGuildTemplateResult,
+  }>,
 });
 
 
-export const interactionResponse = group({
+export const InteractionResponse = group({
   /**
    * ## [Create Interaction Response](https://discordapp.com/developers/docs/interactions/receiving-and-responding#create-interaction-response)
    * 
@@ -1666,49 +1913,57 @@ export const interactionResponse = group({
    * 
    * This endpoint also supports file attachments similar to the webhook endpoints. Refer to [Uploading Files](#DOCS_REFERENCE/uploading-files) for details on uploading files and `multipart/form-data` requests.
    */
-  createInteractionResponse: route({
+  createInteractionResponse: {
     method: 'POST',
     route: (interactionId: string, interactionToken: string) => `/interactions/${interactionId}/${interactionToken}/callback`,
     params: ["interactionId", "interactionToken"],
-    body: type<Discord.RESTPostAPIInteractionCallbackJSONBody>(),
-    result: type<never>(),
+  } as unknown as Route<{
+    params: ["interactionId", "interactionToken"],
+    body: Discord.RESTPostAPIInteractionCallbackJSONBody,
+    result: never,
     file: true,
-  } as const),
+  }>,
   /**
    * ## [Get Original Interaction Response](https://discordapp.com/developers/docs/interactions/receiving-and-responding#get-original-interaction-response)
    * 
    * Returns the initial Interaction response. Functions the same as [Get Webhook Message](https://discordapp.com/developers/docs/resources/webhook#get-webhook-message).
    */
-  getOriginalInteractionResponse: route({
+  getOriginalInteractionResponse: {
     method: 'GET',
     route: (applicationId: string, interactionToken: string) => `/webhooks/${applicationId}/${interactionToken}/messages/@original`,
     params: ["applicationId", "interactionToken"],
-    result: type<Discord.RESTGetAPIInteractionFollowupResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "interactionToken"],
+    result: Discord.RESTGetAPIInteractionFollowupResult,
+  }>,
   /**
    * ## [Edit Original Interaction Response](https://discordapp.com/developers/docs/interactions/receiving-and-responding#edit-original-interaction-response)
    * 
    * Edits the initial Interaction response. Functions the same as [Edit Webhook Message](https://discordapp.com/developers/docs/resources/webhook#edit-webhook-message).
    */
-  editOriginalInteractionResponse: route({
+  editOriginalInteractionResponse: {
     method: 'PATCH',
     route: (applicationId: string, interactionToken: string) => `/webhooks/${applicationId}/${interactionToken}/messages/@original`,
     params: ["applicationId", "interactionToken"],
-    body: type<Discord.RESTPatchAPIInteractionFollowupJSONBody>(),
-    result: type<Discord.RESTPatchAPIInteractionFollowupResult>(),
+  } as unknown as Route<{
+    params: ["applicationId", "interactionToken"],
+    body: Discord.RESTPatchAPIInteractionFollowupJSONBody,
+    result: Discord.RESTPatchAPIInteractionFollowupResult,
     file: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Original Interaction Response](https://discordapp.com/developers/docs/interactions/receiving-and-responding#delete-original-interaction-response)
    * 
    * Deletes the initial Interaction response. Returns `204 No Content` on success. Does not support ephemeral followups.
    */
-  deleteOriginalInteractionResponse: route({
+  deleteOriginalInteractionResponse: {
     method: 'DELETE',
     route: (applicationId: string, interactionToken: string) => `/webhooks/${applicationId}/${interactionToken}/messages/@original`,
     params: ["applicationId", "interactionToken"],
-    result: type<never>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "interactionToken"],
+    result: never,
+  }>,
   /**
    * ## [Create Followup Message](https://discordapp.com/developers/docs/interactions/receiving-and-responding#create-followup-message)
    * 
@@ -1716,104 +1971,118 @@ export const interactionResponse = group({
    * 
    * `flags` can be set to `64` to mark the message as ephemeral, except when it is the first followup message to a deferred Interactions Response. In that case, the `flags` field will be ignored, and the ephemerality of the message will be determined by the `flags` value in your original ACK.
    */
-  createFollowupMessage: route({
+  createFollowupMessage: {
     method: 'POST',
     route: (applicationId: string, interactionToken: string) => `/webhooks/${applicationId}/${interactionToken}`,
     params: ["applicationId", "interactionToken"],
-    body: type<Discord.RESTPostAPIInteractionFollowupJSONBody>(),
-    result: type<Discord.RESTPostAPIInteractionFollowupResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "interactionToken"],
+    body: Discord.RESTPostAPIInteractionFollowupJSONBody,
+    result: Discord.RESTPostAPIInteractionFollowupResult,
+  }>,
   /**
    * ## [Get Followup Message](https://discordapp.com/developers/docs/interactions/receiving-and-responding#get-followup-message)
    * 
    * Returns a followup message for an Interaction. Functions the same as [Get Webhook Message](https://discordapp.com/developers/docs/resources/webhook#get-webhook-message).
    */
-  getFollowupMessage: route({
+  getFollowupMessage: {
     method: 'GET',
     route: (applicationId: string, interactionToken: string, messageId: string) => `/webhooks/${applicationId}/${interactionToken}/messages/${messageId}`,
     params: ["applicationId", "interactionToken", "messageId"],
-    result: type<Discord.RESTGetAPIInteractionFollowupResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "interactionToken", "messageId"],
+    result: Discord.RESTGetAPIInteractionFollowupResult,
+  }>,
   /**
    * ## [Edit Followup Message](https://discordapp.com/developers/docs/interactions/receiving-and-responding#edit-followup-message)
    * 
    * Edits a followup message for an Interaction. Functions the same as [Edit Webhook Message](https://discordapp.com/developers/docs/resources/webhook#edit-webhook-message).
    */
-  editFollowupMessage: route({
+  editFollowupMessage: {
     method: 'PATCH',
     route: (applicationId: string, interactionToken: string, messageId: string) => `/webhooks/${applicationId}/${interactionToken}/messages/${messageId}`,
     params: ["applicationId", "interactionToken", "messageId"],
-    body: type<Discord.RESTPatchAPIInteractionFollowupJSONBody>(),
-    result: type<Discord.RESTPatchAPIInteractionFollowupResult>(),
+  } as unknown as Route<{
+    params: ["applicationId", "interactionToken", "messageId"],
+    body: Discord.RESTPatchAPIInteractionFollowupJSONBody,
+    result: Discord.RESTPatchAPIInteractionFollowupResult,
     file: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Followup Message](https://discordapp.com/developers/docs/interactions/receiving-and-responding#delete-followup-message)
    * 
    * Deletes a followup message for an Interaction. Returns `204 No Content` on success. Does not support ephemeral followups.
    */
-  deleteFollowupMessage: route({
+  deleteFollowupMessage: {
     method: 'DELETE',
     route: (applicationId: string, interactionToken: string, messageId: string) => `/webhooks/${applicationId}/${interactionToken}/messages/${messageId}`,
     params: ["applicationId", "interactionToken", "messageId"],
-    result: type<never>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["applicationId", "interactionToken", "messageId"],
+    result: never,
+  }>,
 });
 
 
-export const invite = group({
+export const Invite = group({
   /**
    * ## [Get Invite](https://discordapp.com/developers/docs/resources/invite#get-invite)
    * 
    * Returns an [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) object for the given code.
    */
-  getInvite: route({
+  getInvite: {
     method: 'GET',
     route: (inviteCode: string) => `/invites/${inviteCode}`,
     params: ["inviteCode"],
-    query: type<Discord.RESTGetAPIInviteQuery>(),
-    result: type<Discord.RESTGetAPIInviteResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["inviteCode"],
+    query: Discord.RESTGetAPIInviteQuery,
+    result: Discord.RESTGetAPIInviteResult,
+  }>,
   /**
    * ## [Delete Invite](https://discordapp.com/developers/docs/resources/invite#delete-invite)
    * 
    * Delete an invite. Requires the `MANAGE_CHANNELS` permission on the channel this invite belongs to, or `MANAGE_GUILD` to remove any invite across the guild. Returns an [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) object on success. Fires a [Invite Delete](#DOCS_TOPICS_GATEWAY/invite-delete) Gateway event.
    */
-  deleteInvite: route({
+  deleteInvite: {
     method: 'DELETE',
     route: (inviteCode: string) => `/invites/${inviteCode}`,
     params: ["inviteCode"],
-    result: type<Discord.RESTDeleteAPIInviteResult>(),
+  } as unknown as Route<{
+    params: ["inviteCode"],
+    result: Discord.RESTDeleteAPIInviteResult,
     reason: true,
-  } as const),
+  }>,
 });
 
 
-export const oauth2 = group({
+export const Oauth2 = group({
   /**
    * ## [Get Current Bot Application Information](https://discordapp.com/developers/docs/topics/oauth2#get-current-bot-application-information)
    * 
    * Returns the bot's [application](https://discordapp.com/developers/docs/resources/application#application-object) object.
    */
-  getCurrentBotApplicationInformation: route({
+  getCurrentBotApplicationInformation: {
     method: 'GET',
     route: "/oauth2/applications/@me",
-    result: type<Discord.RESTGetAPIOAuth2CurrentApplicationResult>(),
-  } as const),
+  } as unknown as Route<{
+    result: Discord.RESTGetAPIOAuth2CurrentApplicationResult,
+  }>,
   /**
    * ## [Get Current Authorization Information](https://discordapp.com/developers/docs/topics/oauth2#get-current-authorization-information)
    * 
    * Returns info about the current authorization. Requires authentication with a bearer token.
    */
-  getCurrentAuthorizationInformation: route({
+  getCurrentAuthorizationInformation: {
     method: 'GET',
     route: "/oauth2/@me",
-    result: type<Discord.RESTGetAPIOAuth2CurrentAuthorizationResult>(),
-  } as const),
+  } as unknown as Route<{
+    result: Discord.RESTGetAPIOAuth2CurrentAuthorizationResult,
+  }>,
 });
 
 
-export const stageInstance = group({
+export const StageInstance = group({
   /**
    * ## [Create Stage Instance](https://discordapp.com/developers/docs/resources/stage-instance#create-stage-instance)
    * 
@@ -1821,24 +2090,27 @@ export const stageInstance = group({
    * 
    * Requires the user to be a moderator of the Stage channel.
    */
-  createStageInstance: route({
+  createStageInstance: {
     method: 'POST',
     route: "/stage-instances",
-    body: type<Discord.RESTPostAPIStageInstanceJSONBody>(),
-    result: type<Discord.RESTPostAPIStageInstanceResult>(),
+  } as unknown as Route<{
+    body: Discord.RESTPostAPIStageInstanceJSONBody,
+    result: Discord.RESTPostAPIStageInstanceResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Stage Instance](https://discordapp.com/developers/docs/resources/stage-instance#get-stage-instance)
    * 
    * Gets the stage instance associated with the Stage channel, if it exists.
    */
-  getStageInstance: route({
+  getStageInstance: {
     method: 'GET',
     route: (channelId: string) => `/stage-instances/${channelId}`,
     params: ["channelId"],
-    result: type<Discord.RESTGetAPIStageInstanceResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTGetAPIStageInstanceResult,
+  }>,
   /**
    * ## [Modify Stage Instance](https://discordapp.com/developers/docs/resources/stage-instance#modify-stage-instance)
    * 
@@ -1846,14 +2118,16 @@ export const stageInstance = group({
    * 
    * Requires the user to be a moderator of the Stage channel.
    */
-  modifyStageInstance: route({
+  modifyStageInstance: {
     method: 'PATCH',
     route: (channelId: string) => `/stage-instances/${channelId}`,
     params: ["channelId"],
-    body: type<Discord.RESTPatchAPIStageInstanceJSONBody>(),
-    result: type<Discord.RESTPatchAPIStageInstanceResult>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    body: Discord.RESTPatchAPIStageInstanceJSONBody,
+    result: Discord.RESTPatchAPIStageInstanceResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Stage Instance](https://discordapp.com/developers/docs/resources/stage-instance#delete-stage-instance)
    * 
@@ -1861,60 +2135,69 @@ export const stageInstance = group({
    * 
    * Requires the user to be a moderator of the Stage channel.
    */
-  deleteStageInstance: route({
+  deleteStageInstance: {
     method: 'DELETE',
     route: (channelId: string) => `/stage-instances/${channelId}`,
     params: ["channelId"],
-    result: type<never>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: never,
     reason: true,
-  } as const),
+  }>,
 });
 
 
-export const sticker = group({
+export const Sticker = group({
   /**
    * ## [Get Sticker](https://discordapp.com/developers/docs/resources/sticker#get-sticker)
    * 
    * Returns a [sticker](https://discordapp.com/developers/docs/resources/sticker#sticker-object) object for the given sticker ID.
    */
-  getSticker: route({
+  getSticker: {
     method: 'GET',
     route: (stickerId: string) => `/stickers/${stickerId}`,
     params: ["stickerId"],
-    result: type<Discord.RESTGetAPIStickerResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["stickerId"],
+    result: Discord.RESTGetAPIStickerResult,
+  }>,
   /**
    * ## [List Nitro Sticker Packs](https://discordapp.com/developers/docs/resources/sticker#list-nitro-sticker-packs)
    * 
    * Returns the list of sticker packs available to Nitro subscribers.
    */
-  listNitroStickerPacks: route({
+  listNitroStickerPacks: {
     method: 'GET',
     route: "/sticker-packs",
-    result: type<Discord.RESTGetNitroStickerPacksResult>(),
-  } as const),
+  } as unknown as Route<{
+    result: Discord.RESTGetNitroStickerPacksResult,
+  }>,
   /**
    * ## [List Guild Stickers](https://discordapp.com/developers/docs/resources/sticker#list-guild-stickers)
    * 
    * Returns an array of [sticker](https://discordapp.com/developers/docs/resources/sticker#sticker-object) objects for the given guild. Includes `user` fields if the bot has the `MANAGE_EMOJIS_AND_STICKERS` permission.
    */
-  listGuildStickers: route({
+  listGuildStickers: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/stickers`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildStickersResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildStickersResult,
+  }>,
   /**
    * ## [Get Guild Sticker](https://discordapp.com/developers/docs/resources/sticker#get-guild-sticker)
    * 
    * Returns a [sticker](https://discordapp.com/developers/docs/resources/sticker#sticker-object) object for the given guild and sticker IDs. Includes the `user` field if the bot has the `MANAGE_EMOJIS_AND_STICKERS` permission.
    */
-  getGuildSticker: route({
+  getGuildSticker: {
     method: 'GET',
     route: (guildId: string, stickerId: string) => `/guilds/${guildId}/stickers/${stickerId}`,
     params: ["guildId", "stickerId"],
-    result: type<Discord.RESTGetAPIGuildStickerResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId", "stickerId"],
+    result: Discord.RESTGetAPIGuildStickerResult,
+  }>,
   /**
    * ## [Create Guild Sticker](https://discordapp.com/developers/docs/resources/sticker#create-guild-sticker)
    * 
@@ -1924,14 +2207,16 @@ export const sticker = group({
    * 
    * Lottie stickers can only be uploaded on guilds that have either the `VERIFIED` and/or the `PARTNERED` [guild feature](#DOCS_RESOURCES_GUILD/guild-object-guild-features).
    */
-  createGuildSticker: route({
+  createGuildSticker: {
     method: 'POST',
     route: (guildId: string) => `/guilds/${guildId}/stickers`,
     params: ["guildId"],
-    result: type<Discord.RESTPostAPIGuildStickerResult>(),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTPostAPIGuildStickerResult,
     reason: true,
-    form: type<Omit<Discord.RESTPostAPIGuildStickerFormDataBody, 'file'> & { file: FileData }>(),
-  } as const),
+    form: Omit<Discord.RESTPostAPIGuildStickerFormDataBody, 'file'> & { file: FileData },
+  }>,
   /**
    * ## [Modify Guild Sticker](https://discordapp.com/developers/docs/resources/sticker#modify-guild-sticker)
    * 
@@ -1939,51 +2224,58 @@ export const sticker = group({
    * 
    * All parameters to this endpoint are optional.
    */
-  modifyGuildSticker: route({
+  modifyGuildSticker: {
     method: 'PATCH',
     route: (guildId: string, stickerId: string) => `/guilds/${guildId}/stickers/${stickerId}`,
     params: ["guildId", "stickerId"],
-    body: type<Discord.RESTPatchAPIGuildStickerJSONBody>(),
-    result: type<Discord.RESTPatchAPIGuildStickerResult>(),
+  } as unknown as Route<{
+    params: ["guildId", "stickerId"],
+    body: Discord.RESTPatchAPIGuildStickerJSONBody,
+    result: Discord.RESTPatchAPIGuildStickerResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Guild Sticker](https://discordapp.com/developers/docs/resources/sticker#delete-guild-sticker)
    * 
    * Delete the given sticker. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns `204 No Content` on success.
    */
-  deleteGuildSticker: route({
+  deleteGuildSticker: {
     method: 'DELETE',
     route: (guildId: string, stickerId: string) => `/guilds/${guildId}/stickers/${stickerId}`,
     params: ["guildId", "stickerId"],
-    result: type<never>(),
+  } as unknown as Route<{
+    params: ["guildId", "stickerId"],
+    result: never,
     reason: true,
-  } as const),
+  }>,
 });
 
 
-export const user = group({
+export const User = group({
   /**
    * ## [Get Current User](https://discordapp.com/developers/docs/resources/user#get-current-user)
    * 
    * Returns the [user](https://discordapp.com/developers/docs/resources/user#user-object) object of the requester's account. For OAuth2, this requires the `identify` scope, which will return the object _without_ an email, and optionally the `email` scope, which returns the object _with_ an email.
    */
-  getCurrentUser: route({
+  getCurrentUser: {
     method: 'GET',
     route: "/users/@me",
-    result: type<Discord.RESTGetAPICurrentUserResult>(),
-  } as const),
+  } as unknown as Route<{
+    result: Discord.RESTGetAPICurrentUserResult,
+  }>,
   /**
    * ## [Get User](https://discordapp.com/developers/docs/resources/user#get-user)
    * 
    * Returns a [user](https://discordapp.com/developers/docs/resources/user#user-object) object for a given user ID.
    */
-  getUser: route({
+  getUser: {
     method: 'GET',
     route: (userId: string) => `/users/${userId}`,
     params: ["userId"],
-    result: type<Discord.RESTGetAPIUserResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["userId"],
+    result: Discord.RESTGetAPIUserResult,
+  }>,
   /**
    * ## [Modify Current User](https://discordapp.com/developers/docs/resources/user#modify-current-user)
    * 
@@ -1991,45 +2283,51 @@ export const user = group({
    * 
    * All parameters to this endpoint are optional.
    */
-  modifyCurrentUser: route({
+  modifyCurrentUser: {
     method: 'PATCH',
     route: "/users/@me",
-    body: type<Discord.RESTPatchAPICurrentUserJSONBody>(),
-    result: type<Discord.RESTPatchAPICurrentUserResult>(),
-  } as const),
+  } as unknown as Route<{
+    body: Discord.RESTPatchAPICurrentUserJSONBody,
+    result: Discord.RESTPatchAPICurrentUserResult,
+  }>,
   /**
    * ## [Get Current User Guilds](https://discordapp.com/developers/docs/resources/user#get-current-user-guilds)
    * 
    * Returns a list of partial [guild](https://discordapp.com/developers/docs/resources/guild#guild-object) objects the current user is a member of. Requires the `guilds` OAuth2 scope.
    */
-  getCurrentUserGuilds: route({
+  getCurrentUserGuilds: {
     method: 'GET',
     route: "/users/@me/guilds",
-    query: type<Discord.RESTGetAPICurrentUserGuildsQuery>(),
-    result: type<Discord.RESTGetAPICurrentUserGuildsResult>(),
-  } as const),
+  } as unknown as Route<{
+    query: Discord.RESTGetAPICurrentUserGuildsQuery,
+    result: Discord.RESTGetAPICurrentUserGuildsResult,
+  }>,
   /**
    * ## [Get Current User Guild Member](https://discordapp.com/developers/docs/resources/user#get-current-user-guild-member)
    * 
    * Returns a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object) object for the current user. Requires the `guilds.members.read` OAuth2 scope.
    */
-  getCurrentUserGuildMember: route({
+  getCurrentUserGuildMember: {
     method: 'GET',
     route: (guildId: string) => `/users/@me/guilds/${guildId}/member`,
     params: ["guildId"],
-    result: type<Discord.RESTGetCurrentUserGuildMemberResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetCurrentUserGuildMemberResult,
+  }>,
   /**
    * ## [Leave Guild](https://discordapp.com/developers/docs/resources/user#leave-guild)
    * 
    * Leave a guild. Returns a 204 empty response on success.
    */
-  leaveGuild: route({
+  leaveGuild: {
     method: 'DELETE',
     route: (guildId: string) => `/users/@me/guilds/${guildId}`,
     params: ["guildId"],
-    result: type<Discord.RESTDeleteAPICurrentUserGuildResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTDeleteAPICurrentUserGuildResult,
+  }>,
   /**
    * ## [Create DM](https://discordapp.com/developers/docs/resources/user#create-dm)
    * 
@@ -2037,12 +2335,13 @@ export const user = group({
    * 
    * You should not use this endpoint to DM everyone in a server about something. DMs should generally be initiated by a user action. If you open a significant amount of DMs too quickly, your bot may be rate limited or blocked from opening new ones.
    */
-  createDM: route({
+  createDM: {
     method: 'POST',
     route: "/users/@me/channels",
-    body: type<Discord.RESTPostAPICurrentUserCreateDMChannelJSONBody>(),
-    result: type<Discord.RESTPostAPICurrentUserCreateDMChannelResult>(),
-  } as const),
+  } as unknown as Route<{
+    body: Discord.RESTPostAPICurrentUserCreateDMChannelJSONBody,
+    result: Discord.RESTPostAPICurrentUserCreateDMChannelResult,
+  }>,
   /**
    * @deprecated **DMs created with this endpoint will not be shown in the Discord client**
    * 
@@ -2052,40 +2351,43 @@ export const user = group({
    * 
    * This endpoint is limited to 10 active group DMs.
    */
-  createGroupDM: route({
+  createGroupDM: {
     method: 'POST',
     route: "/users/@me/channels",
-    body: type<{ access_tokens: string[]; nicks: Record<string, string> }>(),
-    result: type<Discord.RESTPostAPICurrentUserCreateDMChannelResult>(),
-  } as const),
+  } as unknown as Route<{
+    body: { access_tokens: string[]; nicks: Record<string, string> },
+    result: Discord.RESTPostAPICurrentUserCreateDMChannelResult,
+  }>,
   /**
    * ## [Get User Connections](https://discordapp.com/developers/docs/resources/user#get-user-connections)
    * 
    * Returns a list of [connection](https://discordapp.com/developers/docs/resources/user#connection-object) objects. Requires the `connections` OAuth2 scope.
    */
-  getUserConnections: route({
+  getUserConnections: {
     method: 'GET',
     route: "/users/@me/connections",
-    result: type<Discord.RESTGetAPICurrentUserConnectionsResult>(),
-  } as const),
+  } as unknown as Route<{
+    result: Discord.RESTGetAPICurrentUserConnectionsResult,
+  }>,
 });
 
 
-export const voice = group({
+export const Voice = group({
   /**
    * ## [List Voice Regions](https://discordapp.com/developers/docs/resources/voice#list-voice-regions)
    * 
    * Returns an array of [voice region](https://discordapp.com/developers/docs/resources/voice#voice-region-object) objects that can be used when setting a voice or stage channel's [`rtc_region`](#DOCS_RESOURCES_CHANNEL/channel-object-channel-structure).
    */
-  listVoiceRegions: route({
+  listVoiceRegions: {
     method: 'GET',
     route: "/voice/regions",
-    result: type<Discord.RESTGetAPIGuildVoiceRegionsResult>(),
-  } as const),
+  } as unknown as Route<{
+    result: Discord.RESTGetAPIGuildVoiceRegionsResult,
+  }>,
 });
 
 
-export const webhook = group({
+export const Webhook = group({
   /**
    * ## [Create Webhook](https://discordapp.com/developers/docs/resources/webhook#create-webhook)
    * 
@@ -2095,58 +2397,68 @@ export const webhook = group({
    * - It does not contain the substring '**clyde**' (case-insensitive)
    * - It follows the nickname guidelines in the [Usernames and Nicknames](#DOCS_RESOURCES_USER/usernames-and-nicknames) documentation, with an exception that webhook names can be up to 80 characters
    */
-  createWebhook: route({
+  createWebhook: {
     method: 'POST',
     route: (channelId: string) => `/channels/${channelId}/webhooks`,
     params: ["channelId"],
-    body: type<Discord.RESTPostAPIChannelWebhookJSONBody>(),
-    result: type<Discord.RESTPostAPIChannelWebhookResult>(),
+  } as unknown as Route<{
+    params: ["channelId"],
+    body: Discord.RESTPostAPIChannelWebhookJSONBody,
+    result: Discord.RESTPostAPIChannelWebhookResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Get Channel Webhooks](https://discordapp.com/developers/docs/resources/webhook#get-channel-webhooks)
    * 
    * Returns a list of channel [webhook](https://discordapp.com/developers/docs/resources/webhook#webhook-object) objects. Requires the `MANAGE_WEBHOOKS` permission.
    */
-  getChannelWebhooks: route({
+  getChannelWebhooks: {
     method: 'GET',
     route: (channelId: string) => `/channels/${channelId}/webhooks`,
     params: ["channelId"],
-    result: type<Discord.RESTGetAPIChannelWebhooksResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["channelId"],
+    result: Discord.RESTGetAPIChannelWebhooksResult,
+  }>,
   /**
    * ## [Get Guild Webhooks](https://discordapp.com/developers/docs/resources/webhook#get-guild-webhooks)
    * 
    * Returns a list of guild [webhook](https://discordapp.com/developers/docs/resources/webhook#webhook-object) objects. Requires the `MANAGE_WEBHOOKS` permission.
    */
-  getGuildWebhooks: route({
+  getGuildWebhooks: {
     method: 'GET',
     route: (guildId: string) => `/guilds/${guildId}/webhooks`,
     params: ["guildId"],
-    result: type<Discord.RESTGetAPIGuildWebhooksResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["guildId"],
+    result: Discord.RESTGetAPIGuildWebhooksResult,
+  }>,
   /**
    * ## [Get Webhook](https://discordapp.com/developers/docs/resources/webhook#get-webhook)
    * 
    * Returns the new [webhook](https://discordapp.com/developers/docs/resources/webhook#webhook-object) object for the given id.
    */
-  getWebhook: route({
+  getWebhook: {
     method: 'GET',
     route: (webhookId: string) => `/webhooks/${webhookId}`,
     params: ["webhookId"],
-    result: type<Discord.RESTGetAPIWebhookResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["webhookId"],
+    result: Discord.RESTGetAPIWebhookResult,
+  }>,
   /**
    * ## [Get Webhook with Token](https://discordapp.com/developers/docs/resources/webhook#get-webhook-with-token)
    * 
    * Same as above, except this call does not require authentication and returns no user in the webhook object.
    */
-  getWebhookWithToken: route({
+  getWebhookWithToken: {
     method: 'GET',
     route: (webhookId: string, webhookToken: string) => `/webhooks/${webhookId}/${webhookToken}`,
     params: ["webhookId", "webhookToken"],
-    result: type<Discord.RESTGetAPIWebhookWithTokenResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["webhookId", "webhookToken"],
+    result: Discord.RESTGetAPIWebhookWithTokenResult,
+  }>,
   /**
    * ## [Modify Webhook](https://discordapp.com/developers/docs/resources/webhook#modify-webhook)
    * 
@@ -2154,49 +2466,57 @@ export const webhook = group({
    * 
    * All parameters to this endpoint are optional
    */
-  modifyWebhook: route({
+  modifyWebhook: {
     method: 'PATCH',
     route: (webhookId: string) => `/webhooks/${webhookId}`,
     params: ["webhookId"],
-    body: type<Discord.RESTPatchAPIWebhookJSONBody>(),
-    result: type<Discord.RESTPatchAPIWebhookResult>(),
+  } as unknown as Route<{
+    params: ["webhookId"],
+    body: Discord.RESTPatchAPIWebhookJSONBody,
+    result: Discord.RESTPatchAPIWebhookResult,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Modify Webhook with Token](https://discordapp.com/developers/docs/resources/webhook#modify-webhook-with-token)
    * 
    * Same as above, except this call does not require authentication, does not accept a `channel_id` parameter in the body, and does not return a user in the webhook object.
    */
-  modifyWebhookWithToken: route({
+  modifyWebhookWithToken: {
     method: 'PATCH',
     route: (webhookId: string, webhookToken: string) => `/webhooks/${webhookId}/${webhookToken}`,
     params: ["webhookId", "webhookToken"],
-    body: type<Discord.RESTPatchAPIWebhookWithTokenJSONBody>(),
-    result: type<Discord.RESTPatchAPIWebhookWithTokenResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["webhookId", "webhookToken"],
+    body: Discord.RESTPatchAPIWebhookWithTokenJSONBody,
+    result: Discord.RESTPatchAPIWebhookWithTokenResult,
+  }>,
   /**
    * ## [Delete Webhook](https://discordapp.com/developers/docs/resources/webhook#delete-webhook)
    * 
    * Delete a webhook permanently. Requires the `MANAGE_WEBHOOKS` permission. Returns a `204 No Content` response on success.
    */
-  deleteWebhook: route({
+  deleteWebhook: {
     method: 'DELETE',
     route: (webhookId: string) => `/webhooks/${webhookId}`,
     params: ["webhookId"],
-    result: type<never>(),
+  } as unknown as Route<{
+    params: ["webhookId"],
+    result: never,
     reason: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Webhook with Token](https://discordapp.com/developers/docs/resources/webhook#delete-webhook-with-token)
    * 
    * Same as above, except this call does not require authentication.
    */
-  deleteWebhookWithToken: route({
+  deleteWebhookWithToken: {
     method: 'DELETE',
     route: (webhookId: string, webhookToken: string) => `/webhooks/${webhookId}/${webhookToken}`,
     params: ["webhookId", "webhookToken"],
-    result: type<Discord.RESTDeleteAPIWebhookWithTokenResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["webhookId", "webhookToken"],
+    result: Discord.RESTDeleteAPIWebhookWithTokenResult,
+  }>,
   /**
    * ## [Execute Webhook](https://discordapp.com/developers/docs/resources/webhook#execute-webhook)
    * 
@@ -2206,53 +2526,61 @@ export const webhook = group({
    * 
    * If the webhook channel is a forum channel, you must provide either `thread_id` in the query string params, or `thread_name` in the JSON/form params. If `thread_id` is provided, the message will send in that thread. If `thread_name` is provided, a thread with that name will be created in the forum channel.
    */
-  executeWebhook: route({
+  executeWebhook: {
     method: 'POST',
     route: (webhookId: string, webhookToken: string) => `/webhooks/${webhookId}/${webhookToken}`,
     params: ["webhookId", "webhookToken"],
-    query: type<Discord.RESTPostAPIWebhookWithTokenQuery>(),
-    body: type<Discord.RESTPostAPIWebhookWithTokenJSONBody>(),
-    result: type<never>(),
+  } as unknown as Route<{
+    params: ["webhookId", "webhookToken"],
+    query: Discord.RESTPostAPIWebhookWithTokenQuery,
+    body: Discord.RESTPostAPIWebhookWithTokenJSONBody,
+    result: never,
     file: true,
-  } as const),
+  }>,
   /**
    * ## [Execute Slack-Compatible Webhook](https://discordapp.com/developers/docs/resources/webhook#execute-slackcompatible-webhook)
    * 
    * Refer to [Slack's documentation](https://api.slack.com/incoming-webhooks) for more information. We do not support Slack's `channel`, `icon_emoji`, `mrkdwn`, or `mrkdwn_in` properties.
    */
-  executeSlackCompatibleWebhook: route({
+  executeSlackCompatibleWebhook: {
     method: 'POST',
     route: (webhookId: string, webhookToken: string) => `/webhooks/${webhookId}/${webhookToken}/slack`,
     params: ["webhookId", "webhookToken"],
-    query: type<Discord.RESTPostAPIWebhookWithTokenSlackQuery>(),
-    body: type<any>(),
-    result: type<Discord.RESTPostAPIWebhookWithTokenSlackResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["webhookId", "webhookToken"],
+    query: Discord.RESTPostAPIWebhookWithTokenSlackQuery,
+    body: any,
+    result: Discord.RESTPostAPIWebhookWithTokenSlackResult,
+  }>,
   /**
    * ## [Execute GitHub-Compatible Webhook](https://discordapp.com/developers/docs/resources/webhook#execute-githubcompatible-webhook)
    * 
    * Add a new webhook to your GitHub repo (in the repo's settings), and use this endpoint as the "Payload URL." You can choose what events your Discord channel receives by choosing the "Let me select individual events" option and selecting individual events for the new webhook you're configuring.
    */
-  executeGitHubCompatibleWebhook: route({
+  executeGitHubCompatibleWebhook: {
     method: 'POST',
     route: (webhookId: string, webhookToken: string) => `/webhooks/${webhookId}/${webhookToken}/github`,
     params: ["webhookId", "webhookToken"],
-    query: type<Discord.RESTPostAPIWebhookWithTokenGitHubQuery>(),
-    body: type<any>(),
-    result: type<Discord.RESTPostAPIWebhookWithTokenGitHubResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["webhookId", "webhookToken"],
+    query: Discord.RESTPostAPIWebhookWithTokenGitHubQuery,
+    body: any,
+    result: Discord.RESTPostAPIWebhookWithTokenGitHubResult,
+  }>,
   /**
    * ## [Get Webhook Message](https://discordapp.com/developers/docs/resources/webhook#get-webhook-message)
    * 
    * Returns a previously-sent webhook message from the same token. Returns a [message](https://discordapp.com/developers/docs/resources/channel#message-object) object on success.
    */
-  getWebhookMessage: route({
+  getWebhookMessage: {
     method: 'GET',
     route: (webhookId: string, webhookToken: string, messageId: string) => `/webhooks/${webhookId}/${webhookToken}/messages/${messageId}`,
     params: ["webhookId", "webhookToken", "messageId"],
-    query: type<{ thread_id?: boolean }>(),
-    result: type<Discord.RESTGetAPIWebhookWithTokenMessageResult>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["webhookId", "webhookToken", "messageId"],
+    query: { thread_id?: boolean },
+    result: Discord.RESTGetAPIWebhookWithTokenMessageResult,
+  }>,
   /**
    * ## [Edit Webhook Message](https://discordapp.com/developers/docs/resources/webhook#edit-webhook-message)
    * 
@@ -2267,25 +2595,29 @@ export const webhook = group({
    * 
    * All parameters to this endpoint are optional and nullable.
    */
-  editWebhookMessage: route({
+  editWebhookMessage: {
     method: 'PATCH',
     route: (webhookId: string, webhookToken: string, messageId: string) => `/webhooks/${webhookId}/${webhookToken}/messages/${messageId}`,
     params: ["webhookId", "webhookToken", "messageId"],
-    query: type<{ thread_id?: boolean }>(),
-    body: type<Discord.RESTPatchAPIWebhookWithTokenMessageJSONBody>(),
-    result: type<Discord.RESTPatchAPIWebhookWithTokenMessageResult>(),
+  } as unknown as Route<{
+    params: ["webhookId", "webhookToken", "messageId"],
+    query: { thread_id?: boolean },
+    body: Discord.RESTPatchAPIWebhookWithTokenMessageJSONBody,
+    result: Discord.RESTPatchAPIWebhookWithTokenMessageResult,
     file: true,
-  } as const),
+  }>,
   /**
    * ## [Delete Webhook Message](https://discordapp.com/developers/docs/resources/webhook#delete-webhook-message)
    * 
    * Deletes a message that was created by the webhook. Returns a `204 No Content` response on success.
    */
-  deleteWebhookMessage: route({
+  deleteWebhookMessage: {
     method: 'DELETE',
     route: (webhookId: string, webhookToken: string, messageId: string) => `/webhooks/${webhookId}/${webhookToken}/messages/${messageId}`,
     params: ["webhookId", "webhookToken", "messageId"],
-    query: type<{ thread_id?: boolean }>(),
-    result: type<never>(),
-  } as const),
+  } as unknown as Route<{
+    params: ["webhookId", "webhookToken", "messageId"],
+    query: { thread_id?: boolean },
+    result: never,
+  }>,
 });

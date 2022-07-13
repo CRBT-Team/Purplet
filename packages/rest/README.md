@@ -1,6 +1,6 @@
 # @purplet/rest
 
-This is a JavaScript implementation for the Discord REST API. It is very light, and doesn't do more than is needed. We do not depend on any runtime-specific apis, but rather the `fetch` and `FormData` standard APIs, meaning this client can run in Node.js and in Bun (with polyfills). Every route is fully typed and hand-tested.
+This is a JavaScript implementation for the Discord REST API. It is very light, and doesn't do more than is needed. We do not depend on any runtime-specific apis, but rather the `fetch` and `FormData` standard APIs, meaning this client can run in Node.js and in Bun (with polyfills). Every route is fully typed via [discord-api-types](https://github.com/discordjs/discord-api-types) and documented using auto-generated JSDoc comments from the [Discord API documentation](https://discordapp.com/developers/docs/resources).
 
 Basic Example:
 
@@ -13,6 +13,33 @@ const me = await rest.user.getCurrentUser();
 ```
 
 All routes are based off of the [Discord API Docs](https://discordapp.com/developers/docs/resources/), in the notation of `.resource.actionName`, where `resource` is the name of a page on the sidebar, and `actionName` is the name of the header above each endpoint. This means the endpoint used above is ["Get Current User" on the "User" page](https://discordapp.com/developers/docs/resources/user#get-current-user).
+
+For requests with url params, JSON bodies, queries, file uploads, and the `X-Audit-Log-Reason` header; a consistent object is passed, though each route has a custom type generated to only allow the fields are allowed/required.
+
+**Sending a Message:**
+
+```ts
+const result = await rest.channel.createMessage({
+  // Url params are on the base object
+  channelId: '995650617282412594',
+  // JSON Body is `body`
+  body: {
+    content: 'Hello, world!',
+    attachments: [
+      {
+        id: '0',
+      },
+    ],
+  },
+  // Attached files are `files`, you can pass a string, Uint8Array, or even `Bun.file(...)`
+  files: [
+    {
+      name: 'cat.png',
+      data: Bun.file('./cat.png'),
+    },
+  ],
+});
+```
 
 ## Installing
 

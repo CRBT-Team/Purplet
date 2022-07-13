@@ -27,7 +27,7 @@
     "netlify.toml": true
   },
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.tsdk": "node_modules/typescript/lib",
   "[javascript, typescript, javascriptreact, typescriptreact, json, jsonc, mdx]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
