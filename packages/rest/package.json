@@ -25,6 +25,11 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "*.md"
+  ],
   "scripts": {
     "build": "node scripts/build.js",
     "dev": "rollup -c --watch",
