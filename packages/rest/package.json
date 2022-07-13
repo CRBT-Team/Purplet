@@ -1,6 +1,6 @@
 {
   "name": "@purplet/rest",
-  "version": "1.0.0",
+  "version": "1.0.0-next.1",
   "description": "Cross-runtime Discord Rest client",
   "keywords": [
     "discord",
@@ -10,7 +10,7 @@
     "typescript",
     "bun"
   ],
-  "homepage": "https://github.com/CRBT-Team/Purplet/tree/v2/packages/rest",
+  "homepage": "https://github.com/CRBT-Team/Purplet/tree/main/packages/rest",
   "repository": {
     "type": "git",
     "url": "https://github.com/CRBT-Team/Purplet.git",
@@ -26,7 +26,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c && tsc -p . && echo Types Passing",
+    "build": "node scripts/build.js",
     "dev": "rollup -c --watch",
     "lint": "eslint src/**/*.{ts,tsx}"
   },
