@@ -38,8 +38,10 @@
     "dev": "rollup -c --watch",
     "lint": "eslint src/**/*.{ts,tsx}"
   },
+  "dependencies": {
+    "@davecode/types": "^1.0.2"
+  },
   "devDependencies": {
-    "@davecode/types": "^1.0.2",
     "@davecode/utils": "^1.0.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@types/node": "^17.0.45",
