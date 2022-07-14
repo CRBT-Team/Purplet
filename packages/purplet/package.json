@@ -1,6 +1,6 @@
 {
   "name": "purplet",
-  "version": "2.0.0-next.15",
+  "version": "2.0.0-next.16",
   "description": "A simple framework to build modern Discord bots.",
   "keywords": [
     "discord",
@@ -43,9 +43,9 @@
   "dependencies": {
     "@davecode/utils": "^1.0.1",
     "@discordjs/builders": "^0.13.0",
-    "@purplet/gateway": "workspace:^1.0.0",
-    "@purplet/polyfill": "workspace:^1.0.0",
-    "@purplet/rest": "workspace:1.0.0-next.2",
+    "@purplet/gateway": "workspace:^1.0.1-next.0",
+    "@purplet/polyfill": "workspace:^1.0.1-next.0",
+    "@purplet/rest": "workspace:1.0.0",
     "@purplet/serialize": "workspace:^2.0.0",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-node-resolve": "^13.3.0",
