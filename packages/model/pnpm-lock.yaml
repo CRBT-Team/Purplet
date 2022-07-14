@@ -1,0 +1,39 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@davecode/types': ^1.0.3
+  bun-types: ^0.1.2
+  mitata: ^0.1.6
+
+dependencies:
+  '@davecode/types': 1.0.3
+
+devDependencies:
+  bun-types: 0.1.4
+  mitata: 0.1.6
+
+packages:
+
+  /@davecode/types/1.0.3:
+    resolution: {integrity: sha512-BzFc7pJVsrYXUzEbU/ILhB1fJ/2RMIb6oGFO7KUpTJ4Ap1W7FuRVzAaUSPjWF7AwLtze7rCzLqJwfOHXOh5yiw==}
+    dependencies:
+      ts-toolbelt: 9.6.0
+      utility-types: 3.10.0
+    dev: false
+
+  /bun-types/0.1.4:
+    resolution: {integrity: sha512-8nyx22INhlPT+R/1MebbAK7TX48aLQdrLTEmce3oTlne5GunoxMEtCiHOku90XKeHbxxbMkkPI2TX1m0pvlLaw==}
+    dev: true
+
+  /mitata/0.1.6:
+    resolution: {integrity: sha512-VKQ0r3jriTOU9E2Z+mwbZrUmbg4Li4QyFfi7kfHKl6reZhGzL0AYlu3wE0VPXzIwA5xnFzmEQoBwCcNT8stUkA==}
+    dev: true
+
+  /ts-toolbelt/9.6.0:
+    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
+    dev: false
+
+  /utility-types/3.10.0:
+    resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
+    engines: {node: '>= 4'}
+    dev: false
