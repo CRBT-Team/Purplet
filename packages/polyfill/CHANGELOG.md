@@ -1,6 +1,6 @@
 # `@purplet/node-polyfill`
 
-## 1.0.1-next.0
+## 1.0.1
 
 ### Patch Changes
 
