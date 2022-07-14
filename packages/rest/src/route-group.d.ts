@@ -55,6 +55,8 @@ type RemoveParamIfEmpty<T> = T extends (options: infer Options) => Promise<infer
     : (options: Options) => Promise<Result>
   : never;
 
-type RouteGroupClass<Routes> = { new (rest: Rest): ForceSimplify<RouteGroup<Routes>> };
+export type RouteGroupClass<Routes> = { new (rest: Rest): ForceSimplify<Routes> };
 
-export function group<Routes extends Dict<any>>(routes: Routes): RouteGroupClass<Routes>;
+export function group<Routes extends Dict<any>>(
+  routes: Routes
+): RouteGroupClass<RouteGroup<Routes>>;

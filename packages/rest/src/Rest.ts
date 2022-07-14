@@ -1,6 +1,24 @@
-import * as routes from './routes.generated';
 import { APIVersion, RouteBases } from 'discord-api-types/rest';
 import { Fetcher } from './Fetcher';
+import {
+  ApplicationCommand,
+  AuditLog,
+  AutoModeration,
+  Channel,
+  Emoji,
+  Gateway,
+  Guild,
+  GuildScheduledEvent,
+  GuildTemplate,
+  InteractionResponse,
+  Invite,
+  Oauth2,
+  StageInstance,
+  Sticker,
+  User,
+  Voice,
+  Webhook,
+} from './routes.generated';
 import { RequestOptions, RequestOptionsWithMethod, RestOptions, TokenType } from './types';
 import { toBlob } from './utils';
 
@@ -40,23 +58,26 @@ export class Rest {
     return this;
   }
 
-  applicationCommand = new routes.ApplicationCommand(this);
-  interactionResponse = new routes.InteractionResponse(this);
-  auditLog = new routes.AuditLog(this);
-  autoModeration = new routes.AutoModeration(this);
-  channel = new routes.Channel(this);
-  emoji = new routes.Emoji(this);
-  guild = new routes.Guild(this);
-  guildScheduledEvent = new routes.GuildScheduledEvent(this);
-  guildTemplate = new routes.GuildTemplate(this);
-  invite = new routes.Invite(this);
-  stageInstance = new routes.StageInstance(this);
-  sticker = new routes.Sticker(this);
-  user = new routes.User(this);
-  voice = new routes.Voice(this);
-  webhook = new routes.Webhook(this);
-  gateway = new routes.Gateway(this);
-  oauth2 = new routes.Oauth2(this);
+  // The following properties have to be typed explicitly or else bundling will break
+  // and inline all the types, which will not preserve jsdoc information
+
+  applicationCommand: ApplicationCommand = new ApplicationCommand(this);
+  interactionResponse: InteractionResponse = new InteractionResponse(this);
+  auditLog: AuditLog = new AuditLog(this);
+  autoModeration: AutoModeration = new AutoModeration(this);
+  channel: Channel = new Channel(this);
+  emoji: Emoji = new Emoji(this);
+  guild: Guild = new Guild(this);
+  guildScheduledEvent: GuildScheduledEvent = new GuildScheduledEvent(this);
+  guildTemplate: GuildTemplate = new GuildTemplate(this);
+  invite: Invite = new Invite(this);
+  stageInstance: StageInstance = new StageInstance(this);
+  sticker: Sticker = new Sticker(this);
+  user: User = new User(this);
+  voice: Voice = new Voice(this);
+  webhook: Webhook = new Webhook(this);
+  gateway: Gateway = new Gateway(this);
+  oauth2: Oauth2 = new Oauth2(this);
 
   /** Runs a request against the Discord API. */
   async request<Output>(endpoint: string, options: RequestOptionsWithMethod): Promise<Output> {
