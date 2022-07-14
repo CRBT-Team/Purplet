@@ -49,6 +49,7 @@ and follow the instructions it gives. Documentation on purplet is available at [
 | [purplet](packages/purplet) | Vite + Discord API abstractions + gateway client + more | [Changelog](packages/purplet/CHANGELOG.md) |
 | [create-purplet](packages/create-purplet) | Project generator CLI | [Changelog](packages/create-purplet/CHANGELOG.md) |
 | [@purplet/gateway](packages/gateway) | Gateway Client implementation | [Changelog](packages/gateway/CHANGELOG.md) |
+| [@purplet/rest](packages/rest) | Gateway Client implementation | [Changelog](packages/rest/CHANGELOG.md) |
 | [@purplet/serialize](packages/serialize) | Utilities for binary serialization | [Changelog](packages/serialize/CHANGELOG.md) |
 
 | Example Projects        | Command to copy                |

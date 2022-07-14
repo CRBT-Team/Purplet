@@ -3,12 +3,16 @@ lockfileVersion: 5.4
 specifiers:
   '@ungap/structured-clone': ^1.0.1
   dotenv: ^16.0.1
+  form-data-encoder: ^2.0.1
+  formdata-node: ^4.3.3
   undici: ^5.6.1
   ws: ^1.0.31
 
 dependencies:
   '@ungap/structured-clone': 1.0.1
   dotenv: 16.0.1
+  form-data-encoder: 2.0.1
+  formdata-node: 4.3.3
   undici: 5.6.1
   ws: 1.1.5
 
@@ -23,6 +27,24 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
+  /form-data-encoder/2.0.1:
+    resolution: {integrity: sha512-Oy+P9w5mnO4TWXVgUiQvggNKPI9/ummcSt5usuIV6HkaLKigwzPpoenhEqmGmx3zHqm6ZLJ+CR/99N8JLinaEw==}
+    engines: {node: '>= 14.17'}
+    dev: false
+
+  /formdata-node/4.3.3:
+    resolution: {integrity: sha512-coTew7WODO2vF+XhpUdmYz4UBvlsiTMSNaFYZlrXIqYbFd4W7bMwnoALNLE6uvNgzTg2j1JDF0ZImEfF06VPAA==}
+    engines: {node: '>= 12.20'}
+    dependencies:
+      node-domexception: 1.0.0
+      web-streams-polyfill: 4.0.0-beta.1
+    dev: false
+
+  /node-domexception/1.0.0:
+    resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
+    engines: {node: '>=10.5.0'}
+    dev: false
+
   /options/0.0.6:
     resolution: {integrity: sha512-bOj3L1ypm++N+n7CEbbe473A414AB7z+amKYshRb//iuL3MpdDCLhPnw6aVTdKB9g5ZRVHIEp8eUln6L2NUStg==}
     engines: {node: '>=0.4.0'}
@@ -35,6 +57,11 @@ packages:
   /undici/5.6.1:
     resolution: {integrity: sha512-yYVqywdCbNb99f/w045wqmv++WExXDjY0FEvLSB7QUZZH6izxrVkF4dJn1aimcvN0+WAhv75Gg7v6VJoqmRtJQ==}
     engines: {node: '>=12.18'}
+    dev: false
+
+  /web-streams-polyfill/4.0.0-beta.1:
+    resolution: {integrity: sha512-3ux37gEX670UUphBF9AMCq8XM6iQ8Ac6A+DSRRjDoRBm1ufCkaCDdNVbaqq60PsEkdNlLKrGtv/YBP4EJXqNtQ==}
+    engines: {node: '>= 12'}
     dev: false
 
   /ws/1.1.5:

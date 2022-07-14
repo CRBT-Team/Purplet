@@ -9,7 +9,7 @@
     "build": "turbo run build --parallel --output-logs new-only --filter=!./examples/*",
     "build:purplet.js.org": "turbo run build --parallel --output-logs new-only --filter=./sites/purplet.js.org",
     "bump": "changeset version",
-    "cloc": "cloc ./packages --exclude-dir=dist,.turbo,build,.purplet,node_modules",
+    "cloc": "cloc ./packages --exclude-dir=dist,.turbo,build,.purplet,node_modules,discord-api-docs --exclude-content='@no-line-count' --exclude-content='lockfileVersion: 5.4'",
     "dev": "pnpm turbo run dev --parallel --filter=!./examples/*",
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md,json}\"",
     "lint": "turbo run lint",

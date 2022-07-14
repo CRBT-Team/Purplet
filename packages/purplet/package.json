@@ -43,9 +43,9 @@
   "dependencies": {
     "@davecode/utils": "^1.0.1",
     "@discordjs/builders": "^0.13.0",
-    "@discordjs/rest": "^0.4.1",
     "@purplet/gateway": "workspace:^1.0.0",
     "@purplet/polyfill": "workspace:^1.0.0",
+    "@purplet/rest": "workspace:1.0.0-next.2",
     "@purplet/serialize": "workspace:^2.0.0",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-node-resolve": "^13.3.0",
@@ -73,14 +73,16 @@
     "@types/prompts": "^2.0.14",
     "@types/wrap-ansi": "^8.0.1",
     "@types/yargs": "^17.0.10",
+    "rollup-plugin-add-shebang": "^0.3.1",
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
     "bufferutil": "^4.0.6",
     "erlpack": "^0.1.4",
-    "rollup-plugin-add-shebang": "^0.3.1",
-    "typescript": "^4.7.4",
     "utf-8-validate": "^5.0.9",
     "zlib-sync": "^0.1.7"
   },
-  "peerDependencies": {
+  "optionalDependencies": {
     "bufferutil": "^4.0.6",
     "erlpack": "^0.1.4",
     "utf-8-validate": "^5.0.9",

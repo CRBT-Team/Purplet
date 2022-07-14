@@ -7,15 +7,40 @@ if (typeof Blob === 'undefined') {
 // Fetch is not available in node <18
 if (typeof fetch === 'undefined') {
   const undici = await import('undici');
+  // Always apply everything here just in case undici and the implementation won't play nice
   globalThis.fetch = undici.fetch;
-
-  // Always apply these just in case undici wouldn't play nice,
-  // though i don't know if that's actually needed
   globalThis.Request = undici.Request;
   globalThis.Response = undici.Response;
   globalThis.FormData = undici.FormData;
   globalThis.Headers = undici.Headers;
   globalThis.File = undici.File;
+}
+// FormData is not available in bun as of 0.1.2
+else if (typeof FormData === 'undefined') {
+  const _Blob = globalThis.Blob;
+  const formData = await import('formdata-node/lib/esm');
+  const { FormDataEncoder } = await import('form-data-encoder');
+  globalThis.FormData = formData.FormData;
+  globalThis.Blob = formData.Blob;
+
+  // Wrap fetch to accept FormData
+  const _fetch = globalThis.fetch;
+  globalThis.fetch = async (url, options) => {
+    if (options && options.body && options.body instanceof FormData) {
+      const encoder = new FormDataEncoder(options.body);
+      options.headers = new Headers(options.headers);
+      options.headers.set('Content-Type', encoder.contentType);
+      options.headers.set('Content-Length', encoder.contentLength);
+      let parts = [];
+      for await (const part of encoder.encode()) {
+        parts.push(part);
+      }
+      options.body = new _Blob(parts);
+    } else if (options && options.body && options.body instanceof Blob) {
+      options.body = new _Blob([options.body.arrayBuffer()]);
+    }
+    return _fetch(url, options);
+  }
 }
 
 // Websocket is not available in any node version as of v18
@@ -32,7 +57,7 @@ if (typeof structuredClone === 'undefined') {
 
 // crypto is not a global variable as of node 18
 if (typeof crypto === 'undefined') {
-  const crypto = await import('crypto');
+  const crypto = await import('node:crypto');
   globalThis.crypto = crypto.webcrypto;
 }
 

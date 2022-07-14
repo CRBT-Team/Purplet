@@ -1,12 +1,5 @@
 import type { Immutable } from '@davecode/types';
-import {
-  APIMessage,
-  RESTGetAPIWebhookWithTokenMessageResult,
-  RESTPatchAPIWebhookWithTokenMessageResult,
-  RESTPostAPIWebhookWithTokenJSONBody,
-  RESTPostAPIWebhookWithTokenWaitResult,
-  Routes,
-} from 'purplet/types';
+import { APIMessage, RESTPostAPIWebhookWithTokenJSONBody } from 'purplet/types';
 import type { Interaction } from './interaction/base';
 import { Message } from './message';
 import { CreateMessageData, resolveCreateMessageData } from './resolve/create-message';
@@ -20,30 +13,34 @@ export class InteractionMessage extends Message {
   }
 
   async fetch() {
-    const data = (await rest.get(
-      Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.raw.id)
-    )) as RESTGetAPIWebhookWithTokenMessageResult;
+    const data = await rest.interactionResponse.getFollowupMessage({
+      applicationId: this.interaction.applicationId,
+      interactionToken: this.interaction.token,
+      messageId: this.raw.id,
+    });
     return new InteractionMessage(data, this.interaction);
   }
 
   async edit(message: CreateMessageData) {
     const { message: body, files } = resolveCreateMessageData(message);
 
-    const result = (await rest.patch(
-      Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.raw.id),
-      {
-        body,
-        files,
-      }
-    )) as RESTPatchAPIWebhookWithTokenMessageResult;
+    const result = await rest.interactionResponse.editFollowupMessage({
+      applicationId: this.interaction.applicationId,
+      interactionToken: this.interaction.token,
+      messageId: this.raw.id,
+      body,
+      files,
+    });
 
     return new InteractionMessage(result, this.interaction);
   }
 
   async delete() {
-    await rest.delete(
-      Routes.webhookMessage(this.interaction.applicationId, this.interaction.token, this.raw.id)
-    );
+    await rest.interactionResponse.deleteFollowupMessage({
+      applicationId: this.interaction.applicationId,
+      interactionToken: this.interaction.token,
+      messageId: this.raw.id,
+    });
   }
 }
 
@@ -67,13 +64,11 @@ export class OriginalInteractionMessage extends InteractionMessage {
 
   async showFollowup(message: RESTPostAPIWebhookWithTokenJSONBody) {
     // TODO: uploading files.
-    const data = (await rest.post(
-      Routes.webhook(this.interaction.applicationId, this.interaction.token),
-      {
-        body: toJSONValue(message),
-      }
-    )) as RESTPostAPIWebhookWithTokenWaitResult;
-
+    const data = await rest.interactionResponse.createFollowupMessage({
+      applicationId: this.interaction.applicationId,
+      interactionToken: this.interaction.token,
+      body: toJSONValue(message),
+    });
     return new InteractionMessage(data, this.interaction);
   }
 }
