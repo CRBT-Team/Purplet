@@ -1,0 +1,53 @@
+{
+  "name": "buncord",
+  "version": "1.0.0",
+  "description": "Cross-runtime Discord Library",
+  "keywords": [
+    "discord",
+    "bot",
+    "api",
+    "rest",
+    "typescript",
+    "bun",
+    "library"
+  ],
+  "homepage": "https://github.com/CRBT-Team/Purplet/tree/v2/packages/buncord",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CRBT-Team/Purplet.git",
+    "directory": "packages/buncord"
+  },
+  "license": "Apache-2.0",
+  "author": "Hycord <masen0914@gmail.com> (https://github.com/hycord)",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c && tsc -p . && echo Types Passing",
+    "dev": "rollup -c --watch",
+    "lint": "eslint src/**/*.{ts,tsx}"
+  },
+  "devDependencies": {
+    "@davecode/types": "^1.0.2",
+    "@davecode/utils": "^1.0.1",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@types/node": "^17.0.45",
+    "bun-types": "^0.1.2",
+    "dedent": "^0.7.0",
+    "discord-api-types": "^0.36.1",
+    "esbuild": "^0.14.48",
+    "execa": "^6.1.0",
+    "rollup": "^2.75.5",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "typescript": "^4.7.4",
+    "@purplet/rest": "workspace:*",
+    "@purplet/gateway": "^1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
