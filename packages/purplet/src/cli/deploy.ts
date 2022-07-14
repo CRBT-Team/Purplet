@@ -1,10 +1,6 @@
 import path from 'path';
-import { REST } from '@discordjs/rest';
-import {
-  RESTGetAPIOAuth2CurrentApplicationResult,
-  RESTPutAPIApplicationCommandsJSONBody,
-  Routes,
-} from 'purplet/types';
+import { Rest } from '@purplet/rest';
+import type { RESTPutAPIApplicationCommandsJSONBody } from 'purplet/types';
 import { pathToFileURL } from 'url';
 import { errorNoToken } from './errors';
 import { loadConfig } from '../config';
@@ -60,13 +56,11 @@ export async function deploy(options: DeployOptions) {
     commands = [];
   }
 
-  const rest = new REST().setToken(token);
+  const rest = new Rest({ token });
 
-  const application = (await rest.get(
-    Routes.oauth2CurrentApplication()
-  )) as RESTGetAPIOAuth2CurrentApplicationResult;
-
-  await rest.put(Routes.applicationCommands(application.id), {
+  const application = await rest.oauth2.getCurrentBotApplicationInformation();
+  await rest.applicationCommand.bulkOverwriteGlobalApplicationCommands({
+    applicationId: application.id,
     body: commands,
   });
 

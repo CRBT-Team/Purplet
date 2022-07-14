@@ -1,6 +1,6 @@
 import type { Immutable } from '@davecode/types';
 import type { ImageURLOptions } from '@discordjs/rest';
-import { APIUser, Routes } from 'purplet/types';
+import type { APIUser } from 'purplet/types';
 import { UserFlagsBitfield } from './bit-field';
 import type { Interaction } from './interaction';
 import { rest } from '../lib/global';
@@ -11,7 +11,7 @@ export class User {
   constructor(readonly raw: Immutable<APIUser>) {}
 
   async fetch() {
-    return new User((await rest.get(Routes.user(this.id))) as APIUser);
+    return new User(await rest.user.getUser({ userId: this.id }));
   }
 
   get id() {

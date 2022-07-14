@@ -1,4 +1,4 @@
-import type { RawFile } from '@discordjs/rest';
+import type { RawFile } from '@purplet/rest';
 import type { APIInteraction, APIPingInteraction, InteractionResponseType } from 'purplet/types';
 import { PermissionsBitfield } from '../bit-field';
 import { EmptyGuild } from '../guild';

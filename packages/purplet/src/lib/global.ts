@@ -1,8 +1,8 @@
-import type { REST } from '@discordjs/rest';
+import type { Rest } from '@purplet/rest';
 
-/** Global REST client from `@discordjs/rest`. */
-export let rest: REST;
+/** Global REST client from `@purplet/rest`. */
+export let rest: Rest;
 
-export function setRESTClient(newRest: REST) {
+export function setRESTClient(newRest: Rest) {
   rest = newRest;
 }

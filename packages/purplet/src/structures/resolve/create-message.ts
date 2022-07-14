@@ -1,4 +1,4 @@
-import type { RawFile } from '@discordjs/rest';
+import type { RawFile } from '@purplet/rest';
 import { APIEmbed, MessageFlags, RESTPostAPIChannelMessageJSONBody } from 'purplet/types';
 import { CamelCasedValue, uncamelCase } from '../../utils/camel-case';
 import { JSONResolvable, toJSONValue } from '../../utils/json';

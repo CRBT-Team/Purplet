@@ -1,5 +1,7 @@
 import { asyncMap, deferred } from '@davecode/utils';
-import { REST } from '@discordjs/rest';
+import { Gateway, GatewayExitError } from '@purplet/gateway';
+import type { GatewayOptions } from '@purplet/gateway/src/Gateway';
+import { Rest } from '@purplet/rest';
 import { deepEqual } from 'fast-equals';
 import {
   APIGuild,
@@ -8,9 +10,7 @@ import {
   GatewayIntentBits,
   GatewayPresenceUpdateData,
   GatewayReadyDispatchData,
-  RESTAPIPartialCurrentUserGuild,
   RESTPutAPIApplicationCommandsJSONBody,
-  Routes,
 } from 'purplet/types';
 import { FeatureLoader } from './FeatureLoader';
 import { rest, setRESTClient } from './global';
@@ -69,8 +69,6 @@ export interface AllowedGuildRules {
 }
 
 export type CreateGatewayClientResult = [Gateway, GatewayReadyDispatchData];
-import { Gateway, GatewayExitError } from '@purplet/gateway';
-import type { GatewayOptions } from '@purplet/gateway/src/Gateway';
 
 export async function createGatewayClient(identify: GatewayOptions) {
   const [promise, resolve, reject] = deferred<CreateGatewayClientResult>();
@@ -149,7 +147,7 @@ export class GatewayBot {
     if (this.#running) throw new Error('GatewayBot is already running');
     this.#running = true;
     // TODO: see how the global variable is set here. this should probably be somewhere else.
-    setRESTClient(new REST().setToken(this.options.token));
+    setRESTClient(new Rest({ token: this.options.token }));
     log('debug', `starting gateway bot, guildCommands=${this.options.deployGuildCommands}`);
     this.#cleanupInitializeHook = await runHook(this.features, $initialize, undefined);
     await this.startClient();
@@ -189,9 +187,12 @@ export class GatewayBot {
     // Interaction hooks
     this.client.on(GatewayDispatchEvents.InteractionCreate, async i => {
       const responseHandler = async (response: InteractionResponse) => {
-        await rest.post(Routes.interactionCallback(i.id, i.token), {
+        await rest.interactionResponse.createInteractionResponse({
+          interactionId: i.id,
+          interactionToken: i.token,
           body: {
             type: response.type,
+            // @ts-expect-error casting from unknown to interaction response data
             data: response.data,
           },
           files: response.files,
@@ -227,9 +228,9 @@ export class GatewayBot {
 
     this.#cachedCommandData = commands;
 
-    const guildList = (
-      (await rest.get(Routes.userGuilds())) as RESTAPIPartialCurrentUserGuild[]
-    ).filter(x => this.isGuildAllowed(x.id));
+    const guildList = await rest.user
+      .getCurrentUserGuilds()
+      .then(guilds => guilds.filter(x => this.isGuildAllowed(x.id)));
 
     if (guildList.length > 75) {
       throw errorTooManyGuilds();
@@ -250,8 +251,10 @@ export class GatewayBot {
 
   private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
     log('info', `updating commands on ${guild.name}`);
-    await rest.put(Routes.applicationGuildCommands(this.id, guild.id), {
-      body: this.#cachedCommandData,
+    await rest.applicationCommand.bulkOverwriteGuildApplicationCommands({
+      guildId: guild.id,
+      applicationId: this.id,
+      body: this.#cachedCommandData!,
     });
   }
 

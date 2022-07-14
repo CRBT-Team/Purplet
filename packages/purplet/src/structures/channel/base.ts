@@ -1,10 +1,9 @@
 import type { Immutable } from '@davecode/types';
-import {
+import type {
   APIChannel,
   APIChannelBase,
   ChannelType,
   RESTPatchAPIChannelJSONBody,
-  Routes,
 } from 'purplet/types';
 import { createChannel } from './create';
 import { ReadonlyChannelFlagsBitfield } from '../bit-field';
@@ -16,21 +15,22 @@ export class Channel<Data extends APIChannelBase<ChannelType> = APIChannelBase<C
   constructor(readonly raw: Immutable<Data>) {}
 
   async fetch() {
-    return createChannel((await rest.get(Routes.channel(this.id))) as APIChannel);
+    return createChannel((await rest.channel.getChannel({ channelId: this.id })) as APIChannel);
   }
 
   // TODO: X-Audit-Log-Reason
   protected async _modify(data: JSONResolvable<RESTPatchAPIChannelJSONBody>) {
     return createChannel(
-      (await rest.patch(Routes.channel(this.id), {
+      await rest.channel.modifyChannel({
+        channelId: this.id,
         body: toJSONValue(data),
-      })) as APIChannel
+      })
     );
   }
 
   // TODO: X-Audit-Log-Reason
   async delete() {
-    return rest.delete(Routes.channel(this.id));
+    await rest.channel.deleteOrCloseChannel({ channelId: this.id });
   }
 
   get id() {

@@ -17,7 +17,10 @@
     "directory": "packages/rest"
   },
   "license": "Apache-2.0",
-  "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+  "contributors": [
+    "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+    "Masen Toplak <masen0914@gmail.com> (https://github.com/Hycord)"
+  ],
   "sideEffects": false,
   "type": "module",
   "exports": {

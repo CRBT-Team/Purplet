@@ -14,6 +14,8 @@ const me = await rest.user.getCurrentUser();
 
 All routes are based off of the [Discord API Docs](https://discordapp.com/developers/docs/resources/), in the notation of `.resource.actionName`, where `resource` is the name of a page on the sidebar, and `actionName` is the name of the header above each endpoint. This means the endpoint used above is ["Get Current User" on the "User" page](https://discordapp.com/developers/docs/resources/user#get-current-user).
 
+> note: "Receiving and Responding" is exposed as `interactionResponse`, as it is more concise
+
 For requests with url params, JSON bodies, queries, file uploads, and the `X-Audit-Log-Reason` header; a consistent object is passed, though each route has a custom type generated to only allow the fields are allowed/required.
 
 **Sending a Message:**
