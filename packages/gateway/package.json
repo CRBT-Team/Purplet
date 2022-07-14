@@ -10,7 +10,7 @@
     "typescript",
     "bun"
   ],
-  "homepage": "https://github.com/CRBT-Team/Purplet/tree/v2/packages/gateway",
+  "homepage": "https://github.com/CRBT-Team/Purplet/tree/main/packages/gateway",
   "repository": {
     "type": "git",
     "url": "https://github.com/CRBT-Team/Purplet.git",
