@@ -2,10 +2,11 @@
   <img alt="Purplet" src="sites/purplet.js.org/static/img/purplet-artwork.png" >
   <h4>A simple framework to build modern Discord bots.</h4>
   <div>
+    <img src="https://img.shields.io/badge/Discord_API-v10-c4aaff" alt="Discord API Version">
     <img src="https://img.shields.io/npm/v/purplet?color=c4aaff&label=version" alt="Version">
     <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=c4aaff" alt="License">
     <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet?color=c4aaff">
-    <a href="https://discord.gg/AvwhNtsgAC"><img src="https://img.shields.io/discord/782584672298729473?color=c4aaff&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
+    <a href="https://discord.gg/BFkHA8P7rh"><img src="https://img.shields.io/discord/995533040040292373?color=c4aaff&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
   </div>
 </div>
 
@@ -44,6 +45,8 @@ and follow the instructions it gives. Documentation on purplet is available at [
 
 ## Monorepo Contents
 
+Aside from `purplet`, our project contains these following public packages:
+
 | Package | Description | Changelog |
 | --- | --- | --- |
 | [purplet](packages/purplet) | Vite + Discord API abstractions + gateway client + more | [Changelog](packages/purplet/CHANGELOG.md) |
@@ -51,6 +54,8 @@ and follow the instructions it gives. Documentation on purplet is available at [
 | [@purplet/gateway](packages/gateway) | Gateway Client implementation | [Changelog](packages/gateway/CHANGELOG.md) |
 | [@purplet/rest](packages/rest) | Gateway Client implementation | [Changelog](packages/rest/CHANGELOG.md) |
 | [@purplet/serialize](packages/serialize) | Utilities for binary serialization | [Changelog](packages/serialize/CHANGELOG.md) |
+
+The `examples` folder contains one framework example as of right now:
 
 | Example Projects        | Command to copy                |
 | ----------------------- | ------------------------------ |

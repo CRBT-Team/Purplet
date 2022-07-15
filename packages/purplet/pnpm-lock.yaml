@@ -4,10 +4,10 @@ specifiers:
   '@davecode/types': ^1.0.2
   '@davecode/utils': ^1.0.1
   '@discordjs/builders': ^0.13.0
-  '@purplet/gateway': workspace:^1.0.0
-  '@purplet/polyfill': workspace:^1.0.0
-  '@purplet/rest': workspace:1.0.0-next.2
-  '@purplet/serialize': workspace:^2.0.0
+  '@purplet/gateway': workspace:*
+  '@purplet/polyfill': workspace:*
+  '@purplet/rest': workspace:*
+  '@purplet/serialize': workspace:*
   '@rollup/plugin-alias': ^3.1.9
   '@rollup/plugin-node-resolve': ^13.3.0
   '@rollup/plugin-replace': ^4.0.0
@@ -39,6 +39,7 @@ specifiers:
   zlib-sync: ^0.1.7
 
 dependencies:
+  '@davecode/types': 1.0.2
   '@davecode/utils': 1.0.1
   '@discordjs/builders': 0.13.0
   '@purplet/gateway': link:../gateway
@@ -70,7 +71,6 @@ optionalDependencies:
   zlib-sync: 0.1.7
 
 devDependencies:
-  '@davecode/types': 1.0.2
   '@rollup/plugin-replace': 4.0.0_rollup@2.76.0
   '@types/dedent': 0.7.0
   '@types/node': 17.0.45
@@ -87,6 +87,7 @@ packages:
     dependencies:
       ts-toolbelt: 9.6.0
       utility-types: 3.10.0
+    dev: false
 
   /@davecode/utils/1.0.1:
     resolution: {integrity: sha512-JNOWzUe2EDn8RiW0ECVIo5g2R3owYEnH0Kcpcg54QcBn3irt2/7fc3s8lY6kZ+q4HjbG3TK4c+TGLK73F1dY6Q==}
@@ -249,6 +250,7 @@ packages:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
     dependencies:
       file-uri-to-path: 1.0.0
+    dev: false
     optional: true
 
   /bl/5.0.0:
@@ -655,6 +657,7 @@ packages:
 
   /file-uri-to-path/1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
+    dev: false
     optional: true
 
   /fill-range/7.0.1:
@@ -669,7 +672,6 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /function-bind/1.1.1:
@@ -803,6 +805,7 @@ packages:
 
   /nan/2.16.0:
     resolution: {integrity: sha512-UdAqHyFngu7TfQKsCBgAA6pWDkT8MAO7d0jyOecVhN5354xbLqdn8mV9Tat9gepAupm0bt2DbeaSC8vS52MuFA==}
+    dev: false
     optional: true
 
   /nanoid/3.3.4:
@@ -814,6 +817,7 @@ packages:
   /node-gyp-build/4.5.0:
     resolution: {integrity: sha512-2iGbaQBV+ITgCz76ZEjmhUKAKVf7xfY1sRl4UiKQspfZMH2h06SyhNsnSVy50cwkFQDGLyif6m/6uFXHkOZ6rg==}
     hasBin: true
+    dev: false
     optional: true
 
   /normalize-path/3.0.0:
@@ -947,7 +951,6 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
-    dev: false
 
   /safe-buffer/5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
@@ -1046,6 +1049,7 @@ packages:
 
   /ts-toolbelt/9.6.0:
     resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
+    dev: false
 
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
@@ -1073,6 +1077,7 @@ packages:
   /utility-types/3.10.0:
     resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
     engines: {node: '>= 4'}
+    dev: false
 
   /vite/3.0.0-alpha.14:
     resolution: {integrity: sha512-5NLwc+70ax8PpKTOwRSH72Zq1DuUOiUnnWWjnPlL2jvhaVac5KzBRRDhsSzkDmKCtLBVOTSVTgAe/2styY1YFQ==}

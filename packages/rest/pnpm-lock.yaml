@@ -14,8 +14,10 @@ specifiers:
   rollup-plugin-esbuild: ^4.9.1
   typescript: ^4.7.4
 
-devDependencies:
+dependencies:
   '@davecode/types': 1.0.2
+
+devDependencies:
   '@davecode/utils': 1.0.1
   '@rollup/plugin-node-resolve': 13.3.0_rollup@2.76.0
   '@types/node': 17.0.45
@@ -35,7 +37,6 @@ packages:
     dependencies:
       ts-toolbelt: 9.6.0
       utility-types: 3.10.0
-    dev: true
 
   /@davecode/utils/1.0.1:
     resolution: {integrity: sha512-JNOWzUe2EDn8RiW0ECVIo5g2R3owYEnH0Kcpcg54QcBn3irt2/7fc3s8lY6kZ+q4HjbG3TK4c+TGLK73F1dY6Q==}
@@ -547,7 +548,6 @@ packages:
 
   /ts-toolbelt/9.6.0:
     resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
-    dev: true
 
   /typescript/4.7.4:
     resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
@@ -558,7 +558,6 @@ packages:
   /utility-types/3.10.0:
     resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
     engines: {node: '>= 4'}
-    dev: true
 
   /which/2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
