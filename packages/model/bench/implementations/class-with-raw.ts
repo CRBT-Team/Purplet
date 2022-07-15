@@ -68,4 +68,7 @@ export class SampleB implements ISampleB {
   }
 }
 
-addImpl('class with raw param + getters', { SampleA, SampleB });
+addImpl('class with getters', {
+  SampleA: raw => new SampleA(raw),
+  SampleB: raw => new SampleB(raw),
+});

@@ -1,7 +1,7 @@
 import { makeBench } from '../shared';
 
 makeBench('Basic construction', ({ SampleA, SampleB }) => {
-  new SampleA({
+  SampleA({
     id: '1',
     name: 'foo',
     snake_case: 1,

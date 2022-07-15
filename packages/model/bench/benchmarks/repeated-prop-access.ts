@@ -1,7 +1,7 @@
 import { makeBench } from '../shared';
 
 makeBench('Repeated property access', ({ SampleA, SampleB }) => {
-  const a = new SampleA({
+  const a = SampleA({
     id: '1',
     name: 'foo',
     snake_case: 1,
@@ -27,7 +27,7 @@ makeBench('Repeated property access', ({ SampleA, SampleB }) => {
     flag: true,
   });
 
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 12; i++) {
     const listOfProps = [
       a.id,
       a.name,

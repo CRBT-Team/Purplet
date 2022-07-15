@@ -1,7 +1,7 @@
 import { makeBench } from '../shared';
 
 makeBench('Basic method calling', ({ SampleA, SampleB }) => {
-  const a = new SampleA({
+  const a = SampleA({
     id: '1',
     name: 'foo',
     snake_case: 1,

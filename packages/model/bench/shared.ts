@@ -43,8 +43,8 @@ export interface ISampleB {
 // TYPES
 
 export interface Impl {
-  SampleA: { new (raw: RawSampleA): ISampleA };
-  SampleB: { new (raw: RawSampleB): ISampleB };
+  SampleA: (raw: RawSampleA) => ISampleA;
+  SampleB: (raw: RawSampleB) => ISampleB;
 }
 
 type Bench = (impl: Impl) => void;
@@ -70,6 +70,15 @@ export function makeBench(name: string, fn: Bench) {
   group(name, () => {
     for (const { name, impl } of impls) {
       bench(name, () => fn(impl));
+    }
+  });
+  benches.push({ name, bench: fn });
+}
+export function makeBenchPrep(name: string, fn: (impl: Impl) => () => void) {
+  group(name, () => {
+    for (const { name, impl } of impls) {
+      const fn2 = fn(impl);
+      bench(name, () => fn2());
     }
   });
   benches.push({ name, bench: fn });

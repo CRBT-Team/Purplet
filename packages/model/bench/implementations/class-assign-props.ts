@@ -54,4 +54,7 @@ export class SampleB implements ISampleB {
   }
 }
 
-addImpl('class assign this.props', { SampleA, SampleB });
+addImpl('class assign props', {
+  SampleA: raw => new SampleA(raw),
+  SampleB: raw => new SampleB(raw),
+});

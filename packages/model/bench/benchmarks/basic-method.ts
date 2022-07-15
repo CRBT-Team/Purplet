@@ -1,12 +1,14 @@
-import { makeBench } from '../shared';
+import { makeBenchPrep } from '../shared';
 
-makeBench('Basic method calling', ({ SampleA, SampleB }) => {
-  const a = new SampleB({
+makeBenchPrep('Basic method calling', ({ SampleA, SampleB }) => {
+  const a = SampleB({
     id: 'abc',
     value: 123,
   });
 
-  for (let i = 0; i < 100; i++) {
-    a.squareSelf();
-  }
+  return () => {
+    for (let i = 0; i < 100; i++) {
+      a.squareSelf();
+    }
+  };
 });

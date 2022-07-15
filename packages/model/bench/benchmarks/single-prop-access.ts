@@ -1,7 +1,7 @@
 import { makeBench } from '../shared';
 
 makeBench('Access all properties', ({ SampleA, SampleB }) => {
-  const a = new SampleB({
+  const a = SampleB({
     id: 'abc',
     value: 123,
   });

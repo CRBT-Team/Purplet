@@ -1,5 +1,9 @@
 import './implementations/class-assign-props';
 import './implementations/class-with-raw';
+import './implementations/function-return-obj';
+import './implementations/lazy-proto';
+import './implementations/lazy-proto-with-inlining';
+import './implementations/function-return-lazy-proto';
 import { describe, expect, test } from 'bun:test';
 import { impls } from './shared';
 
@@ -9,7 +13,7 @@ for (const {
 } of impls) {
   describe(name, () => {
     test('Constructors create proper data structures.', () => {
-      const a = new SampleA({
+      const a = SampleA({
         flag: true,
         id: '1',
         list: [
@@ -45,7 +49,7 @@ for (const {
     });
 
     function getSample() {
-      return new SampleA({
+      return SampleA({
         id: '1',
         name: 'foo',
         snake_case: 531521,
@@ -104,7 +108,7 @@ for (const {
       const a = getSample();
       expect(a.subObject.squareSelf()).toBe(3512 * 3512);
 
-      const b = new SampleB({
+      const b = SampleB({
         id: '1',
         value: 5,
       });
