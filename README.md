@@ -45,15 +45,20 @@ and follow the instructions it gives. Documentation on purplet is available at [
 
 ## Monorepo Contents
 
-Aside from `purplet`, our project contains these following public packages:
+This repository contains these following public packages:
 
 | Package | Description |
 | --- | --- |
-| [![purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=purplet)](packages/purplet) | Vite + Discord API abstractions + gateway client + more |
-| [![create-purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=create-purplet)](packages/create-purplet) | Project generator CLI |
-| [![@purplet/gateway](https://img.shields.io/npm/v/@purplet/gateway?color=c4aaff&label=@purplet/gateway)](packages/gateway) | Gateway Client implementation |
-| [![@purplet/rest](https://img.shields.io/npm/v/@purplet/rest?color=c4aaff&label=@purplet/rest)](packages/rest) | Gateway Client implementation |
+| [![purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=purplet)](packages/purplet) | Full Framework for quickly building bots. |
+| ![buncord](https://img.shields.io/badge/buncord-soon%E2%84%A2-red) | Library to easily interact with the Discord API. |
+| [![@purplet/rest](https://img.shields.io/npm/v/@purplet/rest?color=c4aaff&label=@purplet/rest)](packages/rest) | Rest client implementation |
+| [![@purplet/gateway](https://img.shields.io/npm/v/@purplet/gateway?color=c4aaff&label=@purplet/gateway)](packages/gateway) | Gateway client implementation |
+| ![@purplet/structures](https://img.shields.io/badge/%40purplet%2Fstructures-soon%E2%84%A2-red) | Rest client implementation |
+| ![@purplet/model](https://img.shields.io/badge/%40purplet%2Fmodel-soon%E2%84%A2-red) | Create maintainable classes to enrich JSON data. |
+| ![@purplet/logger](https://img.shields.io/badge/%40purplet%2Flogger-soon%E2%84%A2-red) | Simple log library that allows global injection. |
+| ![@purplet/utils](https://img.shields.io/badge/%40purplet%2Futils-soon%E2%84%A2-red) | Internal helper functions. Might not be published. |
 | [![@purplet/serialize](https://img.shields.io/npm/v/@purplet/serialize?color=c4aaff&label=@purplet/serialize)](packages/serialize) | Utilities for binary serialization |
+| [![create-purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=create-purplet)](packages/create-purplet) | Project generation command, `pnpm create purplet` |
 
 The `examples` folder contains one framework example as of right now:
 
