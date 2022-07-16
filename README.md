@@ -47,13 +47,13 @@ and follow the instructions it gives. Documentation on purplet is available at [
 
 Aside from `purplet`, our project contains these following public packages:
 
-| Package | Description | Changelog |
-| --- | --- | --- |
-| [purplet](packages/purplet) | Vite + Discord API abstractions + gateway client + more | [Changelog](packages/purplet/CHANGELOG.md) |
-| [create-purplet](packages/create-purplet) | Project generator CLI | [Changelog](packages/create-purplet/CHANGELOG.md) |
-| [@purplet/gateway](packages/gateway) | Gateway Client implementation | [Changelog](packages/gateway/CHANGELOG.md) |
-| [@purplet/rest](packages/rest) | Gateway Client implementation | [Changelog](packages/rest/CHANGELOG.md) |
-| [@purplet/serialize](packages/serialize) | Utilities for binary serialization | [Changelog](packages/serialize/CHANGELOG.md) |
+| Package | Description |
+| --- | --- |
+| [![purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=purplet)](packages/purplet) | Vite + Discord API abstractions + gateway client + more |
+| [![create-purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=create-purplet)](packages/create-purplet) | Project generator CLI |
+| [![@purplet/gateway](https://img.shields.io/npm/v/@purplet/gateway?color=c4aaff&label=@purplet/gateway)](packages/gateway) | Gateway Client implementation |
+| [![@purplet/rest](https://img.shields.io/npm/v/@purplet/rest?color=c4aaff&label=@purplet/rest)](packages/rest) | Gateway Client implementation |
+| [![@purplet/serialize](https://img.shields.io/npm/v/@purplet/serialize?color=c4aaff&label=@purplet/serialize)](packages/serialize) | Utilities for binary serialization |
 
 The `examples` folder contains one framework example as of right now:
 
