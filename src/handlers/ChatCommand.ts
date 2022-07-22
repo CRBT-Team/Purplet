@@ -24,6 +24,22 @@ export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
    * subcommands and subcommand groups, and Purplet will automatically combine commands for you.
    */
   name: string;
+  /**
+   * Localization dictionary for the command's name, which follows the same restrictions. This will
+   * be rendered on the client-side depending on the user's Discord locale.
+   *
+   * @example
+   *   export default ChatCommand({
+   *     name: 'coinflip',
+   *     name_localizations: {
+   *       fr: 'pile-ou-face', // French
+   *     },
+   *     description: 'Flips a coin.',
+   *   });
+   *
+   * @link https://discord.com/developers/docs/reference#locales
+   */
+  nameLocalizations?: LocalizationMap;
   /** A 1-100 character description for the command. This will be shown under the command name in Discord. */
   description: string;
   /**
@@ -34,7 +50,7 @@ export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
    *   export default ChatCommand({
    *     name: 'coinflip',
    *     description: 'Flips a coin.',
-   *     descriptionLocalizations: {
+   *     description_localizations: {
    *       fr: 'Lance une pièce.', // French
    *     },
    *   });
@@ -51,6 +67,12 @@ export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
    */
   defaultPermission?: boolean;
   /**
+   * Whether the command is enabled in DMs.
+   *
+   * @default true
+   */
+  allowInDMs?: boolean;
+  /**
    * The function to execute when the command is called. The interaction is bound to `this` and the
    * resolved options are passed as the first argument.
    */
@@ -61,7 +83,7 @@ export interface ChatCommandGroupData {
   /** The name of the command group, not including the "/" character. */
   name: string;
   /**
-   * The description of the command group. This *should* be shown under the command group name in
+   * The description of the command group. This _should_ be shown under the command group name in
    * Discord, but doesn't go anywhere as of right now.
    */
   description: string;
@@ -176,6 +198,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
       // a nice message about a duplicate handler instance.
       throw new Error(`Command ${instance.data.name} already exists`);
     }
+
     this.commands.set(instance.data.name, instance);
   }
 
@@ -194,10 +217,15 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
     }
 
     return Object.values(commandsParts).map((subcommands) => {
+      const cmd = subcommands[0].data as ChatCommandData;
       const discordCommand = {
         type: 'CHAT_INPUT',
-        name: subcommands[0].data.name.split(' ')[0],
+        name: cmd.name.split(' ')[0],
         description: 'No Description Provided',
+        dmPermission: cmd.allowInDMs,
+        defaultMemberPermissions: cmd.defaultPermission,
+        descriptionLocalizations: cmd.descriptionLocalizations,
+        nameLocalizations: cmd.nameLocalizations,
         options: [],
       } as ChatInputApplicationCommandData;
 
@@ -213,6 +241,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
               type: 'SUB_COMMAND',
               name: splitName[1],
               description: subcommand.data.description,
+              descriptionLocalizations: subcommand.data.descriptionLocalizations,
               options: getOptionsFromBuilder(subcommand.data.options) as any,
             });
           } else if (splitName.length === 3) {
@@ -233,6 +262,9 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
               type: 'SUB_COMMAND',
               name: splitName[2],
               description: subcommand.data.description,
+              dmPermission: subcommand.data.allowInDMs,
+              defaultPermission: subcommand.data.defaultPermission,
+              descriptionLocalizations: subcommand.data.descriptionLocalizations,
               options: getOptionsFromBuilder(subcommand.data.options),
             });
           } else {
@@ -242,7 +274,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
           if (splitName.length === 1) {
             discordCommand.description = subcommand.data.description;
           } else if (splitName.length === 2) {
-            let option = discordCommand.options!.find((opt) => opt.name === splitName[1]) as any;
+            let option = discordCommand.options!.find((opt) => opt.name === splitName[1]);
 
             if (!option) {
               option = {

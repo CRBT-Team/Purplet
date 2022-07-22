@@ -47,7 +47,9 @@ interface AutocompleteOption<ThisKey, ExistingOptions> extends BaseOption {
 type EnumOption<ThisKey, ExistingOptions> =
   | AutocompleteOption<ThisKey, ExistingOptions>
   | (BaseOption & {
-      choices: Record<T, string>;
+      minLength?: number;
+      maxLength?: number;
+      choices?: Record<T, string>;
       choiceLocalizations?: Record<T, Record<string, string>>;
     });
 

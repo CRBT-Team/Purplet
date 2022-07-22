@@ -75,7 +75,11 @@ export class Purplet implements IPurplet {
     );
 
     const applicationCommands = (
-      await Promise.all(this.handlers.map((handler) => handler.getApplicationCommands()))
+      await Promise.all(
+        this.handlers.map((handler) => {
+          return handler.getApplicationCommands();
+        })
+      )
     ).flat();
 
     let commandSources: CommandSource[];
@@ -83,16 +87,16 @@ export class Purplet implements IPurplet {
     if (guilds.length > 0) {
       const allGuilds = await Promise.all(guilds.map((id) => this.client.guilds.fetch(id)));
       commandSources = allGuilds.map((x) => x.commands).filter(Boolean);
-      await this.client.application.commands.set([]);
+      await this.client?.application?.commands.set([]);
     } else {
-      commandSources = [this.client.application.commands];
+      commandSources = [this.client?.application?.commands];
     }
 
     for (const src of commandSources) {
       src.set(applicationCommands);
     }
 
-    console.log(`Logged in as ${this.client.user.tag}`);
+    console.log(`Logged in as ${this.client?.user?.tag}`);
   }
 
   public async registerHandler(handler: Handler) {

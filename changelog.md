@@ -1,3 +1,9 @@
+## 1.3.3
+
+- Backports `nameLocalizations`, `descriptionLocalizations` and `allowInDMs` props to `ChatCommand`
+- Backports `minLength` & `maxLength` options to `OptionBuilder#string()`
+- Bumped D.js to v13.9
+
 ## 1.3.1
 
 - Reverse `required` to default to false
