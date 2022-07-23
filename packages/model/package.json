@@ -23,12 +23,22 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [],
+  "scripts": {
+    "build": "rollup -c && tsc -p . && echo Types Passing",
+    "dev": "rollup -c --watch",
+    "lint": "eslint src/**/*.{ts,tsx}"
+  },
   "dependencies": {
     "@davecode/types": "^1.0.3"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "bun-types": "^0.1.2",
-    "mitata": "^0.1.6"
+    "esbuild": "^0.14.47",
+    "mitata": "^0.1.6",
+    "rollup": "^2.75.5",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "typescript": "^4.7.4"
   },
   "publishConfig": {
     "access": "public"
