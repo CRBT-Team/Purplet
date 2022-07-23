@@ -76,6 +76,7 @@ const overrides = {
     createGroupDM: 'Discord.RESTPostAPICurrentUserCreateDMChannel',
     listVoiceRegions: 'Discord.RESTGetAPIGuildVoiceRegions',
     createWebhook: 'Discord.RESTPostAPIChannelWebhook',
+    listJoinedPrivateArchivedThreads: 'Discord.RESTGetAPIChannelUsersThreadsArchived',
   },
   body: {
     createGroupDM: '{ access_tokens: string[]; nicks: Record<string, string> }',
@@ -88,6 +89,7 @@ const overrides = {
     getWebhookMessage: '{ thread_id?: boolean }',
     editWebhookMessage: '{ thread_id?: boolean }',
     deleteWebhookMessage: '{ thread_id?: boolean }',
+    listJoinedPrivateArchivedThreads: '{ limit?: number; before?: string; }',
   },
   result: {
     modifyCurrentMember: 'Discord.RESTGetAPIGuildMemberResult',

@@ -704,8 +704,8 @@ export type Channel = RouteGroup<{
    */
   listJoinedPrivateArchivedThreads: Route<{
     params: ["channelId"],
-    query: Discord.RESTGetAPIChannelCurrentUserThreadsArchivedPrivateQuery,
-    result: Discord.RESTGetAPIChannelCurrentUserThreadsArchivedPrivateResult,
+    query: Discord.RESTGetAPIChannelUsersThreadsArchivedQuery,
+    result: Discord.RESTGetAPIChannelUsersThreadsArchivedResult,
   }>,
 }>;
 export declare const Channel: RouteGroupClass<Channel>;

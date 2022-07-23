@@ -7,8 +7,8 @@ Our supported versions follows any non-deprecated version. That will usually be 
 | Version  | Supported          |
 | -------- | ------------------ |
 | 2.0.0    | :white_check_mark: |
-| 1.3.2    | :white_check_mark: |
-| <= 1.3.1 | :x:                |
+| 1.3.3    | :white_check_mark: |
+| <= 1.3.2 | :x:                |
 
 ## Reporting a Vulnerability
 

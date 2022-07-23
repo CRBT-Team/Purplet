@@ -82,7 +82,7 @@ const config = {
             items: [
               {
                 label: 'Discord',
-                href: 'https://crbt.app/discord',
+                href: 'https://discord.gg/BFkHA8P7rh',
               },
             ],
           },

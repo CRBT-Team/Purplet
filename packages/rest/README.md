@@ -83,4 +83,3 @@ We do apply some patches of our own, but missing types should be contributed to 
 
   - `channel.listPublicArchivedThreads`
   - `channel.listPrivateArchivedThreads`
-  - `channel.listJoinedPrivateArchivedThreads`

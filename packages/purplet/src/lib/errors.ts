@@ -1,4 +1,3 @@
-import type { GatewayCloseCodes } from 'purplet/types';
 import { log } from './logger';
 
 export class CLIError extends Error {
