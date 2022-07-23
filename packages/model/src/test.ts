@@ -16,13 +16,9 @@ export const Sample = createModel((m: Model<RawSample>) =>
     .copy('age')
     .copy('description')
 
-    .get('fullName', ['first_name', 'last_name'], self => {
-      return `${self.firstName} ${self.lastName}`;
-    })
+    .get('fullName', ['first_name', 'last_name'], self => `${self.firstName} ${self.lastName}`)
 
-    .method('multiplyAgeBy', ['age'], (self, i: number) => {
-      return self.age * i;
-    })
+    .method('multiplyAgeBy', ['age'], (self, i: number) => self.age * i)
 );
 
 const test = new Sample({

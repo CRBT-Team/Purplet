@@ -1,5 +1,7 @@
 {
-  "editor.rulers": [100],
+  "editor.rulers": [
+    100
+  ],
   "editor.tabSize": 2,
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
@@ -15,16 +17,16 @@
     "docs/*.md": "mdx"
   },
   "files.exclude": {
-    "**/.DS_Store": true,
-    "**/.docusaurus": true,
-    "**/.git": true,
-    "**/.turbo": true,
-    "**/Thumbs.db": true,
-    "**/node_modules": true,
-    ".eslint{ignore,rc}": true,
-    ".gitattributes": true,
-    ".prettier{ignore,rc.js}": true,
-    "netlify.toml": true
+    "**/.DS_Store": false,
+    "**/.docusaurus": false,
+    "**/.git": false,
+    "**/.turbo": false,
+    "**/Thumbs.db": false,
+    "**/node_modules": false,
+    ".eslint{ignore,rc}": false,
+    ".gitattributes": false,
+    ".prettier{ignore,rc.js}": false,
+    "netlify.toml": false
   },
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.tsdk": "node_modules/typescript/lib",
