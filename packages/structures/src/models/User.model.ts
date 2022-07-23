@@ -25,7 +25,7 @@ export const User = createModel((m: Model<APIUser>) =>
       self => `${self.username}#${self.discriminator ?? '0000'}`
     )
 
-    .get('isBot', ['bot', 'system'], self => self.raw.bot ?? self.raw.system)
+    .get('isBot', ['bot', 'system'], self => !!(self.raw.bot ?? self.raw.system))
 
     // TODO: the dependency should be `flags` OR `public_flags`, not AND
     .get(
