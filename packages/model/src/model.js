@@ -1,4 +1,4 @@
-// @ts-nocheck
+// notice: this file is excluded via tsconfig.json
 
 class Model {
   copyList = [];

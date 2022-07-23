@@ -25,6 +25,6 @@
     "target": "ESNext",
     "types": ["bun-types"]
   },
-  "exclude": ["**/dist"],
+  "exclude": ["**/dist", "src/model.js"],
   "include": ["bench/**/*.ts", "src/**/*.ts", "src/**/*.js"]
 }
