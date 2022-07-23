@@ -1,7 +1,11 @@
 import { execSync } from 'child_process';
 import { copyFileSync } from 'fs';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-execSync('node scripts/gen-routes.js', { stdio: 'inherit' });
+const dir = dirname(fileURLToPath(import.meta.url));
+
+execSync(`node ${dir}/gen-routes.js`, { stdio: 'inherit' });
 execSync('pnpm rollup -c', { stdio: 'inherit' });
 try {
   execSync('pnpm tsc -p .', { stdio: 'inherit' });
