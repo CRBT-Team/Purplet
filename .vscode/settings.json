@@ -35,7 +35,7 @@
     "editor.wordWrap": "bounded",
     "editor.wordWrapColumn": 100
   },
-  "workspace.isHidden": false,
+  "workspace.isHidden": true,
   "explorer.fileNesting.expand": false,
   "search.exclude": {
     "**/dist": true

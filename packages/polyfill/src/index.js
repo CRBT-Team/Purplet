@@ -40,7 +40,7 @@ else if (typeof FormData === 'undefined') {
       options.body = new _Blob([options.body.arrayBuffer()]);
     }
     return _fetch(url, options);
-  }
+  };
 }
 
 // Websocket is not available in any node version as of v18

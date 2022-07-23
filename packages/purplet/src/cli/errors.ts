@@ -1,6 +1,6 @@
-import type { Gateway, GatewayExitError } from '@purplet/gateway';
 import chalk from 'chalk';
 import dedent from 'dedent';
+import type { Gateway, GatewayExitError } from '@purplet/gateway';
 import { GatewayCloseCodes, GatewayIntentBits, GatewayVersion } from 'purplet/types';
 import { CLIError } from '../lib/errors';
 import { IntentsBitfield } from '../structures';
@@ -28,10 +28,7 @@ export function errorNoIncludeAndExcludeGuilds() {
   return new CLIError('Cannot specify both PURPLET_INCLUDE_GUILDS and PURPLET_EXCLUDE_GUILDS');
 }
 
-export function errorFromGatewayClientExitError(
-  { code }: GatewayExitError,
-  client: Gateway
-) {
+export function errorFromGatewayClientExitError({ code }: GatewayExitError, client: Gateway) {
   switch (code) {
     case GatewayCloseCodes.AuthenticationFailed:
       return new CLIError(
