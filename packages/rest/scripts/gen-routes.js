@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // @ts-check
 import { execSync } from 'child_process';
-import { createReadStream, existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { capitalize } from '@davecode/utils';
 
 if (!existsSync('discord-api-docs')) {
