@@ -75,7 +75,7 @@ export class Fetcher {
     return promise;
   }
 
-  private setBucketTimer(bucket: Bucket, subBucket: SubBucket, now = Date.now()) {
+  private setBucketTimer(bucket: Bucket, subBucket: SubBucket) {
     if (subBucket.refresh === Infinity) {
       return;
     }
@@ -129,6 +129,8 @@ export class Fetcher {
     const serverNow = response.headers.has('Date')
       ? new Date(response.headers.get('Date')!).getTime()
       : Date.now();
+    const ourNow = Date.now();
+
     const xReset = response.headers.get('X-RateLimit-Reset');
     const xBucket = response.headers.get('X-RateLimit-Bucket');
     const xLimit = response.headers.get('X-RateLimit-Limit');
@@ -148,11 +150,11 @@ export class Fetcher {
 
       bucket.limit = parseInt(xLimit!, 10);
       subBucket.remaining = parseInt(xRemaining!, 10);
-      subBucket.refresh = parseInt(xReset!, 10) * 1000;
+      subBucket.refresh = Number(xReset!) * 1000 - serverNow + ourNow;
 
       if (subBucket.queue.length > 0) {
         if (subBucket.remaining === 0) {
-          this.setBucketTimer(bucket, subBucket, serverNow);
+          this.setBucketTimer(bucket, subBucket);
         } else {
           subBucket.remaining--;
           const queueEntry = subBucket.queue.shift()!;
@@ -168,8 +170,8 @@ export class Fetcher {
     }
 
     if (response.status === 429) {
-      const { global } = await response.json();
-      // TODO: handle `global` properly
+      const json = await response.json();
+      console.log(json);
       throw new Error("Rate limited! This shouldn't happen wtf.");
       return;
     }
