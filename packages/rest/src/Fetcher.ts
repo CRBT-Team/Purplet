@@ -3,6 +3,12 @@ import { DiscordAPIError } from './DiscordAPIError';
 import { RequestData } from './types';
 import { classifyEndpoint } from './utils';
 
+interface Error429 {
+  message: string;
+  retry_after: number;
+  global: boolean;
+}
+
 export interface QueueEntry {
   request: RequestData;
   bucketId: string;
@@ -27,7 +33,6 @@ export interface SubBucket {
 
 /** Implements fetching Discord API endpoints, given endpoints and options. */
 // TODO: handle the 10000 errors per 10 min limit
-// TODO: handle 429 errors
 export class Fetcher {
   #buckets = new Map<string, Bucket>();
   #bucketIds = new Map<string, string>();
@@ -94,6 +99,17 @@ export class Fetcher {
     }, subBucket.refresh - Date.now());
   }
 
+  private setGlobalTimer(time: number) {
+    setTimeout(() => {
+      const toRun = this.#globalRateLimited!.splice(0, 49);
+      this.#globalCount = toRun.length;
+      if (this.#globalRateLimited!.length === 0) {
+        this.#globalRateLimited = undefined;
+      }
+      toRun.forEach(queueEntry => this.runRequest(queueEntry, true).catch(queueEntry.reject));
+    }, time);
+  }
+
   private async runRequest(entry: QueueEntry, ignoreGlobal = false) {
     if (!ignoreGlobal) {
       if (!this.#globalRateLimited) {
@@ -101,14 +117,7 @@ export class Fetcher {
         const now = Date.now();
         if (this.#globalCount > 49) {
           this.#globalRateLimited = [];
-          setTimeout(() => {
-            const toRun = this.#globalRateLimited!.splice(0, 49);
-            this.#globalCount = toRun.length;
-            if (this.#globalRateLimited!.length === 0) {
-              this.#globalRateLimited = undefined;
-            }
-            toRun.forEach(queueEntry => this.runRequest(queueEntry, true).catch(entry.reject));
-          }, 1100);
+          this.setGlobalTimer(1000);
         }
         if (now - this.#lastSecond > 1000) {
           this.#globalCount = 0;
@@ -130,6 +139,7 @@ export class Fetcher {
       ? new Date(response.headers.get('Date')!).getTime()
       : Date.now();
     const ourNow = Date.now();
+    const timeOffset = ourNow - serverNow;
 
     const xReset = response.headers.get('X-RateLimit-Reset');
     const xBucket = response.headers.get('X-RateLimit-Bucket');
@@ -150,7 +160,7 @@ export class Fetcher {
 
       bucket.limit = parseInt(xLimit!, 10);
       subBucket.remaining = parseInt(xRemaining!, 10);
-      subBucket.refresh = Number(xReset!) * 1000 - serverNow + ourNow;
+      subBucket.refresh = Number(xReset!) * 1000 - timeOffset;
 
       if (subBucket.queue.length > 0) {
         if (subBucket.remaining === 0) {
@@ -170,10 +180,17 @@ export class Fetcher {
     }
 
     if (response.status === 429) {
-      const json = await response.json();
-      console.log(json);
-      throw new Error("Rate limited! This shouldn't happen wtf.");
-      return;
+      const { global, retry_after } = (await response.json()) as Error429;
+      if (global) {
+        this.#globalRateLimited = [entry];
+        this.setGlobalTimer(retry_after - timeOffset);
+      } else {
+        subBucket.remaining = 0;
+        subBucket.refresh = retry_after * 1000 - timeOffset;
+        subBucket.queue.unshift(entry);
+        this.setBucketTimer(bucket, subBucket);
+      }
+      return undefined;
     }
 
     const text = await response.text();
