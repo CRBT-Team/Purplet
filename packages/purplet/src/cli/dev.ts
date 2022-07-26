@@ -11,7 +11,7 @@ import { writeTSConfig } from '../config/tsconfig';
 import type { ResolvedConfig } from '../config/types';
 import { createViteConfig } from '../config/vite';
 import { moduleToFeatureArray } from '../internal';
-import { getEnvVar } from '../lib/env';
+import { env, setGlobalEnv } from '../lib/env';
 import { GatewayBot } from '../lib/GatewayBot';
 import type { Feature } from '../lib/hook';
 import { log, startSpinner } from '../lib/logger';
@@ -54,7 +54,6 @@ export class DevMode {
   constructor(readonly options: DevModeOptions) {}
 
   async start() {
-    const startTime = performance.now();
     const spinner = startSpinner(
       this.firstRun ? 'Initializing development mode...' : 'Reloading...'
     );
@@ -62,14 +61,18 @@ export class DevMode {
 
     this.config = await loadConfig(this.options.root);
 
-    const token = getEnvVar('DISCORD_BOT_TOKEN');
+    setGlobalEnv({
+      config: this.config,
+    });
+
+    const token = env.DISCORD_BOT_TOKEN;
 
     if (!token) {
       throw errorNoToken();
     }
 
-    const include = getEnvVar('PURPLET_INCLUDE_GUILDS') ?? '';
-    const exclude = getEnvVar('PURPLET_EXCLUDE_GUILDS') ?? '';
+    const include = env.PURPLET_INCLUDE_GUILDS ?? '';
+    const exclude = env.PURPLET_EXCLUDE_GUILDS ?? '';
 
     if (include && exclude) {
       throw errorNoIncludeAndExcludeGuilds();
@@ -112,11 +115,10 @@ export class DevMode {
 
     spinner.stop();
     spinner.clear();
-    const duration = performance.now() - startTime;
-    const durationFormat = (duration / 1000).toFixed(1);
+    const startupTime = (performance.now() / 1000).toFixed(1);
     log(
       'purplet',
-      `Bot is now running in development mode as ${this.bot.user.tag} (${durationFormat}s)`
+      `Bot is now running in development mode as ${this.bot.user.tag} (${startupTime}s)`
     );
   }
 

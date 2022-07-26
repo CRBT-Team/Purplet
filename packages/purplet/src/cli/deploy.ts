@@ -4,7 +4,7 @@ import type { RESTPutAPIApplicationCommandsJSONBody } from 'purplet/types';
 import { pathToFileURL } from 'url';
 import { errorNoToken } from './errors';
 import { loadConfig } from '../config';
-import { getEnvVar } from '../lib/env';
+import { env } from '../lib/env';
 import { CLIError } from '../lib/errors';
 import type { GatewayBot } from '../lib/GatewayBot';
 import { $applicationCommands } from '../lib/hook-core';
@@ -23,7 +23,7 @@ export async function deploy(options: DeployOptions) {
   log('info', `Preparing to ${options.delete ? 'delete' : 'deploy'} commands.`);
 
   const config = await loadConfig(options.root);
-  const token = getEnvVar('DISCORD_BOT_TOKEN');
+  const token = env.DISCORD_BOT_TOKEN;
 
   if (!token) {
     throw errorNoToken();

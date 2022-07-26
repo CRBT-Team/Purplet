@@ -3,7 +3,7 @@ import { APIMessage, RESTPostAPIWebhookWithTokenJSONBody } from 'purplet/types';
 import type { Interaction } from './interaction/base';
 import { Message } from './message';
 import { CreateMessageData, resolveCreateMessageData } from './resolve/create-message';
-import { rest } from '../lib/global';
+// import { rest } from '../lib/global';
 import { createPartialClass, PartialClass } from '../utils/class';
 import { toJSONValue } from '../utils/json';
 

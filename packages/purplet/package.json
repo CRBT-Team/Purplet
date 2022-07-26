@@ -21,7 +21,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./internal": "./dist/internal.js",
-    "./types": "./dist/types.js"
+    "./types": "./dist/types.js",
+    "./env": "./dist/env.js"
   },
   "main": "./dist/index.js",
   "bin": "./dist/cli.js",
