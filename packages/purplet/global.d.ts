@@ -3,5 +3,5 @@ declare module 'purplet/types' {
 }
 
 declare module 'purplet/env' {
-  export * from './src/env';
+  export * from './dist/env';
 }

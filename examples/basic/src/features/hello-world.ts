@@ -1,11 +1,13 @@
-import { $slashCommand } from 'purplet';
-import { config } from 'purplet/env';
+import { capitalize } from '$lib/utils';
+import { $slashCommand, OptionBuilder } from 'purplet';
 
 export default $slashCommand({
-  name: 'self',
-  description: 'me',
+  name: 'hello',
+  description: 'Say hello',
+  options: new OptionBuilder() //
+    .string('who', 'to who you are saying hello to'),
 
   async handle(options) {
-    this.showMessage(`Config File: \`\`\`json\n${JSON.stringify(config, null, 2)}\`\`\``);
+    this.showMessage(`Hello ${capitalize(options.who ?? 'World')}!`);
   },
 });
