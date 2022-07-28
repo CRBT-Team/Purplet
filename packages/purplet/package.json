@@ -29,11 +29,10 @@
   "bin": "./dist/cli.js",
   "files": [
     "dist",
-    "src",
     "CHANGELOG.MD",
     "LICENSE",
     "README.md",
-    "global.d.ts"
+    "*.d.ts"
   ],
   "scripts": {
     "build": "rollup -c && tsc -p . && node post-build && echo Types Passing",
@@ -46,9 +45,9 @@
     "@davecode/types": "^1.0.2",
     "@davecode/utils": "^1.0.1",
     "@discordjs/builders": "^0.13.0",
-    "@purplet/gateway": "workspace:^1.0.1-next.0",
-    "@purplet/polyfill": "workspace:^1.0.1-next.0",
-    "@purplet/rest": "workspace:1.0.1-next.0",
+    "@purplet/gateway": "workspace:^1.0.1",
+    "@purplet/polyfill": "workspace:^1.0.1",
+    "@purplet/rest": "workspace:1.0.0",
     "@purplet/serialize": "workspace:^2.0.0",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-node-resolve": "^13.3.0",

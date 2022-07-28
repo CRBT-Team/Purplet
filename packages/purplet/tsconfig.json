@@ -25,7 +25,7 @@
     "strictFunctionTypes": true,
     "target": "ESNext",
     "paths": {
-      // "purplet/*": ["./src/*"]
+      "purplet/types": ["./src/types"]
     }
   },
   "include": ["src/**/*"]

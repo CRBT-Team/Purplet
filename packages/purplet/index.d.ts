@@ -1,13 +1,4 @@
-declare module 'purplet' {
-  const purplet: typeof import('./dist/index');
-  export = purplet;
-}
+export * from './dist/index';
 
-declare module 'purplet/types' {
-  export * from 'discord-api-types/v10';
-}
-
-declare module 'purplet/env' {
-  const env: typeof import('./dist/env');
-  export = env;
-}
+/// <reference path="./types.d.ts" />
+/// <reference path="./env.d.ts" />

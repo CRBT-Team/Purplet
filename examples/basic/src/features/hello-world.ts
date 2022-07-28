@@ -1,4 +1,3 @@
-import 'purplet/env';
 import { capitalize } from '$lib/utils';
 import { $slashCommand, OptionBuilder } from 'purplet';
 
