@@ -77,6 +77,7 @@ export async function writeTSConfig(config: ResolvedConfig) {
       baseUrl: tempRelative('.'),
       rootDirs: [tempRelative('.')],
       paths,
+      types: ['purplet'],
 
       // Vite compiles modules one at a time
       isolatedModules: true,
@@ -96,7 +97,6 @@ export async function writeTSConfig(config: ResolvedConfig) {
     include: [
       //
       tempRelative('src'),
-      tempRelative('node_modules/purplet/global.d.ts'),
     ],
   };
 

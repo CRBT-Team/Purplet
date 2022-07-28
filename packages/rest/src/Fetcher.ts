@@ -176,7 +176,7 @@ export class Fetcher {
     }
 
     if (response.ok) {
-      return entry.resolve(await response.json());
+      return response.status === 204 ? undefined : entry.resolve(await response.json());
     }
 
     if (response.status === 429) {

@@ -2,6 +2,7 @@ import type { Awaitable } from '@davecode/types';
 import { asyncMap } from '@davecode/utils';
 import { GatewayIntentBits } from 'purplet/types';
 import { $gatewayEvent } from './gateway-event';
+import { botUser } from '../env';
 import { $intents } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
 import { Message } from '../structures';
@@ -26,17 +27,18 @@ interface MentionCommandArgumentParseOptions {
 
 export function $mentionCommand(params: MentionCommandData) {
   return $merge([
-    $gatewayEvent('MESSAGE_CREATE', async function (apiMessage) {
+    $gatewayEvent('MESSAGE_CREATE', async apiMessage => {
       const message = new Message(apiMessage);
 
-      // TODO: we do not have a way to get our own metadata right now.
-      const mention = `<@${null}>`;
+      const mention = botUser.toString();
       const command = `${mention} ${params.name}`;
 
       const prefix = message.content.trim().startsWith(command);
-      if (!prefix) return;
+      if (!prefix) {
+        return;
+      }
 
-      let args = message.content.trim().slice(command.length).split(/\s+/).slice(1);
+      const args = message.content.trim().slice(command.length).split(/\s+/).slice(1);
 
       if (params.args) {
         const definedArgs = params.args.map(arg => (arg instanceof RegExp ? { match: arg } : arg));
@@ -47,7 +49,9 @@ export function $mentionCommand(params: MentionCommandData) {
           }
           return undefined;
         });
-        if (newArgs.includes(undefined)) return;
+        if (newArgs.includes(undefined)) {
+          return;
+        }
         params.handle.call(message, ...newArgs);
       } else {
         params.handle.call(message, ...args);
@@ -69,7 +73,7 @@ export const ArgTypes = {
   integer: {
     match: /^[-+]?[0-9]+$/,
     parse({ match }: MentionCommandArgumentParseOptions) {
-      return parseInt(match[0]);
+      return parseInt(match[0], 10);
     },
   },
   boolean: {

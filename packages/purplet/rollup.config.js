@@ -35,6 +35,7 @@ const config = {
     index: 'src/index.ts',
     internal: 'src/internal.ts',
     types: 'src/types.ts',
+    env: 'src/env.ts',
   },
   output: {
     dir: 'dist',

@@ -3,7 +3,7 @@ import type { ImageURLOptions } from '@discordjs/rest';
 import type { APIUser } from 'purplet/types';
 import { UserFlagsBitfield } from './bit-field';
 import type { Interaction } from './interaction';
-import { rest } from '../lib/global';
+import { rest } from '../lib/env';
 import { createPartialClass, PartialClass } from '../utils/class';
 
 /** Structure for APIUser. */

@@ -12,8 +12,8 @@ import {
   GatewayReadyDispatchData,
   RESTPutAPIApplicationCommandsJSONBody,
 } from 'purplet/types';
+import { setGlobalEnv } from './env';
 import { FeatureLoader } from './FeatureLoader';
-import { rest, setRESTClient } from './global';
 import type { Feature } from './hook';
 import {
   $applicationCommands,
@@ -56,6 +56,11 @@ interface GatewayBotOptions {
   guildRules?: AllowedGuildRules;
   /** Bot sharding information. */
   shard?: [shard_id: number, shard_count: number];
+  /**
+   * If set to false, this will not mutate global variables, though it may not be possible for
+   * features to access these variables. Defaults to true.
+   */
+  mutateGlobalEnv?: boolean;
 }
 
 export interface PatchFeatureInput {
@@ -103,7 +108,8 @@ export async function createGatewayClient(identify: GatewayOptions) {
 // TODO: split off command deploying logic to a `GuildCommandManager` class
 export class GatewayBot {
   features = new FeatureLoader();
-  client: Gateway | null = null;
+  gateway: Gateway | null = null;
+  rest: Rest;
 
   #application?: { id: string; flags: ApplicationFlagsBitfield };
   #user?: User;
@@ -114,12 +120,16 @@ export class GatewayBot {
   #cachedCommandData?: RESTPutAPIApplicationCommandsJSONBody;
 
   get application() {
-    if (!this.#application) throw new Error('GatewayBot.application is not yet ready');
+    if (!this.#application) {
+      throw new Error('GatewayBot.application is not yet ready');
+    }
     return this.#application;
   }
 
   get user() {
-    if (!this.#user) throw new Error('GatewayBot.user is not yet ready');
+    if (!this.#user) {
+      throw new Error('GatewayBot.user is not yet ready');
+    }
     return this.#user;
   }
 
@@ -141,13 +151,23 @@ export class GatewayBot {
         ),
       ]);
     }
+    if (this.options.mutateGlobalEnv !== false) {
+      this.options.mutateGlobalEnv = true;
+    }
+    this.rest = new Rest({ token: this.options.token });
+    if (this.options.mutateGlobalEnv) {
+      setGlobalEnv({
+        rest: this.rest,
+      });
+    }
   }
 
   async start() {
-    if (this.#running) throw new Error('GatewayBot is already running');
+    if (this.#running) {
+      throw new Error('GatewayBot is already running');
+    }
     this.#running = true;
-    // TODO: see how the global variable is set here. this should probably be somewhere else.
-    setRESTClient(new Rest({ token: this.options.token }));
+
     log('debug', `starting gateway bot, guildCommands=${this.options.deployGuildCommands}`);
     this.#cleanupInitializeHook = await runHook(this.features, $initialize, undefined);
     await this.startClient();
@@ -164,13 +184,13 @@ export class GatewayBot {
     this.#cachedPresence = presence;
 
     // Create gateway client
-    const [client, readyData] = await createGatewayClient({
+    const [gateway, readyData] = await createGatewayClient({
       token: this.options.token,
       shard: this.options.shard,
       intents,
       presence,
     });
-    this.client = client;
+    this.gateway = gateway;
     this.#user = new User(readyData.user);
 
     // TODO: implement Application class
@@ -179,15 +199,23 @@ export class GatewayBot {
       flags: new ApplicationFlagsBitfield(readyData.application.flags),
     };
 
+    if (this.options.mutateGlobalEnv) {
+      setGlobalEnv({
+        application: this.#application,
+        botUser: this.#user,
+        gateway,
+      });
+    }
+
     // Dispatch Hooks
-    this.client.on('*', (payload: GatewayDispatchPayload) =>
+    this.gateway.on('*', (payload: GatewayDispatchPayload) =>
       runHook(this.features, $dispatch, payload)
     );
 
     // Interaction hooks
-    this.client.on(GatewayDispatchEvents.InteractionCreate, async i => {
+    this.gateway.on(GatewayDispatchEvents.InteractionCreate, async i => {
       const responseHandler = async (response: InteractionResponse) => {
-        await rest.interactionResponse.createInteractionResponse({
+        await this.rest.interactionResponse.createInteractionResponse({
           interactionId: i.id,
           interactionToken: i.token,
           body: {
@@ -228,7 +256,7 @@ export class GatewayBot {
 
     this.#cachedCommandData = commands;
 
-    const guildList = await rest.user
+    const guildList = await this.rest.user
       .getCurrentUserGuilds()
       .then(guilds => guilds.filter(x => this.isGuildAllowed(x.id)));
 
@@ -250,19 +278,23 @@ export class GatewayBot {
   }
 
   private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
-    log('info', `updating commands on ${guild.name}`);
-    await rest.applicationCommand.bulkOverwriteGuildApplicationCommands({
-      guildId: guild.id,
-      applicationId: this.id,
-      body: this.#cachedCommandData!,
-    });
+    try {
+      await this.rest.applicationCommand.bulkOverwriteGuildApplicationCommands({
+        guildId: guild.id,
+        applicationId: this.id,
+        body: this.#cachedCommandData!,
+      });
+      log('info', `updated commands on ${guild.name}`);
+    } catch (error) {
+      log('warn', `could not update commands on ${guild.name} (${guild.id})`);
+    }
   }
 
   async close() {
     await Promise.all([
       //
       this.#cleanupInitializeHook?.(),
-      this.client?.close(),
+      this.gateway?.close(),
     ]);
   }
 
@@ -272,7 +304,9 @@ export class GatewayBot {
 
     log('debug', `patching features, ${add.length} add, ${remove.length} remove.`);
 
-    if (!this.#running) return;
+    if (!this.#running) {
+      return;
+    }
 
     // TODO: clear lifecycle, but maybe that should be done in .remove()?
     await runHook(coreFeaturesAdded, $initialize, undefined);
@@ -283,11 +317,11 @@ export class GatewayBot {
 
     if (newIntents !== this.#cachedIntents) {
       this.#cachedIntents = newIntents;
-      await this.client?.close();
+      await this.gateway?.close();
       await this.startClient();
     } else if (!deepEqual(newPresence, this.#cachedPresence)) {
       this.#cachedPresence = newPresence;
-      this.client?.updatePresence(newPresence);
+      this.gateway?.updatePresence(newPresence);
     }
 
     if (this.options.deployGuildCommands) {
