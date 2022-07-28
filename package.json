@@ -24,11 +24,11 @@
     "@svitejs/changesets-changelog-github-compact": "^0.1.1",
     "cloc": "^2.10.0",
     "eslint": "^8.19.0",
-    "eslint-config-dave": "^3.0.3",
+    "eslint-config-dave": "^3.0.6",
     "husky": "^8.0.0",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
-    "prettier-config-dave": "^1.0.3",
+    "prettier-config-dave": "^1.0.4",
     "turbo": "latest",
     "typescript": "^4.7.4"
   },
