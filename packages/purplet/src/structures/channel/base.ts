@@ -7,7 +7,7 @@ import type {
 } from 'purplet/types';
 import { createChannel } from './create';
 import { ReadonlyChannelFlagsBitfield } from '../bit-field';
-// import { rest } from '../../lib/global';
+import { rest } from '../../env';
 import { JSONResolvable, toJSONValue } from '../../utils/json';
 
 /** Structure for APIChannel. */

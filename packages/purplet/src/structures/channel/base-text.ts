@@ -2,7 +2,7 @@ import type { APITextBasedChannel, TextChannelType } from 'purplet/types';
 import { Channel } from './base';
 import { EmptyMessage, Message } from '../message';
 import { CreateMessageData, resolveCreateMessageData } from '../resolve/create-message';
-// import { rest } from '../../lib/global';
+import { rest } from '../../lib/env';
 import { createPartialClass, PartialClass } from '../../utils/class';
 
 export class TextChannel<
