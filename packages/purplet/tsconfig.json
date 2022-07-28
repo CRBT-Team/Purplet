@@ -28,5 +28,5 @@
       // "purplet/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "global.d.ts"]
+  "include": ["src/**/*"]
 }

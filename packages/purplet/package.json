@@ -25,6 +25,7 @@
     "./env": "./dist/env.js"
   },
   "main": "./dist/index.js",
+  "types": "index.d.ts",
   "bin": "./dist/cli.js",
   "files": [
     "dist",
