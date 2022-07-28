@@ -1,5 +1,5 @@
 ---
-'purplet': patch
+'purplet': minor
 ---
 
 add `purplet/env`
