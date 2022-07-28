@@ -1,23 +1,47 @@
 # `purplet`
 
+## 2.0.0-next.18
+
+### Minor Changes
+
+- feat: add `purplet/env` ([#55](https://github.com/CRBT-Team/Purplet/pull/55))
+
+### Patch Changes
+
+- fix: `$mentionCommand` now works ([#55](https://github.com/CRBT-Team/Purplet/pull/55))
+
+- Updated dependencies
+  [[`281b7dc`](https://github.com/CRBT-Team/Purplet/commit/281b7dcb853dea36ff0dbb8d129c44e21a5b10cb),
+  [`8a57c60`](https://github.com/CRBT-Team/Purplet/commit/8a57c6051a5dd788536cbe924334d76aa4cd140f),
+  [`8a57c60`](https://github.com/CRBT-Team/Purplet/commit/8a57c6051a5dd788536cbe924334d76aa4cd140f),
+  [`bbbe1b1`](https://github.com/CRBT-Team/Purplet/commit/bbbe1b18de07dab0c4921a78f7b1ee6a1b63f293),
+  [`e817d3d`](https://github.com/CRBT-Team/Purplet/commit/e817d3dc7a4fc5d019cae29d9a4eb5aff801fc13)]:
+  - @purplet/rest@1.0.2-next.0
+
 ## 2.0.0-next.17
 
 ### Patch Changes
 
-- move @davecode/types to be a required dependency ([`20b20d5`](https://github.com/CRBT-Team/Purplet/commit/20b20d564234091974bc0af18f1fe4d92152271c))
+- move @davecode/types to be a required dependency
+  ([`20b20d5`](https://github.com/CRBT-Team/Purplet/commit/20b20d564234091974bc0af18f1fe4d92152271c))
 
-- Updated dependencies [[`20b20d5`](https://github.com/CRBT-Team/Purplet/commit/20b20d564234091974bc0af18f1fe4d92152271c)]:
+- Updated dependencies
+  [[`20b20d5`](https://github.com/CRBT-Team/Purplet/commit/20b20d564234091974bc0af18f1fe4d92152271c)]:
   - @purplet/rest@1.0.1-next.0
 
 ## 2.0.0-next.16
 
 ### Patch Changes
 
-- swap out `@discordjs/rest` with `@purplet/rest` ([#33](https://github.com/CRBT-Team/Purplet/pull/33))
+- swap out `@discordjs/rest` with `@purplet/rest`
+  ([#33](https://github.com/CRBT-Team/Purplet/pull/33))
 
-* Extract `GatewayClient` to separate package `@purplet/gateway` ([#31](https://github.com/CRBT-Team/Purplet/pull/31))
+* Extract `GatewayClient` to separate package `@purplet/gateway`
+  ([#31](https://github.com/CRBT-Team/Purplet/pull/31))
 
-* Updated dependencies [[`0ac1bdd`](https://github.com/CRBT-Team/Purplet/commit/0ac1bddf24f244207401d4e81b86e96fb649a3d1), [`1af5025`](https://github.com/CRBT-Team/Purplet/commit/1af5025c0e2db4689a7706ee8a669430e993f075)]:
+* Updated dependencies
+  [[`0ac1bdd`](https://github.com/CRBT-Team/Purplet/commit/0ac1bddf24f244207401d4e81b86e96fb649a3d1),
+  [`1af5025`](https://github.com/CRBT-Team/Purplet/commit/1af5025c0e2db4689a7706ee8a669430e993f075)]:
   - @purplet/polyfill@1.0.1-next.0
   - @purplet/gateway@1.0.1-next.0
 
@@ -31,7 +55,8 @@
 
 ### Patch Changes
 
-- component custom ids allow longer feature ids, making it more unlikely to get an error thrown during usage ([#22](https://github.com/CRBT-Team/Purplet/pull/22))
+- component custom ids allow longer feature ids, making it more unlikely to get an error thrown
+  during usage ([#22](https://github.com/CRBT-Team/Purplet/pull/22))
 
 ## 2.0.0-next.13
 
@@ -51,13 +76,15 @@ Rebuild
 - rename `$onEvent` to `$gatewayEvent`
 - fix an issue with subcommands and options not working
 - fix autocomplete handlers
-- fix a performance/nesting issue with OptionBuilder, causing it to fail with the infinite recursion error after four options
+- fix a performance/nesting issue with OptionBuilder, causing it to fail with the infinite recursion
+  error after four options
 - support purplet.config.ts
 - remove config.paths.temp
 - Add Interaction.appPermissions
 - stop exporting `$appCommand`. it is now an internal tool for us
 - add error messages when startind dev mode
-- add message attachments to Channel.createMessage, Interaction.showMessage, Interaction.updateMessage, and Message.edit
+- add message attachments to Channel.createMessage, Interaction.showMessage,
+  Interaction.updateMessage, and Message.edit
 - add .meta property to all hooks, allowing user-defined metadata to be attached to hooks
 - fix `purplet build`'s output to actually be runnable (due to changes in GatewayBot)
 - new cli interface
@@ -71,7 +98,8 @@ Rebuild
 - Purplet structures are back. They aren't finalized and it's probably harder to use but yeah.
 - Remove `$modal` temporarily. It will be back
 
-- Updated dependencies [[`2a994ea`](https://github.com/CRBT-Team/Purplet/commit/2a994ea9e7e325cf5670f78477a621377c94c29e)]:
+- Updated dependencies
+  [[`2a994ea`](https://github.com/CRBT-Team/Purplet/commit/2a994ea9e7e325cf5670f78477a621377c94c29e)]:
   - @purplet/serialize@2.0.0-next.0
 
 ## 2.0.0-next.9
@@ -107,7 +135,8 @@ Rebuild
 - revert to using discord.js structure for everything - the world isn't ready for what i have lol
 
 - move `modules` to `features`
-- Updated dependencies [[`38d20aa`](https://github.com/CRBT-Team/Purplet/commit/38d20aa5a4d4e12bac3e05008aac179b866118d3)]:
+- Updated dependencies
+  [[`38d20aa`](https://github.com/CRBT-Team/Purplet/commit/38d20aa5a4d4e12bac3e05008aac179b866118d3)]:
   - @purplet/serialize@1.0.0-next.0
 
 ## 2.0.0-next.5
@@ -124,7 +153,8 @@ Rebuild
 - add full bitfield resolving.
 - add basic autocomplete handler execution.
 - add `$merge` and `$interaction`.
-- add `MessageComponentBuilder` and `ModalComponentBuilder` for simplified creation of the `components` array..
+- add `MessageComponentBuilder` and `ModalComponentBuilder` for simplified creation of the
+  `components` array..
 - add component stuff.
 - messed with the changelog format
 -
@@ -133,16 +163,21 @@ Rebuild
 
 ### Patch Changes
 
-- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff): add hooks
+- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff):
+  add hooks
   - `$appCommand`
   - `$userContextCommand`
   - `$djsUserContextCommand`
   - `$messageContextCommand`
   - `$djsMessageContextCommand`
-- [`3b6d61d`](https://github.com/CRBT-Team/Purplet/commit/3b6d61d7f87f3a9d15c3693c2f3f8f23807eeeb7): add basic version of `$chatCommand`
-- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff): Add PurpletInteraction and all of it's subclasses.
-- [`f16fdc3`](https://github.com/CRBT-Team/Purplet/commit/f16fdc3ee675e08eddc5bae352994b0ac913fd9f): Fix OptionBuilder types
-- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff): add OptionBuilder
+- [`3b6d61d`](https://github.com/CRBT-Team/Purplet/commit/3b6d61d7f87f3a9d15c3693c2f3f8f23807eeeb7):
+  add basic version of `$chatCommand`
+- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff):
+  Add PurpletInteraction and all of it's subclasses.
+- [`f16fdc3`](https://github.com/CRBT-Team/Purplet/commit/f16fdc3ee675e08eddc5bae352994b0ac913fd9f):
+  Fix OptionBuilder types
+- [`a4980c7`](https://github.com/CRBT-Team/Purplet/commit/a4980c741ea4d64bd74f13647840a4b85eb51aff):
+  add OptionBuilder
 
 ## 2.0.0-next.3
 
@@ -169,7 +204,8 @@ Rebuild
 
 ### Patch Changes
 
-- Rewritten codebase, projects are bundled with vite and built with rollup. Instead of a Modules + Handlers api, it is based off of `Feature` objects.
+- Rewritten codebase, projects are bundled with vite and built with rollup. Instead of a Modules +
+  Handlers api, it is based off of `Feature` objects.
 - Removed purplet configuration file.
 - Removed every handler type, but all of these will be added in some variation.
 

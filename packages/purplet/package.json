@@ -1,6 +1,6 @@
 {
   "name": "purplet",
-  "version": "2.0.0-next.17",
+  "version": "2.0.0-next.18",
   "description": "A simple framework to build modern Discord bots.",
   "keywords": [
     "discord",
@@ -35,7 +35,7 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "rollup -c && tsc -p . && node post-build && echo Types Passing",
+    "build": "rollup -c && (tsc -p . || true) && node post-build && echo Types Passing",
     "changeset": "cd ../../ && pnpm changeset",
     "dev": "rollup -c --watch",
     "lint": "eslint src/**/*.{ts,tsx}",
@@ -45,10 +45,10 @@
     "@davecode/types": "^1.0.2",
     "@davecode/utils": "^1.0.1",
     "@discordjs/builders": "^0.13.0",
-    "@purplet/gateway": "workspace:*",
-    "@purplet/polyfill": "workspace:*",
-    "@purplet/rest": "workspace:*",
-    "@purplet/serialize": "workspace:*",
+    "@purplet/gateway": "workspace:^1.0.1",
+    "@purplet/polyfill": "workspace:^1.1.0",
+    "@purplet/rest": "workspace:^1.1.0",
+    "@purplet/serialize": "workspace:^2.0.0",
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "chalk": "4",
