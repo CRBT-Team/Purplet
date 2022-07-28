@@ -2,10 +2,11 @@
   <img alt="Purplet" src="sites/purplet.js.org/static/img/purplet-artwork.png" >
   <h4>A simple framework to build modern Discord bots.</h4>
   <div>
+    <img src="https://img.shields.io/badge/Discord_API-v10-c4aaff" alt="Discord API Version">
     <img src="https://img.shields.io/npm/v/purplet?color=c4aaff&label=version" alt="Version">
     <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=c4aaff" alt="License">
     <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet?color=c4aaff">
-    <a href="https://discord.gg/AvwhNtsgAC"><img src="https://img.shields.io/discord/782584672298729473?color=c4aaff&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
+    <a href="https://discord.gg/BFkHA8P7rh"><img src="https://img.shields.io/discord/995533040040292373?color=c4aaff&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
   </div>
 </div>
 
@@ -44,13 +45,25 @@ and follow the instructions it gives. Documentation on purplet is available at [
 
 ## Monorepo Contents
 
-| Package | Description | Changelog |
-| --- | --- | --- |
-| [purplet](packages/purplet) | Vite + Discord API abstractions + gateway client + more | [Changelog](packages/purplet/CHANGELOG.md) |
-| [create-purplet](packages/create-purplet) | Project generator CLI | [Changelog](packages/create-purplet/CHANGELOG.md) |
-| [@purplet/gateway](packages/gateway) | Gateway Client implementation | [Changelog](packages/gateway/CHANGELOG.md) |
-| [@purplet/rest](packages/rest) | Gateway Client implementation | [Changelog](packages/rest/CHANGELOG.md) |
-| [@purplet/serialize](packages/serialize) | Utilities for binary serialization | [Changelog](packages/serialize/CHANGELOG.md) |
+This repository contains these following public packages:
+
+| Package | Description |
+| --- | --- |
+| [![purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=purplet)](packages/purplet) | Full Framework for quickly building Discord Bots |
+| ![buncord](https://img.shields.io/badge/buncord-soon%E2%84%A2-red) | Library to easily interact with the Discord API |
+| [![@purplet/rest](https://img.shields.io/npm/v/@purplet/rest?color=c4aaff&label=@purplet/rest)](packages/rest) | Rest client implementation |
+| [![@purplet/gateway](https://img.shields.io/npm/v/@purplet/gateway?color=c4aaff&label=@purplet/gateway)](packages/gateway) | Gateway client implementation |
+| ![@purplet/structures](https://img.shields.io/badge/%40purplet%2Fstructures-soon%E2%84%A2-red) | Classes wrapping Discord API objects |
+| ![@purplet/builders](https://img.shields.io/badge/%40purplet%2Fbuilders-soon%E2%84%A2-red) | Builder-style classes to create Discord API objects |
+| ![@purplet/model](https://img.shields.io/badge/%40purplet%2Fmodel-soon%E2%84%A2-red)\* | Create maintainable classes to enrich JSON data. |
+| ![@purplet/logger](https://img.shields.io/badge/%40purplet%2Flogger-soon%E2%84%A2-red)\* | Simple log library that allows global injection. |
+| ![@purplet/utils](https://img.shields.io/badge/%40purplet%2Futils-soon%E2%84%A2-red) | Internal helper functions. Might not be published. |
+| [![@purplet/serialize](https://img.shields.io/npm/v/@purplet/serialize?color=c4aaff&label=@purplet/serialize)](packages/serialize)\* | Utilities for binary serialization |
+| [![create-purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=create-purplet)](packages/create-purplet) | Project generation command, `pnpm create purplet` |
+
+<sup>\*is not discord-specific, which might make it useful out of the context of Discord Bots.</sup>
+
+The `examples` folder contains one framework example as of right now:
 
 | Example Projects        | Command to copy                |
 | ----------------------- | ------------------------------ |

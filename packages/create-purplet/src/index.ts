@@ -436,7 +436,7 @@ console.log(dedent`
 
   Before you can run your bot, you need to create an ${c.cyanBright('.env')} file with a Discord
   bot token, which can be created at ${c.magentaBright(
-    'https://discordapp.com/developers/applications'
+    'https://discord.com/developers/applications'
   )}.
   Your ${c.cyanBright('.env')} file should look something like this:
 
@@ -449,6 +449,6 @@ console.log(dedent`
 )}
 
   Purplet Documentation: ${c.magentaBright('https://purplet.js.org/docs/getting-started')}
-  Discord Server: ${c.magentaBright('https://discord.gg/NFZqTWGVQ4')}
+  Discord Server: ${c.magentaBright('https://discord.gg/BFkHA8P7rh')}
 `);
 console.log();

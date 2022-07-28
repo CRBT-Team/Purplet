@@ -81,11 +81,16 @@ export class Rest {
 
   /** Runs a request against the Discord API. */
   async request<Output>(endpoint: string, options: RequestOptionsWithMethod): Promise<Output> {
+    const query = Object.entries(options.query || {})
+      .filter(([, value]) => value !== undefined)
+      .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`)
+      .join('&');
+
     const url = new URL(
       this.options.base +
         (endpoint.startsWith('/oauth2') ? '' : `/v${this.options.version}`) +
         endpoint +
-        (options.query ? `?${new URLSearchParams(options.query)}` : '')
+        (query ? `?${query}` : '')
     );
 
     const headers = new Headers(options.headers);

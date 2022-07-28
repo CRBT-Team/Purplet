@@ -41,5 +41,27 @@
   "explorer.fileNesting.expand": false,
   "search.exclude": {
     "**/dist": true
-  }
+  },
+  "githubIssues.queries": [
+    {
+      "label": "Assigned",
+      "query": "is:open assignee:${user} repo:${owner}/${repository} sort:created-asc"
+    },
+    {
+      "label": "Purplet v2.0.0",
+      "query": "milestone:2.0 state:open repo:${owner}/${repository} sort:created-desc"
+    },
+    {
+      "label": "High Priority",
+      "query": "label:\"high priority\" state:open repo:${owner}/${repository} sort:created-desc"
+    },
+    {
+      "label": "My Created Issues",
+      "query": "author:${user} state:open repo:${owner}/${repository} sort:created-desc"
+    },
+    {
+      "label": "All Recent Issues",
+      "query": "state:open repo:${owner}/${repository} sort:updated-desc"
+    }
+  ]
 }
