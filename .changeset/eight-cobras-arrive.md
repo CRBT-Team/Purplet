@@ -2,4 +2,4 @@
 'purplet': minor
 ---
 
-add `purplet/env`
+feat: add `purplet/env`
