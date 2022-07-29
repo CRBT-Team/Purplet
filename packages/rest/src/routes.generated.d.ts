@@ -2,9 +2,9 @@
 // Do not modify directly.
 // @no-line-count
 
-import type * as Discord from 'discord-api-types/rest';
-import type { FileData } from './types';
-import type { Route, RouteGroup, RouteGroupClass } from './route-group';
+import * as Discord from 'discord-api-types/rest';
+import { FileData } from './types';
+import { Route, RouteGroup, RouteGroupClass } from './route-group';
 
 export type ApplicationCommand = RouteGroup<{
   /**
