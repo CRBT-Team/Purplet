@@ -1,4 +1,4 @@
-import type { Immutable } from '@davecode/types';
+import type { Immutable } from '@paperdave/utils';
 import type { APIChannelBase, ChannelType, RESTPatchAPIChannelJSONBody } from 'purplet/types';
 import { createChannel } from './create';
 import { ReadonlyChannelFlagsBitfield } from '../bit-field';

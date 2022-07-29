@@ -1,4 +1,4 @@
-import type { Dict } from '@davecode/types';
+import type { Dict } from '@paperdave/utils';
 
 export type CamelCase<T> = T extends `${infer A}_${infer B}`
   ? `${A}${Capitalize<CamelCase<B>>}`

@@ -1,4 +1,4 @@
-import type { Immutable } from '@davecode/types';
+import type { Immutable } from '@paperdave/utils';
 import type { APIGuild } from 'purplet/types';
 import { rest } from '../env';
 import type { PartialClass } from '../utils/class';

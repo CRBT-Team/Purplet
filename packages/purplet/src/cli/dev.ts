@@ -1,8 +1,8 @@
 import path from 'path';
-import { asyncMap, unique } from '@davecode/utils';
+import { asyncMap, unique } from '@paperdave/utils';
 import { watch } from 'chokidar';
 import { EventEmitter } from 'events';
-import type { HmrContext, ModuleNode, Plugin , ViteDevServer } from 'vite';
+import type { HmrContext, ModuleNode, Plugin, ViteDevServer } from 'vite';
 import { createServer } from 'vite';
 import defaultConfig from '../config/default';
 import { errorNoIncludeAndExcludeGuilds, errorNoToken } from './errors';

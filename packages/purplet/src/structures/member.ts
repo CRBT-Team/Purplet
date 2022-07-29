@@ -1,4 +1,4 @@
-import type { Immutable } from '@davecode/types';
+import type { Immutable } from '@paperdave/utils';
 import type { APIGuildMember } from 'purplet/types';
 
 /** Structure for APIMember. */

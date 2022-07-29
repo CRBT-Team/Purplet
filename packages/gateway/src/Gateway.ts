@@ -1,4 +1,4 @@
-import { Emitter } from '@davecode/events';
+import { Emitter } from '@paperdave/events';
 import type {
   GatewayIdentifyData,
   GatewayPresenceUpdateData,

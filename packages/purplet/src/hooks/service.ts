@@ -1,4 +1,4 @@
-import type { Awaitable } from '@davecode/types';
+import type { Awaitable } from '@paperdave/utils';
 import { $initialize } from '../lib/hook-core';
 import { log } from '../lib/logger';
 import type { Cleanup } from '../utils/types';

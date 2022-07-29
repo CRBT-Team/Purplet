@@ -1,9 +1,8 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@davecode/types': ^1.0.2
-  '@davecode/utils': ^1.0.1
   '@paperdave/logger': ^2.0.1
+  '@paperdave/utils': 1.1.0
   '@rollup/plugin-node-resolve': ^13.3.0
   '@types/node': ^17.0.45
   bun-types: ^0.1.2
@@ -16,10 +15,9 @@ specifiers:
   typescript: ^4.7.4
 
 dependencies:
-  '@davecode/types': 1.0.2
+  '@paperdave/utils': 1.1.0
 
 devDependencies:
-  '@davecode/utils': 1.0.1
   '@paperdave/logger': 2.0.1
   '@rollup/plugin-node-resolve': 13.3.0_rollup@2.76.0
   '@types/node': 17.0.45
@@ -34,24 +32,18 @@ devDependencies:
 
 packages:
 
-  /@davecode/types/1.0.2:
-    resolution: {integrity: sha512-0ivurdfLkdLI2BpLPKLGceioL6lriMc7s7FPJiSQ8PaSwXd3I86Nm6V849LEIdrzun+0ARehk3D98IfwHHfBWA==}
-    dependencies:
-      ts-toolbelt: 9.6.0
-      utility-types: 3.10.0
-
-  /@davecode/utils/1.0.1:
-    resolution: {integrity: sha512-JNOWzUe2EDn8RiW0ECVIo5g2R3owYEnH0Kcpcg54QcBn3irt2/7fc3s8lY6kZ+q4HjbG3TK4c+TGLK73F1dY6Q==}
-    dependencies:
-      '@davecode/types': 1.0.2
-    dev: true
-
   /@paperdave/logger/2.0.1:
     resolution: {integrity: sha512-54WkTJxTBBjf5Tn84vVD7q1C+XWYvFqYVw0WILdqg0fg1zsqd9Shwd34J8NTnAO2KtNmkZfMUoDY+/vbLlxvrw==}
     dependencies:
       supports-color: 9.2.2
       wrap-ansi: 8.0.1
     dev: true
+
+  /@paperdave/utils/1.1.0:
+    resolution: {integrity: sha512-J95Wf8RnR44I8apZ6TRJGQIyVVuL6YGGFbHneFVpqXwerfd2/Bp+AxmLRdDUGbKtUaPRAErPs5H2jkeVDLDhjw==}
+    dependencies:
+      utility-types: 3.10.0
+    dev: false
 
   /@rollup/plugin-node-resolve/13.3.0_rollup@2.76.0:
     resolution: {integrity: sha512-Lus8rbUo1eEcnS4yTFKLZrVumLPY+YayBdWXgFSHYhTT2iJbMhoaaBL3xl5NCdeRytErGr8tZ0L71BMRmnlwSw==}
@@ -594,9 +586,6 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /ts-toolbelt/9.6.0:
-    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
-
   /typescript/4.7.4:
     resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
     engines: {node: '>=4.2.0'}
@@ -606,6 +595,7 @@ packages:
   /utility-types/3.10.0:
     resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
     engines: {node: '>= 4'}
+    dev: false
 
   /which/2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}

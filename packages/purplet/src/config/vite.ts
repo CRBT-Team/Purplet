@@ -1,5 +1,5 @@
 import path from 'path';
-import { unique } from '@davecode/utils';
+import { unique } from '@paperdave/utils';
 import type { InlineConfig as ViteConfig } from 'vite';
 import type { ResolvedConfig } from './types';
 import { purpletSourceCode } from '../utils/fs';

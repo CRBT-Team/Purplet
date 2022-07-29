@@ -1,4 +1,4 @@
-import type { Class } from '@davecode/types';
+import type { Class } from '@paperdave/utils';
 
 declare const HIDDEN: unique symbol;
 

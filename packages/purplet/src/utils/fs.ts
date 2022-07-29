@@ -1,5 +1,5 @@
 import path from 'path';
-import { asyncMap } from '@davecode/utils';
+import { asyncMap } from '@paperdave/utils';
 import type { Dirent } from 'fs';
 import { access, mkdir, readdir, stat, writeFile } from 'fs/promises';
 import { createRequire } from 'module';
@@ -29,7 +29,9 @@ export async function mkdirp(dir: string) {
   try {
     await mkdir(dir, { recursive: true });
   } catch (e: any) {
-    if (e.code === 'EEXIST') {return;}
+    if (e.code === 'EEXIST') {
+      return;
+    }
     throw e;
   }
 }
@@ -73,18 +75,19 @@ export async function resolveEntrypoint(entry: string): Promise<string | null> {
     }
 
     return entry;
-  } 
-    const dir = path.dirname(entry);
+  }
+  const dir = path.dirname(entry);
 
-    if (!(await exists(dir))) {
-      const base = path.basename(entry);
-      const files = await readdir(dir);
+  if (!(await exists(dir))) {
+    const base = path.basename(entry);
+    const files = await readdir(dir);
 
-      const found = files.find(file => file.replace(/\.[^.]+$/, '') === base);
+    const found = files.find(file => file.replace(/\.[^.]+$/, '') === base);
 
-      if (found) {return path.join(dir, found);}
+    if (found) {
+      return path.join(dir, found);
     }
-  
+  }
 
   return null;
 }

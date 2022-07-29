@@ -1,4 +1,4 @@
-import type { Class } from '@davecode/types';
+import type { Class } from '@paperdave/utils';
 import type { APIChannel, ChannelType } from 'purplet/types';
 import type { Channel } from '../..';
 

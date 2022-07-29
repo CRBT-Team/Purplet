@@ -1,16 +1,14 @@
-import { unique } from '@davecode/utils';
+import { unique } from '@paperdave/utils';
 import type {
   APIApplicationCommandBasicOption,
   GatewayPresenceUpdateData,
   LocalizationMap,
   PresenceUpdateStatus,
   RESTPostAPIApplicationCommandsJSONBody,
-  RESTPostAPIChatInputApplicationCommandsJSONBody} from 'purplet/types';
-import {
-  ApplicationCommandOptionType,
-  ApplicationCommandType
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from 'purplet/types';
-import type { IntentsHookData, PresenceHookData} from './hook-core';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'purplet/types';
+import type { IntentsHookData, PresenceHookData } from './hook-core';
 import { PresenceStatus } from './hook-core';
 import { IntentsBitfield } from '../structures';
 
@@ -34,7 +32,9 @@ export function mergePresence(presences: PresenceHookData[]): GatewayPresenceUpd
   };
 
   for (const entry of presences) {
-    if (entry.afk) {obj.afk = true;}
+    if (entry.afk) {
+      obj.afk = true;
+    }
     if (entry.activities) {
       obj.activities.push(...entry.activities);
     }
@@ -74,13 +74,13 @@ export function mergeCommands(_list: ApplicationCommandResolvable[]) {
 
   const groups = list.filter(x => 'isSlashCommandGroup' in x && !x.name.includes(' '));
 
-  const toBeMerged = (list ).filter(
+  const toBeMerged = list.filter(
     x =>
       (x.type === ApplicationCommandType.ChatInput || x.isSlashCommandGroup) && x.name.includes(' ')
   );
 
   const commandNamesToBeMerged = unique(toBeMerged.map(x => x.name.split(' ')[0]));
-  const rest = list.filter(x => !toBeMerged.includes(x) && !groups.includes(x ));
+  const rest = list.filter(x => !toBeMerged.includes(x) && !groups.includes(x));
 
   for (const name of commandNamesToBeMerged) {
     const group = groups.find(x => x.name === name);

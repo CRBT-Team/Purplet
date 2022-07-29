@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { execSync } from 'child_process';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { capitalize } from '@davecode/utils';
+import { capitalize } from '@paperdave/utils';
 
 if (!existsSync('discord-api-docs')) {
   execSync('git clone https://github.com/discord/discord-api-docs');

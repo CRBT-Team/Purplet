@@ -1,6 +1,6 @@
 // idk entirely on these types, but they work good enough
 
-import type { Dict, ForceSimplify } from '@davecode/types';
+import type { Dict, ForceSimplify } from '@paperdave/utils';
 import type { Rest } from './Rest';
 import type { HTTPMethod, RawFile } from './types';
 

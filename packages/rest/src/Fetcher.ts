@@ -1,4 +1,4 @@
-import { deferred } from '@davecode/utils';
+import { deferred } from '@paperdave/utils';
 import { DiscordAPIError } from './DiscordAPIError';
 import type { RequestData } from './types';
 import { classifyEndpoint } from './utils';

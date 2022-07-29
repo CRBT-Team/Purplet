@@ -1,4 +1,4 @@
-import type { Class } from '@davecode/types';
+import type { Class } from '@paperdave/utils';
 import type { APIInteraction } from 'purplet/types';
 import { AutocompleteInteraction } from './autocomplete';
 import type { Interaction, InteractionResponseHandler } from './base';

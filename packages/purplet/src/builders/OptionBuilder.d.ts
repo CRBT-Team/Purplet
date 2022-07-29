@@ -1,4 +1,4 @@
-import type { Awaitable, Class, EmptyObject, ForceSimplify, Overwrite } from '@davecode/types';
+import type { Awaitable, Class, EmptyObject, ForceSimplify, Overwrite } from '@paperdave/utils';
 import type {
   APIApplicationCommandOption,
   APIAttachment,

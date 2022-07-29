@@ -1,4 +1,4 @@
-import type { Awaitable } from '@davecode/utils';
+import type { Awaitable } from '@paperdave/utils';
 import type { RawFile } from '@purplet/rest';
 import type { APIInteraction, APIPingInteraction, InteractionResponseType } from 'purplet/types';
 import { PermissionsBitfield } from '../bit-field';

@@ -1,4 +1,4 @@
-import type { Immutable } from '@davecode/types';
+import type { Immutable } from '@paperdave/utils';
 import type { APIMessage } from 'purplet/types';
 import { ReadonlyMessageFlagsBitfield } from './bit-field';
 import { PartialUser } from './user';

@@ -1,4 +1,4 @@
-import type { Awaitable } from '@davecode/types';
+import type { Awaitable } from '@paperdave/utils';
 import type { Cleanup } from '../utils/types';
 
 export const FEATURE = Symbol.for('purplet.feature-data');

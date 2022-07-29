@@ -1,5 +1,5 @@
-import type { Awaitable } from '@davecode/types';
-import { asyncMap } from '@davecode/utils';
+import type { Awaitable } from '@paperdave/utils';
+import { asyncMap } from '@paperdave/utils';
 import { GatewayIntentBits } from 'purplet/types';
 import { $gatewayEvent } from './gateway-event';
 import { botUser } from '../env';

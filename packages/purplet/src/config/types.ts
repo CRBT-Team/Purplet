@@ -1,4 +1,4 @@
-import type { Awaitable, DeepPartial, ForceSimplify } from '@davecode/types';
+import type { Awaitable, DeepPartial, ForceSimplify } from '@paperdave/utils';
 import type { AllowedMentionsTypes } from 'purplet/types';
 import type { UserConfig as ViteConfig } from 'vite';
 
