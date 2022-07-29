@@ -1,6 +1,6 @@
 // Taken from
 
-import { ArrayBufferable, FileData, Streamable } from './types';
+import type { ArrayBufferable, FileData, Streamable } from './types';
 
 // https://github.com/discordjs/discord.js/blob/main/packages/rest/src/lib/RequestManager.ts#L479
 export function classifyEndpoint(endpoint: string, method: string) {
@@ -51,7 +51,7 @@ export async function toBlob(data: FileData): Promise<Blob> {
     do {
       read = await stream.read();
       read.value && values.push(read.value);
-    } while (read.done === false);
+    } while (!read.done);
 
     return new Blob([]);
   }

@@ -1,4 +1,5 @@
-import { APIInteraction, APIMessageComponentButtonInteraction, ComponentType } from 'purplet/types';
+import type { APIInteraction, APIMessageComponentButtonInteraction} from 'purplet/types';
+import { ComponentType } from 'purplet/types';
 import { ComponentInteraction } from './component';
 import { createInstanceofGuard } from '../../utils/class';
 

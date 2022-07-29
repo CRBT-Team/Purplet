@@ -1,10 +1,11 @@
+import type { Awaitable } from '@davecode/types';
 import { $initialize } from '../lib/hook-core';
 import { log } from '../lib/logger';
 import type { Cleanup } from '../utils/types';
 
 export interface ServiceOptions {
   name?: string;
-  start(): Cleanup;
+  start(): Awaitable<Cleanup>;
   stop?(): void;
 }
 

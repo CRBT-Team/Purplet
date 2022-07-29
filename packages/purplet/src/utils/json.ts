@@ -20,7 +20,7 @@ export type JSONResolvable<Target extends JSONValue> =
   | { toJSON(): JSONResolvable<Target> }
   | { toLocaleJSON(locale: LocaleString): JSONResolvable<Target> }
   | (Target extends Array<infer V>
-      ? JSONResolvable<V>[]
+      ? Array<JSONResolvable<V>>
       : Target extends Record<string, JSONValue>
       ? { [K in keyof Target]: JSONResolvable<Target[K]> }
       : Target);

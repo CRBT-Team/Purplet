@@ -3,15 +3,15 @@ import { Gateway, GatewayExitError } from '@purplet/gateway';
 import type { GatewayOptions } from '@purplet/gateway/src/Gateway';
 import { Rest } from '@purplet/rest';
 import { deepEqual } from 'fast-equals';
-import {
+import type {
   APIGuild,
-  GatewayDispatchEvents,
   GatewayDispatchPayload,
   GatewayIntentBits,
   GatewayPresenceUpdateData,
   GatewayReadyDispatchData,
   RESTPutAPIApplicationCommandsJSONBody,
 } from 'purplet/types';
+import { GatewayDispatchEvents } from 'purplet/types';
 import { setGlobalEnv } from './env';
 import { FeatureLoader } from './FeatureLoader';
 import type { Feature } from './hook';
@@ -29,12 +29,8 @@ import { log } from './logger';
 import { errorFromGatewayClientExitError, errorTooManyGuilds } from '../cli/errors';
 import { $gatewayEvent } from '../hooks';
 import { markFeature } from '../internal';
-import {
-  ApplicationFlagsBitfield,
-  createInteraction,
-  InteractionResponse,
-  User,
-} from '../structures';
+import type { InteractionResponse } from '../structures';
+import { ApplicationFlagsBitfield, createInteraction, User } from '../structures';
 import type { Cleanup } from '../utils/types';
 
 interface GatewayBotOptions {
@@ -97,7 +93,7 @@ export async function createGatewayClient(identify: GatewayOptions) {
   client.on('error', errorHandler);
   client.on(GatewayDispatchEvents.Ready, readyHandler);
 
-  return promise;
+  return await promise;
 }
 
 /**
@@ -208,12 +204,12 @@ export class GatewayBot {
     }
 
     // Dispatch Hooks
-    this.gateway.on('*', (payload: GatewayDispatchPayload) =>
-      runHook(this.features, $dispatch, payload)
-    );
+    this.gateway.on('*', (payload: GatewayDispatchPayload) => {
+      runHook(this.features, $dispatch, payload);
+    });
 
     // Interaction hooks
-    this.gateway.on(GatewayDispatchEvents.InteractionCreate, async i => {
+    this.gateway.on(GatewayDispatchEvents.InteractionCreate, i => {
       const responseHandler = async (response: InteractionResponse) => {
         await this.rest.interactionResponse.createInteractionResponse({
           interactionId: i.id,
@@ -250,7 +246,7 @@ export class GatewayBot {
 
   private async updateCommands(commands: RESTPutAPIApplicationCommandsJSONBody) {
     if (commands.length === 0) {
-      console.debug('there are no application commands');
+      log('debug', 'there are no application commands');
       return;
     }
 
@@ -270,11 +266,11 @@ export class GatewayBot {
       );
     }
 
-    await asyncMap(guildList, async guild => {
+    await asyncMap(guildList, guild => {
       this.updateApplicationCommandsGuild(guild);
     });
 
-    console.debug('development mode app command push done');
+    log('debug', 'development mode app command push done');
   }
 
   private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
@@ -299,8 +295,8 @@ export class GatewayBot {
   }
 
   async patchFeatures({ add, remove }: PatchFeatureInput) {
-    const coreFeaturesRemoved = await this.features.remove(remove);
-    const coreFeaturesAdded = await this.features.add(add);
+    this.features.remove(remove);
+    const coreFeaturesAdded = this.features.add(add);
 
     log('debug', `patching features, ${add.length} add, ${remove.length} remove.`);
 
@@ -317,7 +313,7 @@ export class GatewayBot {
 
     if (newIntents !== this.#cachedIntents) {
       this.#cachedIntents = newIntents;
-      await this.gateway?.close();
+      this.gateway?.close();
       await this.startClient();
     } else if (!deepEqual(newPresence, this.#cachedPresence)) {
       this.#cachedPresence = newPresence;

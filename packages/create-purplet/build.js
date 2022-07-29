@@ -5,7 +5,6 @@ import path from 'path';
 
 process.env.NODE_ENV = 'production';
 
-console.log('Building Rollup');
 const rollupConfig = (await import('./rollup.config.js')).default;
 const roll = await rollup(rollupConfig);
 await roll.write(rollupConfig.output);
@@ -28,12 +27,7 @@ async function copy(src, dest, ignore = []) {
   const stats = await stat(src);
   if (stats.isDirectory()) {
     await mkdirp(dest);
-    const files = (await readdir(src)).filter(
-      file =>
-        !ignore.some(match => {
-          return match === file;
-        })
-    );
+    const files = (await readdir(src)).filter(file => !ignore.some(match => match === file));
     await Promise.all(
       files.map(async file => {
         await copy(path.join(src, file), path.join(dest, file), ignore);

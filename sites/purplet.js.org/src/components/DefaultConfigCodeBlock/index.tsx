@@ -3,8 +3,7 @@ import CodeBlock from '@theme/CodeBlock';
 import React from 'react';
 import { TabbedCodeBlock, TabItem } from '../TabbedCodeBlock';
 
-const configValues = String(purpletDefault)
-  .match(/\/\/ START CONFIG\n(.*)\/\/ END CONFIG/s)[1]
+const configValues = (/\/\/ START CONFIG\n(.*)\/\/ END CONFIG/s.exec(String(purpletDefault)))[1]
   .trim();
 
 const jsSource = `

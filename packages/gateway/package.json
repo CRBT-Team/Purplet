@@ -27,8 +27,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rollup -c && tsc -p . && echo Types Passing",
-    "dev": "rollup -c --watch",
-    "lint": "eslint src/**/*.{ts,tsx}"
+    "dev": "rollup -c --watch"
   },
   "dependencies": {
     "@davecode/events": "^1.0.0"

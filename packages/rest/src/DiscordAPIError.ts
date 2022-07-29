@@ -1,4 +1,4 @@
-import { RESTJSONErrorCodes } from 'discord-api-types/rest';
+import type { RESTJSONErrorCodes } from 'discord-api-types/rest';
 
 interface APIJSONError {
   code: RESTJSONErrorCodes;
@@ -22,8 +22,8 @@ function getErrorList(error: APIErrorObject, keypath = ''): APIErrorWithKeypath[
   for (const key in error) {
     errors.push(
       ...(key === '_errors'
-        ? error[key].map(error => ({ ...error, keypath: `${keypath}` }))
-        : getErrorList(error[key], `${keypath}${key.match(/^\d+$/) ? `[${key}]` : `.${key}`}`))
+        ? error[key].map(e => ({ ...e, keypath: `${keypath}` }))
+        : getErrorList(error[key], `${keypath}${/^\d+$/.exec(key) ? `[${key}]` : `.${key}`}`))
     );
   }
   return errors;

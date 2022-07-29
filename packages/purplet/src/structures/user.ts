@@ -4,7 +4,8 @@ import type { APIUser } from 'purplet/types';
 import { UserFlagsBitfield } from './bit-field';
 import type { Interaction } from './interaction';
 import { rest } from '../lib/env';
-import { createPartialClass, PartialClass } from '../utils/class';
+import type { PartialClass } from '../utils/class';
+import { createPartialClass } from '../utils/class';
 
 /** Structure for APIUser. */
 export class User {

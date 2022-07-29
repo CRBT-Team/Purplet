@@ -1,15 +1,17 @@
 import { unique } from '@davecode/utils';
-import {
+import type {
   APIApplicationCommandBasicOption,
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
   GatewayPresenceUpdateData,
   LocalizationMap,
   PresenceUpdateStatus,
   RESTPostAPIApplicationCommandsJSONBody,
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
+  RESTPostAPIChatInputApplicationCommandsJSONBody} from 'purplet/types';
+import {
+  ApplicationCommandOptionType,
+  ApplicationCommandType
 } from 'purplet/types';
-import { IntentsHookData, PresenceHookData, PresenceStatus } from './hook-core';
+import type { IntentsHookData, PresenceHookData} from './hook-core';
+import { PresenceStatus } from './hook-core';
 import { IntentsBitfield } from '../structures';
 
 export function mergeIntents(intents: IntentsHookData[]) {
@@ -32,7 +34,7 @@ export function mergePresence(presences: PresenceHookData[]): GatewayPresenceUpd
   };
 
   for (const entry of presences) {
-    if (entry.afk) obj.afk = true;
+    if (entry.afk) {obj.afk = true;}
     if (entry.activities) {
       obj.activities.push(...entry.activities);
     }
@@ -72,13 +74,13 @@ export function mergeCommands(_list: ApplicationCommandResolvable[]) {
 
   const groups = list.filter(x => 'isSlashCommandGroup' in x && !x.name.includes(' '));
 
-  const toBeMerged = (list as any[]).filter(
+  const toBeMerged = (list ).filter(
     x =>
       (x.type === ApplicationCommandType.ChatInput || x.isSlashCommandGroup) && x.name.includes(' ')
   );
 
   const commandNamesToBeMerged = unique(toBeMerged.map(x => x.name.split(' ')[0]));
-  const rest = list.filter(x => !toBeMerged.includes(x) && !groups.includes(x as any));
+  const rest = list.filter(x => !toBeMerged.includes(x) && !groups.includes(x ));
 
   for (const name of commandNamesToBeMerged) {
     const group = groups.find(x => x.name === name);
@@ -87,7 +89,7 @@ export function mergeCommands(_list: ApplicationCommandResolvable[]) {
     }
 
     const cmd: SlashCommand = {
-      name: name,
+      name,
       type: ApplicationCommandType.ChatInput,
       options: [],
       description: group.description,

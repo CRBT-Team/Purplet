@@ -1,17 +1,19 @@
 import { Emitter } from '@davecode/events';
-import {
-  GatewayCloseCodes,
-  GatewayDispatchEvents,
+import type {
   GatewayIdentifyData,
-  GatewayOpcodes,
   GatewayPresenceUpdateData,
   GatewayReceivePayload,
   GatewaySendPayload,
+} from 'discord-api-types/gateway';
+import {
+  GatewayCloseCodes,
+  GatewayDispatchEvents,
+  GatewayOpcodes,
   GatewayVersion,
 } from 'discord-api-types/gateway';
 import { RouteBases, Routes } from 'discord-api-types/v10';
-import { Inflate } from 'zlib-sync';
-import { GatewayEventMap } from './GatewayEventMap';
+import type { Inflate } from 'zlib-sync';
+import type { GatewayEventMap } from './GatewayEventMap';
 import { GatewayExitError } from './GatewayExitError';
 import { Heartbeater } from './Heartbeater';
 
@@ -47,7 +49,9 @@ function stripUndefined(obj: any): any {
   if (obj && typeof obj === 'object') {
     const out: Record<PropertyKey, any> = {};
     for (const [key, value] of Object.entries(obj)) {
-      if (value !== undefined) out[key] = stripUndefined(value);
+      if (value !== undefined) {
+        out[key] = stripUndefined(value);
+      }
     }
     return out;
   }
@@ -89,9 +93,12 @@ export class Gateway extends Emitter<GatewayEventMap> {
 
     if (!urlString) {
       // TODO: in the future, use /gateway/bot and automatic sharding.
-      let request = await fetch(RouteBases.api + Routes.gateway());
-      let json = await request.json();
-      urlString = gatewayURL = json.url;
+      const { url } = await fetch(RouteBases.api + Routes.gateway()).then(x => x.json());
+      urlString = url;
+      // I honestly do not understand why this causes a race condition.
+      // I hope it is a false positive.
+      // eslint-disable-next-line require-atomic-updates
+      gatewayURL = urlString;
     }
 
     if (zlib) {
@@ -103,7 +110,9 @@ export class Gateway extends Emitter<GatewayEventMap> {
     const url = new URL(urlString!);
     url.searchParams.set('v', GatewayVersion);
     url.searchParams.set('encoding', erlpack ? 'etf' : 'json');
-    if (zlib) url.searchParams.set('compress', 'zlib-stream');
+    if (zlib) {
+      url.searchParams.set('compress', 'zlib-stream');
+    }
 
     this.gotHello = false;
 
@@ -111,7 +120,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
     // this.ws.binaryType = 'arraybuffer';
     this.ws.onmessage = event => this.onRawPacket(event.data);
     this.ws.onclose = event => this.onClose(event);
-    this.ws.onerror = event => this.emit('error', new Error('WebSocket error'));
+    this.ws.onerror = event => this.emit('error', new Error('WebSocket error: ' + event.target));
 
     // TODO: Remove this code once `https://github.com/Jarred-Sumner/bun/issues/521` is resolved.
     this.ws.onopen = () => {
@@ -141,7 +150,9 @@ export class Gateway extends Emitter<GatewayEventMap> {
         buf[l - 2] === 0xff &&
         buf[l - 1] === 0xff;
       this.inflate.push(buf as Buffer, flush && zlib!.Z_SYNC_FLUSH);
-      if (!flush) return;
+      if (!flush) {
+        return;
+      }
       raw = this.inflate.result as Uint8Array;
     } else {
       raw = buf;
@@ -155,8 +166,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
         packet = JSON.parse(typeof raw === 'string' ? raw : decoder.decode(raw));
       }
     } catch (error) {
-      console.error('error decoding');
-      console.error(error);
+      this.emit('error', error instanceof Error ? error : new Error(String(error)));
       return;
     }
 
@@ -169,7 +179,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
       let reconnect = false;
       switch (code) {
         case GatewayCloseCodes.UnknownError:
-          console.error("WebSocket closed by Discord. We're not sure what went wrong.");
+          this.emit('debug', "WebSocket closed by Discord. We're not sure what went wrong.");
           reconnect = true;
           break;
         case GatewayCloseCodes.UnknownOpcode:
@@ -186,7 +196,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
         case GatewayCloseCodes.DisallowedIntents:
           break;
         case GatewayCloseCodes.SessionTimedOut:
-          console.error('WebSocket closed by Discord. Attempting to reconnect...');
+          this.emit('debug', 'WebSocket closed by Discord. Attempting to reconnect...');
           reconnect = true;
           break;
         case GatewayCloseCodes.InvalidSeq:
@@ -211,7 +221,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
   }
 
   /** @internal handle decoded packet data */
-  private async onPacket(packet: GatewayReceivePayload) {
+  private onPacket(packet: GatewayReceivePayload) {
     if (packet.s) {
       this.seq = packet.s;
     }
@@ -250,10 +260,9 @@ export class Gateway extends Emitter<GatewayEventMap> {
         return;
       case GatewayOpcodes.HeartbeatAck:
         // TODO: implement zombie detection
-        console.debug('heartbeat ack, thanks', packet);
         return;
       case GatewayOpcodes.InvalidSession:
-        console.warn('Gateway Session Invalidated. Reconnecting.');
+        this.emit('debug', 'Gateway Session Invalidated. Reconnecting.');
         this.reconnect();
         return;
       case GatewayOpcodes.Reconnect:
@@ -268,7 +277,6 @@ export class Gateway extends Emitter<GatewayEventMap> {
         return;
       case GatewayOpcodes.Heartbeat:
         this.hb!.beat();
-        return;
     }
   }
 

@@ -111,7 +111,7 @@ describe('serializers', () => {
     expectSerialize(S.generic, []);
     expectSerialize(S.generic, [1, 2, 3]);
     expectSerialize(S.generic, [1, null, true, { a: 1, b: 2 }]);
-    expectSerialize(S.generic, { a: 1, b: 2, null: null, undefined: undefined });
+    expectSerialize(S.generic, { a: 1, b: 2, null: null, undefined });
     expectSerialize(S.generic, 5321n);
     expectSerialize(S.generic, -53421n);
     expectSerialize(S.generic, NaN);

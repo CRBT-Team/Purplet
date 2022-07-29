@@ -19,6 +19,7 @@ export class GuildChannelBase<
     return this.raw.position!;
   }
 
+  // @ts-expect-error uaudsfhfdj ugh itl be rewritten ig
   get parent(): EmptyCategoryChannel | null {
     return this.raw.parent_id ? new EmptyCategoryChannel({ id: this.raw.parent_id }) : null;
   }
@@ -32,8 +33,6 @@ export class GuildChannelBase<
   }
 }
 
-export interface GuildChannelBase<
-  Data extends APIGuildChannel<ChannelType> = APIGuildChannel<ChannelType>
-> {
+export interface GuildChannelBase {
   fetch(): Promise<GuildChannelBase>;
 }

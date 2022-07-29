@@ -15,12 +15,14 @@ export type CamelCasedValueRec<T> = T extends Record<PropertyKey, unknown>
       [K in keyof T as CamelCase<K>]: CamelCasedValueRec<T[K]>;
     }
   : T extends Array<infer I>
-  ? CamelCasedValue<I>[]
+  ? Array<CamelCasedValue<I>>
   : T;
 
 function isPlainObj(value: unknown): value is Record<PropertyKey, unknown> {
-  if (typeof value !== 'object' || value === null) return false;
-  let obj = {};
+  if (typeof value !== 'object' || value == null) {
+    return false;
+  }
+  const obj = {};
   return Object.getPrototypeOf(value) === Object.getPrototypeOf(obj);
 }
 

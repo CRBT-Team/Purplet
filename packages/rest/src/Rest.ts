@@ -19,7 +19,7 @@ import {
   Voice,
   Webhook,
 } from './routes.generated';
-import { RequestOptions, RequestOptionsWithMethod, RestOptions, TokenType } from './types';
+import type { RequestOptions, RequestOptionsWithMethod, RestOptions, TokenType } from './types';
 import { toBlob } from './utils';
 
 const sourceURL = 'https://github.com/CRBT-Team/Purplet/tree/main/packages/rest';
@@ -81,7 +81,7 @@ export class Rest {
 
   /** Runs a request against the Discord API. */
   async request<Output>(endpoint: string, options: RequestOptionsWithMethod): Promise<Output> {
-    const query = Object.entries(options.query || {})
+    const query = Object.entries(options.query ?? {})
       .filter(([, value]) => value !== undefined)
       .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`)
       .join('&');
@@ -113,7 +113,6 @@ export class Rest {
       const form = new FormData();
 
       if (body) {
-        console.log('body', body);
         form.append('payload_json', body);
       }
 
@@ -132,7 +131,7 @@ export class Rest {
       headers.set('X-Audit-Log-Reason', options.reason);
     }
 
-    return this.fetcher.queue({
+    return await this.fetcher.queue({
       url,
       init: {
         method: options.method,
@@ -144,23 +143,23 @@ export class Rest {
 
   // Useful method aliases
 
-  get<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return this.request(endpoint, { method: 'GET', ...options });
+  async get<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
+    return await this.request(endpoint, { method: 'GET', ...options });
   }
 
-  post<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return this.request(endpoint, { method: 'POST', ...options });
+  async post<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
+    return await this.request(endpoint, { method: 'POST', ...options });
   }
 
-  put<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return this.request(endpoint, { method: 'PUT', ...options });
+  async put<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
+    return await this.request(endpoint, { method: 'PUT', ...options });
   }
 
-  delete<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return this.request(endpoint, { method: 'DELETE', ...options });
+  async delete<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
+    return await this.request(endpoint, { method: 'DELETE', ...options });
   }
 
-  patch<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return this.request<Output>(endpoint, { method: 'PATCH', ...options });
+  async patch<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
+    return await this.request<Output>(endpoint, { method: 'PATCH', ...options });
   }
 }

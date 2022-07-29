@@ -2,7 +2,8 @@ import type { Immutable } from '@davecode/types';
 import type { APIMessage } from 'purplet/types';
 import { ReadonlyMessageFlagsBitfield } from './bit-field';
 import { PartialUser } from './user';
-import { createPartialClass, PartialClass } from '../utils/class';
+import type { PartialClass } from '../utils/class';
+import { createPartialClass } from '../utils/class';
 
 /** This class has a long way to go but its OK right now. */
 export class Message {

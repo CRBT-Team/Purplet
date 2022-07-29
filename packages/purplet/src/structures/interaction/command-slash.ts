@@ -1,10 +1,9 @@
-import {
+import type {
   APIApplicationCommandSubcommandGroupOption as SubcommandOption,
   APIChatInputApplicationCommandInteraction,
   APIInteraction,
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
 } from 'purplet/types';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'purplet/types';
 import { CommandInteraction } from './command';
 import { createInstanceofGuard } from '../../utils/class';
 
@@ -24,9 +23,8 @@ export class SlashCommandInteraction<
       return this.raw.data.options![0].options ?? [];
     } else if (firstType === ApplicationCommandOptionType.SubcommandGroup) {
       return this.raw.data.options![0].options[0].options ?? [];
-    } else {
-      return this.raw.data.options ?? [];
     }
+    return this.raw.data.options ?? [];
   }
 
   get subcommandName() {
@@ -35,9 +33,8 @@ export class SlashCommandInteraction<
       return this.raw.data.options![0].name;
     } else if (type === ApplicationCommandOptionType.SubcommandGroup) {
       return (this.raw.data.options![0] as SubcommandOption).options?.[0].name;
-    } else {
-      return null;
     }
+    return null;
   }
 
   get subcommandGroupName() {
@@ -56,7 +53,7 @@ export class SlashCommandInteraction<
   }
 
   getResolvedOption(name: string) {
-    const opt = this.options.find(opt => opt.name === name);
+    const opt = this.options.find(o => o.name === name);
     if (!opt) {
       return null;
     }

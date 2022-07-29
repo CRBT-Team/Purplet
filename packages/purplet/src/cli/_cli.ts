@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import '@purplet/polyfill';
 import chalk from 'chalk';
 import dedent from 'dedent';
@@ -88,7 +89,7 @@ const longDescriptions: Record<string, string> = {};
 cli.command(
   'dev',
   'start in development mode',
-  yargs => yargs.positional(...rootPositional),
+  args => args.positional(...rootPositional),
   args => start(new DevMode(args), args.verbose)
 );
 longDescriptions['dev'] = dedent`
@@ -97,7 +98,7 @@ longDescriptions['dev'] = dedent`
 cli.command(
   'build',
   'build a production gateway client',
-  yargs => yargs.positional(...rootPositional),
+  args => args.positional(...rootPositional),
   args => start({ start: () => buildGateway(args) }, args.verbose)
 );
 longDescriptions['build'] = dedent`
@@ -106,8 +107,8 @@ longDescriptions['build'] = dedent`
 cli.command(
   'build-http',
   'build a production http interaction handler',
-  yargs => yargs.positional(...rootPositional),
-  args => {}
+  args => args.positional(...rootPositional)
+  // args => {}
 );
 longDescriptions['build-http'] = dedent`
   Build a production http interaction handler to './dist', which can be run for an optimized production build without hot-reloading or server limits. Handles interactions unless you have a gateway client handled.
@@ -115,8 +116,8 @@ longDescriptions['build-http'] = dedent`
 cli.command(
   'deploy [--delete]',
   'manage production-deployed application commands',
-  yargs =>
-    yargs //
+  args =>
+    args //
       .positional(...rootPositional)
       .option('delete', {
         alias: 'd',
@@ -134,7 +135,7 @@ longDescriptions['deploy'] = dedent`
 cli.command(
   'sync',
   'generate development-related files',
-  yargs => yargs.positional(...rootPositional),
+  args => args.positional(...rootPositional),
   args => start({ start: () => sync(args) }, args.verbose)
 );
 longDescriptions['sync'] = dedent`
@@ -143,8 +144,8 @@ longDescriptions['sync'] = dedent`
 cli.command(
   'guild-manager',
   "interactivly manage bot's current guilds",
-  yargs =>
-    yargs.positional('root', {
+  args =>
+    args.positional('root', {
       default: './',
       type: 'string',
       coerce(x) {
@@ -159,8 +160,8 @@ longDescriptions['guild-manager'] = dedent`
 
 // Override printing methods
 const _showHelp = cli.showHelp;
-cli.showHelp = () => {
-  return _showHelp.call(cli, data => {
+cli.showHelp = () =>
+  _showHelp.call(cli, data => {
     const isRoot = data.startsWith('purplet <command>');
 
     const lines = data.split('\n');
@@ -227,14 +228,12 @@ cli.showHelp = () => {
           '  ',
           line
             .trim()
-            .replace(/\[.*?\]/g, brackets => {
-              return chalk[brackets.startsWith('[default: ') ? 'magentaBright' : 'yellowBright'](
-                brackets
-              );
-            })
-            .replace(/--?[a-zA-Z0-9_-]+/g, flag => {
-              return chalk[flag.startsWith('--') ? 'cyanBright' : 'greenBright'](flag);
-            })
+            .replace(/\[.*?\]/g, brackets =>
+              chalk[brackets.startsWith('[default: ') ? 'magentaBright' : 'yellowBright'](brackets)
+            )
+            .replace(/--?[a-zA-Z0-9_-]+/g, flag =>
+              chalk[flag.startsWith('--') ? 'cyanBright' : 'greenBright'](flag)
+            )
         );
       });
       console.log();
@@ -243,7 +242,6 @@ cli.showHelp = () => {
     // next up may be an error, so inject the logger
     injectLogger();
   });
-};
 
 // Parse
 cli.demandCommand().strictCommands().strictOptions().strict(true).parse();

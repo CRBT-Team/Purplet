@@ -1,6 +1,8 @@
+import type { Dict } from '@paperdave/utils';
 import type { BitBuffer } from './BitBuffer';
 import { BitSerializer } from './BitSerializer';
-import { fillArray, Generic } from './utils';
+import type { Generic } from './utils';
+import { fillArray } from './utils';
 
 /** Creates a serializer that does not read/write any data, but instead return a predefined constant. */
 export function constant<T>(input: T): BitSerializer<T> {
@@ -287,14 +289,12 @@ export function object<T extends Record<string, unknown>>(definition: {
 /** Serializer for an object of `generic` values. */
 export const genericObject = new BitSerializer<Record<string, Generic>>({
   read(buffer) {
-    const obj = {};
-    while (true) {
-      const key = string.read(buffer);
-      if (key === '') {
-        break;
-      }
-      (obj as any)[key] = generic.read(buffer);
-    }
+    const obj: Dict<Generic> = {};
+    let key: string;
+    do {
+      key = string.read(buffer);
+      obj[key] = generic.read(buffer);
+    } while (key !== '');
     return obj;
   },
   write(value, buffer) {
@@ -306,7 +306,7 @@ export const genericObject = new BitSerializer<Record<string, Generic>>({
   },
   check(value): value is Record<string, Generic> {
     return (
-      value !== null &&
+      value != null &&
       typeof value === 'object' &&
       Object.keys(value).every(key => string.check(key) && generic.check((value as any)[key]))
     );

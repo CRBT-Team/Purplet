@@ -1,15 +1,8 @@
-import {
-  APIApplicationCommandAutocompleteInteraction,
-  APIInteraction,
-  ApplicationCommandOptionType,
-  InteractionType,
-} from 'purplet/types';
+import type { APIApplicationCommandAutocompleteInteraction, APIInteraction } from 'purplet/types';
+import { ApplicationCommandOptionType, InteractionType } from 'purplet/types';
 import { Interaction } from './base';
-import {
-  applyInteractionResponseMixins,
-  createInteractionMixinList,
-  InteractionResponseMixin,
-} from './response';
+import type { InteractionResponseMixin } from './response';
+import { applyInteractionResponseMixins, createInteractionMixinList } from './response';
 import { createInstanceofGuard } from '../../utils/class';
 
 export class AutocompleteInteraction<
@@ -51,7 +44,7 @@ export class AutocompleteInteraction<
   }
 
   get focusedOption() {
-    return this.raw.data.options.find(x => (x as any).focused)!;
+    return this.raw.data.options.find(x => 'focused' in x)!;
   }
 
   getOption(name: string) {

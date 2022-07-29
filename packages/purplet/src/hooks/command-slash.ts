@@ -1,16 +1,20 @@
-import { ApplicationCommandType, LocalizationMap } from 'purplet/types';
+import type { LocalizationMap } from 'purplet/types';
+import { ApplicationCommandType } from 'purplet/types';
 import { $appCommand } from './command';
-import {
-  getOptionBuilderAutocompleteHandlers,
+import type {
   OptionBuilder,
-  OptionBuilderToPurpletResolvedObject,
+  OptionBuilderToPurpletResolvedObject} from '../builders';
+import {
+  getOptionBuilderAutocompleteHandlers
 } from '../builders';
 import { $applicationCommands, $interaction } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
-import { AutocompleteInteraction, SlashCommandInteraction } from '../structures';
+import type { SlashCommandInteraction } from '../structures';
+import { AutocompleteInteraction } from '../structures';
 import { camelChoiceToSnake } from '../utils/case';
 import { toJSONValue } from '../utils/json';
-import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
+import type { CommandPermissionsInput} from '../utils/permissions';
+import { resolveCommandPermissions } from '../utils/permissions';
 
 export interface SlashCommandData<T> extends CommandPermissionsInput {
   name: string;

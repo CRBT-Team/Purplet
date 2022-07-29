@@ -1,4 +1,3 @@
-import type { APIInteraction, APIInteractionResponse } from 'purplet/types';
 import { FeatureLoader } from './FeatureLoader';
 import type { PatchFeatureInput } from './GatewayBot';
 import type { Feature } from './hook';
@@ -16,12 +15,12 @@ export class HTTPBot {
     }
   }
 
-  async handleInteraction(i: APIInteraction): Promise<APIInteractionResponse> {
-    throw new Error('Method not implemented.');
-  }
+  // async handleInteraction(i: APIInteraction): Promise<APIInteractionResponse> {
+  //   throw new Error('Method not implemented.');
+  // }
 
-  async patchFeatures({ add, remove }: PatchFeatureInput) {
-    await this.features.remove(remove);
-    await this.features.add(add);
+  patchFeatures({ add, remove }: PatchFeatureInput) {
+    this.features.remove(remove);
+    this.features.add(add);
   }
 }

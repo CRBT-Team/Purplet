@@ -39,7 +39,7 @@ export function errorFromGatewayClientExitError({ code }: GatewayExitError, clie
           )} file is invalid or expired. Please create a new token at ${devPortalLink} and update the environment variable.
         `
       );
-    case GatewayCloseCodes.DisallowedIntents:
+    case GatewayCloseCodes.DisallowedIntents: {
       const specialIntents = [
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildPresences,
@@ -60,7 +60,8 @@ export function errorFromGatewayClientExitError({ code }: GatewayExitError, clie
           ${chalk.magentaBright('https://discord.com/developers/applications')}
         `
       );
-    case GatewayCloseCodes.InvalidIntents:
+    }
+    case GatewayCloseCodes.InvalidIntents: {
       const names2 = new IntentsBitfield(client.options.intents)
         .toStringArray()
         .map(camelCaseToEnumCase);
@@ -73,6 +74,7 @@ export function errorFromGatewayClientExitError({ code }: GatewayExitError, clie
           ${names2.map(x => `  - ${chalk.cyanBright(x)}`).join('\n')}
         `
       );
+    }
     case GatewayCloseCodes.ShardingRequired:
       return new CLIError(
         'Sharding Required!',

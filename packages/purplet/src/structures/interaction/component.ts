@@ -1,9 +1,11 @@
-import { APIInteraction, APIMessageComponentInteraction, InteractionType } from 'purplet/types';
+import type { APIInteraction, APIMessageComponentInteraction} from 'purplet/types';
+import { InteractionType } from 'purplet/types';
 import { Interaction } from './base';
+import type {
+  InteractionResponseMixin} from './response';
 import {
   applyInteractionResponseMixins,
-  createInteractionMixinList,
-  InteractionResponseMixin,
+  createInteractionMixinList
 } from './response';
 import { createInstanceofGuard } from '../../utils/class';
 
@@ -41,4 +43,4 @@ const allowedMethods = createInteractionMixinList([
 ]);
 
 applyInteractionResponseMixins(ComponentInteraction, allowedMethods);
-export interface ComponentInteraction extends InteractionResponseMixin<typeof allowedMethods> {}
+export type ComponentInteraction = InteractionResponseMixin<typeof allowedMethods>

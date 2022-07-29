@@ -1,15 +1,16 @@
-import { FEATURE, Feature } from './hook';
+import type { Feature } from './hook';
+import { FEATURE } from './hook';
 
 export class FeatureLoader {
   #features: Feature[] = [];
 
   get features() {
-    return this.#features as ReadonlyArray<Feature>;
+    return this.#features as readonly Feature[];
   }
 
   constructor() {}
 
-  async add(features: Feature[]) {
+  add(features: Feature[]) {
     const newFeatures = features
       .map(x => (x[FEATURE].hook.merge ? (x[FEATURE].data as Feature[]) : x))
       .flat()
@@ -20,7 +21,7 @@ export class FeatureLoader {
     return newFeatures;
   }
 
-  async remove(features: Feature[]) {
+  remove(features: Feature[]) {
     const removedFeatures = features
       .map(x => (x[FEATURE].hook.merge ? (x[FEATURE].data as Feature[]) : x))
       .flat()

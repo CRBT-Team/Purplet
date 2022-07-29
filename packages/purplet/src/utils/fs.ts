@@ -29,7 +29,7 @@ export async function mkdirp(dir: string) {
   try {
     await mkdir(dir, { recursive: true });
   } catch (e: any) {
-    if (e.code === 'EEXIST') return;
+    if (e.code === 'EEXIST') {return;}
     throw e;
   }
 }
@@ -69,11 +69,11 @@ export async function resolveEntrypoint(entry: string): Promise<string | null> {
   if (await exists(entry)) {
     const stats = await stat(entry);
     if (stats.isDirectory()) {
-      return resolveEntrypoint(path.join(entry, 'index'));
+      return await resolveEntrypoint(path.join(entry, 'index'));
     }
 
     return entry;
-  } else {
+  } 
     const dir = path.dirname(entry);
 
     if (!(await exists(dir))) {
@@ -82,9 +82,9 @@ export async function resolveEntrypoint(entry: string): Promise<string | null> {
 
       const found = files.find(file => file.replace(/\.[^.]+$/, '') === base);
 
-      if (found) return path.join(dir, found);
+      if (found) {return path.join(dir, found);}
     }
-  }
+  
 
   return null;
 }

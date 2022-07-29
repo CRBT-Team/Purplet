@@ -1,9 +1,10 @@
-import { FEATURE, UnmarkedFeature } from './hook';
+import type { UnmarkedFeature } from './hook';
+import { FEATURE } from './hook';
 
 type Falsey = undefined | null | false | 0 | '';
 
 export function $merge<Pass>(
-  features: (UnmarkedFeature | Falsey)[],
+  features: Array<UnmarkedFeature | Falsey>,
   passthrough?: Pass
 ): UnmarkedFeature<Pass> {
   const allHookData = features

@@ -1,4 +1,5 @@
-import { APIVoiceChannel, VideoQualityMode } from 'purplet/types';
+import type { APIVoiceChannel } from 'purplet/types';
+import { VideoQualityMode } from 'purplet/types';
 import { Channel } from './base';
 
 export class VoiceChannelBase<
@@ -21,6 +22,6 @@ export class VoiceChannelBase<
   }
 }
 
-export interface VoiceChannelBase<Data extends APIVoiceChannel = APIVoiceChannel> {
+export interface VoiceChannelBase {
   fetch(): Promise<VoiceChannelBase>;
 }

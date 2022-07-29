@@ -1,16 +1,19 @@
-import {
+import type {
   APICommandAutocompleteInteractionResponseCallbackData,
-  APIModalInteractionResponseCallbackData,
+  APIModalInteractionResponseCallbackData} from 'purplet/types';
+import {
   InteractionResponseType,
   MessageFlags,
 } from 'purplet/types';
 import { Interaction } from './base';
 import { OriginalInteractionMessagePartial } from '../message-interaction';
+import type {
+  CreateInteractionMessageData} from '../resolve/create-message';
 import {
-  CreateInteractionMessageData,
   resolveCreateInteractionMessageData,
 } from '../resolve/create-message';
-import { JSONResolvable, toJSONValue } from '../../utils/json';
+import type { JSONResolvable} from '../../utils/json';
+import { toJSONValue } from '../../utils/json';
 
 /** Options for `Interaction.deferMessage` */
 export interface DeferMessageOptions {

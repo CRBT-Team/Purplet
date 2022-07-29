@@ -11,6 +11,6 @@ export class DMChannel<Data extends APIDMChannel = APIDMChannel> extends TextCha
   }
 }
 
-export interface DMChannel<Data extends APIDMChannel = APIDMChannel> {
+export interface DMChannel {
   fetch(): Promise<DMChannel>;
 }

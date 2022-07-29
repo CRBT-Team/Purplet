@@ -1,20 +1,27 @@
 import type { RawFile } from '@purplet/rest';
-import { APIEmbed, MessageFlags, RESTPostAPIChannelMessageJSONBody } from 'purplet/types';
-import { CamelCasedValue, uncamelCase } from '../../utils/camel-case';
-import { JSONResolvable, toJSONValue } from '../../utils/json';
+import type { APIEmbed, RESTPostAPIChannelMessageJSONBody } from 'purplet/types';
+import { MessageFlags } from 'purplet/types';
+import type { CamelCasedValue } from '../../utils/camel-case';
+import { uncamelCase } from '../../utils/camel-case';
+import type { JSONResolvable } from '../../utils/json';
+import { toJSONValue } from '../../utils/json';
 
 export type FileData = string | Buffer | Uint8Array | ArrayBufferLike;
 
 function toBuffer(x: FileData): Buffer {
-  if (x instanceof Buffer) return x;
+  if (x instanceof Buffer) {
+    return x;
+  }
   return Buffer.from(x as Uint8Array);
 }
+
+type APIEmbedFixed = { [K in keyof APIEmbed]: APIEmbed[K] };
 
 export type CreateMessageData =
   | string
   | JSONResolvable<
       | CreateMessageObject
-      | APIEmbed
+      | APIEmbedFixed
       | APIEmbed[]
       | CreateMessageAttachment
       | CreateMessageAttachment[]
@@ -96,13 +103,12 @@ export function resolveCreateMessageData(input: CreateMessageData): CreateMessag
     const isEmbed = embedFields.includes(Object.keys(data[0])[0]);
     if (isEmbed) {
       return { message: { embeds: data as APIEmbed[] }, files: [] };
-    } else {
-      const attachments = (data as CreateMessageAttachment[]).map(transformAttachment);
-      return {
-        message: { attachments: attachments.map(x => x.attachment) },
-        files: attachments.map(x => x.file),
-      };
     }
+    const attachments = (data as CreateMessageAttachment[]).map(transformAttachment);
+    return {
+      message: { attachments: attachments.map(x => x.attachment) },
+      files: attachments.map(x => x.file),
+    };
   }
 
   const isEmbed = embedFields.includes(Object.keys(data)[0]);

@@ -1,4 +1,5 @@
-import { ApplicationCommandType, LocalizationMap } from 'purplet/types';
+import type { LocalizationMap } from 'purplet/types';
+import { ApplicationCommandType } from 'purplet/types';
 import { $appCommand } from './command';
 import type {
   Message,
@@ -6,7 +7,8 @@ import type {
   PartialUser,
   UserCommandInteraction,
 } from '../structures';
-import { CommandPermissionsInput, resolveCommandPermissions } from '../utils/permissions';
+import type { CommandPermissionsInput} from '../utils/permissions';
+import { resolveCommandPermissions } from '../utils/permissions';
 
 export interface ContextCommandOptions extends CommandPermissionsInput {
   name: string;
@@ -14,7 +16,7 @@ export interface ContextCommandOptions extends CommandPermissionsInput {
 }
 
 export interface UserCommandOptions extends ContextCommandOptions {
-  handle: (this: UserCommandInteraction, target: PartialUser) => void;
+  handle(this: UserCommandInteraction, target: PartialUser): void;
 }
 
 export function $userContextCommand(opts: UserCommandOptions) {
@@ -32,7 +34,7 @@ export function $userContextCommand(opts: UserCommandOptions) {
 }
 
 export interface MessageCommandOptions extends ContextCommandOptions {
-  handle: (this: MessageCommandInteraction, target: Message) => void;
+  handle(this: MessageCommandInteraction, target: Message): void;
 }
 
 export function $messageContextCommand(opts: MessageCommandOptions) {

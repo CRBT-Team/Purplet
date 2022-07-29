@@ -1,9 +1,10 @@
 import { asyncMap } from '@davecode/utils';
-import { FEATURE, Feature, FeatureInternalData, Hook, HookType } from './hook';
+import type { Feature, FeatureInternalData, Hook, HookType } from './hook';
+import { FEATURE } from './hook';
 import type { Cleanup } from '../utils/types';
 
 export type MergeFunction<T, Result> = (a: T[]) => Result;
-export type FeatureArrayResolvable = ReadonlyArray<Feature> | { features: ReadonlyArray<Feature> };
+export type FeatureArrayResolvable = readonly Feature[] | { features: readonly Feature[] };
 
 /**
  * Runs a data hook, given a list of features to operate on (may include non-matching hooks), the
@@ -58,9 +59,9 @@ export async function runHook<Data, Type extends HookType>(
   hook: Hook<Data, Type>,
   extraArg?: Data | MergeFunction<Data, unknown>
 ) {
-  const rawList: ReadonlyArray<Feature> = Array.isArray(features)
+  const rawList: readonly Feature[] = Array.isArray(features)
     ? features
-    : (features as { features: ReadonlyArray<Feature> }).features;
+    : (features as { features: readonly Feature[] }).features;
 
   const list = rawList.filter(feature => feature[FEATURE].hook.id === hook.id);
 
@@ -75,7 +76,7 @@ export async function runHook<Data, Type extends HookType>(
   }
 
   if (hook.type === 'event') {
-    return Promise.all(
+    return await Promise.all(
       list.map(feature =>
         (feature[FEATURE] as FeatureInternalData<unknown, 'event'>).data.call(feature, extraArg)
       )

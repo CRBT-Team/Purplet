@@ -1,5 +1,6 @@
 import type { PermissionFlagsBits } from 'purplet/types';
-import { BitfieldResolvable, PermissionsBitfield } from '../structures';
+import type { BitfieldResolvable} from '../structures';
+import { PermissionsBitfield } from '../structures';
 
 export interface CommandPermissionsInput {
   permissions?: BitfieldResolvable<typeof PermissionFlagsBits>;

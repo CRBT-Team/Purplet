@@ -4,8 +4,8 @@ export type Validator<T = any> = (input: T, keypath: string) => T;
 
 let currentBasePath: string | undefined;
 
-export function setValidatorBasePath(path: string) {
-  currentBasePath = path;
+export function setValidatorBasePath(filepath: string) {
+  currentBasePath = filepath;
 }
 
 export function object(children: Record<string, Validator>, allow_unknown = false): Validator {
@@ -36,9 +36,7 @@ export function object(children: Record<string, Validator>, allow_unknown = fals
 }
 
 export function validate<T>(fallback: T, fn: Validator<T>): Validator {
-  return (input, keypath) => {
-    return fn(input === undefined ? fallback : input, keypath);
-  };
+  return (input, keypath) => fn(input === undefined ? fallback : input, keypath);
 }
 
 export function string(fallback: string | null, allow_empty = true): Validator {
@@ -55,7 +53,9 @@ export function string(fallback: string | null, allow_empty = true): Validator {
 
 export function string_array(fallback: string[] | undefined): Validator {
   return validate(fallback, (input, keypath) => {
-    if (input === undefined) return input;
+    if (input === undefined) {
+      return input;
+    }
 
     if (!Array.isArray(input) || input.some(value => typeof value !== 'string')) {
       throw new Error(`${keypath} must be an array of strings, if specified`);
@@ -93,7 +93,7 @@ export function list(options: string[], fallback = options[0]): Validator {
     if (!options.includes(input)) {
       // prettier-ignore
       const msg = options.length > 2
-        ? `${keypath} should be one of ${options.slice(0, -1).map(input => `"${input}"`).join(', ')} or "${options[options.length - 1]}"`
+        ? `${keypath} should be one of ${options.slice(0, -1).map(i => `"${i}"`).join(', ')} or "${options[options.length - 1]}"`
         : `${keypath} should be either "${options[0]}" or "${options[1]}"`;
 
       throw new Error(msg);
@@ -124,6 +124,6 @@ export function pathname(fallback: string): Validator {
       throw new Error(`${keypath} cannot be empty`);
     }
 
-    return path.resolve(currentBasePath || '/', input);
+    return path.resolve(currentBasePath ?? '/', input);
   });
 }

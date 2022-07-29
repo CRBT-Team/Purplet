@@ -125,7 +125,7 @@ export async function buildGateway(options: BuildOptions) {
   try {
     const resolved = req.resolve('./' + userPkg.main);
     if (resolved !== outputFile) {
-      throw undefined;
+      throw new Error('Error');
     }
   } catch {
     log(

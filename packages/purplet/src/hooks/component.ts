@@ -1,32 +1,35 @@
-import { BitSerializer, serializers as S } from '@purplet/serialize';
-import {
+import type { BitSerializer } from '@purplet/serialize';
+import { serializers as S } from '@purplet/serialize';
+import type {
   APIButtonComponent,
   APIMessageActionRowComponent,
   APISelectMenuComponent,
-  ComponentType,
 } from 'purplet/types';
+import { ComponentType } from 'purplet/types';
 import { $initialize, $interaction } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
-import { ButtonInteraction, ComponentInteraction, SelectMenuInteraction } from '../structures';
-import { JSONResolvable, toJSONValue } from '../utils/json';
+import type { ButtonInteraction, SelectMenuInteraction } from '../structures';
+import { ComponentInteraction } from '../structures';
+import type { JSONResolvable } from '../utils/json';
+import { toJSONValue } from '../utils/json';
 import type { IsUnknown } from '../utils/types';
 
 const purpletCustomIdTrigger = '🟣';
 
 type ComponentResolvable<Component> = JSONResolvable<Omit<Component, 'type' | 'custom_id'>>;
 
-type MessageComponentOptions<
+interface MessageComponentOptions<
   Context,
   CreateProps,
   ComponentType extends APIMessageActionRowComponent
-> = {
+> {
   type: ComponentType['type'];
   serializer?: BitSerializer<Context>;
   template:
     | ((ctx: Context, createProps: CreateProps) => ComponentResolvable<ComponentType>)
     | ComponentResolvable<ComponentType>;
   handle(this: ComponentInteraction, context: Context): void;
-};
+}
 
 /** @internal This type is used to remove properties of the `create` function if they are not needed. */
 type MessageComponentStaticProps<
@@ -81,14 +84,20 @@ function $messageComponent<
         // Extract the feature ID, as it is passed when the feature is created.
         featureId = this.featureId;
       }),
-      $interaction(async i => {
-        if (!ComponentInteraction.is(i)) return;
-        if (!i.customId.startsWith(purpletCustomIdTrigger)) return;
+      $interaction(i => {
+        if (!ComponentInteraction.is(i)) {
+          return;
+        }
+        if (!i.customId.startsWith(purpletCustomIdTrigger)) {
+          return;
+        }
 
         const length = parseInt(i.customId.charAt(2), 36);
         const encodedId = S.string.decodeCustomId(i.customId.slice(3, 3 + length));
 
-        if (encodedId !== featureId) return;
+        if (encodedId !== featureId) {
+          return;
+        }
 
         const context = serializer.decodeCustomId(i.customId.slice(3 + length)) as Context;
         options.handle.call(i, context);

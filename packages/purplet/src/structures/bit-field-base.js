@@ -1,4 +1,9 @@
-// @ts-nocheck
+// @ts-nocheck -
+/**
+ * Bitfield is a class that operates very dynamically, mainly operating on bitints and numbers in
+ * the same class. It's much easier to implement this in pure JS, then write tsdefs for it.
+ * Correctness is assured using unit testing.
+ */
 
 function toValue(values) {
   return values.map(x => x?.bitfield ?? x).reduce((a, b) => a | b);
@@ -109,14 +114,13 @@ export function createBitfieldClass(name, flagObject) {
     static flags = flagObject;
     static resolveValue(...data) {
       return data
-        .map(data => {
-          if (typeof data === 'string') {
-            return Class.flags[data] ?? BigInt(data);
-          } else if (Array.isArray(data)) {
-            return Class.resolveValue(...data);
-          } else {
-            return toValue([data]);
+        .map(data2 => {
+          if (typeof data2 === 'string') {
+            return Class.flags[data2] ?? BigInt(data2);
+          } else if (Array.isArray(data2)) {
+            return Class.resolveValue(...data2);
           }
+          return toValue([data2]);
         })
         .reduce((a, b) => a | b);
     }
@@ -126,7 +130,7 @@ export function createBitfieldClass(name, flagObject) {
   };
   Object.defineProperty(Class, 'name', { value: name });
   for (const flag in flagObject) {
-    if (!flag.match(/^[0-9]/)) {
+    if (!/^[0-9]/.exec(flag)) {
       Object.defineProperty(Class.prototype, 'has' + flag[0].toUpperCase() + flag.slice(1), {
         get() {
           return this.has(flagObject[flag]);

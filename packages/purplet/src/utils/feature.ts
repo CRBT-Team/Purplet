@@ -1,5 +1,6 @@
 import type { Module } from './types';
-import { Feature, FEATURE, UnmarkedFeature } from '../lib/hook';
+import type { Feature, UnmarkedFeature } from '../lib/hook';
+import { FEATURE } from '../lib/hook';
 
 /**
  * Converts a module of type `Record<string, MarkedFeature | unknown>` into an array of its

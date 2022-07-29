@@ -38,7 +38,6 @@
     "build": "rollup -c && (tsc -p . || true) && node post-build && echo Types Passing",
     "changeset": "cd ../../ && pnpm changeset",
     "dev": "rollup -c --watch",
-    "lint": "eslint src/**/*.{ts,tsx}",
     "prepack": "pnpm run build"
   },
   "dependencies": {

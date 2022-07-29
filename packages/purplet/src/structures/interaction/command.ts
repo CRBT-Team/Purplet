@@ -1,18 +1,20 @@
-import {
+import type {
   APIApplicationCommandInteraction,
   APIAttachment,
   APIInteraction,
   APIInteractionDataResolvedChannel,
   APIInteractionDataResolvedGuildMember,
   APIRole,
-  InteractionType,
-  Snowflake,
+  Snowflake} from 'purplet/types';
+import {
+  InteractionType
 } from 'purplet/types';
 import { Interaction } from './base';
+import type {
+  InteractionResponseMixin} from './response';
 import {
   applyInteractionResponseMixins,
-  createInteractionMixinList,
-  InteractionResponseMixin,
+  createInteractionMixinList
 } from './response';
 import { EmptyTextChannel } from '../channel';
 import { Message } from '../message';
@@ -48,7 +50,7 @@ export abstract class CommandInteraction<
   }
 
   get channel() {
-    return new EmptyTextChannel({ id: this.raw.channel_id! });
+    return new EmptyTextChannel({ id: this.raw.channel_id });
   }
 
   get commandType() {
@@ -77,4 +79,4 @@ const allowedMethods = createInteractionMixinList([
 ]);
 
 applyInteractionResponseMixins(CommandInteraction, allowedMethods);
-export interface CommandInteraction extends InteractionResponseMixin<typeof allowedMethods> {}
+export type CommandInteraction = InteractionResponseMixin<typeof allowedMethods>

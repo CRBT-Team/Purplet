@@ -1,4 +1,4 @@
-import type { Awaitable, Class, ForceSimplify, Overwrite } from '@davecode/types';
+import type { Awaitable, Class, EmptyObject, ForceSimplify, Overwrite } from '@davecode/types';
 import type {
   APIApplicationCommandOption,
   APIAttachment,
@@ -103,7 +103,7 @@ export interface Choice<T = string | number> {
 export type Autocomplete<Context = null, Type = unknown> = (
   this: AutocompleteInteraction,
   ctx: Context
-) => Awaitable<Choice<Type>[]>;
+) => Awaitable<Array<Choice<Type>>>;
 
 /**
  * @internal Transforms { autocomplete?: Autocomplete<null, T> } to fill that `null`. This type exists so we
@@ -135,7 +135,7 @@ type TransformAutocompleteOptions<T, CurrentOptions, Key> = //
  * keeping track of all the options you pass to it in a type parameter, which is extracted by
  * `$slashCommand` to give you rich option types.
  */
-export type OptionBuilder<Options = {}> = {
+export type OptionBuilder<Options = EmptyObject> = {
   /** Append an option. */
   [Type in keyof OptionInputs]: OptionBuilderMethod<Options, Type>;
 } & {

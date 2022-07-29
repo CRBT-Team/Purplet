@@ -12,4 +12,4 @@ export type IsUnknown<T> = T extends
   ? false
   : true;
 
-export type Closable = { close: () => void };
+export interface Closable { close(): void }

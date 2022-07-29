@@ -1,8 +1,8 @@
 // idk entirely on these types, but they work good enough
 
-import { Dict, ForceSimplify } from '@davecode/types';
-import { Rest } from './Rest';
-import { HTTPMethod, RawFile } from './types';
+import type { Dict, ForceSimplify } from '@davecode/types';
+import type { Rest } from './Rest';
+import type { HTTPMethod, RawFile } from './types';
 
 interface RouteMeta {
   method: HTTPMethod;
@@ -40,22 +40,22 @@ type RouteGroup<Routes extends Dict<RouteMeta>> = {
     (
       options: MakeEmptyOptional<
         Record<Routes[K]['params'][number], string> &
-          (Routes[K]['body'] extends {} ? { body: Routes[K]['body'] } : {}) &
-          (Routes[K]['query'] extends {} ? { query: Routes[K]['query'] } : {}) &
-          (Routes[K]['file'] extends true ? { files?: RawFile[] } : {}) &
-          (Routes[K]['reason'] extends true ? { reason?: string } : {})
+          (Routes[K]['body'] extends Dict<unknown> ? { body: Routes[K]['body'] } : EmptyObject) &
+          (Routes[K]['query'] extends Dict<unknown> ? { query: Routes[K]['query'] } : EmptyObject) &
+          (Routes[K]['file'] extends true ? { files?: RawFile[] } : EmptyObject) &
+          (Routes[K]['reason'] extends true ? { reason?: string } : EmptyObject)
       >
-    ) => Promise<undefined | unknown extends Routes[K]['result'] ? void : Routes[K]['result']>
+    ) => Promise<unknown extends Routes[K]['result'] ? undefined : Routes[K]['result']>
   >;
 };
 
 type RemoveParamIfEmpty<T> = T extends (options: infer Options) => Promise<infer Result>
-  ? {} extends Options
+  ? Dict<unknown> extends Options
     ? () => Promise<Result>
     : (options: Options) => Promise<Result>
   : never;
 
-export type RouteGroupClass<Routes> = { new (rest: Rest): ForceSimplify<Routes> };
+export type RouteGroupClass<Routes> = new (rest: Rest) => ForceSimplify<Routes>;
 
 export function group<Routes extends Dict<any>>(
   routes: Routes

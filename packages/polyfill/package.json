@@ -25,9 +25,6 @@
     "src/index.js",
     "CHANGELOG.md"
   ],
-  "scripts": {
-    "lint": "eslint src/**/*.{ts,tsx}"
-  },
   "dependencies": {
     "@ungap/structured-clone": "^1.0.1",
     "dotenv": "^16.0.1",

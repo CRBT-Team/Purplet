@@ -1,3 +1,5 @@
+// @ts-nocheck This file messes with lots of globals and basically every line is a type error.
+
 // Blob is not global in node as of v18
 if (typeof Blob === 'undefined') {
   const { Blob } = await import('node:buffer');
@@ -31,7 +33,7 @@ else if (typeof FormData === 'undefined') {
       options.headers = new Headers(options.headers);
       options.headers.set('Content-Type', encoder.contentType);
       options.headers.set('Content-Length', encoder.contentLength);
-      let parts = [];
+      const parts = [];
       for await (const part of encoder.encode()) {
         parts.push(part);
       }
@@ -39,6 +41,9 @@ else if (typeof FormData === 'undefined') {
     } else if (options && options.body && options.body instanceof Blob) {
       options.body = new _Blob([options.body.arrayBuffer()]);
     }
+    // This ignore line here is intentional, but also i put this
+    // ignore in at 2:31 am so maybe I am actually wrong.
+    // eslint-disable-next-line @typescript-eslint/return-await
     return _fetch(url, options);
   };
 }

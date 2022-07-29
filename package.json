@@ -12,7 +12,7 @@
     "cloc": "cloc ./packages --exclude-dir=dist,.turbo,build,.purplet,node_modules,discord-api-docs --exclude-content='@no-line-count' --exclude-content='lockfileVersion: 5.4'",
     "dev": "pnpm turbo run dev --parallel --filter=!./examples/*",
     "format": "prettier --write \"**/*.{ts,ts,js,jsx,md,json}\"",
-    "lint": "turbo run lint",
+    "lint": "eslint ./**/*.{tsx,ts,js}",
     "prepare": "husky install",
     "pub": "changeset publish"
   },
@@ -20,15 +20,15 @@
     "*.{ts,ts,js,jsx,md,json}": "prettier --write"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.23.0",
+    "@changesets/cli": "^2.24.1",
     "@svitejs/changesets-changelog-github-compact": "^0.1.1",
     "cloc": "^2.10.0",
-    "eslint": "^8.19.0",
-    "eslint-config-dave": "^3.0.3",
-    "husky": "^8.0.0",
+    "eslint": "^8.20.0",
+    "eslint-config-dave": "^3.0.6",
+    "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
-    "prettier-config-dave": "^1.0.3",
+    "prettier-config-dave": "^1.0.4",
     "turbo": "latest",
     "typescript": "^4.7.4"
   },

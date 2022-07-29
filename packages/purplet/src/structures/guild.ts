@@ -1,7 +1,8 @@
 import type { Immutable } from '@davecode/types';
 import type { APIGuild } from 'purplet/types';
 import { rest } from '../env';
-import { createPartialClass, PartialClass } from '../utils/class';
+import type { PartialClass } from '../utils/class';
+import { createPartialClass } from '../utils/class';
 
 /** Structure for APIGuild. */
 export class Guild {

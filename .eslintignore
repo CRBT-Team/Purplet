@@ -1,1 +1,7 @@
 dist
+discord-api-docs
+build
+.purplet
+local
+*local*/
+node_modules

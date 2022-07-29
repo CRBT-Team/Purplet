@@ -1,4 +1,4 @@
-export type PermissionResolve = string | bigint | (string | bigint)[];
+export type PermissionResolve = string | bigint | Array<string | bigint>;
 
 export function resolvePermission(permissions: PermissionResolve): string {
   if (typeof permissions === 'string') {

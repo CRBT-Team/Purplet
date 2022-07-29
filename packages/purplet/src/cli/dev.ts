@@ -2,8 +2,8 @@ import path from 'path';
 import { asyncMap, unique } from '@davecode/utils';
 import { watch } from 'chokidar';
 import { EventEmitter } from 'events';
-import type { HmrContext, ModuleNode, Plugin } from 'vite';
-import { createServer, ViteDevServer } from 'vite';
+import type { HmrContext, ModuleNode, Plugin , ViteDevServer } from 'vite';
+import { createServer } from 'vite';
 import defaultConfig from '../config/default';
 import { errorNoIncludeAndExcludeGuilds, errorNoToken } from './errors';
 import { loadConfig } from '../config';
@@ -49,7 +49,7 @@ export class DevMode {
   viteServer!: ViteDevServer;
   bot!: GatewayBot;
   closables: Closable[] = [];
-  featureMap: Map<string, Feature[]> = new Map();
+  featureMap = new Map<string, Feature[]>();
 
   constructor(readonly options: DevModeOptions) {}
 

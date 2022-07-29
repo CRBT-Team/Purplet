@@ -35,14 +35,14 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "rollup -c --watch",
-    "lint": "eslint src/**/*.{ts,tsx}"
+    "dev": "rollup -c --watch"
   },
   "dependencies": {
     "@davecode/types": "^1.0.2"
   },
   "devDependencies": {
     "@davecode/utils": "^1.0.1",
+    "@paperdave/logger": "^2.0.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@types/node": "^17.0.45",
     "bun-types": "^0.1.2",

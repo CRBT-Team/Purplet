@@ -2,9 +2,11 @@ import type { Immutable } from '@davecode/types';
 import type { APIMessage, RESTPostAPIWebhookWithTokenJSONBody } from 'purplet/types';
 import type { Interaction } from './interaction/base';
 import { Message } from './message';
-import { CreateMessageData, resolveCreateMessageData } from './resolve/create-message';
+import type { CreateMessageData} from './resolve/create-message';
+import { resolveCreateMessageData } from './resolve/create-message';
 import { rest } from '../env';
-import { createPartialClass, PartialClass } from '../utils/class';
+import type { PartialClass } from '../utils/class';
+import { createPartialClass } from '../utils/class';
 import { toJSONValue } from '../utils/json';
 
 export class InteractionMessage extends Message {

@@ -1,6 +1,7 @@
-import {
+import type {
   APIInteraction,
-  APIMessageComponentSelectMenuInteraction,
+  APIMessageComponentSelectMenuInteraction} from 'purplet/types';
+import {
   ComponentType,
 } from 'purplet/types';
 import { ComponentInteraction } from './component';

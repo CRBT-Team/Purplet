@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // TODO:
 // - split this file into multiple files with utility functions, actions, cli parsing, etc
 // - prebuild the 'jsdoc' versions of each template
@@ -7,7 +8,7 @@ import c from 'chalk';
 import dedent from 'dedent';
 import ora from 'ora';
 import path from 'path';
-import prompt, { PromptObject } from 'prompts';
+import prompt from 'prompts';
 import sortPackageJSON from 'sort-package-json';
 import yargs from 'yargs';
 import { spawn } from 'child_process';
@@ -15,6 +16,7 @@ import { existsSync } from 'fs';
 import { copyFile, mkdir, readdir, readFile, realpath, stat, writeFile } from 'fs/promises';
 import { createRequire } from 'module';
 import { format } from 'prettier';
+import type { PromptObject } from 'prompts';
 import { fileURLToPath } from 'url';
 import { hideBin } from 'yargs/helpers';
 import { version } from '../package.json';
@@ -231,10 +233,10 @@ console.log();
 
 const spinner = ora('Creating new Purplet project... May take a minute.').start();
 
-async function mkdirp(root: string) {
+async function mkdirp(mkdirRoot: string) {
   try {
-    await mkdir(root, { recursive: true });
-  } catch (error) {
+    await mkdir(mkdirRoot, { recursive: true });
+  } catch (error: any) {
     if (error.code !== 'EEXIST') {
       throw error;
     }
@@ -254,9 +256,9 @@ async function copy(
   if (stats.isDirectory()) {
     await mkdirp(dest);
     const allFiles = await readdir(src);
-    const files = allFiles.filter(file => !ignore.some(ignore => file === ignore));
+    const newFiles = allFiles.filter(file => !ignore.some(ignoreEntry => file === ignoreEntry));
     await Promise.all(
-      files.map(async file => {
+      newFiles.map(async file => {
         await copy(path.join(src, file), path.join(dest, file), copySingleFile, ignore);
       })
     );
@@ -332,7 +334,7 @@ const copyPromise = copy(
         )
       );
 
-      return;
+      return undefined;
     }
     return copyFile(src, dest);
   },

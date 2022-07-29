@@ -1,21 +1,17 @@
 import type { Immutable } from '@davecode/types';
-import type {
-  APIChannel,
-  APIChannelBase,
-  ChannelType,
-  RESTPatchAPIChannelJSONBody,
-} from 'purplet/types';
+import type { APIChannelBase, ChannelType, RESTPatchAPIChannelJSONBody } from 'purplet/types';
 import { createChannel } from './create';
 import { ReadonlyChannelFlagsBitfield } from '../bit-field';
 import { rest } from '../../env';
-import { JSONResolvable, toJSONValue } from '../../utils/json';
+import type { JSONResolvable } from '../../utils/json';
+import { toJSONValue } from '../../utils/json';
 
 /** Structure for APIChannel. */
 export class Channel<Data extends APIChannelBase<ChannelType> = APIChannelBase<ChannelType>> {
   constructor(readonly raw: Immutable<Data>) {}
 
   async fetch() {
-    return createChannel((await rest.channel.getChannel({ channelId: this.id })) as APIChannel);
+    return createChannel(await rest.channel.getChannel({ channelId: this.id }));
   }
 
   // TODO: X-Audit-Log-Reason

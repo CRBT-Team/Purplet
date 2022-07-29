@@ -23,22 +23,18 @@ export type PartialClass<
   [HIDDEN]: [T, PickedRawProperties, SupportedPartialMethods];
 };
 
-type GetRestArgs<C> = C extends { new (arg0: any, ...args: infer R): any } ? R : never;
+type GetRestArgs<C> = C extends new (arg0: any, ...args: infer R) => any ? R : never;
 
 /** @see `PartialClass` */
-export function createPartialClass<T>(c: any): T extends PartialClass<
-  infer C,
-  infer PickedRawProperties,
-  infer SupportedPartialMethods
->
-  ? {
-      new (
-        partialData: Pick<ConstructorParameters<C>[0], PickedRawProperties>,
-        ...restArgs: GetRestArgs<C>
-      ): T;
-    }
+export function createPartialClass<T>(
+  c: any
+): T extends PartialClass<infer C, infer PickedRawProperties, any>
+  ? new (
+      partialData: Pick<ConstructorParameters<C>[0], PickedRawProperties>,
+      ...restArgs: GetRestArgs<C>
+    ) => T
   : never {
-  return c as any;
+  return c;
 }
 
 export function createInstanceofGuard<T>(def: Class<T>) {

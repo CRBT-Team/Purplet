@@ -32,7 +32,7 @@ export type UnmarkedFeature<Pass = Record<never, unknown>> = {
 
 export type HookType = 'data' | 'event' | 'lifecycle';
 
-export interface CreateHookData<HookData, Type extends HookType> {
+export interface CreateHookData<Type extends HookType> {
   id: string;
   /**
    * Hook type.
@@ -53,7 +53,7 @@ export interface HookHotUpdate<HookData> {
   removed: HookData[];
 }
 
-export interface Hook<HookData, Type extends HookType> extends CreateHookData<HookData, Type> {
+export interface Hook<HookData, Type extends HookType> extends CreateHookData<Type> {
   <Pass>(data: HookInput<HookData, Type>, passthrough?: Pass): UnmarkedFeature<Pass>;
   merge?: boolean;
 }
@@ -67,20 +67,19 @@ export type HookInput<HookData, Type extends HookType> = Type extends 'data'
   : never;
 
 export function createCoreHook<Data, Type extends HookType>(
-  data: CreateHookData<Data, Type>
+  data: CreateHookData<Type>
 ): Hook<Data, Type> {
   const hook: any = <X>(
     instance: Data | (() => Awaitable<Data>),
     passthrough?: X & { meta?: Partial<UserMetadata> }
-  ): UnmarkedFeature<X> => {
-    return {
+  ): UnmarkedFeature<X> =>
+    ({
       [FEATURE]: {
         data: instance,
         hook,
       },
       ...passthrough,
-    } as UnmarkedFeature<X>;
-  };
+    } as UnmarkedFeature<X>);
 
   Object.defineProperty(hook, 'name', {
     value: `hook:${data.id}`,

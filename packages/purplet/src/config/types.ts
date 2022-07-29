@@ -10,7 +10,7 @@ export interface ResolvedConfig {
 
   alias: Record<string, string>;
   allowedMentions: {
-    parse: (AllowedMentionsTypes | 'everyone' | 'roles' | 'users')[];
+    parse: Array<AllowedMentionsTypes | 'everyone' | 'roles' | 'users'>;
     repliedUser: boolean;
   };
   lang: string;

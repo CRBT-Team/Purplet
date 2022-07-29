@@ -1,9 +1,11 @@
 import type { APITextBasedChannel, TextChannelType } from 'purplet/types';
 import { Channel } from './base';
 import { EmptyMessage, Message } from '../message';
-import { CreateMessageData, resolveCreateMessageData } from '../resolve/create-message';
+import type { CreateMessageData } from '../resolve/create-message';
+import { resolveCreateMessageData } from '../resolve/create-message';
 import { rest } from '../../lib/env';
-import { createPartialClass, PartialClass } from '../../utils/class';
+import type { PartialClass } from '../../utils/class';
+import { createPartialClass } from '../../utils/class';
 
 export class TextChannel<
   Data extends APITextBasedChannel<TextChannelType> = APITextBasedChannel<TextChannelType>
@@ -25,9 +27,7 @@ export class TextChannel<
   }
 }
 
-export interface TextChannel<
-  Data extends APITextBasedChannel<TextChannelType> = APITextBasedChannel<TextChannelType>
-> {
+export interface TextChannel {
   fetch(): Promise<TextChannel>;
 }
 

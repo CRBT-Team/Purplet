@@ -1,6 +1,13 @@
 {
   "extends": "dave",
   "rules": {
-    "no-redeclare": "off"
+    "@typescript-eslint/no-invalid-void-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-redeclare": "off",
+    "@typescript-eslint/no-unnecessary-type-assertion": "off",
+    "@typescript-eslint/no-redundant-type-constituents": "off",
+    "no-empty": ["warn", { "allowEmptyCatch": true }]
   }
 }

@@ -50,10 +50,6 @@ const options = object({
           throw new Error(`${keypath} should be an array of mention types`);
         }
 
-        for (const key in input) {
-          assert_string(input[key], `${keypath}.${key}`);
-        }
-
         return input;
       }
     ),

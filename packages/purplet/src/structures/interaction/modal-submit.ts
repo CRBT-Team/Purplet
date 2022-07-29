@@ -1,15 +1,17 @@
-import {
+import type {
   APIInteraction,
   APIMessageComponentSelectMenuInteraction,
-  APIModalSubmitInteraction,
+  APIModalSubmitInteraction} from 'purplet/types';
+import {
   ComponentType,
   InteractionType,
 } from 'purplet/types';
 import { Interaction } from './base';
+import type {
+  InteractionResponseMixin} from './response';
 import {
   applyInteractionResponseMixins,
-  createInteractionMixinList,
-  InteractionResponseMixin,
+  createInteractionMixinList
 } from './response';
 import { createInstanceofGuard } from '../../utils/class';
 
@@ -72,4 +74,4 @@ const allowedMethods = createInteractionMixinList([
 ]);
 
 applyInteractionResponseMixins(ModalSubmitInteraction, allowedMethods);
-export interface ModalSubmitInteraction extends InteractionResponseMixin<typeof allowedMethods> {}
+export type ModalSubmitInteraction = InteractionResponseMixin<typeof allowedMethods>

@@ -1,4 +1,4 @@
-import { GatewayCloseCodes } from 'discord-api-types/gateway';
+import type { GatewayCloseCodes } from 'discord-api-types/gateway';
 
 export class GatewayExitError extends Error {
   constructor(public code: GatewayCloseCodes) {

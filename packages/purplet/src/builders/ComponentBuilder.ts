@@ -1,18 +1,20 @@
 import { ButtonBuilder } from '@discordjs/builders';
-import {
+import type {
   APIActionRowComponent,
   APIActionRowComponentTypes,
   APIButtonComponentWithURL,
   APIMessageActionRowComponent,
   APIModalActionRowComponent,
-  APIModalInteractionResponseCallbackData,
+  APIModalInteractionResponseCallbackData} from 'purplet/types';
+import {
   ButtonStyle,
   ComponentType,
 } from 'purplet/types';
-import { JSONResolvable, toJSONValue } from '../utils/json';
+import type { JSONResolvable} from '../utils/json';
+import { toJSONValue } from '../utils/json';
 
 abstract class ComponentBuilder<Type extends APIActionRowComponentTypes> {
-  protected components: APIActionRowComponent<Type>[] = [];
+  protected components: Array<APIActionRowComponent<Type>> = [];
 
   /**
    * Adds an Action Row, either by providing an array of components, a single component, or a whole

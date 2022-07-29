@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 import { useBetween } from 'use-between';
 import styles from './styles.module.css';
 
-const stateFunc = () => {
-  return useState('pnpm');
-};
+const stateFunc = () => useState('pnpm');
 
 const useTabState = () => useBetween(stateFunc);
 
@@ -69,15 +67,13 @@ export function InstallCodeBlock(): JSX.Element {
   return (
     <>
       <ul className={clsx('tabs', styles.tabs)}>
-        {Object.entries(packageManagers).map(([name]) => {
-          return (
-            <li
-              className={clsx('tabs__item', tab === name && 'tabs__item--active')}
-              onClick={() => setTab(name)}>
-              {name}
-            </li>
-          );
-        })}
+        {Object.entries(packageManagers).map(([name]) => (
+          <li
+            className={clsx('tabs__item', tab === name && 'tabs__item--active')}
+            onClick={() => setTab(name)}>
+            {name}
+          </li>
+        ))}
       </ul>
       <pre className={styles.pre}>
         <code>{packageManagers[tab]}</code>
@@ -87,7 +83,7 @@ export function InstallCodeBlock(): JSX.Element {
 }
 
 export function RunScriptCodeBlock({ name }): JSX.Element {
-  const [tab, setTab] = useTabState();
+  const [tab] = useTabState();
   return (
     <code>
       {name.startsWith('purplet ')

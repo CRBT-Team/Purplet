@@ -1,3 +1,5 @@
+/* eslint-disable */
+// This file is going to be removed soon so idont care about linting
 import chalk from 'chalk';
 import ora from 'ora';
 import stringLength from 'string-length';
@@ -27,7 +29,9 @@ const textColors: Partial<LogFormatters> = {
 };
 
 function logString(level: LogLevel, data: string) {
-  if (level === 'debug' && !showDebug) return;
+  if (level === 'debug' && !showDebug) {
+    return;
+  }
   if (data === '') {
     process.stdout.write('\n');
     return;

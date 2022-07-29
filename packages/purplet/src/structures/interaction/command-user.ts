@@ -1,6 +1,7 @@
-import {
+import type {
   APIInteraction,
-  APIUserApplicationCommandInteraction,
+  APIUserApplicationCommandInteraction} from 'purplet/types';
+import {
   ApplicationCommandType,
 } from 'purplet/types';
 import { CommandInteraction } from './command';

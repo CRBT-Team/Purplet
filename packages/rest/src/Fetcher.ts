@@ -1,9 +1,9 @@
 import { deferred } from '@davecode/utils';
 import { DiscordAPIError } from './DiscordAPIError';
-import { RequestData } from './types';
+import type { RequestData } from './types';
 import { classifyEndpoint } from './utils';
 
-interface Error429 {
+export interface Error429 {
   message: string;
   retry_after: number;
   global: boolean;
@@ -14,8 +14,8 @@ export interface QueueEntry {
   bucketId: string;
   endpointId: string;
   majorId: string;
-  resolve: (data: any) => void;
-  reject: (error: Error) => void;
+  resolve(data: any): void;
+  reject(error: Error): void;
 }
 
 export interface Bucket {
@@ -41,13 +41,13 @@ export class Fetcher {
   #globalCount = 0;
   #globalRateLimited?: QueueEntry[];
 
-  queue<Output>(request: RequestData) {
+  async queue<Output>(request: RequestData) {
     const { endpointId, majorId } = classifyEndpoint(
-      request.url.pathname.match(/^\/api(?:\/v\d+)?(\/.*)/)![1],
+      /^\/api(?:\/v\d+)?(\/.*)/.exec(request.url.pathname)![1],
       request.init.method ?? 'GET'
     );
 
-    const bucketId = this.#bucketIds.get(endpointId) || endpointId;
+    const bucketId = this.#bucketIds.get(endpointId) ?? endpointId;
 
     const [promise, resolve, reject] = deferred<Output>();
     const entry = { request, resolve, reject, bucketId, endpointId, majorId };
@@ -77,7 +77,7 @@ export class Fetcher {
       this.runRequest(entry).catch(reject);
     }
 
-    return promise;
+    return await promise;
   }
 
   private setBucketTimer(bucket: Bucket, subBucket: SubBucket) {
@@ -106,11 +106,13 @@ export class Fetcher {
       if (this.#globalRateLimited!.length === 0) {
         this.#globalRateLimited = undefined;
       }
-      toRun.forEach(queueEntry => this.runRequest(queueEntry, true).catch(queueEntry.reject));
+      for (const queueEntry of toRun) {
+        this.runRequest(queueEntry, true).catch(queueEntry.reject);
+      }
     }, time);
   }
 
-  private async runRequest(entry: QueueEntry, ignoreGlobal = false) {
+  private async runRequest(entry: QueueEntry, ignoreGlobal = false): Promise<void> {
     if (!ignoreGlobal) {
       if (!this.#globalRateLimited) {
         this.#globalCount++;
@@ -125,7 +127,8 @@ export class Fetcher {
         }
       }
       if (this.#globalRateLimited) {
-        return this.#globalRateLimited.push(entry);
+        this.#globalRateLimited.push(entry);
+        return;
       }
     }
 
@@ -176,7 +179,8 @@ export class Fetcher {
     }
 
     if (response.ok) {
-      return response.status === 204 ? undefined : entry.resolve(await response.json());
+      response.status === 204 ? undefined : entry.resolve(await response.json());
+      return;
     }
 
     if (response.status === 429) {
@@ -190,7 +194,7 @@ export class Fetcher {
         subBucket.queue.unshift(entry);
         this.setBucketTimer(bucket, subBucket);
       }
-      return undefined;
+      return;
     }
 
     const text = await response.text();

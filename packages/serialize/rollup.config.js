@@ -1,6 +1,4 @@
 // This configuration is modelled after what SvelteKit uses to bundle their app.
-
-// @ts-nocheck
 import fs from 'fs';
 import resolve from '@rollup/plugin-node-resolve';
 import esbuild from 'rollup-plugin-esbuild';

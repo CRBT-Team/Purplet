@@ -1,4 +1,4 @@
-import { Config } from 'purplet';
+import type { Config } from 'purplet';
 
 const config: Config = {};
 

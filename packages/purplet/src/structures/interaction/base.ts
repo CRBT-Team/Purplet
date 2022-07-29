@@ -1,3 +1,4 @@
+import type { Awaitable } from '@davecode/utils';
 import type { RawFile } from '@purplet/rest';
 import type { APIInteraction, APIPingInteraction, InteractionResponseType } from 'purplet/types';
 import { PermissionsBitfield } from '../bit-field';
@@ -5,7 +6,7 @@ import { EmptyGuild } from '../guild';
 import { InteractionExecutingUser } from '../user';
 import { createInstanceofGuard } from '../../utils/class';
 
-export type InteractionResponseHandler = (r: InteractionResponse) => void;
+export type InteractionResponseHandler = (r: InteractionResponse) => Awaitable<void>;
 export type APINonPingInteraction = Exclude<APIInteraction, APIPingInteraction>;
 
 export interface InteractionResponse {
@@ -14,13 +15,16 @@ export interface InteractionResponse {
   files?: RawFile[];
 }
 
+declare const i: APINonPingInteraction;
+i.member!;
+
 export abstract class Interaction<Data extends APINonPingInteraction = APINonPingInteraction> {
   static is = createInstanceofGuard<Interaction>(Interaction as any);
 
   #onRespond: InteractionResponseHandler | undefined;
   #replied = false;
 
-  constructor(public readonly raw: Data, onRespond?: InteractionResponseHandler) {
+  constructor(readonly raw: Data, onRespond?: InteractionResponseHandler) {
     this.#onRespond = onRespond;
   }
 
@@ -61,7 +65,7 @@ export abstract class Interaction<Data extends APINonPingInteraction = APINonPin
   }
 
   get user(): InteractionExecutingUser {
-    return new InteractionExecutingUser(this.raw.user ?? this.member!.user, this);
+    return new InteractionExecutingUser(this.raw.user ?? this.raw.member!.user, this);
   }
 
   protected async respond(response: InteractionResponse) {

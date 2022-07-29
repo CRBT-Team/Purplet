@@ -11,7 +11,7 @@ type BitfieldEnum = Record<string | number, string | number | bigint>;
  * properties for each bit in the form of `.hasFlagName`.
  */
 export type Bitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Pick<
-  Array<Value>,
+  Value[],
   CopiedArrayProps
 > &
   Iterable<Value> & {
@@ -21,7 +21,7 @@ export type Bitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Pick
     toJSON(): Value extends bigint ? string : number;
     toString(): string;
     toArray(): Value[];
-    toStringArray(): Extract<keyof Enum, string>[];
+    toStringArray(): Array<Extract<keyof Enum, string>>;
     clone(): Bitfield<Enum>;
     has(bit: Value): boolean;
     add(bit: Value): this;
@@ -65,7 +65,7 @@ type BitfieldClass<BF extends ReadonlyBitfield> = BF extends Bitfield<infer Enum
         bitfield?: (Value extends bigint ? string | bigint : number) | ReadonlyBitfield<Enum, Value>
       ): BF;
       /** Resolves a bitfield-resolvable value into an actual bitfield. */
-      resolve(...data: BitfieldResolvable<Enum, Value>[]): BF;
+      resolve(...data: Array<BitfieldResolvable<Enum, Value>>): BF;
     }
   : never;
 
@@ -78,7 +78,7 @@ type ReadonlyBitfieldClass<BF extends ReadonlyBitfield> = BF extends ReadonlyBit
         bitfield?: (Value extends bigint ? string | bigint : number) | ReadonlyBitfield<Enum, Value>
       ): BF;
       /** Resolves a bitfield-resolvable value into an actual bitfield. */
-      resolve(...data: BitfieldResolvable<Enum, Value>[]): BF;
+      resolve(...data: Array<BitfieldResolvable<Enum, Value>>): BF;
     }
   : never;
 
