@@ -1,5 +1,5 @@
 ---
-'@purplet/rest': minor
+'@purplet/rest': patch
 ---
 
 Handle FastBuffer in toBlob
