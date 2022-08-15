@@ -1,5 +1,5 @@
 ---
-'@purplet/rest': minor
+'@purplet/rest': patch
 ---
 
 Remove request Content-Length setter
