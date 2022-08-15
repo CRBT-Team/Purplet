@@ -1,5 +1,6 @@
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
-export type FileData = string | Uint8Array | Blob | ArrayBufferLike | ArrayBufferable | Streamable;
+export type FastBuffer = Buffer;
+export type FileData = string | FastBuffer | Uint8Array | Blob | ArrayBufferLike | ArrayBufferable | Streamable;
 export type TokenType = 'Bot' | 'Bearer';
 
 export interface ArrayBufferable {

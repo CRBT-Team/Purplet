@@ -1,6 +1,6 @@
 // Taken from
 
-import type { ArrayBufferable, FileData, Streamable } from './types';
+import type { ArrayBufferable, FastBuffer, FileData, Streamable } from './types';
 
 // https://github.com/discordjs/discord.js/blob/main/packages/rest/src/lib/RequestManager.ts#L479
 export function classifyEndpoint(endpoint: string, method: string) {
@@ -36,6 +36,10 @@ function isStreamable(data: FileData): data is Streamable {
   return typeof (data as Streamable).stream === 'function';
 }
 
+function isFastBuffer(data: FileData): data is FastBuffer {
+  return data instanceof Buffer && data.compare(new Uint8Array(data.buffer)) !== 0;
+}
+
 export async function toBlob(data: FileData): Promise<Blob> {
   if (data instanceof Blob) {
     return data;
@@ -54,6 +58,9 @@ export async function toBlob(data: FileData): Promise<Blob> {
     } while (!read.done);
 
     return new Blob([]);
+  }
+  if (isFastBuffer(data)) {
+    return new Blob([new Uint8Array(data).buffer]);
   }
   return new Blob([data instanceof Uint8Array ? data.buffer : data]);
 }
