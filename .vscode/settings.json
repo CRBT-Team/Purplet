@@ -63,5 +63,8 @@
       "label": "All Recent Issues",
       "query": "state:open repo:${owner}/${repository} sort:updated-desc"
     }
+  ],
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "main"
   ]
 }
