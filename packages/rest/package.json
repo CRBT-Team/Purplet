@@ -46,7 +46,7 @@
     "@types/node": "^17.0.45",
     "bun-types": "^0.1.8",
     "dedent": "^0.7.0",
-    "discord-api-types": "^0.36.3",
+    "discord-api-types": "^0.37.2",
     "esbuild": "^0.14.54",
     "execa": "^6.1.0",
     "rollup": "^2.78.0",

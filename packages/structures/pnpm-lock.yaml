@@ -4,7 +4,7 @@ specifiers:
   '@paperdave/utils': 1.1.0
   '@purplet/rest': workspace:^1.1.0
   '@rollup/plugin-node-resolve': ^13.3.0
-  discord-api-types: ^0.36.3
+  discord-api-types: ^0.37.2
   esbuild: ^0.14.54
   rollup: ^2.78.0
   rollup-plugin-esbuild: ^4.9.3
@@ -12,11 +12,11 @@ specifiers:
 
 dependencies:
   '@purplet/rest': link:../rest
-  discord-api-types: 0.36.3
 
 devDependencies:
   '@paperdave/utils': 1.1.0
   '@rollup/plugin-node-resolve': 13.3.0_rollup@2.78.0
+  discord-api-types: 0.37.2
   esbuild: 0.14.54
   rollup: 2.78.0
   rollup-plugin-esbuild: 4.9.3_2yhceorlees6ev364fcurqi67q
@@ -110,9 +110,9 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /discord-api-types/0.36.3:
-    resolution: {integrity: sha512-bz/NDyG0KBo/tY14vSkrwQ/n3HKPf87a0WFW/1M9+tXYK+vp5Z5EksawfCWo2zkAc6o7CClc0eff1Pjrqznlwg==}
-    dev: false
+  /discord-api-types/0.37.2:
+    resolution: {integrity: sha512-JS4q0LGRxqY7TIsfORlIMzcmews+Qu3RmOWrxoEY+BR0g0sZlplEyY/Ltb3om6ZaBm+WNcAmAJxlsmAu4068Vw==}
+    dev: true
 
   /es-module-lexer/0.9.3:
     resolution: {integrity: sha512-1HQ2M2sPtxwnvOvT1ZClHyQDiggdNjURWpY2we6aMKCQiUVxTmVs2UYPLIrD84sS+kMdUwfBSylbJPwNnBrnHQ==}

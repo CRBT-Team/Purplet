@@ -7,7 +7,7 @@ specifiers:
   '@types/node': ^17.0.45
   bun-types: ^0.1.8
   dedent: ^0.7.0
-  discord-api-types: ^0.36.3
+  discord-api-types: ^0.37.2
   esbuild: ^0.14.54
   execa: ^6.1.0
   rollup: ^2.78.0
@@ -23,7 +23,7 @@ devDependencies:
   '@types/node': 17.0.45
   bun-types: 0.1.8
   dedent: 0.7.0
-  discord-api-types: 0.36.3
+  discord-api-types: 0.37.2
   esbuild: 0.14.54
   execa: 6.1.0
   rollup: 2.78.0
@@ -152,8 +152,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /discord-api-types/0.36.3:
-    resolution: {integrity: sha512-bz/NDyG0KBo/tY14vSkrwQ/n3HKPf87a0WFW/1M9+tXYK+vp5Z5EksawfCWo2zkAc6o7CClc0eff1Pjrqznlwg==}
+  /discord-api-types/0.37.2:
+    resolution: {integrity: sha512-JS4q0LGRxqY7TIsfORlIMzcmews+Qu3RmOWrxoEY+BR0g0sZlplEyY/Ltb3om6ZaBm+WNcAmAJxlsmAu4068Vw==}
     dev: true
 
   /eastasianwidth/0.2.0:
