@@ -1,5 +1,4 @@
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
-export type FileData = string | Buffer | Uint8Array | Blob | ArrayBufferLike | ArrayBufferable | Streamable;
 export type FileData =
   | string
   | Uint8Array
