@@ -53,10 +53,7 @@ export async function toBlob(data: FileData): Promise<Blob> {
       read.value && values.push(read.value);
     } while (!read.done);
 
-    return new Blob([]);
+    return new Blob(values);
   }
-  if (data instanceof Buffer) {
-    return new Blob([new Uint8Array(data).buffer]);
-  }
-  return new Blob([data instanceof Uint8Array ? data.buffer : data]);
+  return new Blob([data]);
 }
