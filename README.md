@@ -55,9 +55,7 @@ This repository contains these following public packages:
 | [![@purplet/gateway](https://img.shields.io/npm/v/@purplet/gateway?color=c4aaff&label=@purplet/gateway)](packages/gateway) | Gateway client implementation |
 | ![@purplet/structures](https://img.shields.io/badge/%40purplet%2Fstructures-soon%E2%84%A2-red) | Classes wrapping Discord API objects |
 | ![@purplet/builders](https://img.shields.io/badge/%40purplet%2Fbuilders-soon%E2%84%A2-red) | Builder-style classes to create Discord API objects |
-| ![@purplet/model](https://img.shields.io/badge/%40purplet%2Fmodel-soon%E2%84%A2-red)\* | Create maintainable classes to enrich JSON data. |
-| ![@purplet/logger](https://img.shields.io/badge/%40purplet%2Flogger-soon%E2%84%A2-red)\* | Simple log library that allows global injection. |
-| ![@purplet/utils](https://img.shields.io/badge/%40purplet%2Futils-soon%E2%84%A2-red) | Internal helper functions. Might not be published. |
+| ![@purplet/utils](https://img.shields.io/badge/%40purplet%2Futils-soon%E2%84%A2-red) | Internal helper functions. |
 | [![@purplet/serialize](https://img.shields.io/npm/v/@purplet/serialize?color=c4aaff&label=@purplet/serialize)](packages/serialize)\* | Utilities for binary serialization |
 | [![create-purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=create-purplet)](packages/create-purplet) | Project generation command, `pnpm create purplet` |
 
