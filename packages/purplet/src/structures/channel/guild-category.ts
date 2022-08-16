@@ -9,7 +9,7 @@ export class CategoryChannel<
   static is = createInstanceofGuard(CategoryChannel);
 }
 
-export interface CategoryChannel<> {
+export interface CategoryChannel<Data extends APIGuildCategoryChannel = APIGuildCategoryChannel> {
   fetch(): Promise<CategoryChannel>;
 }
 
