@@ -2,9 +2,9 @@
 // Do not modify directly.
 // @no-line-count
 
-import * as Discord from 'discord-api-types/rest';
-import { FileData } from './types';
-import { Route, RouteGroup, RouteGroupClass } from './route-group';
+import type * as Discord from 'discord-api-types/rest';
+import type { FileData } from './types';
+import type { Route, RouteGroup, RouteGroupClass } from './route-group';
 
 export type ApplicationCommand = RouteGroup<{
   /**
@@ -1104,6 +1104,7 @@ export type Guild = RouteGroup<{
     params: ["guildId"],
     body: Discord.RESTPostAPIGuildsMFAJSONBody,
     result: Discord.RESTPostAPIGuildsMFAResult,
+    reason: true,
   }>,
   /**
    * ## [Delete Guild Role](https://discordapp.com/developers/docs/resources/guild#delete-guild-role)

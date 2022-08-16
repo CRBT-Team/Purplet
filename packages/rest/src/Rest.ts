@@ -124,7 +124,6 @@ export class Rest {
     } else if (body) {
       // JSON body is to be sent as application/json
       headers.set('Content-Type', 'application/json');
-      headers.set('Content-Length', body.length.toString());
     }
 
     if (options.reason?.length) {

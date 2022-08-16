@@ -36,6 +36,12 @@ function isStreamable(data: FileData): data is Streamable {
   return typeof (data as Streamable).stream === 'function';
 }
 
+function isAsyncIterable(
+  data: FileData
+): data is AsyncIterable<string | Uint8Array | Blob | ArrayBufferLike | Buffer> {
+  return typeof (data as AsyncIterable<FileData>)[Symbol.asyncIterator] === 'function';
+}
+
 export async function toBlob(data: FileData): Promise<Blob> {
   if (data instanceof Blob) {
     return data;
@@ -52,6 +58,15 @@ export async function toBlob(data: FileData): Promise<Blob> {
       read = await stream.read();
       read.value && values.push(read.value);
     } while (!read.done);
+
+    return new Blob(values);
+  }
+  if (isAsyncIterable(data)) {
+    const values = [];
+
+    for await (const value of data) {
+      values.push(value);
+    }
 
     return new Blob(values);
   }
