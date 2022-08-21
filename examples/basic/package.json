@@ -7,11 +7,10 @@
     "build": "purplet build",
     "build-http": "purplet build-http",
     "dev": "purplet dev",
-    "guild-manager": "purplet guild-manager",
-    "postinstall": "purplet sync"
+    "guild-manager": "purplet guild-manager"
   },
   "dependencies": {
-    "purplet": "workspace:*"
+    "purplet": "workspace:2.0.0-next.18"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.6",

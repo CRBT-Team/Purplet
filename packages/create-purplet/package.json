@@ -25,7 +25,7 @@
     "chalk": "^5.0.1",
     "dedent": "^0.7.0",
     "ora": "^6.1.2",
-    "prettier": "^2.6.2",
+    "prettier": "^2.7.1",
     "prettier-plugin-jsdoc": "^0.3.38",
     "prompts": "^2.4.2",
     "sort-package-json": "^1.57.0",
@@ -39,12 +39,12 @@
     "@types/dedent": "^0.7.0",
     "@types/minimatch": "^3.0.5",
     "@types/node": "^17.0.45",
-    "@types/prettier": "^2.6.4",
+    "@types/prettier": "^2.7.0",
     "@types/prompts": "^2.0.14",
-    "@types/yargs": "^17.0.10",
-    "esbuild": "^0.14.47",
-    "rollup": "^2.75.7",
+    "@types/yargs": "^17.0.11",
+    "esbuild": "^0.14.54",
+    "rollup": "^2.78.0",
     "rollup-plugin-add-shebang": "^0.3.1",
-    "rollup-plugin-esbuild": "^4.9.1"
+    "rollup-plugin-esbuild": "^4.9.3"
   }
 }
