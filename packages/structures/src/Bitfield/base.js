@@ -9,7 +9,7 @@ function toValue(values) {
   return values.map(x => x?.bitfield ?? x).reduce((a, b) => a | b);
 }
 
-class Bitfield {
+export class Bitfield {
   constructor(bitfield = 0) {
     this.bitfield =
       typeof bitfield === 'string'

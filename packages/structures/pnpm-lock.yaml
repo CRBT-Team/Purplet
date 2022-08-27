@@ -4,6 +4,7 @@ specifiers:
   '@paperdave/utils': 1.1.0
   '@purplet/rest': workspace:^1.1.0
   '@rollup/plugin-node-resolve': ^13.3.0
+  bun-types: ^0.1.8
   discord-api-types: ^0.37.2
   esbuild: ^0.14.54
   rollup: ^2.78.0
@@ -12,6 +13,7 @@ specifiers:
 
 dependencies:
   '@purplet/rest': link:../rest
+  bun-types: 0.1.8
 
 devDependencies:
   '@paperdave/utils': 1.1.0
@@ -92,6 +94,10 @@ packages:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
     dev: true
+
+  /bun-types/0.1.8:
+    resolution: {integrity: sha512-gIcflj8Urhq38QsIeZBeFsJyrJ0k2MUsxYJ4nNW2mkPLmvfvT+wyqdvXRpZVVEFtFZeGYXmihZW3AymWEXdbEA==}
+    dev: false
 
   /debug/4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}

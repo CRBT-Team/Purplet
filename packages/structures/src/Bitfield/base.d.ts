@@ -103,3 +103,5 @@ export function createBitfieldClass<Enum extends BitfieldEnum>(
 export function createReadonlyBitfield<T extends Bitfield>(
   bitfield: BitfieldClass<T>
 ): T extends Bitfield<infer A, infer B> ? ReadonlyBitfieldClass<ReadonlyBitfield<A, B>> : never;
+
+export const Bitfield: BitfieldClass<Bitfield<any>>;

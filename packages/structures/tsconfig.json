@@ -23,7 +23,8 @@
     "strictPropertyInitialization": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
-    "target": "ESNext"
+    "target": "ESNext",
+    "types": ["bun-types"]
   },
   "include": ["src/**/*.ts", "src/**/*.js"],
   "exclude": ["**/node_modules", "**/dist"]
