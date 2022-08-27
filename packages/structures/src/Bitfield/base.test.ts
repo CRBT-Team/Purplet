@@ -15,14 +15,17 @@ describe('Bitfield', () => {
     assert.strictEqual(field.has(16), false);
     assert.strictEqual(field.has(32), true);
   });
+
   test('.toArray()', () => {
     const field = new Bitfield(0b100110);
     assert.deepEqual(field.toArray(), [2, 4, 32]);
   });
+
   test('.bitfield', () => {
     const field = new Bitfield(0b100110);
     assert.strictEqual(field.bitfield, 0b100110);
   });
+
   test('.add', () => {
     const field = new Bitfield(0b100110);
     field.add(1);
@@ -30,6 +33,7 @@ describe('Bitfield', () => {
     field.add(2);
     assert.strictEqual(field.bitfield, 0b100111);
   });
+
   test('.remove', () => {
     const field = new Bitfield(0b100110);
     field.remove(1);

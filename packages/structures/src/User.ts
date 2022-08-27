@@ -67,13 +67,17 @@ export class User extends Base<APIUser> {
     return this.Class.fetch(this.id);
   }
 
-  createDM(): never {
+  static async createDM(userId: string): Promise<never> {
     throw new Error('TODO: Structure for DM');
     // const dm = await this.rest.user.createDM({
     //   body: {
-    //     recipient_id: this.id,
+    //     recipient_id: userId,
     //   },
     // });
+  }
+
+  async createDM(): Promise<never> {
+    return this.Class.createDM(this.id);
   }
 }
 
@@ -117,7 +121,7 @@ export class CurrentUser extends User {
   }
 
   // Methods
-  static async fetch() {
+  static async fetch(): Promise<CurrentUser> {
     return new this(await this.rest.user.getCurrentUser());
   }
 
@@ -126,8 +130,12 @@ export class CurrentUser extends User {
     // await this.rest.user.getCurrentUserGuilds();
   }
 
-  async modify(data: ModifyCurrentUserData) {
+  static async modify(data: ModifyCurrentUserData): Promise<CurrentUser> {
     // TODO: handle FileData and so on for `avatar`
-    return new this.Class(await this.rest.user.modifyCurrentUser({ body: data }));
+    return new this(await this.rest.user.modifyCurrentUser({ body: data }));
+  }
+
+  async modify(data: ModifyCurrentUserData): Promise<CurrentUser> {
+    return this.modify(data);
   }
 }
