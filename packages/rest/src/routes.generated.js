@@ -224,7 +224,7 @@ export const Channel = group({
     route: (channelId, overwriteId) => `/channels/${channelId}/permissions/${overwriteId}`,
     params: ["channelId", "overwriteId"],
   },
-  followNewsChannel: {
+  followAnnouncementChannel: {
     method: 'POST',
     route: (channelId) => `/channels/${channelId}/followers`,
     params: ["channelId"],

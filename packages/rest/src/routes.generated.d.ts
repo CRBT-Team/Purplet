@@ -347,7 +347,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Crosspost Message](https://discordapp.com/developers/docs/resources/channel#crosspost-message)
    * 
-   * Crosspost a message in a News Channel to following channels. This endpoint requires the `SEND_MESSAGES` permission, if the current user sent the message, or additionally the `MANAGE_MESSAGES` permission, for all other messages, to be present for the current user.
+   * Crosspost a message in an Announcement Channel to following channels. This endpoint requires the `SEND_MESSAGES` permission, if the current user sent the message, or additionally the `MANAGE_MESSAGES` permission, for all other messages, to be present for the current user.
    * 
    * Returns a [message](https://discordapp.com/developers/docs/resources/channel#message-object) object.
    */
@@ -504,11 +504,11 @@ export type Channel = RouteGroup<{
     reason: true,
   }>,
   /**
-   * ## [Follow News Channel](https://discordapp.com/developers/docs/resources/channel#follow-news-channel)
+   * ## [Follow Announcement Channel](https://discordapp.com/developers/docs/resources/channel#follow-announcement-channel)
    * 
-   * Follow a News Channel to send messages to a target channel. Requires the `MANAGE_WEBHOOKS` permission in the target channel. Returns a [followed channel](https://discordapp.com/developers/docs/resources/channel#followed-channel-object) object.
+   * Follow an Announcement Channel to send messages to a target channel. Requires the `MANAGE_WEBHOOKS` permission in the target channel. Returns a [followed channel](https://discordapp.com/developers/docs/resources/channel#followed-channel-object) object.
    */
-  followNewsChannel: Route<{
+  followAnnouncementChannel: Route<{
     params: ["channelId"],
     body: Discord.RESTPostAPIChannelFollowersJSONBody,
     result: Discord.RESTPostAPIChannelFollowersResult,
@@ -577,7 +577,7 @@ export type Channel = RouteGroup<{
    * 
    * Creates a new thread from an existing message. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) on success, and a 400 BAD REQUEST on invalid parameters. Fires a [Thread Create](#DOCS_TOPICS_GATEWAY/thread-create) Gateway event.
    * 
-   * When called on a `GUILD_TEXT` channel, creates a `GUILD_PUBLIC_THREAD`. When called on a `GUILD_NEWS` channel, creates a `GUILD_NEWS_THREAD`. Does not work on a [`GUILD_FORUM`](#DOCS_RESOURCES_CHANNEL/start-thread-in-forum-channel) channel. The id of the created thread will be the same as the id of the source message, and as such a message can only have a single thread created from it.
+   * When called on a `GUILD_TEXT` channel, creates a `PUBLIC_THREAD`. When called on a `GUILD_ANNOUNCEMENT` channel, creates a `ANNOUNCEMENT_THREAD`. Does not work on a [`GUILD_FORUM`](#DOCS_RESOURCES_CHANNEL/start-thread-in-forum-channel) channel. The id of the created thread will be the same as the id of the source message, and as such a message can only have a single thread created from it.
    */
   startThreadFromMessage: Route<{
     params: ["channelId", "messageId"],
@@ -603,7 +603,7 @@ export type Channel = RouteGroup<{
    * 
    * Creates a new thread in a forum channel, and sends a message within the created thread. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object), with a nested [message](#DOCS_RESOURCES_CHANNEL/message-object) object, on success, and a 400 BAD REQUEST on invalid parameters. Fires a [Thread Create](#DOCS_TOPICS_GATEWAY/thread-create) and [Message Create](#DOCS_TOPICS_GATEWAY/message-create) Gateway event.
    * 
-   * - The type of the created thread is `GUILD_PUBLIC_THREAD`.
+   * - The type of the created thread is `PUBLIC_THREAD`.
    * - See [message formatting](#DOCS_REFERENCE/message-formatting) for more information on how to properly format messages.
    * - The current user must have the `SEND_MESSAGES` permission (`CREATE_PUBLIC_THREADS` is ignored).
    * - The maximum request size when sending a message is **8MiB**.
@@ -680,7 +680,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [List Public Archived Threads](https://discordapp.com/developers/docs/resources/channel#list-public-archived-threads)
    * 
-   * Returns archived threads in the channel that are public. When called on a `GUILD_TEXT` channel, returns threads of [type](https://discordapp.com/developers/docs/resources/channel#channel-object-channel-types) `GUILD_PUBLIC_THREAD`. When called on a `GUILD_NEWS` channel returns threads of [type](#DOCS_RESOURCES_CHANNEL/channel-object-channel-types) `GUILD_NEWS_THREAD`. Threads are ordered by `archive_timestamp`, in descending order. Requires the `READ_MESSAGE_HISTORY` permission.
+   * Returns archived threads in the channel that are public. When called on a `GUILD_TEXT` channel, returns threads of [type](https://discordapp.com/developers/docs/resources/channel#channel-object-channel-types) `PUBLIC_THREAD`. When called on a `GUILD_ANNOUNCEMENT` channel returns threads of [type](#DOCS_RESOURCES_CHANNEL/channel-object-channel-types) `ANNOUNCEMENT_THREAD`. Threads are ordered by `archive_timestamp`, in descending order. Requires the `READ_MESSAGE_HISTORY` permission.
    */
   listPublicArchivedThreads: Route<{
     params: ["channelId"],

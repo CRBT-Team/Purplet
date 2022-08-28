@@ -82,6 +82,10 @@ export class User extends Base<APIUser> {
 }
 
 export class OAuthUser extends User {
+  protected get Class() {
+    return this.constructor as typeof OAuthUser;
+  }
+
   // Properties
   isMFAEnabled: boolean;
   locale: string;
@@ -101,7 +105,11 @@ export class OAuthUser extends User {
 
   // Methods
   async fetchConnections(): Promise<APIConnection[]> {
-    return this.rest.user.getUserConnections({ userId: this.id });
+    return this.Class.fetchConnections(this.id);
+  }
+
+  static async fetchConnections(userId: string): Promise<APIConnection[]> {
+    return this.rest.user.getUserConnections({ userId });
   }
 }
 
