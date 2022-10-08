@@ -1,6 +1,6 @@
 {
   "name": "purplet",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "A toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
   "scripts": {
     "purplet": "node scripts/build-dev.mjs && node dist/index.mjs --root=sample",

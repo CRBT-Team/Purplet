@@ -223,7 +223,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
         name: cmd.name.split(' ')[0],
         description: 'No Description Provided',
         dmPermission: cmd.allowInDMs,
-        defaultMemberPermissions: cmd.defaultPermission,
+        defaultMemberPermissions: null,
         descriptionLocalizations: cmd.descriptionLocalizations,
         nameLocalizations: cmd.nameLocalizations,
         options: [],
