@@ -80,10 +80,11 @@ export class Gateway extends Emitter<GatewayEventMap> {
   private hb?: Heartbeater;
   private sessionId: string | undefined;
   private inflate?: Inflate;
-  private gotHello = false;
+  options: GatewayOptions;
 
-  constructor(public options: GatewayOptions) {
+  constructor(options: GatewayOptions) {
     super();
+    this.options = options;
     this.connect();
   }
 
@@ -114,22 +115,11 @@ export class Gateway extends Emitter<GatewayEventMap> {
       url.searchParams.set('compress', 'zlib-stream');
     }
 
-    this.gotHello = false;
-
-    this.ws = new WebSocket(url.toString());
+    this.ws = new WebSocket(url);
     // this.ws.binaryType = 'arraybuffer';
     this.ws.onmessage = event => this.onRawPacket(event.data);
     this.ws.onclose = event => this.onClose(event);
     this.ws.onerror = event => this.emit('error', new Error('WebSocket error: ' + event.target));
-
-    // TODO: Remove this code once `https://github.com/Jarred-Sumner/bun/issues/521` is resolved.
-    this.ws.onopen = () => {
-      setTimeout(() => {
-        if (!this.gotHello) {
-          this.onPacket({ t: null, s: null, op: 10, d: { heartbeat_interval: 41250 } });
-        }
-      }, 250);
-    };
   }
 
   /** Send a packet to the Gateway. */
@@ -228,7 +218,6 @@ export class Gateway extends Emitter<GatewayEventMap> {
 
     switch (packet.op) {
       case GatewayOpcodes.Hello:
-        this.gotHello = true;
         this.hb = new Heartbeater(packet.d.heartbeat_interval, () => this.onHeartbeat());
 
         if (this.sessionId) {

@@ -1,6 +1,7 @@
 <div align="center">
   <img alt="Purplet" src="sites/purplet.js.org/static/img/purplet-artwork.png" >
-  <h4>A simple framework to build modern Discord bots.</h4>
+  <h1>Purplet</h1>
+  <h4>A simple framework to build modern Discord apps.</h4>
   <div>
     <img src="https://img.shields.io/badge/Discord_API-v10-c4aaff" alt="Discord API Version">
     <img src="https://img.shields.io/npm/v/purplet?color=c4aaff&label=version" alt="Version">
@@ -55,7 +56,8 @@ This repository contains these following public packages:
 | [![@purplet/gateway](https://img.shields.io/npm/v/@purplet/gateway?color=c4aaff&label=@purplet/gateway)](packages/gateway) | Gateway client implementation |
 | ![@purplet/structures](https://img.shields.io/badge/%40purplet%2Fstructures-soon%E2%84%A2-red) | Classes wrapping Discord API objects |
 | ![@purplet/builders](https://img.shields.io/badge/%40purplet%2Fbuilders-soon%E2%84%A2-red) | Builder-style classes to create Discord API objects |
-| ![@purplet/utils](https://img.shields.io/badge/%40purplet%2Futils-soon%E2%84%A2-red) | Internal helper functions. |
+| ![@purplet/model](https://img.shields.io/badge/%40purplet%2Fmodel-soon%E2%84%A2-red)\* | Create maintainable classes to enrich JSON data. |
+| ![@purplet/utils](https://img.shields.io/badge/%40purplet%2Futils-soon%E2%84%A2-red) | Internal helper functions. Might not be published. |
 | [![@purplet/serialize](https://img.shields.io/npm/v/@purplet/serialize?color=c4aaff&label=@purplet/serialize)](packages/serialize)\* | Utilities for binary serialization |
 | [![create-purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=create-purplet)](packages/create-purplet) | Project generation command, `pnpm create purplet` |
 

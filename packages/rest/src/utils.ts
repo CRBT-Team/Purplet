@@ -59,7 +59,7 @@ export async function toBlob(data: FileData): Promise<Blob> {
       read.value && values.push(read.value);
     } while (!read.done);
 
-    return new Blob([]);
+    return new Blob(values);
   }
   if (isAsyncIterable(data)) {
     const values = [];
@@ -70,5 +70,5 @@ export async function toBlob(data: FileData): Promise<Blob> {
 
     return new Blob(values);
   }
-  return new Blob([data instanceof Uint8Array ? data.buffer : data]);
+  return new Blob([data]);
 }

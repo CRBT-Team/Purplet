@@ -20,10 +20,7 @@ export default function Home(): JSX.Element {
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className={clsx('container', styles.header)}>
           <div className={styles.logo}>
-            <img
-              src='https://user-images.githubusercontent.com/67973777/169643730-2b03ecb8-3510-471f-8e3d-2c2485750962.png'
-              alt='Purplet Logo'
-            />
+            <img src='/img/purplet-artwork.png' alt='Purplet Logo' />
           </div>
           <div className={styles.headerContent}>
             <p className={styles.lead}>

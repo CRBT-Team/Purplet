@@ -10,7 +10,7 @@ darkCodeTheme.plain.backgroundColor = '#323234';
 const config = {
   title: 'Purplet',
   tagline: 'A simple framework to build modern Discord apps.',
-  url: 'https://purplet.crbt.app',
+  url: 'https://purplet.js.org',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -37,11 +37,11 @@ const config = {
         docs: {
           path: '../../docs',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/CRBT-Team/purplet/tree/main/sites/purplet.crbt.app/',
+          editUrl: 'https://github.com/CRBT-Team/Purplet/tree/main/sites/purplet.js.org/',
         },
         blog: {
           showReadingTime: true,
-          editUrl: 'https://github.com/CRBT-Team/purplet/tree/main/sites/purplet.crbt.app/',
+          editUrl: 'https://github.com/CRBT-Team/Purplet/tree/main/sites/purplet.js.org/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -68,7 +68,7 @@ const config = {
           },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
-            href: 'https://github.com/CRBT-Team/purplet',
+            href: 'https://github.com/CRBT-Team/Purplet',
             label: 'GitHub',
             position: 'right',
           },

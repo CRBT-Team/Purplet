@@ -14,7 +14,7 @@ export interface QueueEntry {
   bucketId: string;
   endpointId: string;
   majorId: string;
-  resolve(data: any): void;
+  resolve(data?: any): void;
   reject(error: Error): void;
 }
 
@@ -179,7 +179,7 @@ export class Fetcher {
     }
 
     if (response.ok) {
-      response.status === 204 ? undefined : entry.resolve(await response.json());
+      entry.resolve(response.status === 204 ? undefined : await response.json());
       return;
     }
 
