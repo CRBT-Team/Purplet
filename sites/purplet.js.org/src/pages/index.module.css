@@ -1,19 +1,23 @@
+.heroBanner {
+  background-color: rgb(161, 114, 248, 0.15);
+  color: var(--ifm-heading-color);
+}
+
 .header {
   display: flex;
-  gap: 2rem;
   justify-content: center;
   align-items: center;
-  color: #fff;
+  gap: 5rem;
 }
 .headerContent {
   display: flex;
   flex-direction: column;
-  max-width: 700px;
   width: 100%;
+  max-width: 700px;
 }
 .lead {
-  font-size: 1.45rem;
   font-weight: 600;
+  font-size: 1.45rem;
 }
 .scrollX {
   overflow-x: auto;
