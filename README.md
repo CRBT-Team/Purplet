@@ -41,7 +41,7 @@ yarn create purplet
 pnpm create purplet
 ```
 
-and follow the instructions it gives. Documentation on purplet is available at [purplet.js.org](https://purplet.js.org/docs/getting-started).
+and follow the instructions it gives. Documentation on Purplet is available at [purplet.js.org/docs/getting-started](https://purplet.js.org/docs/getting-started).
 
 ## Monorepo Contents
 
