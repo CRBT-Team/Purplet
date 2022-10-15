@@ -14,8 +14,8 @@
   "repository": "github:CRBT-Team/Purplet",
   "license": "Apache-2.0",
   "contributors": [
-    "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
-    "Clembs <clembs@clembs.xyz> (https://github.com/Clembs)"
+    "Dave Caruso <me@paperdave.net> (https://github.com/paperdave)",
+    "Clembs <clembs@clembs.com> (https://github.com/Clembs)"
   ],
   "type": "module",
   "exports": {

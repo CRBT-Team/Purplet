@@ -17,7 +17,7 @@
     "directory": "packages/gateway"
   },
   "license": "Apache-2.0",
-  "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+  "author": "Dave Caruso <me@paperdave.net> (https://github.com/paperdave)",
   "sideEffects": false,
   "type": "module",
   "exports": {
