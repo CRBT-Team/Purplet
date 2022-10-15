@@ -6,7 +6,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #735da2;
+  --ifm-color-primary: #a172f8;
   --ifm-color-primary-dark: #685492;
   --ifm-color-primary-darker: #624f8a;
   --ifm-color-primary-darkest: #514171;
@@ -19,6 +19,11 @@
 }
 .footer {
   --ifm-footer-background-color: #3a2d54;
+}
+
+.button.button--secondary {
+  --ifm-button-background-color: var(--ifm-color-primary);
+  border: none;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
