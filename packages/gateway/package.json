@@ -30,9 +30,11 @@
     "dev": "rollup -c --watch"
   },
   "dependencies": {
-    "@paperdave/events": "^1.0.2"
+    "@paperdave/events": "^1.0.2",
+    "@paperdave/logger": "^2.0.6"
   },
   "devDependencies": {
+    "@paperdave/utils": "1.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@types/node": "^17.0.45",
     "bun-types": "^0.1.8",
