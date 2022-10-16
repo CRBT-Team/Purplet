@@ -5,8 +5,6 @@ export type GatewayEventMap = {
   '*': GatewayDispatchPayload;
   // passthrough websocket and gateway disconnect errors
   error: Error;
-  //
-  debug: string;
 } & {
   // map every discord-api-types event to its key and extract the data from it's DataPayload<Key, Data>
   // the approach here is a bit extensive due to how union types work in typescript
