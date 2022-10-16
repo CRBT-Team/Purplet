@@ -211,6 +211,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
         this.sendIdentify();
         return;
       case GatewayOpcodes.HeartbeatAck:
+        debug('Recieved heartbeat ack');
         // TODO: implement zombie detection
         return;
       case GatewayOpcodes.InvalidSession:
