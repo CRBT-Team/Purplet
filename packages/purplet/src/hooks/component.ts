@@ -158,6 +158,7 @@ export function $selectMenuComponent<Context, CreateProps>(
     handle(this: SelectMenuInteraction, context) {
       options.handle.call(this, {
         ...context,
+        type: ComponentType.SelectMenu,
         values: this.values,
       });
     },
