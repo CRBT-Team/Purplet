@@ -1,6 +1,7 @@
 // This configuration is modelled after what SvelteKit uses to bundle their app.
 import fs from 'fs';
 import resolve from '@rollup/plugin-node-resolve';
+import json from '@rollup/plugin-json';
 import esbuild from 'rollup-plugin-esbuild';
 import pkg from './package.json';
 
@@ -26,6 +27,7 @@ export default [
     },
     external: id => id.startsWith('node:') || external.some(x => id.startsWith(x)),
     plugins: [
+      json(),
       resolve({
         extensions: ['.mjs', '.js', '.ts', '.json'],
       }),

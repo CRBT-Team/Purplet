@@ -19,6 +19,7 @@ import { Heartbeater } from './Heartbeater';
 import { getWSCodeDisplayName } from './status-code';
 import type { GatewayOptions } from './util';
 import { debug, decoder, erlpack, stripUndefined, zlib } from './util';
+import { version } from '../package.json';
 
 /**
  * Implementation of a Discord gateway client. Supports etf and zlib, if installed.
@@ -45,7 +46,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
   constructor(options: GatewayOptions) {
     super();
     this.options = options;
-    // this.connect();
+    this.connect();
   }
 
   /** Connects to the Gateway. */
@@ -81,6 +82,35 @@ export class Gateway extends Emitter<GatewayEventMap> {
   /** Send a packet to the Gateway. */
   send(packet: GatewaySendPayload) {
     this.ws!.send((erlpack ? erlpack.pack : JSON.stringify)(stripUndefined(packet)));
+  }
+
+  private sendIdentify() {
+    if (this.sessionId) {
+      this.send({
+        op: GatewayOpcodes.Resume,
+        d: {
+          seq: this.seq,
+          session_id: this.sessionId,
+          token: this.options.token,
+        },
+      });
+    } else {
+      this.send({
+        op: GatewayOpcodes.Identify,
+        d: {
+          token: this.options.token,
+          shard: this.options.shard,
+          presence: this.options.presence,
+          intents: this.options.intents,
+          compress: !!zlib,
+          properties: {
+            os: typeof process !== 'undefined' ? process.platform : 'web',
+            browser: `@purplet/gateway ${version}`,
+            device: `@purplet/gateway ${version}`,
+          },
+        },
+      });
+    }
   }
 
   /** @internal handles raw packets, decoding etf and gz */
@@ -149,7 +179,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
         reconnect = true;
         break;
       case GatewayCloseCodes.InvalidSeq:
-        // Do not log for this one
+        this.seq = 0;
         this.sessionId = undefined;
         reconnect = true;
         break;
@@ -178,39 +208,19 @@ export class Gateway extends Emitter<GatewayEventMap> {
     switch (packet.op) {
       case GatewayOpcodes.Hello:
         this.hb = new Heartbeater(packet.d.heartbeat_interval, () => this.onHeartbeat());
-
-        if (this.sessionId) {
-          this.send({
-            op: GatewayOpcodes.Resume,
-            d: {
-              seq: this.seq,
-              session_id: this.sessionId,
-              token: this.options.token,
-            },
-          });
-        } else {
-          this.send({
-            op: GatewayOpcodes.Identify,
-            d: {
-              token: this.options.token,
-              shard: this.options.shard,
-              presence: this.options.presence,
-              intents: this.options.intents,
-              compress: !!zlib,
-              properties: {
-                os: typeof process !== 'undefined' ? process.platform : 'web',
-                browser: 'purplet',
-                device: 'purplet',
-              },
-            },
-          });
-        }
+        this.sendIdentify();
         return;
       case GatewayOpcodes.HeartbeatAck:
         // TODO: implement zombie detection
         return;
       case GatewayOpcodes.InvalidSession:
         debug('Session Invalidated. Attempting to reconnect.');
+        if (packet.d) {
+          this.sendIdentify();
+          return;
+        }
+        this.seq = 0;
+        this.sessionId = undefined;
         this.reconnect();
         return;
       case GatewayOpcodes.Reconnect:
@@ -219,6 +229,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
       case GatewayOpcodes.Dispatch:
         if (packet.t === GatewayDispatchEvents.Ready) {
           this.sessionId = packet.d.session_id;
+          this.gatewayURL = packet.d.resume_gateway_url ?? this.gatewayURL;
         }
         this.emit('*', packet);
         this.emit(packet.t, packet.d);
