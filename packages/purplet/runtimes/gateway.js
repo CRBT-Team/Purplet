@@ -1,9 +1,14 @@
 // Purplet runtime for Node.js/Bun + Gateway
-import { allFeatures } from 'purplet/generated-build';
+import features from 'purplet/features';
+import { injectLogger } from '@paperdave/logger';
 import { GatewayBot, isDirectlyRun } from 'purplet/internal';
 
-const bot = new GatewayBot();
-bot.loadFeatures(...allFeatures);
+injectLogger();
+
+const bot = new GatewayBot({
+  token: process.env.DISCORD_BOT_TOKEN,
+});
+bot.patchFeatures({ add: features });
 
 // The bot only gets started automatically if you run it directly, otherwise `bot` is
 // returned as the default export.

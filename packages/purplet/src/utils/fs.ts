@@ -71,7 +71,7 @@ export async function resolveEntrypoint(entry: string): Promise<string | null> {
   if (await exists(entry)) {
     const stats = await stat(entry);
     if (stats.isDirectory()) {
-      return await resolveEntrypoint(path.join(entry, 'index'));
+      return resolveEntrypoint(path.join(entry, 'index'));
     }
 
     return entry;

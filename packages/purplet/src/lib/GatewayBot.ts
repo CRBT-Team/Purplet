@@ -60,8 +60,8 @@ interface GatewayBotOptions {
 }
 
 export interface PatchFeatureInput {
-  add: Feature[];
-  remove: Feature[];
+  add?: Feature[];
+  remove?: Feature[];
 }
 
 export interface AllowedGuildRules {
@@ -293,7 +293,7 @@ export class GatewayBot {
     ]);
   }
 
-  async patchFeatures({ add, remove }: PatchFeatureInput) {
+  async patchFeatures({ add = [], remove = [] }: PatchFeatureInput) {
     this.features.remove(remove);
     const coreFeaturesAdded = this.features.add(add);
 

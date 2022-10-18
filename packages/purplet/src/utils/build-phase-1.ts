@@ -20,6 +20,6 @@ export function printPhase1Data(features: Feature[]) {
   }
 
   // eslint-disable-next-line no-console
-  console.log(JSON.stringify(files));
+  console.log(JSON.stringify(files, null, process.env.DEBUG ? 2 : undefined));
   process.exit(0);
 }

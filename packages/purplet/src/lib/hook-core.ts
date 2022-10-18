@@ -29,19 +29,19 @@ export enum PresenceStatus {
   Invisible = 'invisible',
 }
 
-export const $initialize = /*#__PURE__*/ createCoreHook<InitializeHookEvent, 'lifecycle'>({
+export const $initialize = /*@__PURE__*/ createCoreHook<InitializeHookEvent, 'lifecycle'>({
   id: 'initialize',
   type: 'lifecycle',
 });
-export const $dispatch = /*#__PURE__*/ createCoreHook<DispatchHookEvent, 'event'>({
+export const $dispatch = /*@__PURE__*/ createCoreHook<DispatchHookEvent, 'event'>({
   id: 'dispatch',
   type: 'event',
 });
-export const $interaction = /*#__PURE__*/ createCoreHook<InteractionHookEvent, 'event'>({
+export const $interaction = /*@__PURE__*/ createCoreHook<InteractionHookEvent, 'event'>({
   id: 'interaction',
   type: 'event',
 });
-export const $applicationCommands = /*#__PURE__*/ createCoreHook<
+export const $applicationCommands = /*@__PURE__*/ createCoreHook<
   ApplicationCommandResolvable,
   'data'
 >({
@@ -54,11 +54,11 @@ export const $applicationCommands = /*#__PURE__*/ createCoreHook<
  * Takes either one or more intents (numbers, see `GatewayIntentBits` from `discord-api-types`), one
  * or more arrays of intents, or a function returning that.
  */
-export const $intents = /*#__PURE__*/ createCoreHook<IntentsHookData, 'data'>({
+export const $intents = /*@__PURE__*/ createCoreHook<IntentsHookData, 'data'>({
   id: 'intents',
   type: 'data',
 });
-export const $presence = /*#__PURE__*/ createCoreHook<PresenceHookData, 'data'>({
+export const $presence = /*@__PURE__*/ createCoreHook<PresenceHookData, 'data'>({
   id: 'presence',
   type: 'data',
 });

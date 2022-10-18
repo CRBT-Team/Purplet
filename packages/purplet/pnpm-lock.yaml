@@ -16,7 +16,7 @@ specifiers:
   chalk: ^5.1.2
   chokidar: ^3.5.3
   dedent: ^0.7.0
-  discord-api-types: ^0.36.3
+  discord-api-types: ^0.37.14
   erlpack: ^0.1.4
   tweetnacl: ^1.0.3
   utf-8-validate: ^5.0.9
@@ -36,7 +36,7 @@ dependencies:
   chalk: 5.1.2
   chokidar: 3.5.3
   dedent: 0.7.0
-  discord-api-types: 0.36.3
+  discord-api-types: 0.37.14
   tweetnacl: 1.0.3
   vite: 3.0.7
   wrap-ansi: 8.0.1
@@ -196,8 +196,8 @@ packages:
     resolution: {integrity: sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==}
     dev: false
 
-  /discord-api-types/0.36.3:
-    resolution: {integrity: sha512-bz/NDyG0KBo/tY14vSkrwQ/n3HKPf87a0WFW/1M9+tXYK+vp5Z5EksawfCWo2zkAc6o7CClc0eff1Pjrqznlwg==}
+  /discord-api-types/0.37.14:
+    resolution: {integrity: sha512-byBH7SfDCMJwxdqeS8k5sihltH88/YPhuwx+vF2cftSxFLdxyHyU/ZxDL3bq+LB2c4ls/TymE76/ISlLfniUXg==}
     dev: false
 
   /eastasianwidth/0.2.0:
