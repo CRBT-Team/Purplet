@@ -1,4 +1,5 @@
 import path from 'path';
+import { Logger, Spinner } from '@paperdave/logger';
 import { asyncMap, unique } from '@paperdave/utils';
 import { watch } from 'chokidar';
 import { EventEmitter } from 'events';
@@ -14,7 +15,6 @@ import { moduleToFeatureArray } from '../internal';
 import { env, setGlobalEnv } from '../lib/env';
 import { GatewayBot } from '../lib/GatewayBot';
 import type { Feature } from '../lib/hook';
-import { log, startSpinner } from '../lib/logger';
 import { isSourceFile } from '../utils/filetypes';
 import { purpletSourceCode, walk } from '../utils/fs';
 import type { Closable } from '../utils/types';
@@ -54,9 +54,9 @@ export class DevMode {
   constructor(readonly options: DevModeOptions) {}
 
   async start() {
-    const spinner = startSpinner(
-      this.firstRun ? 'Initializing development mode...' : 'Reloading...'
-    );
+    const spinner = new Spinner({
+      text: this.firstRun ? 'Initializing development mode...' : 'Reloading...',
+    });
     this.firstRun = false;
 
     this.config = await loadConfig(this.options.root);
@@ -113,17 +113,14 @@ export class DevMode {
 
     await this.bot.start();
 
-    spinner.stop();
-    spinner.clear();
     const startupTime = (performance.now() / 1000).toFixed(1);
-    log(
-      'purplet',
+    spinner.success(
       `Bot is now running in development mode as ${this.bot.user.tag} (${startupTime}s)`
     );
   }
 
   async stop() {
-    log('info', 'Shutting down Purplet');
+    Logger.info('Shutting down Purplet');
     await this.stopInternal();
   }
 
@@ -135,14 +132,14 @@ export class DevMode {
   private startFeatureHMR(hmrWatcher: VitePluginPurpletHMRHook) {
     //  Hot Updates: Changing or adding files
     hmrWatcher.on('resolvedHotUpdate', async (files: string[]) => {
-      log('info', 'Reloading new changes...');
+      Logger.info('Reloading new changes...');
       const modulesToReload = files.filter(file => file.startsWith(this.config.paths.features));
       await asyncMap(modulesToReload, mod => this.reloadFeatureModule(mod));
     });
 
     // Hot Updates: Removing files
     this.viteServer.watcher.on('unlink', async filename => {
-      log('info', 'Reloading new changes...');
+      Logger.info('Reloading new changes...');
       if (filename.startsWith(this.config.paths.features) && this.featureMap.has(filename)) {
         await this.bot.patchFeatures({
           add: [],
@@ -158,8 +155,8 @@ export class DevMode {
       if (err instanceof Error) {
         this.viteServer.ssrFixStacktrace(err);
       }
-      log('error', 'Uncaught Error (async):');
-      log('error', err);
+      Logger.error('Uncaught Error (async):');
+      Logger.error(err);
     };
 
     process.on('uncaughtException', handler);
@@ -177,8 +174,7 @@ export class DevMode {
     if (purpletSourceCode.endsWith('packages/purplet/dist')) {
       // Most likely running from inside the monorepo. Maybe we want a better test for this?
       const watcher = watch(path.join(purpletSourceCode, '*.js')).on('change', () => {
-        log(
-          'warn',
+        Logger.warn(
           'Purplet library was modified. Please restart this dev process to continue receiving updates.'
         );
         this.viteServer.watcher.close();
@@ -192,7 +188,7 @@ export class DevMode {
     const watcher = watch(path.join(this.options.root, 'purplet.config.*')).on(
       'change',
       async filepath => {
-        log('info', path.basename(filepath) + ' was modified. Restarting development mode.');
+        Logger.info(path.basename(filepath) + ' was modified. Restarting development mode.');
         await this.stopInternal();
         await this.start();
       }

@@ -1,9 +1,9 @@
 import dedent from 'dedent';
 import path from 'path';
+import { Logger } from '@paperdave/logger';
 import { asyncMap } from '@paperdave/utils';
 import { readdir, readFile, writeFile } from 'fs/promises';
 import type { ResolvedConfig } from './types';
-import { log } from '../lib/logger';
 import { isDirectory, posixify, resolveEntrypoint, writeIfChanged } from '../utils/fs';
 
 const searchPaths = ['tsconfig.json', 'jsconfig.json'];
@@ -21,14 +21,13 @@ export async function writeTSConfig(config: ResolvedConfig) {
 
   let userTSConfig;
   if (matched.length === 0) {
-    log('info', 'Generating a tsconfig.json file, as it was not found in your project.');
+    Logger.info('Generating a tsconfig.json file, as it was not found in your project.');
     userTSConfig = {
       extends: shouldExtends,
     };
     await writeFile(`${config.root}/tsconfig.json`, JSON.stringify(userTSConfig, null, 2), 'utf8');
   } else if (matched.length > 1) {
-    log(
-      'warn',
+    Logger.warn(
       'Found multiple typescript configuration files in your project. Please remove one of the following:\n' +
         matched.map(x => ` - ${x}`).join('\n')
     );
@@ -38,8 +37,7 @@ export async function writeTSConfig(config: ResolvedConfig) {
   }
 
   if (userTSConfig.extends !== shouldExtends) {
-    log(
-      'warn',
+    Logger.warn(
       dedent`
         Your ${matched[0]} does not extend the Purplet generated tsconfig. Please update your ${matched[0]} with:
           "extends": "${shouldExtends}"

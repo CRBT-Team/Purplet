@@ -1,3 +1,4 @@
+import { Logger } from '@paperdave/logger';
 import { asyncMap, deferred } from '@paperdave/utils';
 import type { GatewayOptions } from '@purplet/gateway';
 import { Gateway, GatewayExitError } from '@purplet/gateway';
@@ -25,10 +26,9 @@ import {
 } from './hook-core';
 import { mergeCommands, mergeIntents, mergePresence } from './hook-core-merge';
 import { runHook } from './hook-run';
-import { log } from './logger';
 import { errorFromGatewayClientExitError, errorTooManyGuilds } from '../cli/errors';
 import { $gatewayEvent } from '../hooks';
-import { markFeature } from '../internal';
+import { markFeatureInternal } from '../internal';
 import type { InteractionResponse } from '../structures';
 import { ApplicationFlagsBitfield, createInteraction, User } from '../structures';
 import type { Cleanup } from '../utils/types';
@@ -93,7 +93,7 @@ export async function createGatewayClient(identify: GatewayOptions) {
   client.on('error', errorHandler);
   client.on(GatewayDispatchEvents.Ready, readyHandler);
 
-  return await promise;
+  return promise;
 }
 
 /**
@@ -139,7 +139,7 @@ export class GatewayBot {
     }
     if (this.options.deployGuildCommands) {
       this.features.add([
-        markFeature(
+        markFeatureInternal(
           'dev.deployGuildCommands',
           $gatewayEvent('GUILD_CREATE', guild => {
             this.updateApplicationCommandsGuild(guild);
@@ -164,7 +164,7 @@ export class GatewayBot {
     }
     this.#running = true;
 
-    log('debug', `starting gateway bot, guildCommands=${this.options.deployGuildCommands}`);
+    Logger.debug(`starting gateway bot, guildCommands=${this.options.deployGuildCommands}`);
     this.#cleanupInitializeHook = await runHook(this.features, $initialize, undefined);
     await this.startClient();
   }
@@ -246,7 +246,7 @@ export class GatewayBot {
 
   private async updateCommands(commands: RESTPutAPIApplicationCommandsJSONBody) {
     if (commands.length === 0) {
-      log('debug', 'there are no application commands');
+      Logger.debug('there are no application commands');
       return;
     }
 
@@ -260,8 +260,7 @@ export class GatewayBot {
       throw errorTooManyGuilds();
     }
     if (guildList.length >= 5) {
-      log(
-        'warn',
+      Logger.warn(
         `You have ${guildList.length} guilds on your development bot. Many guilds can slow down the bot significantly, as commands are registered per-guild during development.`
       );
     }
@@ -270,7 +269,7 @@ export class GatewayBot {
       this.updateApplicationCommandsGuild(guild);
     });
 
-    log('debug', 'development mode app command push done');
+    Logger.debug('development mode app command push done');
   }
 
   private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
@@ -280,9 +279,9 @@ export class GatewayBot {
         applicationId: this.id,
         body: this.#cachedCommandData!,
       });
-      log('info', `updated commands on ${guild.name}`);
+      Logger.info(`updated commands on ${guild.name}`);
     } catch (error) {
-      log('warn', `could not update commands on ${guild.name} (${guild.id})`);
+      Logger.warn(`could not update commands on ${guild.name} (${guild.id})`);
     }
   }
 
@@ -298,7 +297,7 @@ export class GatewayBot {
     this.features.remove(remove);
     const coreFeaturesAdded = this.features.add(add);
 
-    log('debug', `patching features, ${add.length} add, ${remove.length} remove.`);
+    Logger.debug(`patching features, ${add.length} add, ${remove.length} remove.`);
 
     if (!this.#running) {
       return;

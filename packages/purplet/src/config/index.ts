@@ -1,10 +1,10 @@
 import path from 'path';
+import { Logger } from '@paperdave/logger';
 import { build } from 'esbuild';
 import { readdir, readFile } from 'fs/promises';
 import { resolveConfig } from './resolver';
 import type { Config } from './types';
 import { setValidatorBasePath } from './validators';
-import { log } from '../lib/logger';
 import { mkdirp } from '../utils/fs';
 
 const searchPaths = ['purplet.config.ts', 'purplet.config.js'];
@@ -58,9 +58,9 @@ export async function loadConfig(root: string) {
     return resolved;
   } catch (error) {
     if (error instanceof Error) {
-      log('error', 'Error while loading configuration:\n  ' + error.message.replace(/\n/g, '\n  '));
+      Logger.error('Error while loading configuration:\n  ' + error.message.replace(/\n/g, '\n  '));
     } else {
-      log('error', 'Error while loading configuration: ' + error);
+      Logger.error('Error while loading configuration: ', error);
     }
     throw new Error('');
   }

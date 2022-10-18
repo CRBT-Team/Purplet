@@ -30,9 +30,21 @@ export function moduleToFeatureArray(filename: string, module: Module) {
     });
 }
 
-export function markFeature(id: string, feat: UnmarkedFeature<any>): Feature {
+export function markFeatureInternal(id: string, feat: UnmarkedFeature<any>): Feature {
   feat.featureId = id;
   feat.exportId = 'unknown';
   feat.filename = 'unknown';
+  return feat;
+}
+
+export function markFeature(
+  feat: UnmarkedFeature<any>,
+  filename: string,
+  exportId: string
+): Feature {
+  feat.filename = filename;
+  feat.exportId = exportId;
+  const filenameWithoutExtension = filename.replace(/\.[^.]+$/, '');
+  feat.featureId = `${filenameWithoutExtension}#${exportId}`;
   return feat;
 }

@@ -2,12 +2,14 @@ lockfileVersion: 5.4
 
 specifiers:
   bufferutil: ^4.0.6
+  discord-api-types: ^0.37.14
   erlpack: ^0.1.4
   purplet: workspace:2.0.0-next.18
   utf-8-validate: ^5.0.9
   zlib-sync: ^0.1.7
 
 dependencies:
+  discord-api-types: 0.37.14
   purplet: link:../../packages/purplet
 
 optionalDependencies:
@@ -33,6 +35,10 @@ packages:
       node-gyp-build: 4.5.0
     dev: false
     optional: true
+
+  /discord-api-types/0.37.14:
+    resolution: {integrity: sha512-byBH7SfDCMJwxdqeS8k5sihltH88/YPhuwx+vF2cftSxFLdxyHyU/ZxDL3bq+LB2c4ls/TymE76/ISlLfniUXg==}
+    dev: false
 
   /erlpack/0.1.4:
     resolution: {integrity: sha512-CJYbkEvsB5FqCCu2tLxF1eYKi28PvemC12oqzJ9oO6mDFrFO9G9G7nNJUHhiAyyL9zfXTOJx/tOcrQk+ncD65w==}

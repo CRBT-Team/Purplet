@@ -1,17 +1,16 @@
 import chalk from 'chalk';
 import dedent from 'dedent';
+import { CLIError } from '@paperdave/logger';
 import type { Gateway, GatewayExitError } from '@purplet/gateway';
 import { GatewayCloseCodes, GatewayIntentBits, GatewayVersion } from 'purplet/types';
-import { CLIError } from '../lib/errors';
 import { IntentsBitfield } from '../structures';
 import { camelCaseToEnumCase } from '../utils/case';
 
-const magenta = chalk.magentaBright;
-const cyan = chalk.cyanBright;
-
-const devPortalLink = magenta('https://discordapp.com/developers/applications');
-
 export function errorNoToken() {
+  const magenta = chalk.magentaBright;
+  const cyan = chalk.cyanBright;
+  const devPortalLink = magenta('https://discordapp.com/developers/applications');
+
   return new CLIError(
     'Missing DISCORD_BOT_TOKEN environment variable!',
     dedent`
@@ -25,7 +24,10 @@ export function errorNoToken() {
 }
 
 export function errorNoIncludeAndExcludeGuilds() {
-  return new CLIError('Cannot specify both PURPLET_INCLUDE_GUILDS and PURPLET_EXCLUDE_GUILDS');
+  return new CLIError(
+    'Cannot specify both PURPLET_INCLUDE_GUILDS and PURPLET_EXCLUDE_GUILDS',
+    `Please update your ${cyan('.env')} file.`
+  );
 }
 
 export function errorFromGatewayClientExitError({ code }: GatewayExitError, client: Gateway) {
@@ -93,7 +95,8 @@ export function errorFromGatewayClientExitError({ code }: GatewayExitError, clie
       );
     default:
       return new CLIError(
-        `Gateway disconnected with code: ${camelCaseToEnumCase(GatewayCloseCodes[code])} (${code})`
+        `Gateway disconnected with code: ${camelCaseToEnumCase(GatewayCloseCodes[code])} (${code})`,
+        ''
       );
   }
 }
