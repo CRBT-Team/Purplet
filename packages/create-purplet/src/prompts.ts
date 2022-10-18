@@ -2,9 +2,9 @@ import c from 'chalk';
 import path from 'node:path';
 import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
-import { checkEmpty } from './helpers/file-stuff';
-import { getTemplates } from './helpers/getTemplates';
-import { promptOption } from './helpers/promptOption';
+import { checkEmpty } from './fs';
+import { getTemplates } from './getTemplates';
+import { promptOption } from './promptOption';
 import { ProjectConfig } from './types';
 
 export async function createConfig(templatesRoot: string) {

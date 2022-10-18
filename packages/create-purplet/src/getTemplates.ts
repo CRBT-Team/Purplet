@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { readdir, readFile } from 'node:fs/promises';
-import { ProjectTemplate } from '../types';
+import { ProjectTemplate } from './types';
 
 export async function getTemplates(templatesRoot: string): Promise<ProjectTemplate[]> {
   const templateNames = await readdir(templatesRoot);

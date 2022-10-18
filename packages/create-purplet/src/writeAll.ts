@@ -4,7 +4,7 @@ import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { format } from 'prettier';
 import { sortPackageJson } from 'sort-package-json';
-import { copy } from './helpers/file-stuff';
+import { copy } from './fs';
 import { handleESLint } from './options/eslint';
 import { handlePrettier, prettierConfig } from './options/prettier';
 import { ProjectConfig } from './types';

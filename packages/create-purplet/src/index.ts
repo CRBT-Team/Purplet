@@ -8,7 +8,7 @@ import { existsSync } from 'node:fs';
 import { realpath } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { hideBin } from 'yargs/helpers';
-import { mkdirp } from './helpers/file-stuff';
+import { mkdirp } from './fs';
 import { createConfig } from './prompts';
 import { writeAll } from './writeAll';
 import { version } from '../package.json';
