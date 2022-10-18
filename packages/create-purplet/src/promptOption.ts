@@ -1,7 +1,7 @@
 import c from 'chalk';
 import prompts, { PromptObject } from 'prompts';
-import { cli } from '..';
-import { ProjectConfig } from '../types';
+import { cli } from '.';
+import { ProjectConfig } from './types';
 
 export async function promptOption<T extends keyof ProjectConfig>(
   optionName: T,
