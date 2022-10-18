@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@mattinton/prettier-plugin-tidy-imports': ^1.1.12
+  '@paperdave/logger': ^2.0.6
   '@rollup/plugin-json': ^4.1.0
   '@rollup/plugin-node-resolve': ^13.3.0
   '@types/dedent': ^0.7.0
@@ -27,6 +28,7 @@ specifiers:
 
 dependencies:
   '@mattinton/prettier-plugin-tidy-imports': 1.1.12_gd3y7r3s3evy6b2vthd7dmacga
+  '@paperdave/logger': 2.2.4
   chalk: 5.0.1
   dedent: 0.7.0
   ora: 6.1.2
@@ -96,6 +98,23 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
+    dev: false
+
+  /@paperdave/logger/2.2.4:
+    resolution: {integrity: sha512-dBxymags5neNQehBZmREnuOi5Mh03Mmv4VAXki1RElME4nDNrfQnyvk7ri6y8ElxWpga8Mcy6DxPA+zQDd6UqA==}
+    engines: {bun: '>=0.1.9', node: '>=16'}
+    dependencies:
+      '@paperdave/utils': 1.4.1
+      ansi-escapes: 5.0.0
+      chalk: 4.1.2
+      strip-ansi: 7.0.1
+    dev: false
+
+  /@paperdave/utils/1.4.1:
+    resolution: {integrity: sha512-wzbIGtiVSL2Krc4s6rMSFzhh4KMTfq3i8Yusy+8/a83oicw1jkaneE08zKNk7dziXFpDvlkmi2S/Kr0OQq0wRQ==}
+    engines: {bun: '>=0.1.9', node: '>=16'}
+    dependencies:
+      utility-types: 3.10.0
     dev: false
 
   /@rollup/plugin-json/4.1.0_rollup@2.78.0:
@@ -227,6 +246,13 @@ packages:
       '@types/yargs-parser': 21.0.0
     dev: true
 
+  /ansi-escapes/5.0.0:
+    resolution: {integrity: sha512-5GFMVX8HqE/TB+FuBJGuO5XG0WrsA6ptUqoODaT/n9mmUaZFkqnBueB4leqGBCmrUHnCnC4PCZTCd0E7QQ83bA==}
+    engines: {node: '>=12'}
+    dependencies:
+      type-fest: 1.4.0
+    dev: false
+
   /ansi-regex/5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
@@ -304,6 +330,14 @@ packages:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
     dev: true
+
+  /chalk/4.1.2:
+    resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
+    engines: {node: '>=10'}
+    dependencies:
+      ansi-styles: 4.3.0
+      supports-color: 7.2.0
+    dev: false
 
   /chalk/5.0.1:
     resolution: {integrity: sha512-Fo07WOYGqMfCWHOzSXOt2CxDbC6skS/jO9ynEcmpANMoPrD+W1r1K6Vx7iNm+AQmETU1Xr2t+n8nzkV9t6xh3w==}
@@ -739,6 +773,11 @@ packages:
       ignore: 5.2.0
       merge2: 1.4.1
       slash: 3.0.0
+    dev: false
+
+  /has-flag/4.0.0:
+    resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
+    engines: {node: '>=8'}
     dev: false
 
   /has/1.0.3:
@@ -1343,6 +1382,13 @@ packages:
       ansi-regex: 6.0.1
     dev: false
 
+  /supports-color/7.2.0:
+    resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
+    engines: {node: '>=8'}
+    dependencies:
+      has-flag: 4.0.0
+    dev: false
+
   /supports-preserve-symlinks-flag/1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
@@ -1377,6 +1423,11 @@ packages:
       ts-morph: 12.2.0
     dev: false
 
+  /type-fest/1.4.0:
+    resolution: {integrity: sha512-yGSza74xk0UG8k+pLh5oeoYirvIiWo5t0/o3zHHAO2tRDiZcxWP7fywNlXhqb6/r6sWvwi+RsyQMWhVLe4BVuA==}
+    engines: {node: '>=10'}
+    dev: false
+
   /typescript/4.7.4:
     resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
     engines: {node: '>=4.2.0'}
@@ -1391,6 +1442,11 @@ packages:
 
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+    dev: false
+
+  /utility-types/3.10.0:
+    resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
+    engines: {node: '>= 4'}
     dev: false
 
   /uvu/0.5.6:

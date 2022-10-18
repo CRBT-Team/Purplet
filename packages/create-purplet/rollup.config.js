@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import resolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
 import esbuild from 'rollup-plugin-esbuild';

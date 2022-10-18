@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@mattinton/prettier-plugin-tidy-imports": "^1.1.12",
+    "@paperdave/logger": "^2.0.6",
     "chalk": "^5.0.1",
     "dedent": "^0.7.0",
     "ora": "^6.1.2",

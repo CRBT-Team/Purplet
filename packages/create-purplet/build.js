@@ -1,7 +1,7 @@
 import { rollup } from 'rollup';
-import { copyFile, mkdir, readdir, stat } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
+import { copyFile, mkdir, readdir, stat } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 
 process.env.NODE_ENV = 'production';
 
