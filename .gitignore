@@ -33,4 +33,8 @@ dist/
 # local examples, prefixed with local if youre testing something custom.
 local/
 local-*/
+*-local/
+local.*
+local-*.*
 my-bot*
+my-app*
