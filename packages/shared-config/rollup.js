@@ -43,6 +43,21 @@ export function library({ input }) {
       external(),
       dtsPoint(),
       del({ targets: 'dist/**/*' }),
+      {
+        name: 'external-bugfix',
+        resolveId: {
+          order: 'pre',
+          handler(source) {
+            if (source.includes('node_modules')) {
+              return {
+                id: source,
+                external: true,
+              };
+            }
+            return null;
+          },
+        },
+      },
     ],
   };
 }
