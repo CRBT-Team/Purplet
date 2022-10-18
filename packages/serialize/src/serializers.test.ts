@@ -1,9 +1,13 @@
+// these tests are a mess
+
 import * as S from './serializers';
+import { deepEqual } from 'assert';
+import { describe, expect, test } from 'bun:test';
 import type { BitSerializer } from './BitSerializer';
 
 function expectSerialize(serializer: BitSerializer<any>, value: any) {
   expect(serializer.check(value)).toBe(true);
-  expect(serializer.decode(serializer.encode(value))).toEqual(value);
+  deepEqual(serializer.decode(serializer.encode(value)), value);
 }
 
 function expectFailCheck(serializer: BitSerializer<any>, value: any) {
@@ -20,7 +24,7 @@ describe('serializers', () => {
   });
   test('constant', () => {
     const sym = Symbol('test');
-    expect(S.constant(sym).encode(sym)).toEqual(new Uint8Array([]));
+    deepEqual(S.constant(sym).encode(sym), new Uint8Array([]));
     expect(S.constant(sym).decode(new Uint8Array([]))).toStrictEqual(sym);
   });
   test('date', () => {
