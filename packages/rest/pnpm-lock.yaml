@@ -3,11 +3,12 @@ lockfileVersion: 5.4
 specifiers:
   '@paperdave/logger': ^2.0.6
   '@paperdave/utils': 1.1.0
+  '@purplet/shared-config': workspace:*
   '@rollup/plugin-node-resolve': ^13.3.0
   '@types/node': ^17.0.45
   bun-types: ^0.1.8
   dedent: ^0.7.0
-  discord-api-types: ^0.36.3
+  discord-api-types: ^0.37.14
   esbuild: ^0.14.54
   execa: ^6.1.0
   rollup: ^2.78.0
@@ -16,6 +17,7 @@ specifiers:
 
 dependencies:
   '@paperdave/utils': 1.1.0
+  '@purplet/shared-config': link:../shared-config
 
 devDependencies:
   '@paperdave/logger': 2.0.6
@@ -23,7 +25,7 @@ devDependencies:
   '@types/node': 17.0.45
   bun-types: 0.1.8
   dedent: 0.7.0
-  discord-api-types: 0.36.3
+  discord-api-types: 0.37.14
   esbuild: 0.14.54
   execa: 6.1.0
   rollup: 2.78.0
@@ -152,8 +154,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /discord-api-types/0.36.3:
-    resolution: {integrity: sha512-bz/NDyG0KBo/tY14vSkrwQ/n3HKPf87a0WFW/1M9+tXYK+vp5Z5EksawfCWo2zkAc6o7CClc0eff1Pjrqznlwg==}
+  /discord-api-types/0.37.14:
+    resolution: {integrity: sha512-byBH7SfDCMJwxdqeS8k5sihltH88/YPhuwx+vF2cftSxFLdxyHyU/ZxDL3bq+LB2c4ls/TymE76/ISlLfniUXg==}
     dev: true
 
   /eastasianwidth/0.2.0:

@@ -7,7 +7,7 @@ import shebang from 'rollup-plugin-add-shebang';
 import replace from '@rollup/plugin-replace';
 import { readJSONSync } from '@paperdave/utils';
 
-export function makeRollupConfig({ input }) {
+export function library({ input }) {
   let version = '0.0.0-unknown';
 
   try {

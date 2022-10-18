@@ -1,11 +1,5 @@
 {
   "extends": "@purplet/shared-config/tsconfig.base.json",
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.js"
-  ],
-  "exclude": [
-    "**/node_modules",
-    "**/dist"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.js"],
+  "exclude": ["**/node_modules", "**/dist"]
 }
