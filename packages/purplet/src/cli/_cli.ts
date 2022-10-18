@@ -5,51 +5,33 @@ import dedent from 'dedent';
 import path from 'path';
 import wrapAnsi from 'wrap-ansi';
 import yargs from 'yargs';
+import { injectLogger, Logger } from '@paperdave/logger';
 import { hideBin } from 'yargs/helpers';
 import { buildGateway } from './build';
 import { deploy } from './deploy';
 import { DevMode } from './dev';
 import { guildManager } from './guild-manager';
 import { sync } from './sync';
-import { CLIError } from '../lib/errors';
-import { injectLogger, log, setVerbose, startSpinner } from '../lib/logger';
 
 interface CLIProgram {
   start(): Promise<void>;
   stop?(): Promise<void>;
 }
 
-async function start(cmd: CLIProgram, verbose: boolean) {
-  setVerbose(verbose);
+async function start(cmd: CLIProgram) {
   injectLogger();
-  log('warn', '⚠️  Purplet v__VERSION__ is beta software! ⚠️');
-  log('warn', 'Report issues to https://github.com/CRBT-Team/purplet/issues');
-  if (verbose) {
-    log('debug', `purplet v__VERSION__`);
-  } else if ('__VERSION__'.endsWith('-dev')) {
-    // log('info', 'purplet development build v__VERSION__');
-  }
+  Logger.warn('⚠️  Purplet v__VERSION__ is beta software! ⚠️');
+  Logger.warn('Report issues to https://github.com/CRBT-Team/purplet/issues');
+  Logger.debug(`purplet v__VERSION__`);
 
-  try {
-    await cmd.start();
-  } catch (error) {
-    startSpinner('Cleaning up...').stop().clear();
-
-    if (error instanceof CLIError) {
-      error.printAndExit();
-    }
-
-    log('error', chalk.redBright(`${error instanceof Error ? error.message : String(error)}`));
-    process.exit(1);
-  }
+  await cmd.start();
 
   let stopping = false;
   process.on('SIGINT', async () => {
     if (stopping) {
       return;
     }
-    process.stdout.write('\x1b[1G');
-    log('debug', 'Received SIGINT');
+    Logger.debug('Received SIGINT');
 
     stopping = true;
 
@@ -90,7 +72,7 @@ cli.command(
   'dev',
   'start in development mode',
   args => args.positional(...rootPositional),
-  args => start(new DevMode(args), args.verbose)
+  args => start(new DevMode(args))
 );
 longDescriptions['dev'] = dedent`
   Start purplet in development mode. Development mode uses vite to give you fast hot-reloading. The $DISCORD_BOT_TOKEN variable must be set to a bot that is in a few guilds, only intended for testing. Reloads will be slower with bots in over 5 guilds, and does not support bots in over 75 guilds.
@@ -99,7 +81,7 @@ cli.command(
   'build',
   'build a production gateway client',
   args => args.positional(...rootPositional),
-  args => start({ start: () => buildGateway(args) }, args.verbose)
+  args => start({ start: () => buildGateway(args) })
 );
 longDescriptions['build'] = dedent`
   Build a production gateway client to './dist', which can be run for an optimized production build without hot-reloading or server limits. Handles interactions unless you have an HTTP endpoint handled.
@@ -125,7 +107,7 @@ cli.command(
         type: 'boolean',
         default: false,
       }),
-  args => start({ start: () => deploy(args) }, args.verbose)
+  args => start({ start: () => deploy(args) })
 );
 longDescriptions['deploy'] = dedent`
   Manage production-deployed application commands, as the production gateway client or http interaction handler does not do this for you. Pass --delete if you need to delete all commands.
@@ -136,7 +118,7 @@ cli.command(
   'sync',
   'generate development-related files',
   args => args.positional(...rootPositional),
-  args => start({ start: () => sync(args) }, args.verbose)
+  args => start({ start: () => sync(args) })
 );
 longDescriptions['sync'] = dedent`
   Generate development-related files, such as the generated tsconfig.json file. You don't usually need to run this as 'purplet dev' will do this for you.
@@ -152,7 +134,7 @@ cli.command(
         return path.resolve(x);
       },
     }),
-  args => start({ start: () => guildManager(args) }, args.verbose)
+  args => start({ start: () => guildManager(args) })
 );
 longDescriptions['guild-manager'] = dedent`
   Opens an interactive guild manager, which allows you to manage the bot's current guilds. This is useful if you run into issues with 'purplet dev' complaining about the number of guilds your bot is in.

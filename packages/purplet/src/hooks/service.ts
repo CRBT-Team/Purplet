@@ -1,6 +1,6 @@
+import { Logger } from '@paperdave/logger';
 import type { Awaitable } from '@paperdave/utils';
 import { $initialize } from '../lib/hook-core';
-import { log } from '../lib/logger';
 import type { Cleanup } from '../utils/types';
 
 export interface ServiceOptions {
@@ -16,11 +16,11 @@ export interface ServiceOptions {
  */
 export function $service<Pass>({ name, start, stop }: ServiceOptions, passthrough: Pass) {
   return $initialize(async function () {
-    log('debug', `starting service "${name ?? `<${this.featureId}>`}"`);
+    Logger.debug(`starting service "${name ?? `<${this.featureId}>`}"`);
     const cleanup = await start();
 
     return () => {
-      log('debug', `stopping service "${name ?? `<${this.featureId}>`}"`);
+      Logger.debug(`stopping service "${name ?? `<${this.featureId}>`}"`);
 
       cleanup?.();
       stop?.();

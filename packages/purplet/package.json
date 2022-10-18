@@ -26,6 +26,7 @@
   },
   "main": "./dist/index.js",
   "types": "index.d.ts",
+  "sideEffects": false,
   "bin": "./dist/cli.js",
   "files": [
     "dist",
@@ -47,7 +48,7 @@
     "@purplet/polyfill": "workspace:*",
     "@purplet/rest": "workspace:*",
     "@purplet/serialize": "workspace:*",
-    "@purplet/utils": "workspace:*",
+    "@purplet/utils": "workspace:1.0.0",
     "chalk": "^5.1.2",
     "chokidar": "^3.5.3",
     "dedent": "^0.7.0",

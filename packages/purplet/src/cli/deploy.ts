@@ -1,17 +1,15 @@
 import path from 'path';
+import { CLIError, Logger } from '@paperdave/logger';
 import { Rest } from '@purplet/rest';
 import type { RESTPutAPIApplicationCommandsJSONBody } from 'purplet/types';
 import { pathToFileURL } from 'url';
 import { errorNoToken } from './errors';
 import { loadConfig } from '../config';
 import { env } from '../lib/env';
-import { CLIError } from '../lib/errors';
 import type { GatewayBot } from '../lib/GatewayBot';
 import { $applicationCommands } from '../lib/hook-core';
 import { mergeCommands } from '../lib/hook-core-merge';
 import { runHook } from '../lib/hook-run';
-import type { HTTPBot } from '../lib/HTTPBot';
-import { log } from '../lib/logger';
 import { exists } from '../utils/fs';
 
 export interface DeployOptions {
@@ -20,7 +18,7 @@ export interface DeployOptions {
 }
 
 export async function deploy(options: DeployOptions) {
-  log('info', `Preparing to ${options.delete ? 'delete' : 'deploy'} commands.`);
+  Logger.info(`Preparing to ${options.delete ? 'delete' : 'deploy'} commands.`);
 
   const config = await loadConfig(options.root);
   const token = env.DISCORD_BOT_TOKEN;
@@ -42,7 +40,7 @@ export async function deploy(options: DeployOptions) {
     }
 
     const buildURL = `file://${pathToFileURL(buildRoot).pathname}`;
-    let bot: GatewayBot | HTTPBot;
+    let bot: GatewayBot;
     try {
       bot = (await import(buildURL)).default;
     } catch (error) {
@@ -64,5 +62,5 @@ export async function deploy(options: DeployOptions) {
     body: commands,
   });
 
-  log('purplet', `${options.delete ? 'Deleted' : 'Deployed'} commands successfully.`);
+  Logger.success(`${options.delete ? 'Deleted' : 'Deployed'} commands successfully.`);
 }

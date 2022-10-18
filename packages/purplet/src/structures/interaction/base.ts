@@ -15,9 +15,6 @@ export interface InteractionResponse {
   files?: RawFile[];
 }
 
-declare const i: APINonPingInteraction;
-i.member!;
-
 export abstract class Interaction<Data extends APINonPingInteraction = APINonPingInteraction> {
   static is = createInstanceofGuard<Interaction>(Interaction as any);
 

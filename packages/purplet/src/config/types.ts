@@ -13,6 +13,9 @@ export interface ResolvedConfig {
     parse: Array<AllowedMentionsTypes | 'everyone' | 'roles' | 'users'>;
     repliedUser: boolean;
   };
+  build: {
+    runtimes: PurpletBuildRuntime[];
+  };
   lang: string;
   paths: {
     build: string;
@@ -21,5 +24,15 @@ export interface ResolvedConfig {
   };
   vite: ViteConfig | (() => Awaitable<ViteConfig>);
 }
+
+export type PurpletBuildRuntime =
+  | 'auto'
+  | 'auto-http'
+  | 'bun'
+  | 'cloudflare-workers'
+  | 'express'
+  | 'gateway'
+  | 'gateway-slim'
+  | 'vercel-edge-function';
 
 export type Config = ForceSimplify<DeepPartial<Omit<ResolvedConfig, 'root'>>>;

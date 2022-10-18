@@ -13,6 +13,9 @@ const config: ResolvedConfig = {
     repliedUser: true,
     parse: ['users'],
   },
+  build: {
+    runtimes: ['auto'],
+  },
   lang: 'en-US',
   paths: {
     build: 'dist',
