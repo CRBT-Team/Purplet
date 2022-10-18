@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import { warn } from '@paperdave/logger';
 import { copyFileSync } from 'fs';
 
-execSync('node scripts/gen-routes.js', { stdio: 'inherit' });
+// execSync('node scripts/gen-routes.js', { stdio: 'inherit' });
 execSync('pnpm rollup -c', { stdio: 'inherit' });
 try {
   execSync('pnpm tsc -p .', { stdio: 'inherit' });

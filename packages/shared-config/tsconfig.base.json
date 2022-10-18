@@ -9,16 +9,11 @@
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "error",
     "isolatedModules": true,
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "node",
-    "declaration": true,
-    "declarationDir": "dist",
-    "emitDeclarationOnly": true,
+    "declaration": false,
+    "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
@@ -29,7 +24,5 @@
     "strictFunctionTypes": true,
     "target": "ESNext"
   },
-  "include": [
-    "./ambient.d.ts"
-  ]
+  "include": ["./ambient.d.ts"]
 }
