@@ -224,10 +224,16 @@ export const Channel = group({
     route: (channelId, overwriteId) => `/channels/${channelId}/permissions/${overwriteId}`,
     params: ["channelId", "overwriteId"],
   },
+  followAnnouncementChannel: {
+    method: 'POST',
+    route: (channelId) => `/channels/${channelId}/followers`,
+    params: ["channelId"],
+  },
   followNewsChannel: {
     method: 'POST',
     route: (channelId) => `/channels/${channelId}/followers`,
     params: ["channelId"],
+    deprecated: 'channel.followAnnouncementChannel'
   },
   triggerTypingIndicator: {
     method: 'POST',

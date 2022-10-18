@@ -1,6 +1,6 @@
-import { makeRollupConfig } from '@purplet/shared-config/rollup';
+import { library } from '@purplet/shared-config/rollup';
 
-export default makeRollupConfig({
+export default library({
   input: {
     index: 'src/index.ts',
   },
