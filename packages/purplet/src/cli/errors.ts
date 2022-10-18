@@ -6,11 +6,11 @@ import { GatewayCloseCodes, GatewayIntentBits, GatewayVersion } from 'purplet/ty
 import { IntentsBitfield } from '../structures';
 import { camelCaseToEnumCase } from '../utils/case';
 
-export function errorNoToken() {
-  const magenta = chalk.magentaBright;
-  const cyan = chalk.cyanBright;
-  const devPortalLink = magenta('https://discordapp.com/developers/applications');
+const magenta = /*@__PURE__*/ chalk.magentaBright;
+const cyan = /*@__PURE__*/ chalk.cyanBright;
+const devPortalLink = /*@__PURE__*/ magenta('https://discordapp.com/developers/applications');
 
+export function errorNoToken() {
   return new CLIError(
     'Missing DISCORD_BOT_TOKEN environment variable!',
     dedent`

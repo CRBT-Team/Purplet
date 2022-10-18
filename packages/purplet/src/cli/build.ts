@@ -8,7 +8,6 @@ import esbuild from 'rollup-plugin-esbuild';
 import { Logger, Spinner } from '@paperdave/logger';
 import { asyncIterToArray, pathExists, walk } from '@paperdave/utils';
 import { spawnSync } from 'child_process';
-import { createRequire } from 'module';
 import { rollup, VERSION as rollupVersion } from 'rollup';
 import { loadConfig } from '../config';
 import type { FeatureScan } from '../internal';
@@ -117,7 +116,7 @@ export async function buildGateway(options: BuildOptions) {
   // Second rollup build
   Logger.info('Running phase 2 build');
   const phase2Rollup = await rollup({
-    input: '/code/CRBT-Team/Purplet/packages/purplet/runtimes/test.js',
+    input: '/code/CRBT-Team/Purplet/packages/purplet/runtimes/gateway.js',
     // external: id =>
 
     plugins: [
@@ -131,11 +130,11 @@ export async function buildGateway(options: BuildOptions) {
               '@paperdave/logger',
               '@paperdave/utils',
               '@purplet/polyfill',
-              'discordjs',
               'chalk',
               'dedent',
               'fast-deep-equal',
               '@sindresorhus/is',
+              'purplet/dist',
             ].some(x => source.includes(x))
           ) {
             return {
@@ -166,22 +165,5 @@ export async function buildGateway(options: BuildOptions) {
     banner: ROLLUP_HEADER,
   });
 
-  const outputFile = path.join(config.paths.build, 'index.js');
-
-  const userPkg = JSON.parse(await fs.readFile(path.join(options.root, 'package.json'), 'utf8'));
-
-  const req = createRequire(options.root + '/package.json');
-  try {
-    const resolved = req.resolve('./' + userPkg.main);
-    if (resolved !== outputFile) {
-      throw new Error('Error');
-    }
-  } catch {
-    Logger.warn(
-      `The "main" field in package.json does not point to the bot entry file at ./${path
-        .relative(options.root, outputFile)
-        .replace(/\\/g, '/')}.`
-    );
-  }
-  buildSpinner.success('Bot build succeeded, you can run it with `node .`');
+  buildSpinner.success('Bot build succeeded');
 }

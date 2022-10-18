@@ -22,7 +22,7 @@ export const decoder = new TextDecoder();
 
 export interface GatewayOptions
   extends Pick<GatewayIdentifyData, 'token' | 'shard' | 'presence' | 'intents'> {
-  gateway?: string;
+  gatewayURL?: string;
 }
 
 export function stripUndefined(obj: any): any {

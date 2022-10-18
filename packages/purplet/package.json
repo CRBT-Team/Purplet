@@ -52,7 +52,7 @@
     "chalk": "^5.1.2",
     "chokidar": "^3.5.3",
     "dedent": "^0.7.0",
-    "discord-api-types": "^0.36.3",
+    "discord-api-types": "^0.37.14",
     "tweetnacl": "^1.0.3",
     "vite": "3.0.7",
     "wrap-ansi": "^8.0.1",

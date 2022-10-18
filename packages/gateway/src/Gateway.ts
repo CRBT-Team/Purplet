@@ -21,6 +21,8 @@ import type { GatewayOptions } from './util';
 import { debug, decoder, erlpack, stripUndefined, zlib } from './util';
 import { version } from '../package.json';
 
+type GatewayState = 'connecting' | 'connected';
+
 /**
  * Implementation of a Discord gateway client. Supports etf and zlib, if installed.
  *
@@ -41,23 +43,29 @@ export class Gateway extends Emitter<GatewayEventMap> {
   private sessionId: string | undefined;
   private inflate?: Inflate;
   private gatewayURL?: string;
+  private state: GatewayState = 'connecting';
   options: GatewayOptions;
 
   constructor(options: GatewayOptions) {
     super();
     this.options = options;
+    if (!this.options.token) {
+      throw new Error('Empty token passed to new Gateway()');
+    }
+    if (!this.options.intents) {
+      throw new Error('Empty intents passed to new Gateway()');
+    }
     this.connect();
   }
 
   /** Connects to the Gateway. */
   async connect() {
-    let urlString = this.options.gateway ?? this.gatewayURL;
+    let urlString = this.options.gatewayURL ?? this.gatewayURL;
 
     if (!urlString) {
       // TODO: in the future, use /gateway/bot and automatic sharding.
       const { url } = (await fetch(RouteBases.api + Routes.gateway()).then(x => x.json())) as any;
-      urlString = url;
-      this.gatewayURL = url;
+      urlString = this.gatewayURL = url;
     }
 
     if (zlib) {
@@ -86,6 +94,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
 
   private sendIdentify() {
     if (this.sessionId) {
+      debug('sending resume, seq=%s', this.seq);
       this.send({
         op: GatewayOpcodes.Resume,
         d: {
@@ -95,6 +104,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
         },
       });
     } else {
+      debug('sending identify, intents=%s', this.options.intents);
       this.send({
         op: GatewayOpcodes.Identify,
         d: {
@@ -207,6 +217,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
 
     switch (packet.op) {
       case GatewayOpcodes.Hello:
+        debug('Hello, heartbeat interval is %sms.', packet.d.heartbeat_interval);
         this.hb = new Heartbeater(packet.d.heartbeat_interval, () => this.onHeartbeat());
         this.sendIdentify();
         return;
@@ -215,7 +226,13 @@ export class Gateway extends Emitter<GatewayEventMap> {
         // TODO: implement zombie detection
         return;
       case GatewayOpcodes.InvalidSession:
+        if (this.state === 'connecting') {
+          this.close();
+          this.onClose({ code: GatewayCloseCodes.AuthenticationFailed });
+          return;
+        }
         debug('Session Invalidated. Attempting to reconnect.');
+        debug(packet);
         if (packet.d) {
           this.sendIdentify();
           return;
