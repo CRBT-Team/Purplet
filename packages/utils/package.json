@@ -7,18 +7,13 @@
     "bot",
     "api",
     "utils",
-    "typescript"
+    "typescript",
+    "bun"
   ],
   "homepage": "https://github.com/CRBT-Team/Purplet/tree/main/packages/utils",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/CRBT-Team/Purplet.git",
-    "directory": "packages/rest"
-  },
+  "repository": "github:CRBT-Team/Purplet",
   "license": "Apache-2.0",
-  "contributors": [
-    "Clembs <clembs@clembs.com> (https://github.com/Clembs)"
-  ],
+  "author": "Clembs <clembs@clembs.com> (https://github.com/Clembs)",
   "sideEffects": false,
   "type": "module",
   "exports": {
@@ -32,21 +27,15 @@
     "*.md"
   ],
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "shared-config-build",
     "dev": "rollup -c --watch"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@types/node": "^17.0.45",
-    "bun-types": "^0.1.8",
-    "discord-api-types": "^0.36.3",
-    "esbuild": "^0.14.54",
-    "rollup": "^2.78.0",
-    "rollup-plugin-esbuild": "^4.9.3",
-    "typescript": "^4.7.4"
+    "@purplet/shared-config": "workspace:*",
+    "discord-api-types": "^0.37.14"
   },
   "peerDependencies": {
-    "discord-api-types": "^0.36.1"
+    "discord-api-types": "^0.37.14"
   },
   "publishConfig": {
     "access": "public"

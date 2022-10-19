@@ -1,13 +1,15 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@purplet/shared-config': workspace:*
   discord-api-types: ^0.37.14
 
-dependencies:
+devDependencies:
+  '@purplet/shared-config': link:../shared-config
   discord-api-types: 0.37.14
 
 packages:
 
   /discord-api-types/0.37.14:
     resolution: {integrity: sha512-byBH7SfDCMJwxdqeS8k5sihltH88/YPhuwx+vF2cftSxFLdxyHyU/ZxDL3bq+LB2c4ls/TymE76/ISlLfniUXg==}
-    dev: false
+    dev: true

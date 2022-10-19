@@ -1,0 +1,13 @@
+{
+  "extends": "@purplet/shared-config/tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "noEmit": false,
+    "declaration": true,
+    "declarationDir": "dist",
+    "emitDeclarationOnly": true,
+    "types": ["@purplet/shared-config"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.js"],
+  "exclude": ["**/node_modules", "**/dist"]
+}
