@@ -3,5 +3,5 @@
 
 [build]
   base = ""
-  command = "cd sites/purplet.js.org && yarn install && yarn build"
+  command = "cd sites/purplet.js.org && pnpm install && pnpm run build"
   publish = "sites/purplet.js.org/build"
