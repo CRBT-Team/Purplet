@@ -1,0 +1,13 @@
+lockfileVersion: 5.4
+
+specifiers:
+  discord-api-types: ^0.37.14
+
+dependencies:
+  discord-api-types: 0.37.14
+
+packages:
+
+  /discord-api-types/0.37.14:
+    resolution: {integrity: sha512-byBH7SfDCMJwxdqeS8k5sihltH88/YPhuwx+vF2cftSxFLdxyHyU/ZxDL3bq+LB2c4ls/TymE76/ISlLfniUXg==}
+    dev: false
