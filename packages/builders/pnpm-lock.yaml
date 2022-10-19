@@ -1,0 +1,30 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@paperdave/utils': 1.1.0
+  '@purplet/shared-config': workspace:*
+  discord-api-types: ^0.37.14
+
+dependencies:
+  '@paperdave/utils': 1.1.0
+
+devDependencies:
+  '@purplet/shared-config': link:../shared-config
+  discord-api-types: 0.37.14
+
+packages:
+
+  /@paperdave/utils/1.1.0:
+    resolution: {integrity: sha512-J95Wf8RnR44I8apZ6TRJGQIyVVuL6YGGFbHneFVpqXwerfd2/Bp+AxmLRdDUGbKtUaPRAErPs5H2jkeVDLDhjw==}
+    dependencies:
+      utility-types: 3.10.0
+    dev: false
+
+  /discord-api-types/0.37.14:
+    resolution: {integrity: sha512-byBH7SfDCMJwxdqeS8k5sihltH88/YPhuwx+vF2cftSxFLdxyHyU/ZxDL3bq+LB2c4ls/TymE76/ISlLfniUXg==}
+    dev: true
+
+  /utility-types/3.10.0:
+    resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
+    engines: {node: '>= 4'}
+    dev: false
