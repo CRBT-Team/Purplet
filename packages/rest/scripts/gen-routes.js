@@ -76,6 +76,7 @@ const overrides = {
     listVoiceRegions: 'Discord.RESTGetAPIGuildVoiceRegions',
     createWebhook: 'Discord.RESTPostAPIChannelWebhook',
     listJoinedPrivateArchivedThreads: 'Discord.RESTGetAPIChannelUsersThreadsArchived',
+    createAutoModerationRule: 'Discord.RESTPostAPIAutoModerationRule',
   },
   body: {
     createGroupDM: '{ access_tokens: string[]; nicks: Record<string, string> }',
@@ -214,6 +215,7 @@ function transformContents({ contents, exportName, filename }) {
               .replace('guilds/templates', 'templates')
               .replace('guilds/:guild/roles', 'guild-role')
               .replace('guilds/:guild/roles', 'guild-role')
+              .replace('guilds/:guild/auto-moderation', 'auto-moderation')
               .replace(
                 'applications/:application/guilds/:guild/commands/permissions',
                 'guild-application-commands-permissions'

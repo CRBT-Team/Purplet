@@ -1,17 +1,14 @@
-import { ButtonBuilder } from '@discordjs/builders';
 import type {
   APIActionRowComponent,
   APIActionRowComponentTypes,
   APIButtonComponentWithURL,
   APIMessageActionRowComponent,
   APIModalActionRowComponent,
-  APIModalInteractionResponseCallbackData} from 'purplet/types';
-import {
-  ButtonStyle,
-  ComponentType,
-} from 'purplet/types';
-import type { JSONResolvable} from '../utils/json';
-import { toJSONValue } from '../utils/json';
+  APIModalInteractionResponseCallbackData,
+} from 'discord-api-types/payloads';
+import { ButtonStyle, ComponentType } from 'discord-api-types/payloads';
+import type { JSONResolvable } from '../../purplet/src/utils/json';
+import { toJSONValue } from '../../purplet/src/utils/json';
 
 abstract class ComponentBuilder<Type extends APIActionRowComponentTypes> {
   protected components: Array<APIActionRowComponent<Type>> = [];
@@ -82,10 +79,11 @@ export class ModalComponentBuilder extends ComponentBuilder<APIModalActionRowCom
   }
 }
 
-export function createLinkButton(label: string, url: string) {
-  return new ButtonBuilder() //
-    .setStyle(ButtonStyle.Link)
-    .setLabel(label)
-    .setURL(url)
-    .toJSON() as APIButtonComponentWithURL;
+export function createLinkButton(label: string, url: string): APIButtonComponentWithURL {
+  return {
+    type: ComponentType.Button,
+    style: ButtonStyle.Link,
+    label,
+    url,
+  };
 }

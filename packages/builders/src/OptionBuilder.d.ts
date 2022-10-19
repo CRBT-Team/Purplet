@@ -5,8 +5,7 @@ import type {
   ApplicationCommandOptionType,
   ChannelType,
   LocalizationMap,
-} from 'purplet/types';
-import type { AutocompleteInteraction, BareUser, InteractionUser } from '../structures';
+} from 'discord-api-types/payloads';
 
 /**
  * OptionBuilder is a very complex piece of type-code built out of a lot of mapped types to reduce

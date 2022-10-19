@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from 'purplet/types';
+import { ApplicationCommandOptionType } from 'discord-api-types/payloads';
 
 export class OptionBuilder {
   /** @type {import('purplet/types').APIApplicationCommandOption[]} */

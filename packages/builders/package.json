@@ -1,7 +1,7 @@
 {
-  "name": "@purplet/rest",
-  "version": "0.1.0",
-  "description": "Cross-runtime Discord Rest client",
+  "name": "@purplet/builders",
+  "version": "1.1.0",
+  "description": "",
   "keywords": [
     "discord",
     "bot",
@@ -11,7 +11,11 @@
     "bun"
   ],
   "homepage": "https://github.com/CRBT-Team/Purplet/tree/main/packages/rest",
-  "repository": "github:CRBT-Team/Purplet",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CRBT-Team/Purplet.git",
+    "directory": "packages/rest"
+  },
   "license": "Apache-2.0",
   "author": "Dave Caruso <me@paperdave.net> (https://github.com/paperdave)",
   "sideEffects": false,
@@ -31,11 +35,10 @@
     "dev": "rollup -c --watch"
   },
   "dependencies": {
-    "@paperdave/utils": "1.1.0",
-    "@purplet/shared-config": "workspace:*"
+    "@paperdave/utils": "1.1.0"
   },
   "devDependencies": {
-    "@paperdave/logger": "^2.0.6",
+    "@purplet/shared-config": "workspace:*",
     "discord-api-types": "^0.37.14"
   },
   "peerDependencies": {
