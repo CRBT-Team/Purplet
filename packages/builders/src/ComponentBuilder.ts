@@ -1,4 +1,3 @@
-import { ButtonBuilder } from '@discordjs/builders';
 import type {
   APIActionRowComponent,
   APIActionRowComponentTypes,
@@ -82,10 +81,11 @@ export class ModalComponentBuilder extends ComponentBuilder<APIModalActionRowCom
   }
 }
 
-export function createLinkButton(label: string, url: string) {
-  return new ButtonBuilder() //
-    .setStyle(ButtonStyle.Link)
-    .setLabel(label)
-    .setURL(url)
-    .toJSON() as APIButtonComponentWithURL;
+export function createLinkButton(label: string, url: string): APIButtonComponentWithURL {
+  return {
+    type: ComponentType.Button,
+    style: ButtonStyle.Link,
+    label,
+    url
+  }
 }

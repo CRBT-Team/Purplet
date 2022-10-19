@@ -42,7 +42,7 @@ dependencies:
   '@paperdave/utils': 1.1.0
   '@purplet/gateway': link:../gateway
   '@purplet/polyfill': link:../polyfill
-  '@purplet/rest': link:../rest
+  '@purplet/rest': link:../builders
   '@purplet/serialize': link:../serialize
   '@rollup/plugin-alias': 3.1.9_rollup@2.78.0
   '@rollup/plugin-node-resolve': 13.3.0_rollup@2.78.0
