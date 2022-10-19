@@ -290,11 +290,11 @@ export function object<T extends Record<string, unknown>>(definition: {
 export const genericObject = new BitSerializer<Record<string, Generic>>({
   read(buffer) {
     const obj: Dict<Generic> = {};
-    let key: string;
-    do {
-      key = string.read(buffer);
+    let key: string = string.read(buffer);
+    while (key !== '') {
       obj[key] = generic.read(buffer);
-    } while (key !== '');
+      key = string.read(buffer);
+    }
     return obj;
   },
   write(value, buffer) {

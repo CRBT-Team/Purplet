@@ -4,7 +4,7 @@ import '@purplet/polyfill';
 
 export const version = '__VERSION__';
 
-export * from './builders';
+export * from '@purplet/builders';
 export type { Config } from './config/types';
 export * from './hooks';
 export * from './lib/hook-core';

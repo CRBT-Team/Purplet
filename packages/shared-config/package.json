@@ -10,7 +10,10 @@
     "shared-config-build": "./build.js"
   },
   "dependencies": {
+    "@paperdave/logger": "^2.0.6",
     "@paperdave/utils": "1.4.1",
+    "@rollup/plugin-alias": "^4.0.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-replace": "^4.0.0",
     "@types/node": "^18.11.0",
