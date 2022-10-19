@@ -1,6 +1,6 @@
 import { asyncMap, deferred } from '@paperdave/utils';
+import type { GatewayOptions } from '@purplet/gateway';
 import { Gateway, GatewayExitError } from '@purplet/gateway';
-import type { GatewayOptions } from '@purplet/gateway/src/Gateway';
 import { Rest } from '@purplet/rest';
 import { deepEqual } from 'fast-equals';
 import type {
