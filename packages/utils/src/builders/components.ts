@@ -1,12 +1,11 @@
 import type {
   APIActionRowComponent,
   APIActionRowComponentTypes,
-  APIButtonComponentWithURL,
   APIMessageActionRowComponent,
   APIModalActionRowComponent,
   APIModalInteractionResponseCallbackData,
 } from 'discord-api-types/v10';
-import { ButtonStyle, ComponentType } from 'discord-api-types/v10';
+import { ComponentType } from 'discord-api-types/v10';
 import type { JSONResolvable } from '../json';
 import { toJSONValue } from '../json';
 
@@ -77,13 +76,4 @@ export class ModalComponentBuilder extends ComponentBuilder<APIModalActionRowCom
       components: this.components,
     };
   }
-}
-
-export function createLinkButton(label: string, url: string): APIButtonComponentWithURL {
-  return {
-    type: ComponentType.Button,
-    style: ButtonStyle.Link,
-    label,
-    url,
-  };
 }
