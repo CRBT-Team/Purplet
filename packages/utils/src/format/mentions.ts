@@ -1,20 +1,31 @@
 import {
   APIApplicationCommand,
-  APIChannel,
   APIEmoji,
-  APIRole,
-  APIUser,
   ApplicationCommandOptionType,
   ApplicationCommandType,
+  Snowflake,
 } from 'discord-api-types/v10';
 
-export const userMention = (user: APIUser) => `<@${user.id}>`;
+type ObjectWithId = { id: string };
+type WithId = ObjectWithId | Snowflake;
 
-export const channelMention = (channel: APIChannel) => `<#${channel.id}>`;
+function getId(base: WithId) {
+  return (base as ObjectWithId)?.id ?? base;
+}
 
-export const roleMention = (role: APIRole) => `<@&${role.id}>`;
+export function userMention(user: WithId) {
+  return `<@${getId(user)}>`;
+}
 
-export const slashCommandMention = (command: APIApplicationCommand) => {
+export function channelMention(channel: WithId) {
+  return `<#${getId(channel)}>`;
+}
+
+export function roleMention(role: WithId) {
+  return `<@&${getId(role)}>`;
+}
+
+export function slashCommandMention(command: APIApplicationCommand) {
   if (command.type !== ApplicationCommandType.ChatInput) {
     throw new Error(`Command type ${command.type} is not mentionable.`);
   }
@@ -28,14 +39,14 @@ export const slashCommandMention = (command: APIApplicationCommand) => {
     .join(' ');
 
   return `</${commandName}:${command.id}>`;
-};
+}
 
-// i wanted to implement all the ones from Discord API Docs,
-// and this one was too funny not to include
-export const standardEmojiMention = (unicodeEmoji: string) => unicodeEmoji;
+export function emojiMention(emoji: string | APIEmoji) {
+  // if this is a unicode emoji
+  if (typeof emoji === 'string') return emoji;
 
-export const customEmojiMention = (emoji: APIEmoji) =>
-  `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
+  return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
+}
 
 export enum TimestampFormats {
   ShortTime = 't',
@@ -47,7 +58,7 @@ export enum TimestampFormats {
   Relative = 'R',
 }
 
-export const timestampMention = (date: Date | number, format?: TimestampFormats) => {
+export function timestampMention(date: Date | number, format?: TimestampFormats) {
   const timeMs = Math.round(date instanceof Date ? date.getTime() / 1000 : date);
   return `<t:${timeMs}:${format}>`;
-};
+}
