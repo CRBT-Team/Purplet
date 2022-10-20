@@ -1,12 +1,9 @@
-import {
-  APIApplicationCommand,
-  APIEmoji,
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
-  Snowflake,
-} from 'discord-api-types/v10';
+import type { APIApplicationCommand, APIEmoji, Snowflake } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
-type ObjectWithId = { id: string };
+interface ObjectWithId {
+  id: string;
+}
 type WithId = ObjectWithId | Snowflake;
 
 function getId(base: WithId) {
@@ -43,7 +40,9 @@ export function slashCommandMention(command: APIApplicationCommand) {
 
 export function emojiMention(emoji: string | APIEmoji) {
   // if this is a unicode emoji
-  if (typeof emoji === 'string') return emoji;
+  if (typeof emoji === 'string') {
+    return emoji;
+  }
 
   return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
 }

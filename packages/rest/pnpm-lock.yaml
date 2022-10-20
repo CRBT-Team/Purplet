@@ -4,11 +4,13 @@ specifiers:
   '@paperdave/logger': ^2.0.6
   '@paperdave/utils': 1.1.0
   '@purplet/shared-config': workspace:*
+  '@purplet/utils': workspace:^1.0.0
   discord-api-types: ^0.37.14
 
 dependencies:
   '@paperdave/utils': 1.1.0
   '@purplet/shared-config': link:../shared-config
+  '@purplet/utils': link:../utils
 
 devDependencies:
   '@paperdave/logger': 2.0.6
