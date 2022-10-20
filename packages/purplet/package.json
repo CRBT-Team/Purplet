@@ -42,6 +42,7 @@
     "prepack": "pnpm run build"
   },
   "dependencies": {
+    "@paperdave/logger": "^2.0.6",
     "@paperdave/utils": "1.1.0",
     "@purplet/builders": "workspace:*",
     "@purplet/gateway": "workspace:*",
@@ -53,6 +54,7 @@
     "chokidar": "^3.5.3",
     "dedent": "^0.7.0",
     "discord-api-types": "^0.37.14",
+    "rollup": "^3.2.3",
     "tweetnacl": "^1.0.3",
     "vite": "3.0.7",
     "wrap-ansi": "^8.0.1",
