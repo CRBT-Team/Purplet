@@ -5,7 +5,7 @@ import path from 'node:path';
 
 process.env.NODE_ENV = 'production';
 
-const rollupConfig = (await import('./rollup.config.js')).default;
+const rollupConfig = (await import('./rollup.config.mjs')).default;
 const roll = await rollup(rollupConfig);
 await roll.write(rollupConfig.output);
 

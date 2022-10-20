@@ -1,32 +1,13 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@purplet/shared-config/tsconfig.base.json",
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "composite": false,
-    "downlevelIteration": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "importsNotUsedAsValues": "error",
-    "isolatedModules": true,
-    "lib": ["ESNext"],
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "rootDir": "src",
+    "noEmit": false,
     "declaration": true,
     "declarationDir": "dist",
     "emitDeclarationOnly": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "alwaysStrict": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "target": "ESNext",
-    "paths": {
-      "purplet/types": ["./src/types"]
-    }
+    "types": ["@purplet/shared-config"]
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*.ts", "src/**/*.js"],
+  "exclude": ["**/node_modules", "**/dist"]
 }
