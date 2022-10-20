@@ -26,7 +26,7 @@ export const helloWorld = $slashCommand({
 });
 ```
 
-Our suite of packages is built from the ground up on Web Standards like `fetch`, allowing your code to run locally in Node.js, but also within cloud environments such as CF Workers, allowing you to deploy slash commands for free.
+Our suite of packages is built from the ground up on Web Standards like `fetch` and `WebSocket`, allowing your code to run locally in Node.js, but also within cloud environments such as CF Workers, allowing you to deploy slash commands for free.
 
 > ⚠️ Purplet is extremely experimental software with a rapidly changing API. We do not recommend using it in production at this point. When v2.0 is released, the API will be stable, it will still be considered experimental until we can ensure it's stability.
 
