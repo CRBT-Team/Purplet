@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@paperdave/logger': ^2.0.6
   '@paperdave/utils': 1.1.0
   '@purplet/builders': workspace:*
   '@purplet/gateway': workspace:*
@@ -18,6 +19,7 @@ specifiers:
   dedent: ^0.7.0
   discord-api-types: ^0.37.14
   erlpack: ^0.1.4
+  rollup: ^3.2.3
   tweetnacl: ^1.0.3
   utf-8-validate: ^5.0.9
   vite: 3.0.7
@@ -26,6 +28,7 @@ specifiers:
   zlib-sync: ^0.1.7
 
 dependencies:
+  '@paperdave/logger': 2.2.4
   '@paperdave/utils': 1.1.0
   '@purplet/builders': link:../builders
   '@purplet/gateway': link:../gateway
@@ -37,6 +40,7 @@ dependencies:
   chokidar: 3.5.3
   dedent: 0.7.0
   discord-api-types: 0.37.14
+  rollup: 3.2.3
   tweetnacl: 1.0.3
   vite: 3.0.7
   wrap-ansi: 8.0.1
@@ -65,8 +69,25 @@ packages:
     dev: false
     optional: true
 
+  /@paperdave/logger/2.2.4:
+    resolution: {integrity: sha512-dBxymags5neNQehBZmREnuOi5Mh03Mmv4VAXki1RElME4nDNrfQnyvk7ri6y8ElxWpga8Mcy6DxPA+zQDd6UqA==}
+    engines: {bun: '>=0.1.9', node: '>=16'}
+    dependencies:
+      '@paperdave/utils': 1.4.1
+      ansi-escapes: 5.0.0
+      chalk: 4.1.2
+      strip-ansi: 7.0.1
+    dev: false
+
   /@paperdave/utils/1.1.0:
     resolution: {integrity: sha512-J95Wf8RnR44I8apZ6TRJGQIyVVuL6YGGFbHneFVpqXwerfd2/Bp+AxmLRdDUGbKtUaPRAErPs5H2jkeVDLDhjw==}
+    dependencies:
+      utility-types: 3.10.0
+    dev: false
+
+  /@paperdave/utils/1.4.1:
+    resolution: {integrity: sha512-wzbIGtiVSL2Krc4s6rMSFzhh4KMTfq3i8Yusy+8/a83oicw1jkaneE08zKNk7dziXFpDvlkmi2S/Kr0OQq0wRQ==}
+    engines: {bun: '>=0.1.9', node: '>=16'}
     dependencies:
       utility-types: 3.10.0
     dev: false
@@ -94,6 +115,13 @@ packages:
     dependencies:
       '@types/yargs-parser': 21.0.0
     dev: true
+
+  /ansi-escapes/5.0.0:
+    resolution: {integrity: sha512-5GFMVX8HqE/TB+FuBJGuO5XG0WrsA6ptUqoODaT/n9mmUaZFkqnBueB4leqGBCmrUHnCnC4PCZTCd0E7QQ83bA==}
+    engines: {node: '>=12'}
+    dependencies:
+      type-fest: 1.4.0
+    dev: false
 
   /ansi-regex/5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -152,6 +180,14 @@ packages:
       node-gyp-build: 4.5.0
     dev: false
     optional: true
+
+  /chalk/4.1.2:
+    resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
+    engines: {node: '>=10'}
+    dependencies:
+      ansi-styles: 4.3.0
+      supports-color: 7.2.0
+    dev: false
 
   /chalk/5.1.2:
     resolution: {integrity: sha512-E5CkT4jWURs1Vy5qGJye+XwCkNj7Od3Af7CP6SujMetSMkLs8Do2RWJK5yx1wamHV/op8Rz+9rltjaTQWDnEFQ==}
@@ -471,6 +507,11 @@ packages:
       is-glob: 4.0.3
     dev: false
 
+  /has-flag/4.0.0:
+    resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
+    engines: {node: '>=8'}
+    dev: false
+
   /has/1.0.3:
     resolution: {integrity: sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==}
     engines: {node: '>= 0.4.0'}
@@ -586,6 +627,14 @@ packages:
       fsevents: 2.3.2
     dev: false
 
+  /rollup/3.2.3:
+    resolution: {integrity: sha512-qfadtkY5kl0F5e4dXVdj2D+GtOdifasXHFMiL1SMf9ADQDv5Eti6xReef9FKj+iQPR2pvtqWna57s/PjARY4fg==}
+    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: false
+
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
@@ -623,6 +672,13 @@ packages:
       ansi-regex: 6.0.1
     dev: false
 
+  /supports-color/7.2.0:
+    resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
+    engines: {node: '>=8'}
+    dependencies:
+      has-flag: 4.0.0
+    dev: false
+
   /supports-preserve-symlinks-flag/1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
@@ -637,6 +693,11 @@ packages:
 
   /tweetnacl/1.0.3:
     resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
+    dev: false
+
+  /type-fest/1.4.0:
+    resolution: {integrity: sha512-yGSza74xk0UG8k+pLh5oeoYirvIiWo5t0/o3zHHAO2tRDiZcxWP7fywNlXhqb6/r6sWvwi+RsyQMWhVLe4BVuA==}
+    engines: {node: '>=10'}
     dev: false
 
   /utf-8-validate/5.0.9:
