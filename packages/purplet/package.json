@@ -47,6 +47,7 @@
     "@purplet/polyfill": "workspace:*",
     "@purplet/rest": "workspace:*",
     "@purplet/serialize": "workspace:*",
+    "@purplet/utils": "workspace:*",
     "chalk": "^5.1.2",
     "chokidar": "^3.5.3",
     "dedent": "^0.7.0",
