@@ -5,9 +5,10 @@ import type {
   APIMessageActionRowComponent,
   APIModalActionRowComponent,
   APIModalInteractionResponseCallbackData,
-} from 'discord-api-types/payloads';
-import { ButtonStyle, ComponentType } from 'discord-api-types/payloads';
-import { JSONResolvable, toJSONValue } from '../json';
+} from 'discord-api-types/v10';
+import { ButtonStyle, ComponentType } from 'discord-api-types/v10';
+import type { JSONResolvable } from '../json';
+import { toJSONValue } from '../json';
 
 abstract class ComponentBuilder<Type extends APIActionRowComponentTypes> {
   protected components: Array<APIActionRowComponent<Type>> = [];

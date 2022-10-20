@@ -1,4 +1,4 @@
-import type { APIUser } from 'discord-api-types/v10';
+import type { APIUser } from 'discord-api-types/payloads';
 import type { ImageURLOptions } from './cdn';
 import { formatDefaultUserAvatarURL, formatGuildMemberAvatarURL, formatUserAvatarURL } from './cdn';
 

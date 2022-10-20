@@ -32,7 +32,8 @@
   },
   "dependencies": {
     "@paperdave/utils": "1.1.0",
-    "@purplet/shared-config": "workspace:*"
+    "@purplet/shared-config": "workspace:*",
+    "@purplet/utils": "workspace:^1.0.0"
   },
   "devDependencies": {
     "@paperdave/logger": "^2.0.6",

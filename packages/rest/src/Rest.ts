@@ -1,4 +1,4 @@
-import { APIVersion, RouteBases } from 'discord-api-types/rest';
+import { API_BASE_URL, API_VERSION } from '@purplet/utils';
 import { Fetcher } from './Fetcher';
 import {
   ApplicationCommand,
@@ -37,8 +37,8 @@ export class Rest {
 
   constructor(options: RestOptions) {
     this.options = {
-      version: APIVersion,
-      base: RouteBases.api,
+      version: API_VERSION,
+      base: API_BASE_URL,
       tokenType: 'Bot',
       userAgent: defaultUserAgent,
       ...options,
