@@ -3,11 +3,13 @@ lockfileVersion: 5.4
 specifiers:
   '@paperdave/utils': ^1.4.1
   '@purplet/shared-config': workspace:*
+  dayjs: ^1.11.5
   discord-api-types: ^0.37.14
 
 devDependencies:
   '@paperdave/utils': 1.4.1
   '@purplet/shared-config': link:../shared-config
+  dayjs: 1.11.5
   discord-api-types: 0.37.14
 
 packages:
@@ -17,6 +19,10 @@ packages:
     engines: {bun: '>=0.1.9', node: '>=16'}
     dependencies:
       utility-types: 3.10.0
+    dev: true
+
+  /dayjs/1.11.5:
+    resolution: {integrity: sha512-CAdX5Q3YW3Gclyo5Vpqkgpj8fSdLQcRuzfX6mC6Phy0nfJ0eGYOeS7m4mt2plDWLAtA4TqTakvbboHvUxfe4iA==}
     dev: true
 
   /discord-api-types/0.37.14:

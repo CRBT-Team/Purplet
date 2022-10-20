@@ -1,4 +1,4 @@
 export * from './avatar';
 export * from './cdn';
-export * from './date';
+export * from './snowflake';
 export * from './mentions';

@@ -1,4 +1,4 @@
-import type { APIApplicationCommand, APIEmoji, Snowflake } from 'discord-api-types/v10';
+import type { APIApplicationCommand, APIPartialEmoji, Snowflake } from 'discord-api-types/v10';
 import { ApplicationCommandOptionType, ApplicationCommandType } from 'discord-api-types/v10';
 
 interface ObjectWithId {
@@ -22,8 +22,11 @@ export function roleMention(role: WithId) {
   return `<@&${getId(role)}>`;
 }
 
-export function slashCommandMention(command: APIApplicationCommand) {
-  if (command.type !== ApplicationCommandType.ChatInput) {
+export type SlashCommandMentionData = Partial<Pick<APIApplicationCommand, 'type' | 'options'>> &
+  Pick<APIApplicationCommand, 'id' | 'name'>;
+
+export function slashCommandMention(command: SlashCommandMentionData) {
+  if (command.type && command.type !== ApplicationCommandType.ChatInput) {
     throw new Error(`Command type ${command.type} is not mentionable.`);
   }
 
@@ -38,16 +41,11 @@ export function slashCommandMention(command: APIApplicationCommand) {
   return `</${commandName}:${command.id}>`;
 }
 
-export function emojiMention(emoji: string | APIEmoji) {
-  // if this is a unicode emoji
-  if (typeof emoji === 'string') {
-    return emoji;
-  }
-
+export function emojiMention(emoji: APIPartialEmoji) {
   return `<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>`;
 }
 
-export enum TimestampFormats {
+export enum TimestampFormat {
   ShortTime = 't',
   LongTime = 'T',
   ShortDate = 'd',
@@ -57,7 +55,12 @@ export enum TimestampFormats {
   Relative = 'R',
 }
 
-export function timestampMention(date: Date | number, format?: TimestampFormats) {
-  const timeMs = Math.round(date instanceof Date ? date.getTime() / 1000 : date);
-  return `<t:${timeMs}:${format}>`;
+export function timestampMention(
+  // This type accepts numbers, Dates, dayjs objects, and anything else that has valueOf(): number
+  date: number | { valueOf(): number },
+  format: `${TimestampFormat}` | TimestampFormat = TimestampFormat.ShortDateTime
+) {
+  return `<t:${Math.floor(date.valueOf() / 1000)}${
+    format === TimestampFormat.ShortDateTime ? '' : `:${format}`
+  }>`;
 }
