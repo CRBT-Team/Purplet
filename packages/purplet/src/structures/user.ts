@@ -1,5 +1,5 @@
-import type { ImageURLOptions } from '@discordjs/rest';
 import type { Immutable } from '@paperdave/utils';
+import type { ImageURLOptions } from '@purplet/utils';
 import type { APIUser } from 'purplet/types';
 import { UserFlagsBitfield } from './bit-field';
 import type { Interaction } from './interaction';

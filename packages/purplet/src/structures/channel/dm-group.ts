@@ -1,4 +1,4 @@
-import type { ImageURLOptions } from '@discordjs/rest';
+import type { ImageURLOptions } from '@purplet/utils';
 import type { APIGroupDMChannel } from 'purplet/types';
 import { TextChannel } from './base-text';
 import { User } from '../user';

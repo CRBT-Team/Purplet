@@ -8,6 +8,7 @@ specifiers:
   '@purplet/rest': workspace:*
   '@purplet/serialize': workspace:*
   '@purplet/shared-config': workspace:*
+  '@purplet/utils': workspace:*
   '@types/dedent': ^0.7.0
   '@types/prompts': ^2.0.14
   '@types/yargs': ^17.0.11
@@ -30,6 +31,7 @@ dependencies:
   '@purplet/polyfill': link:../polyfill
   '@purplet/rest': link:../rest
   '@purplet/serialize': link:../serialize
+  '@purplet/utils': link:../utils
   chalk: 5.1.2
   chokidar: 3.5.3
   dedent: 0.7.0
