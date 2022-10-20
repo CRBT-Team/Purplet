@@ -17,16 +17,16 @@
     "docs/*.md": "mdx"
   },
   "files.exclude": {
-    "**/.DS_Store": false,
-    "**/.docusaurus": false,
-    "**/.git": false,
-    "**/.turbo": false,
-    "**/Thumbs.db": false,
-    "**/node_modules": false,
-    ".eslint{ignore,rc}": false,
-    ".gitattributes": false,
-    ".prettier{ignore,rc.js}": false,
-    "netlify.toml": false
+    "**/.DS_Store": true,
+    "**/.docusaurus": true,
+    "**/.git": true,
+    "**/.turbo": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true,
+    ".eslint{ignore,rc}": true,
+    ".gitattributes": true,
+    ".prettier{ignore,rc.js}": true,
+    "netlify.toml": true
   },
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.tsdk": "node_modules/typescript/lib",
@@ -37,7 +37,7 @@
     "editor.wordWrap": "bounded",
     "editor.wordWrapColumn": 100
   },
-  "workspace.isHidden": false,
+  "workspace.isHidden": true,
   "explorer.fileNesting.expand": false,
   "search.exclude": {
     "**/dist": true
