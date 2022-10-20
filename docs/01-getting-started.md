@@ -4,7 +4,7 @@ import { InstallCodeBlock, RunScriptCodeBlock } from '@site/src/components/Insta
 
 :::danger Experimental Technology Ahead!
 
-Purplet v2 is beta software. Proceed at your own risk, and please [report any issues you find on GitHub](https://github.com/CRBT-Team/Purplet/issues).
+Purplet is extremely experimental software with a rapidly changing API. We do not recommend using it in production at this point. When v2.0 is released, the API will be stable, it will still be considered experimental until we can ensure it's stability. Proceed at your own risk, and please [report any issues you find on GitHub](https://github.com/CRBT-Team/Purplet/issues).
 
 :::
 
