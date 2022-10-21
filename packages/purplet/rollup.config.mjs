@@ -16,4 +16,5 @@ export default createRollupConfig({
       fileName: '[name][extname]',
     }),
   ],
+  cjs: false,
 });

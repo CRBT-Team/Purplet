@@ -4,4 +4,5 @@ export default createRollupConfig({
   input: {
     index: 'src/index.ts',
   },
+  cjs: true,
 });

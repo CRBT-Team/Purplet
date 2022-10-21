@@ -10,9 +10,7 @@ import replace from '@rollup/plugin-replace';
 import path from 'path';
 import { readJSONSync } from '@paperdave/utils';
 
-export function createRollupConfig({ input, cli = false, plugins = [] }) {
-  const sourceRoot = path.resolve('.');
-  const repoRoot = path.resolve('../');
+export function createRollupConfig({ input, cli = false, plugins = [], cjs = true }) {
   const outputRoot = path.resolve('./dist');
 
   let version = '0.0.0-unknown';
@@ -46,34 +44,24 @@ export function createRollupConfig({ input, cli = false, plugins = [] }) {
 
   return {
     input,
-    output: {
-      dir: outputRoot,
-      format: 'esm',
-      chunkFileNames: '[name].js',
-    },
+    output: [
+      {
+        dir: outputRoot,
+        format: 'esm',
+        chunkFileNames: '[name].mjs',
+        entryFileNames: '[name].mjs',
+      },
+      cjs && {
+        dir: outputRoot,
+        format: 'cjs',
+        chunkFileNames: '[name].cjs',
+        entryFileNames: '[name].cjs',
+      },
+    ].filter(Boolean),
     treeshake: {
       moduleSideEffects: false,
     },
     plugins: [
-      {
-        name: 'externals',
-        resolveId: {
-          order: 'pre',
-          handler(source) {
-            if (
-              source.includes('node_modules') ||
-              (source.startsWith(repoRoot) && !source.startsWith(sourceRoot))
-            ) {
-              return {
-                id: source,
-                external: true,
-                moduleSideEffects: false,
-              };
-            }
-            return null;
-          },
-        },
-      },
       replace({
         preventAssignment: true,
         values: {

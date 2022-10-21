@@ -7,7 +7,7 @@ process.env.NODE_ENV = 'production';
 
 const rollupConfig = (await import('./rollup.config.mjs')).default;
 const roll = await rollup(rollupConfig);
-await roll.write(rollupConfig.output);
+await roll.write(rollupConfig.output[0]);
 
 const examples = (await readdir('../../examples'))
   .filter(x => existsSync(path.join('../../examples', x, '.template.json')))
