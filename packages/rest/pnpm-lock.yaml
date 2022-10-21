@@ -2,13 +2,13 @@ lockfileVersion: 5.4
 
 specifiers:
   '@paperdave/logger': ^2.0.6
-  '@paperdave/utils': 1.1.0
+  '@paperdave/utils': 1.5.0
   '@purplet/shared-config': workspace:*
   '@purplet/utils': workspace:^1.0.0
   discord-api-types: ^0.37.14
 
 dependencies:
-  '@paperdave/utils': 1.1.0
+  '@paperdave/utils': 1.5.0
   '@purplet/shared-config': link:../shared-config
   '@purplet/utils': link:../utils
 
@@ -25,8 +25,9 @@ packages:
       wrap-ansi: 8.0.1
     dev: true
 
-  /@paperdave/utils/1.1.0:
-    resolution: {integrity: sha512-J95Wf8RnR44I8apZ6TRJGQIyVVuL6YGGFbHneFVpqXwerfd2/Bp+AxmLRdDUGbKtUaPRAErPs5H2jkeVDLDhjw==}
+  /@paperdave/utils/1.5.0:
+    resolution: {integrity: sha512-vj/dWH797+EqUZ6S8FoxzlPW7ZCwiJBwr5gR3XWH5RCM5FUybzLXj8J5a3vH7AskyYzdT6fKYt+8Q6U2FPgZDw==}
+    engines: {bun: '>=0.1.9', node: '>=16'}
     dependencies:
       utility-types: 3.10.0
     dev: false

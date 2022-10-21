@@ -72,13 +72,6 @@ We generate most of our library's route metadata off of these GitHub repositorie
 
 We do apply some patches of our own, but missing types should be contributed to the above repositories instead of as extra overrides to us. The following routes have buggy or incorrect types:
 
-- Auto Moderation routes have not been merged yet. ([types#418](https://github.com/discordjs/discord-api-types/pull/418) / [purplet#35](https://github.com/CRBT-Team/Purplet/issues/35))
-
-  - `autoModeration.listAutoModerationRulesForGuild`
-  - `autoModeration.getAutoModerationRule`
-  - `autoModeration.createAutoModerationRule`
-  - `autoModeration.modifyAutoModerationRule`
-
 - Some thread actions are missing. ([types#526](https://github.com/discordjs/discord-api-types/issues/526)) / [purplet#50](https://github.com/CRBT-Team/Purplet/issues/50))
 
   - `channel.listPublicArchivedThreads`
