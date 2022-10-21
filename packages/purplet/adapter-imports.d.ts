@@ -13,6 +13,11 @@ declare module '$$features/*' {
   export default features;
 }
 
+declare module '$$options' {
+  const any: any;
+  export = any;
+}
+
 declare module '$$adapter' {
   const data: typeof import('./src/lib/GatewayBot') &
     Pick<typeof import('./src/lib/env'), 'setGlobalEnv' | 'setRestOptions'>;
@@ -26,6 +31,10 @@ declare module '$$adapter' {
 }
 
 declare module '*entrypoint.ts' {
+  const data: string;
+  export default data;
+}
+declare module '*entrypoint.d.ts' {
   const data: string;
   export default data;
 }

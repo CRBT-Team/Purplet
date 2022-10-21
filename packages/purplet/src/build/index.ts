@@ -14,14 +14,13 @@ import type { ResolvedConfig } from '../config/types';
 export async function buildPurpletBot(config: ResolvedConfig, spinner?: Spinner) {
   const debug = new Logger('build', { debug: true });
 
-  config.adapter ??= gateway;
+  config.adapter ??= gateway();
 
   debug('initializing adapter');
-  const adapter = await config.adapter(config);
-  adapter.name ??= config.adapter.name;
+  config.adapter.name ??= config.adapter.name;
 
   if (spinner) {
-    spinner.text += ` with the ${chalk.bold(adapter.name)} adapter`;
+    spinner.text += ` with the ${chalk.bold(config.adapter.name)} adapter`;
   }
 
   // Setup common rollup stuff
@@ -51,7 +50,7 @@ export async function buildPurpletBot(config: ResolvedConfig, spinner?: Spinner)
   debug('starting phase 2');
   const { roll, rollupConfig } = await buildPhase2({
     config,
-    adapter,
+    adapter: config.adapter,
     sharedRollupPlugins,
     featureScan,
   });
@@ -61,7 +60,7 @@ export async function buildPurpletBot(config: ResolvedConfig, spinner?: Spinner)
     config,
     roll,
     outputConfig: rollupConfig.output as OutputOptions,
-    adapter,
+    adapter: config.adapter,
   });
 
   return {

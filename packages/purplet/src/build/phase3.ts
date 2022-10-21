@@ -2,14 +2,14 @@ import path from 'path';
 import { Logger } from '@paperdave/logger';
 import { mkdir, rm } from 'fs/promises';
 import type { OutputOptions, RollupBuild } from 'rollup';
-import type { AdapterData, BuildAPI } from './adapter';
+import type { Adapter, AdaptEvent } from './adapter';
 import type { ResolvedConfig } from '../config/types';
 
 export interface Phase3Options {
   config: ResolvedConfig;
   roll: RollupBuild;
   outputConfig: OutputOptions;
-  adapter: AdapterData;
+  adapter: Adapter;
 }
 
 /** Phase 3 is calling the adapter to write the output. */
@@ -18,7 +18,7 @@ export async function buildPhase3({ config, roll, outputConfig, adapter }: Phase
 
   let jsFileLocation: string | undefined;
 
-  const buildApi: BuildAPI = {
+  const buildApi: AdaptEvent = {
     log: new Logger('adapter:' + adapter.name, { color: 'cyanBright' }),
     debug: new Logger('adapter:' + adapter.name, { debug: true, color: 'cyan' }),
 
