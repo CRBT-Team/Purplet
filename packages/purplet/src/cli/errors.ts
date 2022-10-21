@@ -23,6 +23,19 @@ export function errorNoToken() {
   );
 }
 
+export function errorNoPublicKey() {
+  return new CLIError(
+    'Missing DISCORD_PUBLIC_KEY environment variable!',
+    dedent`
+      Please create an ${cyan('.env')} file with the following contents:
+      
+        ${chalk.cyanBright('DISCORD_PUBLIC_KEY')}=${chalk.grey('<your public key>')}
+      
+      You can create or reset your public key at ${devPortalLink}
+    `
+  );
+}
+
 export function errorNoIncludeAndExcludeGuilds() {
   return new CLIError(
     'Cannot specify both PURPLET_INCLUDE_GUILDS and PURPLET_EXCLUDE_GUILDS',

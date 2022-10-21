@@ -1,6 +1,6 @@
 // `purplet` public api entry point:
 
-export const version = '__VERSION__';
+export const VERSION = '__VERSION__';
 
 export * from '@purplet/utils';
 export * from './lib/OptionBuilder';

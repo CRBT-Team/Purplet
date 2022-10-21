@@ -6,7 +6,7 @@ import { purpletSourceCode } from '../../../utils/fs';
 const input = `${purpletSourceCode}/${entrypoint}`;
 
 export const gateway: Adapter = () => ({
-  name: 'gateway',
+  name: 'middleware',
   input,
   rollupConfig(config) {
     // add the external plugin:
