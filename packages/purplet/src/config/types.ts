@@ -1,6 +1,7 @@
 import type { Awaitable, DeepPartial, ForceSimplify } from '@paperdave/utils';
 import type { AllowedMentionsTypes } from 'discord-api-types/v10';
 import type { UserConfig as ViteConfig } from 'vite';
+import type { Adapter } from '../build/adapter';
 
 export interface ResolvedConfig {
   /** Not included in user configuration; This is the root directory of the project. */
@@ -8,13 +9,11 @@ export interface ResolvedConfig {
   /** Not included in user configuration; This is the `.purplet` directory of the project. */
   temp: string;
 
+  adapter: Adapter;
   alias: Record<string, string>;
   allowedMentions: {
     parse: Array<AllowedMentionsTypes | 'everyone' | 'roles' | 'users'>;
     repliedUser: boolean;
-  };
-  build: {
-    //
   };
   injectLogger: boolean;
   lang: string;

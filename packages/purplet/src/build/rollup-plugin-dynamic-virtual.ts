@@ -7,11 +7,11 @@ export interface VirtualEntry {
   load(...args: string[]): Awaitable<string | string[]>;
 }
 
-const PREFIX = `\0dynamic-virtual:`;
-
-export default function dynamicVirtual(entries: VirtualEntry[]): Plugin {
+export default function dynamicVirtual(name: string, entries: VirtualEntry[]): Plugin {
+  const log = new Logger('build:dynamic', { debug: true });
+  const PREFIX = `\0virtual:${name}:`;
   return {
-    name: 'virtual-dynamic',
+    name: `purplet-${name}`,
 
     resolveId(id) {
       for (const entry of entries) {
@@ -30,8 +30,7 @@ export default function dynamicVirtual(entries: VirtualEntry[]): Plugin {
           if (Array.isArray(loaded)) {
             loaded = loaded.join('\n');
           }
-          Logger.debug('Dynamic Module %s:', idNoPrefix);
-          Logger.debug('%s:', loaded);
+          log('generated dynamic module "%s"', idNoPrefix);
           return loaded;
         }
       }

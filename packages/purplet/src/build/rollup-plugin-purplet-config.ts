@@ -9,13 +9,10 @@ export function pluginConfig(config: ResolvedConfig): Plugin {
     runtimeConfig[key] = config[key];
   }
 
-  return {
-    ...dynamicVirtual([
-      {
-        match: /^\$\$config$/,
-        load: () => `export default ${JSON.stringify(runtimeConfig)}`,
-      },
-    ]),
-    name: 'plugin-purplet-config',
-  };
+  return dynamicVirtual('config', [
+    {
+      match: /^\$\$config$/,
+      load: () => `export default ${JSON.stringify(runtimeConfig)}`,
+    },
+  ]);
 }
