@@ -1,4 +1,5 @@
 import { createRollupConfig } from '@purplet/shared-config/rollup';
+import url from '@rollup/plugin-url';
 
 export default createRollupConfig({
   input: {
@@ -8,4 +9,11 @@ export default createRollupConfig({
     types: 'src/types.ts',
     env: 'src/env.ts',
   },
+  plugins: [
+    url({
+      limit: 0,
+      include: /\bentrypoint.ts$/,
+      fileName: '[name][extname]',
+    }),
+  ],
 });

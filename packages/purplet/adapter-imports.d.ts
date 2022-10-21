@@ -20,3 +20,8 @@ declare module '$$adapter' {
 
   export type GatewayBotOptions = import('./src/lib/GatewayBot').GatewayBotOptions;
 }
+
+declare module '*entrypoint.ts' {
+  const data: string;
+  export default data;
+}

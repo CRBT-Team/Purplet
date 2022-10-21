@@ -1,5 +1,22 @@
 // @ts-nocheck This file messes with lots of globals and basically every line is a type error.
 
+// Disable node.js warnings
+if (typeof process !== 'undefined' && !process.isBun) {
+  const originalEmit = process.emit;
+  process.emit = function (name, data, ...args) {
+    if (
+      name === `warning` &&
+      typeof data === `object` &&
+      data.name === `ExperimentalWarning`
+      //if you want to only stop certain messages, test for the message here:
+      //&& data.message.includes(`Fetch API`)
+    ) {
+      return false;
+    }
+    return originalEmit.apply(process, [name, data, ...args]);
+  };
+}
+
 // Blob is not global in node as of v18
 if (typeof Blob === 'undefined') {
   const { Blob } = await import('node:buffer');

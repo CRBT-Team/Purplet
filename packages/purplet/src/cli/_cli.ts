@@ -20,9 +20,14 @@ interface CLIProgram {
 
 async function start(cmd: CLIProgram) {
   injectLogger();
+
+  if ((process as any).isBun) {
+    new Logger('bun!', { color: 'cyanBright' })('v' + process.versions.bun);
+  }
+
   Logger.warn('⚠️  Purplet v__VERSION__ is beta software! ⚠️');
   Logger.warn('Report issues to https://github.com/CRBT-Team/purplet/issues');
-  Logger.debug(`purplet v__VERSION__`);
+  // Logger.debug(`purplet v__VERSION__`);
 
   try {
     await cmd.start();

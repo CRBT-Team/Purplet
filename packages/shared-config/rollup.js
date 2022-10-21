@@ -10,7 +10,7 @@ import replace from '@rollup/plugin-replace';
 import path from 'path';
 import { readJSONSync } from '@paperdave/utils';
 
-export function createRollupConfig({ input, cli = false, pureNodeModules = true }) {
+export function createRollupConfig({ input, cli = false, plugins = [] }) {
   const sourceRoot = path.resolve('.');
   const repoRoot = path.resolve('../');
   const outputRoot = path.resolve('./dist');
@@ -95,8 +95,9 @@ export function createRollupConfig({ input, cli = false, pureNodeModules = true 
         include: cli ? 'dist/index.js' : undefined,
       }),
       external(),
-      dtsPoint(),
       del({ targets: 'dist/**/*' }),
+      dtsPoint(),
+      ...plugins,
     ],
   };
 }

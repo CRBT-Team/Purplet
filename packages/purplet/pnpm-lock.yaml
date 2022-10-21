@@ -3,7 +3,6 @@ lockfileVersion: 5.4
 specifiers:
   '@paperdave/logger': ^2.0.6
   '@paperdave/utils': 1.4.1
-  '@purplet/builders': workspace:*
   '@purplet/gateway': workspace:*
   '@purplet/polyfill': workspace:1.1.0
   '@purplet/rest': workspace:*
@@ -13,6 +12,7 @@ specifiers:
   '@rollup/plugin-alias': ^4.0.0
   '@rollup/plugin-commonjs': ^23.0.1
   '@rollup/plugin-node-resolve': ^15.0.0
+  '@rollup/plugin-url': ^8.0.0
   '@types/dedent': ^0.7.0
   '@types/prompts': ^2.0.14
   '@types/yargs': ^17.0.11
@@ -37,7 +37,6 @@ specifiers:
 dependencies:
   '@paperdave/logger': 2.2.4
   '@paperdave/utils': 1.4.1
-  '@purplet/builders': link:../builders
   '@purplet/gateway': link:../gateway
   '@purplet/polyfill': link:../polyfill
   '@purplet/rest': link:../rest
@@ -68,6 +67,7 @@ optionalDependencies:
 
 devDependencies:
   '@purplet/shared-config': link:../shared-config
+  '@rollup/plugin-url': 8.0.0_rollup@3.2.3
   '@types/dedent': 0.7.0
   '@types/prompts': 2.0.14
   '@types/yargs': 17.0.11
@@ -167,13 +167,27 @@ packages:
       rollup: 3.2.3
     dev: false
 
+  /@rollup/plugin-url/8.0.0_rollup@3.2.3:
+    resolution: {integrity: sha512-lqTTmhJi3t96J1H7/ILJfCFIODWcAMO70DvshzZQ6HIFNZNU+3atusIcX1Lk52DoTwzFFLXLLASm4sCMyjbMpA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': 4.2.1
+      make-dir: 3.1.0
+      mime: 3.0.0
+      rollup: 3.2.3
+    dev: true
+
   /@rollup/pluginutils/4.2.1:
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
     engines: {node: '>= 8.0.0'}
     dependencies:
       estree-walker: 2.0.2
       picomatch: 2.3.1
-    dev: false
 
   /@rollup/pluginutils/5.0.1_rollup@3.2.3:
     resolution: {integrity: sha512-4HaCVEXXuObvcPUaUlLt4faHYHCeQOOWNj8NKFGaRSrw3ZLD0TWeAFZicV9vXjnE2nkNuaVTfTuwAnjR+6uc9A==}
@@ -829,7 +843,6 @@ packages:
 
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
-    dev: false
 
   /fast-equals/4.0.3:
     resolution: {integrity: sha512-G3BSX9cfKttjr+2o1O22tYMLq0DPluZnYtq1rXumE1SpL/F/SLIfHx08WYQoWSIpeMYf8sRbJ8++71+v6Pnxfg==}
@@ -856,7 +869,6 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /function-bind/1.1.1:
@@ -977,6 +989,19 @@ packages:
       sourcemap-codec: 1.4.8
     dev: false
 
+  /make-dir/3.1.0:
+    resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
+    engines: {node: '>=8'}
+    dependencies:
+      semver: 6.3.0
+    dev: true
+
+  /mime/3.0.0:
+    resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
+    engines: {node: '>=10.0.0'}
+    hasBin: true
+    dev: true
+
   /minimatch/5.1.0:
     resolution: {integrity: sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==}
     engines: {node: '>=10'}
@@ -1027,7 +1052,6 @@ packages:
   /picomatch/2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
-    dev: false
 
   /postcss/8.4.16:
     resolution: {integrity: sha512-ipHE1XBvKzm5xI7hiHCZJCSugxvsdq2mPnsq5+UF+VHCjiBvtDrlxJfMBToWaP9D5XlgNmcFGqoHmUn0EYEaRQ==}
@@ -1100,7 +1124,11 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
-    dev: false
+
+  /semver/6.3.0:
+    resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
+    hasBin: true
+    dev: true
 
   /slash/4.0.0:
     resolution: {integrity: sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==}
