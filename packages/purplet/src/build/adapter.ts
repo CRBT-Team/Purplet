@@ -1,6 +1,6 @@
 import type { LogFunction } from '@paperdave/logger';
-import type { Awaitable } from '@paperdave/utils';
-import type { InputOptions, InputOptionsWithPlugins, OutputOptions } from 'rollup';
+import type { Awaitable, Immutable } from '@paperdave/utils';
+import type { InputOptionsWithPlugins, OutputOptions, Plugin } from 'rollup';
 import type { ResolvedConfig } from '../config/types';
 
 export interface PurpletRollupOptions extends InputOptionsWithPlugins {
@@ -8,15 +8,28 @@ export interface PurpletRollupOptions extends InputOptionsWithPlugins {
   output?: OutputOptions | OutputOptions[];
 }
 
-export interface AdapterData {
+export interface Adapter {
   name: string;
   version?: string;
   input: string;
-  rollupConfig?(defaultConfig: PurpletRollupOptions): Awaitable<InputOptions | void>;
-  adapt(builder: BuildAPI): Awaitable<void>;
+  /** JSON data available via `import '$$options'` */
+  options?: any;
+
+  config?(event: RollupConfigEvent): Awaitable<void>;
+  adapt(event: AdaptEvent): Awaitable<void>;
 }
 
-export interface BuildAPI {
+export interface RollupConfigEvent {
+  config: Immutable<ResolvedConfig>;
+  rollup: PurpletRollupOptions;
+
+  addRollupPlugin(plugin: Plugin): void;
+  addExternal(id: string): void;
+}
+
+export interface AdaptEvent {
+  config: Immutable<ResolvedConfig>;
+
   log: LogFunction;
   debug: LogFunction;
 
@@ -29,5 +42,3 @@ export interface BuildAPI {
 
   writeRollup(distDir?: string): Promise<void>;
 }
-
-export type Adapter = (config: ResolvedConfig) => Awaitable<AdapterData>;

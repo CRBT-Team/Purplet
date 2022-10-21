@@ -2,11 +2,12 @@ import commonjs from '@rollup/plugin-commonjs';
 import { Logger } from '@paperdave/logger';
 import { Plugin, rollup, RollupError, VERSION as ROLLUP_VERSION } from 'rollup';
 import entrypoint from './builtin-entrypoint.ts';
-import type { AdapterData, PurpletRollupOptions } from './adapter';
+import type { Adapter, PurpletRollupOptions } from './adapter';
 import { pluginAdapterAPI } from './rollup-plugin-purplet-adapter-api';
 import { pluginConfig } from './rollup-plugin-purplet-config';
 import { pluginEntrypoints } from './rollup-plugin-purplet-entry';
 import { pluginFeatures } from './rollup-plugin-purplet-features';
+import { pluginOptions } from './rollup-plugin-purplet-options';
 import type { ResolvedConfig } from '../config/types';
 import type { FeatureScan } from '../utils/build-phase-1';
 import { purpletSourceCode } from '../utils/fs';
@@ -16,7 +17,7 @@ const builtInEntrypoint = `${purpletSourceCode}/${entrypoint}`;
 export interface Phase2Options {
   config: ResolvedConfig;
   sharedRollupPlugins: Plugin[];
-  adapter: AdapterData;
+  adapter: Adapter;
   featureScan: FeatureScan;
 }
 
@@ -40,9 +41,11 @@ export async function buildPhase2({
       pluginConfig(config),
       pluginFeatures({ config, featureScan }),
       pluginAdapterAPI(),
+      adapter.options !== undefined && pluginOptions(adapter.options),
+
       ...sharedRollupPlugins,
       commonjs(),
-    ],
+    ].filter(Boolean) as Plugin[],
     output: {
       format: 'esm',
       sourcemap: true,
@@ -53,8 +56,7 @@ export async function buildPhase2({
     },
   };
 
-  rollupConfig =
-    ((await adapter.rollupConfig?.(rollupConfig)) as PurpletRollupOptions) ?? rollupConfig;
+  rollupConfig = ((await adapter.config?.(rollupConfig)) as PurpletRollupOptions) ?? rollupConfig;
 
   if (process.env.DEBUG_ROLLUP_CONFIG) {
     log('merged rollup config:');

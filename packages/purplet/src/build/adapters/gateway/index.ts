@@ -5,14 +5,15 @@ import { purpletSourceCode } from '../../../utils/fs';
 
 const input = `${purpletSourceCode}/${entrypoint}`;
 
-export const gateway: Adapter = () => ({
-  name: 'gateway',
-  input,
-  rollupConfig(config) {
-    // add the external plugin:
-    config.plugins.push(pluginPurpletExternals());
-  },
-  async adapt(builder) {
-    await builder.writeRollup();
-  },
-});
+export function gateway(): Adapter {
+  return {
+    name: 'gateway',
+    input,
+    config(e) {
+      e.addRollupPlugin(pluginPurpletExternals());
+    },
+    async adapt(builder) {
+      await builder.writeRollup();
+    },
+  } as Adapter;
+}

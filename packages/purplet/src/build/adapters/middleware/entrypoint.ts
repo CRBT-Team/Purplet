@@ -2,11 +2,12 @@
 
 /// <reference path="../../../../adapter-imports.d.ts" />
 
+import opts from '$$options';
 import { handleInteraction, setGlobalEnv, setRestOptions } from '$$adapter';
 import type { Handler } from 'express';
 import { errorNoPublicKey, errorNoToken, isDirectlyRun, Spinner } from 'purplet/internal';
 import { sign } from 'tweetnacl';
-import type { BotMiddlewareOptions } from './types';
+import type { BotMiddlewareOptions } from './types.entrypoint';
 
 setGlobalEnv({ env: process.env });
 
@@ -78,7 +79,7 @@ if (isDirectlyRun(import.meta.url)) {
   const spinner = new Spinner({ text: 'Starting server' });
   const app = express();
   app.use(botMiddleware({ token, publicKey }));
-  app.listen(process.env.PORT ?? 3000, () => {
+  app.listen(process.env.PORT ?? opts.port, () => {
     spinner.success('Server started');
   });
 }
