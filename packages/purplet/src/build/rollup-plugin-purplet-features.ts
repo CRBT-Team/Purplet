@@ -21,6 +21,7 @@ function escapeJSIdent(str: string) {
     .replace(/[^a-z0-9_]/gi, x => `$${x.charCodeAt(0).toString(16)}`);
 }
 
+/** Provides `$$features` */
 export function pluginFeatureArray({ config, featureScan }: FeatureArrayPluginOptions): Plugin {
   const hookIDs = Object.keys(featureScan);
   const featureScanValues = Object.values(featureScan);
@@ -137,6 +138,6 @@ export function pluginFeatureArray({ config, featureScan }: FeatureArrayPluginOp
         },
       },
     ]),
-    name: 'purplet/plugin-feature',
+    name: 'plugin-purplet-features',
   };
 }

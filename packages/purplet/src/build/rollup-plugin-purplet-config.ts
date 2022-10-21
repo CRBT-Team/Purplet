@@ -1,10 +1,8 @@
-import type { Plugin } from "rollup";
-import { ResolvedConfig, RUNTIME_CONFIG_KEYS } from "../config/types";
-import dynamicVirtual from "./rollup-plugin-dynamic-virtual";
+import type { Plugin } from 'rollup';
+import dynamicVirtual from './rollup-plugin-dynamic-virtual';
+import { ResolvedConfig, RUNTIME_CONFIG_KEYS } from '../config/types';
 
-/**
- * Provides `$build/config`
- */
+/** Provides `$$config` */
 export function pluginConfig(config: ResolvedConfig): Plugin {
   const runtimeConfig = {} as any;
   for (const key of RUNTIME_CONFIG_KEYS) {
@@ -15,9 +13,9 @@ export function pluginConfig(config: ResolvedConfig): Plugin {
     ...dynamicVirtual([
       {
         match: /^\$\$config$/,
-        load: () => `export default ${JSON.stringify(runtimeConfig)}`
+        load: () => `export default ${JSON.stringify(runtimeConfig)}`,
       },
     ]),
-    name: "purplet/plugin-config",
+    name: 'plugin-purplet-config',
   };
 }

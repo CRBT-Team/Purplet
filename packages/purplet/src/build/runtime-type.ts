@@ -3,13 +3,13 @@ import type { Awaitable } from '@paperdave/utils';
 import type { InputOption, InputOptions, InputOptionsWithPlugins } from 'rollup';
 import type { ResolvedConfig } from '../config/types';
 
-export interface RuntimeData {
+export interface AdapterData {
   input: InputOption;
   onRollupConfig?(defaultConfig: InputOptionsWithPlugins): Awaitable<InputOptions | void>;
-  onBuild(builder: RuntimeBuildAPI): Awaitable<void>;
+  onBuild(builder: AdapterAPI): Awaitable<void>;
 }
 
-export interface RuntimeBuildAPI {
+export interface AdapterAPI {
   log: LogFunction;
   rimraf(dir: string): void;
   mkdirp(dir: string): void;
@@ -21,4 +21,4 @@ export interface RuntimeBuildAPI {
   writeRollup(distDir: string): Promise<void>;
 }
 
-export type Runtime = (config: ResolvedConfig) => Awaitable<RuntimeData>;
+export type Adapter = (config: ResolvedConfig) => Awaitable<AdapterData>;
