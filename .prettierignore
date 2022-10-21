@@ -2,7 +2,7 @@ node_modules
 dist
 .purplet
 LICENSE
-build
+sites/*/build
 .docusaurus
 *.generated.*
 .vscode/settings.json

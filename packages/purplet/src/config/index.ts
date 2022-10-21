@@ -26,7 +26,7 @@ export async function loadConfig(root: string) {
     );
   }
 
-  let config: Config;
+  let configPath: string;
 
   if (matched[0].endsWith('.ts')) {
     const pkg = JSON.parse(await readFile(path.resolve(root, 'package.json'), 'utf8'));
@@ -44,12 +44,14 @@ export async function loadConfig(root: string) {
         ...Object.keys(pkg.optionalDependencies ?? {}),
       ],
     });
-    config = (await import(`file:///${root}/.purplet/transpiled-config.js`)).default;
+    configPath = `file:///${root}/.purplet/transpiled-config.js`;
   } else {
-    config = (await import(`file:///${root}/${matched[0]}`)).default;
+    configPath = `file:///${root}/${matched[0]}`;
   }
 
   try {
+    const config: Config = (await import(configPath)).default;
+
     setValidatorBasePath(root);
 
     const resolved = resolveConfig(root, config);
@@ -57,11 +59,7 @@ export async function loadConfig(root: string) {
 
     return resolved;
   } catch (error) {
-    if (error instanceof Error) {
-      Logger.error('Error while loading configuration:\n  ' + error.message.replace(/\n/g, '\n  '));
-    } else {
-      Logger.error('Error while loading configuration: ', error);
-    }
-    throw new Error('');
+    Logger.error('Error while loading configuration.');
+    throw error;
   }
 }

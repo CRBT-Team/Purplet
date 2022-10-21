@@ -1,10 +1,10 @@
-import type { OptionBuilder, OptionBuilderToPurpletResolvedObject } from '@purplet/builders';
-import { getOptionBuilderAutocompleteHandlers } from '@purplet/builders';
 import type { LocalizationMap } from 'purplet/types';
 import { ApplicationCommandType } from 'purplet/types';
 import { $appCommand } from './command';
 import { $applicationCommands, $interaction } from '../lib/hook-core';
 import { $merge } from '../lib/hook-merge';
+import type { OptionBuilder, OptionBuilderToPurpletResolvedObject } from '../lib/OptionBuilder';
+import { getOptionBuilderAutocompleteHandlers } from '../lib/OptionBuilder';
 import type { SlashCommandInteraction } from '../structures';
 import { AutocompleteInteraction } from '../structures';
 import { camelChoiceToSnake } from '../utils/case';

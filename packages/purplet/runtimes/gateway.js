@@ -6,7 +6,7 @@ import { GatewayBot, isDirectlyRun } from 'purplet/internal';
 injectLogger();
 
 const bot = new GatewayBot({
-  token: process.env.DISCORD_BOT_TOKEN,
+  token: process.env.DISCORD_TOKEN,
 });
 bot.patchFeatures({ add: features });
 

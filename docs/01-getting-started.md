@@ -19,7 +19,7 @@ The default project is a simple bot with a "Hello world" command and an activity
 To develop your bot, you first need a Discord Bot Token, obtained from the [Discord Developer Portal](https://discord.com/developers/applications), placed into a `.env` file:
 
 ```md
-DISCORD_BOT_TOKEN=<token>
+DISCORD_TOKEN=<token>
 ```
 
 :::caution

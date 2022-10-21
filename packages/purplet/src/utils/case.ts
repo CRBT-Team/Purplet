@@ -1,4 +1,3 @@
-import type { Choice } from '@purplet/builders';
 import type { APIApplicationCommandOptionChoice } from 'purplet/types';
 
 export function camelChoiceToSnake<T>(choice: Choice<T>): APIApplicationCommandOptionChoice<T> {

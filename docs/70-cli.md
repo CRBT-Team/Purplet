@@ -6,7 +6,7 @@ Each one of the commands is explained below, as well as the options that may be 
 
 ## `dev`
 
-Starts Purplet in development mode. The development mode uses Vite to allow for fast hot-reloading. To use it, you must set the `DISCORD_BOT_TOKEN` environment variable must be set to the token of a bot that is in few guilds, only intended for testing. Reloads will be slower with bots in over 5 guilds, and do not support bots in over 75 guilds.
+Starts Purplet in development mode. The development mode uses Vite to allow for fast hot-reloading. To use it, you must set the `DISCORD_TOKEN` environment variable must be set to the token of a bot that is in few guilds, only intended for testing. Reloads will be slower with bots in over 5 guilds, and do not support bots in over 75 guilds.
 
 ## `build`
 

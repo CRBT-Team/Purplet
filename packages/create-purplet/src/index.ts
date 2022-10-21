@@ -154,7 +154,7 @@ console.log(dedent`
   )}.
   Your ${c.cyanBright('.env')} file should look something like this:
 
-    ${c.cyanBright('DISCORD_BOT_TOKEN')}=${c.grey('<your bot token>')}
+    ${c.cyanBright('DISCORD_TOKEN')}=${c.grey('<your bot token>')}
 
   Once that is setup, you can start developing your bot by running:
 

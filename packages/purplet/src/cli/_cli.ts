@@ -24,7 +24,12 @@ async function start(cmd: CLIProgram) {
   Logger.warn('Report issues to https://github.com/CRBT-Team/purplet/issues');
   Logger.debug(`purplet v__VERSION__`);
 
-  await cmd.start();
+  try {
+    await cmd.start();
+  } catch (error) {
+    Logger.error(error as any);
+    process.exit(1);
+  }
 
   let stopping = false;
   process.on('SIGINT', async () => {
@@ -75,7 +80,7 @@ cli.command(
   args => start(new DevMode(args))
 );
 longDescriptions['dev'] = dedent`
-  Start purplet in development mode. Development mode uses vite to give you fast hot-reloading. The $DISCORD_BOT_TOKEN variable must be set to a bot that is in a few guilds, only intended for testing. Reloads will be slower with bots in over 5 guilds, and does not support bots in over 75 guilds.
+  Start purplet in development mode. Development mode uses vite to give you fast hot-reloading. The $DISCORD_TOKEN variable must be set to a bot that is in a few guilds, only intended for testing. Reloads will be slower with bots in over 5 guilds, and does not support bots in over 75 guilds.
 `;
 cli.command(
   'build',

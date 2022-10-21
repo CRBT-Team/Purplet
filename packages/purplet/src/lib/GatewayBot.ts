@@ -33,7 +33,7 @@ import type { InteractionResponse } from '../structures';
 import { ApplicationFlagsBitfield, createInteraction, User } from '../structures';
 import type { Cleanup } from '../utils/types';
 
-interface GatewayBotOptions {
+export interface GatewayBotOptions {
   /** Bot Token. */
   token: string;
   /** Initial list of features that this bot has. */
@@ -71,7 +71,7 @@ export interface AllowedGuildRules {
 
 export type CreateGatewayClientResult = [Gateway, GatewayReadyDispatchData];
 
-export async function createGatewayClient(identify: GatewayOptions) {
+async function createGatewayClient(identify: GatewayOptions) {
   const [promise, resolve, reject] = deferred<CreateGatewayClientResult>();
 
   const client = new Gateway(identify);

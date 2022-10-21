@@ -13,9 +13,8 @@ const config: ResolvedConfig = {
     repliedUser: true,
     parse: ['users'],
   },
-  build: {
-    runtimes: ['auto'],
-  },
+  build: {},
+  injectLogger: true,
   lang: 'en-US',
   paths: {
     build: 'dist',
