@@ -122,7 +122,7 @@ export function createBitfieldClass(name, flagObject) {
           }
           return toValue([data2]);
         })
-        .reduce((a, b) => a | b);
+        .reduce((a, b) => a | b, 0);
     }
     static resolve(...data) {
       return new Class(Class.resolveValue(...data));

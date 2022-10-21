@@ -21,7 +21,7 @@ export async function deploy(options: DeployOptions) {
   Logger.info(`Preparing to ${options.delete ? 'delete' : 'deploy'} commands.`);
 
   const config = await loadConfig(options.root);
-  const token = env.DISCORD_BOT_TOKEN;
+  const token = env.DISCORD_TOKEN;
 
   if (!token) {
     throw errorNoToken();

@@ -9,9 +9,10 @@ import { Logger, Spinner } from '@paperdave/logger';
 import { asyncIterToArray, pathExists, walk } from '@paperdave/utils';
 import { spawnSync } from 'child_process';
 import { rollup, VERSION as rollupVersion } from 'rollup';
+import { pluginFeatureArray } from '../build/rollup-plugin-features';
+import { pluginConfig } from '../build/rollup-plugin-purplet-config';
 import { loadConfig } from '../config';
 import type { FeatureScan } from '../internal';
-import { rollupPluginFeatureArray } from '../lib/rollup-plugin-feature-array';
 import { isSourceFile } from '../utils/filetypes';
 import { purpletSourceCode } from '../utils/fs';
 
@@ -42,7 +43,9 @@ export async function buildGateway(options: BuildOptions) {
     resolve({
       extensions: ['.mjs', '.js', '.ts', '.json'],
     }),
-    esbuild(),
+    esbuild({
+      target: 'esnext',
+    }),
     alias({
       entries: aliasEntries,
     }),
@@ -116,9 +119,7 @@ export async function buildGateway(options: BuildOptions) {
   // Second rollup build
   Logger.info('Running phase 2 build');
   const phase2Rollup = await rollup({
-    input: '/code/CRBT-Team/Purplet/packages/purplet/runtimes/gateway.js',
-    // external: id =>
-
+    input: '/code/CRBT-Team/Purplet/packages/purplet/src/runtime/gateway/entrypoint.js',
     plugins: [
       //
       {
@@ -153,7 +154,8 @@ export async function buildGateway(options: BuildOptions) {
           return null;
         },
       },
-      rollupPluginFeatureArray({ config, featureScan }),
+      pluginConfig(config),
+      pluginFeatureArray({ config, featureScan }),
       commonjs({ include: [/discord-api-types/] }),
       ...mainPlugins,
     ],

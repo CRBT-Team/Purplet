@@ -1,6 +1,6 @@
 import type { Gateway } from '@purplet/gateway';
 import type { Rest } from '@purplet/rest';
-import type { ResolvedConfig } from '../config/types';
+import type { RuntimeConfig } from '../config/types';
 import type { ApplicationFlagsBitfield, User } from '../structures';
 
 export interface GlobalEnv {
@@ -9,7 +9,7 @@ export interface GlobalEnv {
   env: any;
   gateway: Gateway;
   rest: Rest;
-  config: ResolvedConfig;
+  config: RuntimeConfig;
 }
 
 const globalEnv = {
@@ -18,8 +18,8 @@ const globalEnv = {
 
 export let application = globalEnv.application;
 export let botUser = globalEnv.botUser;
-export let config = globalEnv.config;
-export let env = globalEnv.env;
+export let config = globalEnv.config; // set internally
+export let env = globalEnv.env; // set internally
 export let gateway = globalEnv.gateway;
 export let rest = globalEnv.rest;
 

@@ -65,7 +65,7 @@ export class DevMode {
       config: this.config,
     });
 
-    const token = env.DISCORD_BOT_TOKEN;
+    const token = env.DISCORD_TOKEN;
 
     if (!token) {
       throw errorNoToken();

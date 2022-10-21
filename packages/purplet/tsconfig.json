@@ -6,8 +6,14 @@
     "declaration": true,
     "declarationDir": "dist",
     "emitDeclarationOnly": true,
-    "types": ["@purplet/shared-config"]
+    "types": ["@purplet/shared-config"],
+    "paths": {
+      "purplet": ["./src/index.ts"],
+      "purplet/internal": ["./src/internal.ts"],
+      "purplet/env": ["./src/env.ts"],
+      "purplet/types": ["./src/types.ts"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.js"],
-  "exclude": ["**/node_modules", "**/dist"]
+  "exclude": ["**/node_modules", "**/dist", "runtime-imports.d.ts"]
 }

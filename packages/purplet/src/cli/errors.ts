@@ -12,11 +12,11 @@ const devPortalLink = /*@__PURE__*/ magenta('https://discordapp.com/developers/a
 
 export function errorNoToken() {
   return new CLIError(
-    'Missing DISCORD_BOT_TOKEN environment variable!',
+    'Missing DISCORD_TOKEN environment variable!',
     dedent`
       Please create an ${cyan('.env')} file with the following contents:
       
-        ${chalk.cyanBright('DISCORD_BOT_TOKEN')}=${chalk.grey('<your bot token>')}
+        ${chalk.cyanBright('DISCORD_TOKEN')}=${chalk.grey('<your bot token>')}
       
       You can create or reset your bot token at ${devPortalLink}
     `

@@ -8,3 +8,4 @@ export * from './utils/arraybuffer';
 export * from './utils/build-phase-1';
 export * from './utils/feature';
 export * from './utils/is-directly-run';
+export * from './cli/errors';

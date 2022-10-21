@@ -5,8 +5,8 @@ import type { ResolvedConfig } from '../config/types';
 
 export interface RuntimeData {
   input: InputOption;
-  rollupConfig?(defaultConfig: InputOptionsWithPlugins): Awaitable<InputOptions | void>;
-  writeBundle(builder: RuntimeBuildAPI): Awaitable<void>;
+  onRollupConfig?(defaultConfig: InputOptionsWithPlugins): Awaitable<InputOptions | void>;
+  onBuild(builder: RuntimeBuildAPI): Awaitable<void>;
 }
 
 export interface RuntimeBuildAPI {

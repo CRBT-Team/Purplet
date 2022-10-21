@@ -38,13 +38,20 @@ export function markFeatureInternal(id: string, feat: UnmarkedFeature<any>): Fea
 }
 
 export function markFeature(
-  feat: UnmarkedFeature<any>,
   filename: string,
-  exportId: string
+  exportId: string,
+  feat: UnmarkedFeature<any>
 ): Feature {
   feat.filename = filename;
   feat.exportId = exportId;
   const filenameWithoutExtension = filename.replace(/\.[^.]+$/, '');
   feat.featureId = `${filenameWithoutExtension}#${exportId}`;
+  if (feat[FEATURE].hook.merge) {
+    (feat[FEATURE].data as Feature[]).forEach((subFeature, i) => {
+      subFeature.filename = filename;
+      subFeature.exportId = `${exportId}[${i}]`;
+      subFeature.featureId = `${feat.featureId}[${i}]`;
+    });
+  }
   return feat;
 }

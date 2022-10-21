@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
-import interactionFeatures from 'purplet/features/interaction';
+/// <reference path="../src/build/env.d.ts" />
+import config from '$$config';
+import features from '$$features';
 
-// the goal of a "runtime" as i am calling it, is code that takes purplet features and
-// makes it into a usable bot program. this runtime just prints out the list of interaction
-// features. a real one could for example, start an express server.
-
-console.log('interaction features: ', interactionFeatures);
+console.log('runtime config: ', config);
+console.log('features: ', features);
