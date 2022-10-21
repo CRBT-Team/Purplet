@@ -52,7 +52,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
     if (!this.options.token) {
       throw new Error('Empty token passed to new Gateway()');
     }
-    if (!this.options.intents) {
+    if (this.options.intents === undefined) {
       throw new Error('Empty intents passed to new Gateway()');
     }
     this.connect();

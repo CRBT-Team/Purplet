@@ -1,6 +1,6 @@
-import type { Runtime } from '../../build/runtime-type';
+import type { Adapter } from '../../build/runtime-type';
 
-export const runtime: Runtime = () => ({
+export const runtime: Adapter = () => ({
   input: '/code/CRBT-Team/Purplet/packages/purplet/src/runtime/gateway/index.ts',
   async onBuild(builder) {
     // The runtime builder

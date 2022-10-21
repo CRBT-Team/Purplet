@@ -2,7 +2,6 @@ import { Logger } from '@paperdave/logger';
 import { asyncMap, deferred } from '@paperdave/utils';
 import type { GatewayOptions } from '@purplet/gateway';
 import { Gateway, GatewayExitError } from '@purplet/gateway';
-import { Rest } from '@purplet/rest';
 import { deepEqual } from 'fast-equals';
 import type {
   APIGuild,
@@ -13,7 +12,7 @@ import type {
   RESTPutAPIApplicationCommandsJSONBody,
 } from 'purplet/types';
 import { GatewayDispatchEvents } from 'purplet/types';
-import { setGlobalEnv } from './env';
+import { rest, setGlobalEnv } from './env';
 import { FeatureLoader } from './FeatureLoader';
 import type { Feature } from './hook';
 import {
@@ -52,11 +51,6 @@ export interface GatewayBotOptions {
   guildRules?: AllowedGuildRules;
   /** Bot sharding information. */
   shard?: [shard_id: number, shard_count: number];
-  /**
-   * If set to false, this will not mutate global variables, though it may not be possible for
-   * features to access these variables. Defaults to true.
-   */
-  mutateGlobalEnv?: boolean;
 }
 
 export interface PatchFeatureInput {
@@ -105,7 +99,6 @@ async function createGatewayClient(identify: GatewayOptions) {
 export class GatewayBot {
   features = new FeatureLoader();
   gateway: Gateway | null = null;
-  rest: Rest;
 
   #application?: { id: string; flags: ApplicationFlagsBitfield };
   #user?: User;
@@ -147,15 +140,6 @@ export class GatewayBot {
         ),
       ]);
     }
-    if (this.options.mutateGlobalEnv !== false) {
-      this.options.mutateGlobalEnv = true;
-    }
-    this.rest = new Rest({ token: this.options.token });
-    if (this.options.mutateGlobalEnv) {
-      setGlobalEnv({
-        rest: this.rest,
-      });
-    }
   }
 
   async start() {
@@ -195,13 +179,11 @@ export class GatewayBot {
       flags: new ApplicationFlagsBitfield(readyData.application.flags),
     };
 
-    if (this.options.mutateGlobalEnv) {
-      setGlobalEnv({
-        application: this.#application,
-        botUser: this.#user,
-        gateway,
-      });
-    }
+    setGlobalEnv({
+      application: this.#application,
+      botUser: this.#user,
+      gateway,
+    });
 
     // Dispatch Hooks
     this.gateway.on('*', (payload: GatewayDispatchPayload) => {
@@ -211,7 +193,7 @@ export class GatewayBot {
     // Interaction hooks
     this.gateway.on(GatewayDispatchEvents.InteractionCreate, i => {
       const responseHandler = async (response: InteractionResponse) => {
-        await this.rest.interactionResponse.createInteractionResponse({
+        await rest.interactionResponse.createInteractionResponse({
           interactionId: i.id,
           interactionToken: i.token,
           body: {
@@ -252,7 +234,7 @@ export class GatewayBot {
 
     this.#cachedCommandData = commands;
 
-    const guildList = await this.rest.user
+    const guildList = await rest.user
       .getCurrentUserGuilds()
       .then(guilds => guilds.filter(x => this.isGuildAllowed(x.id)));
 
@@ -274,7 +256,7 @@ export class GatewayBot {
 
   private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
     try {
-      await this.rest.applicationCommand.bulkOverwriteGuildApplicationCommands({
+      await rest.applicationCommand.bulkOverwriteGuildApplicationCommands({
         guildId: guild.id,
         applicationId: this.id,
         body: this.#cachedCommandData!,

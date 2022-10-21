@@ -13,9 +13,9 @@ declare module '$$features/*' {
   export default features;
 }
 
-declare module '$$runtime' {
+declare module '$$adapter' {
   const data: typeof import('./src/lib/GatewayBot') &
-    Pick<typeof import('./src/lib/env'), 'setGlobalEnv'>;
+    Pick<typeof import('./src/lib/env'), 'setGlobalEnv' | 'setRestOptions'>;
   export = data;
 
   export type GatewayBotOptions = import('./src/lib/GatewayBot').GatewayBotOptions;

@@ -1,5 +1,6 @@
 import type { Gateway } from '@purplet/gateway';
-import type { Rest } from '@purplet/rest';
+import type { RestOptions } from '@purplet/rest';
+import { Rest } from '@purplet/rest';
 import type { RuntimeConfig } from '../config/types';
 import type { ApplicationFlagsBitfield, User } from '../structures';
 
@@ -23,7 +24,6 @@ export let env = globalEnv.env; // set internally
 export let gateway = globalEnv.gateway;
 export let rest = globalEnv.rest;
 
-/** @internal */
 export function setGlobalEnv(newEnv: Partial<GlobalEnv>): void {
   Object.assign(globalEnv, newEnv);
 
@@ -33,4 +33,8 @@ export function setGlobalEnv(newEnv: Partial<GlobalEnv>): void {
   env = globalEnv.env;
   gateway = globalEnv.gateway;
   rest = globalEnv.rest;
+}
+
+export function setRestOptions(opts: RestOptions) {
+  setGlobalEnv({ rest: new Rest(opts) });
 }

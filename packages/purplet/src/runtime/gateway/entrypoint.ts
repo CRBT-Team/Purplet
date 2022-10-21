@@ -1,9 +1,9 @@
-// Runtime entrypoint for Purplet + Node.js/Bun.
-// This file also serves an example on how to write runtime entrypoints.
+// Purplet adapter entrypoint for Purplet + Node.js/Bun.
+// This file also serves an example on how to write purplet entrypoints.
 
 // Due to a handful of custom build plugins and extra code, we have a handful of special imports.
 // The following reference comment includes the typedefs.
-/// <reference path="../../../runtime-imports.d.ts" />
+/// <reference path="../../../adapter-imports.d.ts" />
 
 // Before this file loads at all, `packages/purplet/src/build/builtin-entrypoint.ts` is imported,
 // preparing `purplet/env`'s global state, as well as the logger and error handler. Aside from
@@ -16,10 +16,8 @@ import features from '$$features';
 //
 // To modify the values in `purplet/env`, runtimes are given a `setGlobalEnv` function. This
 // import also contains our Gateway class.
-import type { GatewayBotOptions } from '$$runtime';
-import { GatewayBot, setGlobalEnv } from '$$runtime';
-//
-import { Rest } from '@purplet/rest';
+import type { GatewayBotOptions } from '$$adapter';
+import { GatewayBot, setGlobalEnv, setRestOptions } from '$$adapter';
 // We have a number of internal APIs. These are not documented and are subject to change. Sorry.
 import { errorNoToken, isDirectlyRun } from 'purplet/internal';
 
@@ -36,10 +34,8 @@ if (!token) {
   throw errorNoToken();
 }
 
-// We need to set a global rest client, which is as easy as passing with the token.
-setGlobalEnv({
-  rest: new Rest({ token }),
-});
+// We need to set the global rest client token. You can pass other options to the rest client here.
+setRestOptions({ token });
 
 // Development mode and production mode share the same class, but here we extend it to add
 // the token as a default variable.

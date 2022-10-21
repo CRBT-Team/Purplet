@@ -1,4 +1,4 @@
-/// <reference path="../../runtime-imports.d.ts" />
+/// <reference path="../../adapter-imports.d.ts" />
 
 import '@purplet/polyfill';
 import config from '$$config';

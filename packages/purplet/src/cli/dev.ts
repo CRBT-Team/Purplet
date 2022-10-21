@@ -12,7 +12,7 @@ import { writeTSConfig } from '../config/tsconfig';
 import type { ResolvedConfig } from '../config/types';
 import { createViteConfig } from '../config/vite';
 import { moduleToFeatureArray } from '../internal';
-import { env, setGlobalEnv } from '../lib/env';
+import { env, setGlobalEnv, setRestOptions } from '../lib/env';
 import { GatewayBot } from '../lib/GatewayBot';
 import type { Feature } from '../lib/hook';
 import { isSourceFile } from '../utils/filetypes';
@@ -77,6 +77,8 @@ export class DevMode {
     if (include && exclude) {
       throw errorNoIncludeAndExcludeGuilds();
     }
+
+    setRestOptions({ token });
 
     this.bot = new GatewayBot({
       token,
