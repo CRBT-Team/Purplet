@@ -12,6 +12,6 @@ export * from './cli/errors';
 export * from '@paperdave/logger';
 
 export async function importPolyfill() {
-  // @ts-expect-error - this module exports nothing, creating a type error here.
-  await import('@purplet/polyfill');
+  // @ts-expect-error - this module exports nothing, creating a ts error here.
+  await import('@purplet/polyfill/src/polyfill.mjs');
 }

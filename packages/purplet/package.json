@@ -42,8 +42,8 @@
     "prepack": "pnpm run build"
   },
   "dependencies": {
-    "@paperdave/logger": "^2.0.6",
-    "@paperdave/utils": "1.4.1",
+    "@paperdave/logger": "^2.3.0",
+    "@paperdave/utils": "1.5.0",
     "@purplet/gateway": "workspace:*",
     "@purplet/polyfill": "workspace:1.1.0",
     "@purplet/rest": "workspace:*",
@@ -58,6 +58,7 @@
     "discord-api-types": "^0.37.14",
     "esbuild": "^0.15.12",
     "fast-equals": "^4.0.3",
+    "form-data-encoder": "^2.0.1",
     "rollup": "^3.2.3",
     "rollup-plugin-all-external": "^1.0.0",
     "rollup-plugin-esbuild": "^4.10.1",
@@ -73,6 +74,7 @@
     "@types/express": "^4.17.14",
     "@types/prompts": "^2.0.14",
     "@types/yargs": "^17.0.11",
+    "export-directory": "^0.1.0",
     "express": "^4.18.2"
   },
   "peerDependencies": {

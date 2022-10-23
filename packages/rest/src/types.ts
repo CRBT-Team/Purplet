@@ -1,13 +1,8 @@
+import type { BlobResolvable } from '@purplet/utils';
+
+export { BlobResolvable };
+
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
-export type FileData =
-  | string
-  | Uint8Array
-  | Blob
-  | ArrayBufferLike
-  | ArrayBufferable
-  | Streamable
-  | Buffer
-  | AsyncIterable<string | Uint8Array | Blob | ArrayBufferLike | Buffer>;
 export type TokenType = 'Bot' | 'Bearer';
 
 export interface ArrayBufferable {
@@ -54,6 +49,6 @@ export interface RequestData {
 
 export interface RawFile {
   name: string;
-  data: FileData;
+  data: BlobResolvable;
   key?: string;
 }
