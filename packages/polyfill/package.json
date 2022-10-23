@@ -19,8 +19,9 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./src/index.js",
-      "require": "./src/index.js"
+      "browser": "./src/browser.mjs",
+      "import": "./src/index.mjs",
+      "require": "./src/index.cjs"
     }
   },
   "main": "./src/index.js",
@@ -35,6 +36,9 @@
     "formdata-node": "^4.3.3",
     "undici": "^5.8.2",
     "ws": "^1.1.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.15.12"
   },
   "publishConfig": {
     "access": "public"

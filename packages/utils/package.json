@@ -37,7 +37,8 @@
     "@paperdave/utils": "^1.4.1",
     "@purplet/shared-config": "workspace:*",
     "dayjs": "^1.11.5",
-    "discord-api-types": "^0.37.14"
+    "discord-api-types": "^0.37.14",
+    "export-directory": "^0.1.0"
   },
   "peerDependencies": {
     "discord-api-types": "^0.37.14"

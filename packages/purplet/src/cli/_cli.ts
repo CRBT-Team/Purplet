@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import '@purplet/polyfill';
+import '@purplet/polyfill/src/polyfill.mjs';
 import chalk from 'chalk';
 import dedent from 'dedent';
 import path from 'path';
