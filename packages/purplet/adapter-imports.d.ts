@@ -25,9 +25,7 @@ declare module '$$adapter' {
 
   export type GatewayBotOptions = import('./src/lib/GatewayBot').GatewayBotOptions;
 
-  export function handleInteraction(
-    i: import('discord-api-types/v10').APIInteraction
-  ): Promise<import('discord-api-types/v10').APIInteractionResponse>;
+  export function handleInteraction(request: Request, publicKey: Uint8Array): Promise<Response>;
 }
 
 declare module '*entrypoint.ts' {
