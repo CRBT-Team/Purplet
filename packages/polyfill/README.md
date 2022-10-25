@@ -10,7 +10,7 @@ Modifies global scope to apply polyfills for Node.js and Bun for Web Standards t
   - `fetch` and `Blob` are patched to support passing `FormData` as a body, with code provided by `form-data-encoder`. (This might break some other uses of `Blob`).
 - `WebSocket` (node as of v19)
   - provided by `ws`
-- `structuredClone` (node <=17, bun as of v2.1)
+- `structuredClone` (node <=17, bun as of v2.1, some browsers)
   - provided by `@ungap/structured-clone`
 - parsing of `.env` files (node)
   - provided by `dotenv`
