@@ -13,13 +13,13 @@ export function polyfill(require) {
     };
   }
 
-  // Blob is not global in node as of v18
+  // Blob is not global in node <=17
   if (typeof Blob === 'undefined') {
     const { Blob } = require('node:buffer');
     globalThis.Blob = Blob;
   }
 
-  // Fetch is not available in node <18
+  // Fetch is not available in node <=17
   if (typeof fetch === 'undefined') {
     const undici = require('undici');
     // Always apply everything here just in case undici and the implementation won't play nice
@@ -30,7 +30,7 @@ export function polyfill(require) {
     globalThis.Headers = undici.Headers;
     globalThis.File = undici.File;
   }
-  // FormData is not available in bun as of 0.2.1
+  // FormData is not available in node <=16 in bun as of 0.2.1
   else if (typeof FormData === 'undefined') {
     const _Blob = globalThis.Blob;
     // Until https://github.com/oven-sh/bun/issues/1337 is resolved, we have to force this.
@@ -63,19 +63,19 @@ export function polyfill(require) {
     };
   }
 
-  // Websocket is not available in any node version as of v18
+  // Websocket is not available in any node version as of v19
   if (typeof WebSocket === 'undefined') {
     const ws = require('ws');
     globalThis.WebSocket = ws.default;
   }
 
-  // structuredClone is not available in node <17 and bun as of 0.2.1
+  // structuredClone is not available in node <=16 and bun as of 0.2.1
   if (typeof structuredClone === 'undefined') {
     const structuredClone = require('@ungap/structured-clone');
     globalThis.structuredClone = structuredClone.default;
   }
 
-  // crypto is not a global variable as of node 18
+  // crypto is not a global variable in node <=18
   if (typeof crypto === 'undefined') {
     const crypto = require('node:crypto');
     globalThis.crypto = crypto.webcrypto;
