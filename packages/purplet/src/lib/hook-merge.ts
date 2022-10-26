@@ -20,3 +20,7 @@ export function $merge<Pass>(
     },
   } as UnmarkedFeature<Pass>;
 }
+
+export function unmerge(mergeHook: any) {
+  return mergeHook[FEATURE].data;
+}

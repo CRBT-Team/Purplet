@@ -76,7 +76,7 @@ export async function runHook<Data, Type extends HookType>(
   }
 
   if (hook.type === 'event') {
-    return await Promise.all(
+    return Promise.all(
       list.map(feature =>
         (feature[FEATURE] as FeatureInternalData<unknown, 'event'>).data.call(feature, extraArg)
       )

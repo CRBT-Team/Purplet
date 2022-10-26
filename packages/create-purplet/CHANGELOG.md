@@ -1,11 +1,17 @@
 # `create-purplet`
 
+## 2.1.0
+
+- Refactored `src/index.ts` into many smaller files, helper functions and whatnot.
+- Changed default directory from `my-bot` to `my-app`
+- Added custom types (in [src/types.ts](./src/types.ts))
+- Prefixed node imports with `node:`
+
 ## 2.0.4-next.0
 
 ### Patch Changes
 
-- update discord invite link to new server
-  ([`67408fd`](https://github.com/CRBT-Team/Purplet/commit/67408fd77295e87d23d15f32c9f20d7e08a31800))
+- update discord invite link to new server ([`67408fd`](https://github.com/CRBT-Team/Purplet/commit/67408fd77295e87d23d15f32c9f20d7e08a31800))
 
 ## 2.0.3
 
@@ -23,4 +29,4 @@
 
 ## 2.0.0
 
-Crete CLI for Purplet v2
+Create CLI for Purplet v2

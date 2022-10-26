@@ -1,13 +1,13 @@
 import { rollup } from 'rollup';
-import { copyFile, mkdir, readdir, stat } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
+import { copyFile, mkdir, readdir, stat } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 
 process.env.NODE_ENV = 'production';
 
-const rollupConfig = (await import('./rollup.config.js')).default;
+const rollupConfig = (await import('./rollup.config.mjs')).default;
 const roll = await rollup(rollupConfig);
-await roll.write(rollupConfig.output);
+await roll.write(rollupConfig.output[0]);
 
 const examples = (await readdir('../../examples'))
   .filter(x => existsSync(path.join('../../examples', x, '.template.json')))

@@ -1,7 +1,7 @@
+import { Logger } from '@paperdave/logger';
 import { asyncMap, deferred } from '@paperdave/utils';
+import type { GatewayOptions } from '@purplet/gateway';
 import { Gateway, GatewayExitError } from '@purplet/gateway';
-import type { GatewayOptions } from '@purplet/gateway/src/Gateway';
-import { Rest } from '@purplet/rest';
 import { deepEqual } from 'fast-equals';
 import type {
   APIGuild,
@@ -12,7 +12,7 @@ import type {
   RESTPutAPIApplicationCommandsJSONBody,
 } from 'purplet/types';
 import { GatewayDispatchEvents } from 'purplet/types';
-import { setGlobalEnv } from './env';
+import { rest, setGlobalEnv } from './env';
 import { FeatureLoader } from './FeatureLoader';
 import type { Feature } from './hook';
 import {
@@ -25,15 +25,14 @@ import {
 } from './hook-core';
 import { mergeCommands, mergeIntents, mergePresence } from './hook-core-merge';
 import { runHook } from './hook-run';
-import { log } from './logger';
 import { errorFromGatewayClientExitError, errorTooManyGuilds } from '../cli/errors';
 import { $gatewayEvent } from '../hooks';
-import { markFeature } from '../internal';
+import { markFeatureInternal } from '../internal';
 import type { InteractionResponse } from '../structures';
 import { ApplicationFlagsBitfield, createInteraction, User } from '../structures';
 import type { Cleanup } from '../utils/types';
 
-interface GatewayBotOptions {
+export interface GatewayBotOptions {
   /** Bot Token. */
   token: string;
   /** Initial list of features that this bot has. */
@@ -52,16 +51,11 @@ interface GatewayBotOptions {
   guildRules?: AllowedGuildRules;
   /** Bot sharding information. */
   shard?: [shard_id: number, shard_count: number];
-  /**
-   * If set to false, this will not mutate global variables, though it may not be possible for
-   * features to access these variables. Defaults to true.
-   */
-  mutateGlobalEnv?: boolean;
 }
 
 export interface PatchFeatureInput {
-  add: Feature[];
-  remove: Feature[];
+  add?: Feature[];
+  remove?: Feature[];
 }
 
 export interface AllowedGuildRules {
@@ -71,7 +65,7 @@ export interface AllowedGuildRules {
 
 export type CreateGatewayClientResult = [Gateway, GatewayReadyDispatchData];
 
-export async function createGatewayClient(identify: GatewayOptions) {
+async function createGatewayClient(identify: GatewayOptions) {
   const [promise, resolve, reject] = deferred<CreateGatewayClientResult>();
 
   const client = new Gateway(identify);
@@ -93,7 +87,7 @@ export async function createGatewayClient(identify: GatewayOptions) {
   client.on('error', errorHandler);
   client.on(GatewayDispatchEvents.Ready, readyHandler);
 
-  return await promise;
+  return promise;
 }
 
 /**
@@ -105,7 +99,6 @@ export async function createGatewayClient(identify: GatewayOptions) {
 export class GatewayBot {
   features = new FeatureLoader();
   gateway: Gateway | null = null;
-  rest: Rest;
 
   #application?: { id: string; flags: ApplicationFlagsBitfield };
   #user?: User;
@@ -139,22 +132,13 @@ export class GatewayBot {
     }
     if (this.options.deployGuildCommands) {
       this.features.add([
-        markFeature(
+        markFeatureInternal(
           'dev.deployGuildCommands',
           $gatewayEvent('GUILD_CREATE', guild => {
             this.updateApplicationCommandsGuild(guild);
           })
         ),
       ]);
-    }
-    if (this.options.mutateGlobalEnv !== false) {
-      this.options.mutateGlobalEnv = true;
-    }
-    this.rest = new Rest({ token: this.options.token });
-    if (this.options.mutateGlobalEnv) {
-      setGlobalEnv({
-        rest: this.rest,
-      });
     }
   }
 
@@ -164,7 +148,7 @@ export class GatewayBot {
     }
     this.#running = true;
 
-    log('debug', `starting gateway bot, guildCommands=${this.options.deployGuildCommands}`);
+    Logger.debug(`starting gateway bot, guildCommands=${this.options.deployGuildCommands}`);
     this.#cleanupInitializeHook = await runHook(this.features, $initialize, undefined);
     await this.startClient();
   }
@@ -195,13 +179,11 @@ export class GatewayBot {
       flags: new ApplicationFlagsBitfield(readyData.application.flags),
     };
 
-    if (this.options.mutateGlobalEnv) {
-      setGlobalEnv({
-        application: this.#application,
-        botUser: this.#user,
-        gateway,
-      });
-    }
+    setGlobalEnv({
+      application: this.#application,
+      botUser: this.#user,
+      gateway,
+    });
 
     // Dispatch Hooks
     this.gateway.on('*', (payload: GatewayDispatchPayload) => {
@@ -211,7 +193,7 @@ export class GatewayBot {
     // Interaction hooks
     this.gateway.on(GatewayDispatchEvents.InteractionCreate, i => {
       const responseHandler = async (response: InteractionResponse) => {
-        await this.rest.interactionResponse.createInteractionResponse({
+        await rest.interactionResponse.createInteractionResponse({
           interactionId: i.id,
           interactionToken: i.token,
           body: {
@@ -246,13 +228,13 @@ export class GatewayBot {
 
   private async updateCommands(commands: RESTPutAPIApplicationCommandsJSONBody) {
     if (commands.length === 0) {
-      log('debug', 'there are no application commands');
+      Logger.debug('there are no application commands');
       return;
     }
 
     this.#cachedCommandData = commands;
 
-    const guildList = await this.rest.user
+    const guildList = await rest.user
       .getCurrentUserGuilds()
       .then(guilds => guilds.filter(x => this.isGuildAllowed(x.id)));
 
@@ -260,8 +242,7 @@ export class GatewayBot {
       throw errorTooManyGuilds();
     }
     if (guildList.length >= 5) {
-      log(
-        'warn',
+      Logger.warn(
         `You have ${guildList.length} guilds on your development bot. Many guilds can slow down the bot significantly, as commands are registered per-guild during development.`
       );
     }
@@ -270,19 +251,19 @@ export class GatewayBot {
       this.updateApplicationCommandsGuild(guild);
     });
 
-    log('debug', 'development mode app command push done');
+    Logger.debug('development mode app command push done');
   }
 
   private async updateApplicationCommandsGuild(guild: Pick<APIGuild, 'name' | 'id'>) {
     try {
-      await this.rest.applicationCommand.bulkOverwriteGuildApplicationCommands({
+      await rest.applicationCommand.bulkOverwriteGuildApplicationCommands({
         guildId: guild.id,
         applicationId: this.id,
         body: this.#cachedCommandData!,
       });
-      log('info', `updated commands on ${guild.name}`);
+      Logger.info(`updated commands on ${guild.name}`);
     } catch (error) {
-      log('warn', `could not update commands on ${guild.name} (${guild.id})`);
+      Logger.warn(`could not update commands on ${guild.name} (${guild.id})`);
     }
   }
 
@@ -294,11 +275,11 @@ export class GatewayBot {
     ]);
   }
 
-  async patchFeatures({ add, remove }: PatchFeatureInput) {
+  async patchFeatures({ add = [], remove = [] }: PatchFeatureInput) {
     this.features.remove(remove);
     const coreFeaturesAdded = this.features.add(add);
 
-    log('debug', `patching features, ${add.length} add, ${remove.length} remove.`);
+    Logger.debug(`patching features, ${add.length} add, ${remove.length} remove.`);
 
     if (!this.#running) {
       return;

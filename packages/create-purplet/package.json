@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@mattinton/prettier-plugin-tidy-imports": "^1.1.12",
+    "@paperdave/logger": "^2.0.6",
     "chalk": "^5.0.1",
     "dedent": "^0.7.0",
     "ora": "^6.1.2",
@@ -34,17 +35,12 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@purplet/shared-config": "workspace:*",
     "@types/dedent": "^0.7.0",
     "@types/minimatch": "^3.0.5",
-    "@types/node": "^17.0.45",
     "@types/prettier": "^2.7.0",
     "@types/prompts": "^2.0.14",
     "@types/yargs": "^17.0.11",
-    "esbuild": "^0.14.54",
-    "rollup": "^2.78.0",
-    "rollup-plugin-add-shebang": "^0.3.1",
-    "rollup-plugin-esbuild": "^4.9.3"
+    "rollup": "^3.2.3"
   }
 }

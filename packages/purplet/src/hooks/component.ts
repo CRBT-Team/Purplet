@@ -1,7 +1,12 @@
-import type { BitSerializer } from '@purplet/serialize';
-import { serializers as S } from '@purplet/serialize';
+import {
+  BitBuffer,
+  BitSerializer,
+  decodeCustomId,
+  encodeCustomId,
+  serializers as S,
+} from '@purplet/serialize';
 import type {
-  APIButtonComponent,
+  APIButtonComponentWithCustomId,
   APIMessageActionRowComponent,
   APISelectMenuComponent,
 } from 'purplet/types';
@@ -61,13 +66,14 @@ function $messageComponent<
     if (featureId.length > 50) {
       throw new Error(`Feature ID is too long: \`${featureId}\``);
     }
-    const encodedId = S.string.encodeCustomId(featureId);
-    const id = [
-      purpletCustomIdTrigger,
-      encodedId.length.toString(36),
-      encodedId,
-      context !== undefined ? serializer.encodeCustomId(context as any) : '',
-    ].join('');
+    const buffer = new BitBuffer();
+    S.string.write(featureId, buffer);
+    if (context !== undefined) {
+      serializer.write(context as any, buffer);
+    }
+    const id =
+      purpletCustomIdTrigger +
+      encodeCustomId(new Uint8Array(buffer.buffer.slice(0, Math.ceil(buffer.index / 8))));
 
     if ([...id].length > 100) {
       throw new Error(
@@ -92,14 +98,14 @@ function $messageComponent<
           return;
         }
 
-        const length = parseInt(i.customId.charAt(2), 36);
-        const encodedId = S.string.decodeCustomId(i.customId.slice(3, 3 + length));
+        const buffer = new BitBuffer(decodeCustomId(i.customId.slice(2)));
+        const encodedId = S.string.read(buffer);
 
         if (encodedId !== featureId) {
           return;
         }
 
-        const context = serializer.decodeCustomId(i.customId.slice(3 + length)) as Context;
+        const context = serializer.read(buffer) as Context;
         options.handle.call(i, context);
       }),
     ],
@@ -127,7 +133,7 @@ function $messageComponent<
 
 interface ButtonMessageComponentOptions<Context, CreateProps>
   extends Omit<
-    MessageComponentOptions<Context, CreateProps, APIButtonComponent>,
+    MessageComponentOptions<Context, CreateProps, APIButtonComponentWithCustomId>,
     'handle' | 'type'
   > {
   handle(this: ButtonInteraction, context: Context): void;
@@ -158,6 +164,7 @@ export function $selectMenuComponent<Context, CreateProps>(
     handle(this: SelectMenuInteraction, context) {
       options.handle.call(this, {
         ...context,
+        type: ComponentType.SelectMenu,
         values: this.values,
       });
     },

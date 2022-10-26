@@ -1,7 +1,7 @@
 <div align="center">
   <img alt="Purplet" src="sites/purplet.js.org/static/img/purplet-artwork.png" >
   <h1>Purplet</h1>
-  <h4>A simple framework to build modern Discord apps.</h4>
+  <h4>Next-gen tools to build modern Discord apps.</h4>
   <div>
     <img src="https://img.shields.io/badge/Discord_API-v10-c4aaff" alt="Discord API Version">
     <img src="https://img.shields.io/npm/v/purplet?color=c4aaff&label=version" alt="Version">
@@ -26,23 +26,11 @@ export const helloWorld = $slashCommand({
 });
 ```
 
-> ⚠️ Purplet v2 is a complete rewrite and API overhaul. While still experimental, it is more documented and featureful than the [v1 branch][v1]. Please hold off deploying bots built with this to production until the official 2.0.0 releases, but feel free to try it out.
+Our suite of packages is built from the ground up on Web Standards like `fetch` and `WebSocket`, allowing your code to run locally in Node.js, but with the ability to deploy your interaction handlers to Cloudflare Workers, greatly reducing costs while increasing scalability.
 
-[v1]: https://github.com/CRBT-Team/Purplet/tree/v1
+> ⚠️ Purplet is extremely experimental software with a rapidly changing API. We do not recommend using it in production at this point. When v2.0 is released, the API will be stable, but it will still be considered experimental until we can ensure it's stability.
 
-## Getting Started
-
-The best way to get started is using `create-purplet` via your package manager's `create` command:
-
-```sh
-npm init purplet
-# or
-yarn create purplet
-# or
-pnpm create purplet
-```
-
-and follow the instructions it gives. Documentation on purplet is available at [purplet.js.org](https://purplet.js.org/docs/getting-started).
+Full documentation on Purplet and how to get started is available at [purplet.js.org](https://purplet.js.org/docs/getting-started).
 
 ## Monorepo Contents
 
@@ -51,13 +39,10 @@ This repository contains these following public packages:
 | Package | Description |
 | --- | --- |
 | [![purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=purplet)](packages/purplet) | Full Framework for quickly building Discord Bots |
-| ![buncord](https://img.shields.io/badge/buncord-soon%E2%84%A2-red) | Library to easily interact with the Discord API |
+| ![@purplet/structures](https://img.shields.io/badge/%40purplet%2Fstructures-soon%E2%84%A2-red) | Classes wrapping Discord API objects |
 | [![@purplet/rest](https://img.shields.io/npm/v/@purplet/rest?color=c4aaff&label=@purplet/rest)](packages/rest) | Rest client implementation |
 | [![@purplet/gateway](https://img.shields.io/npm/v/@purplet/gateway?color=c4aaff&label=@purplet/gateway)](packages/gateway) | Gateway client implementation |
-| ![@purplet/structures](https://img.shields.io/badge/%40purplet%2Fstructures-soon%E2%84%A2-red) | Classes wrapping Discord API objects |
-| ![@purplet/builders](https://img.shields.io/badge/%40purplet%2Fbuilders-soon%E2%84%A2-red) | Builder-style classes to create Discord API objects |
-| ![@purplet/model](https://img.shields.io/badge/%40purplet%2Fmodel-soon%E2%84%A2-red)\* | Create maintainable classes to enrich JSON data. |
-| ![@purplet/utils](https://img.shields.io/badge/%40purplet%2Futils-soon%E2%84%A2-red) | Internal helper functions. Might not be published. |
+| ![@purplet/utils](https://img.shields.io/npm/v/@purplet/utils?color=c4aaff&label=@purplet/utils) | Helper utilities for Discord driven development |
 | [![@purplet/serialize](https://img.shields.io/npm/v/@purplet/serialize?color=c4aaff&label=@purplet/serialize)](packages/serialize)\* | Utilities for binary serialization |
 | [![create-purplet](https://img.shields.io/npm/v/purplet?color=c4aaff&label=create-purplet)](packages/create-purplet) | Project generation command, `pnpm create purplet` |
 

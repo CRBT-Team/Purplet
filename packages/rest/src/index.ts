@@ -1,6 +1,6 @@
 export { Rest } from './Rest';
 export type {
-  FileData,
+  BlobResolvable,
   HTTPMethod,
   RawFile,
   RequestOptions,

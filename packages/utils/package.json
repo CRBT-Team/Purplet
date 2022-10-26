@@ -1,0 +1,49 @@
+{
+  "name": "@purplet/utils",
+  "version": "1.0.0",
+  "description": "Utilities for Discord API driven development.",
+  "keywords": [
+    "discord",
+    "bot",
+    "api",
+    "utils",
+    "typescript",
+    "bun"
+  ],
+  "homepage": "https://github.com/CRBT-Team/Purplet/tree/main/packages/utils",
+  "repository": "github:CRBT-Team/Purplet",
+  "license": "Apache-2.0",
+  "author": "Clembs <clembs@clembs.com> (https://github.com/Clembs)",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "*.md"
+  ],
+  "scripts": {
+    "build": "shared-config-build",
+    "dev": "rollup -c --watch"
+  },
+  "devDependencies": {
+    "@paperdave/utils": "^1.4.1",
+    "@purplet/shared-config": "workspace:*",
+    "dayjs": "^1.11.5",
+    "discord-api-types": "^0.37.14",
+    "export-directory": "^0.1.0"
+  },
+  "peerDependencies": {
+    "discord-api-types": "^0.37.14"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

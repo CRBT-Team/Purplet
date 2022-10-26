@@ -229,6 +229,12 @@ export const Channel = group({
     route: (channelId) => `/channels/${channelId}/followers`,
     params: ["channelId"],
   },
+  followNewsChannel: {
+    method: 'POST',
+    route: (channelId) => `/channels/${channelId}/followers`,
+    params: ["channelId"],
+    deprecated: 'channel.followAnnouncementChannel'
+  },
   triggerTypingIndicator: {
     method: 'POST',
     route: (channelId) => `/channels/${channelId}/typing`,

@@ -105,7 +105,7 @@ Select Menus function exactly the same as Buttons, except they pass a `values` p
 
 ```ts
 export const mySelect = $selectMenuComponent({
-  create(ctx: SampleContext) {
+  template(ctx: SampleContext) {
     return new SelectMenuBuilder() //
       .setPlaceholder(`Select for ${ctx.name}`)
       .setOptions([

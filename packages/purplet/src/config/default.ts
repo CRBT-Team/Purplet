@@ -5,6 +5,7 @@ const config: ResolvedConfig = {
   root: '',
   temp: '',
   // START CONFIG
+  adapter: null!,
   alias: {
     $features: 'src/features',
     $lib: 'src/lib',
@@ -13,6 +14,7 @@ const config: ResolvedConfig = {
     repliedUser: true,
     parse: ['users'],
   },
+  injectLogger: true,
   lang: 'en-US',
   paths: {
     build: 'dist',

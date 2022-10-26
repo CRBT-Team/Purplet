@@ -1,9 +1,17 @@
+// these tests are a mess
+
 import * as S from './serializers';
+import { deepEqual } from 'assert';
+import { describe, expect, test } from 'bun:test';
 import type { BitSerializer } from './BitSerializer';
 
-function expectSerialize(serializer: BitSerializer<any>, value: any) {
+function expectSerialize(
+  serializer: BitSerializer<any>,
+  value: any,
+  checkFn = (a: any) => deepEqual(value, a)
+) {
   expect(serializer.check(value)).toBe(true);
-  expect(serializer.decode(serializer.encode(value))).toEqual(value);
+  checkFn(serializer.decode(serializer.encode(value)));
 }
 
 function expectFailCheck(serializer: BitSerializer<any>, value: any) {
@@ -20,12 +28,12 @@ describe('serializers', () => {
   });
   test('constant', () => {
     const sym = Symbol('test');
-    expect(S.constant(sym).encode(sym)).toEqual(new Uint8Array([]));
-    expect(S.constant(sym).decode(new Uint8Array([]))).toStrictEqual(sym);
+    deepEqual(S.constant(sym).encode(sym), new Uint8Array([]));
+    expect(S.constant(sym).decode(new Uint8Array([]))).toBe(sym);
   });
   test('date', () => {
     const date = new Date();
-    expect(S.date.encode(date)).toHaveLength(7);
+    expect(S.date.encode(date).length).toBe(7);
     expect(S.date.decode(S.date.encode(date)).getTime()).toBe(date.getTime());
   });
   test('number', () => {
@@ -38,7 +46,7 @@ describe('serializers', () => {
     expectSerialize(S.number, Number.MIN_SAFE_INTEGER);
     expectSerialize(S.number, Number.MAX_SAFE_INTEGER + 1);
     expectSerialize(S.number, Number.MIN_SAFE_INTEGER - 1);
-    expectSerialize(S.number, NaN);
+    expectSerialize(S.number, NaN, isNaN);
     expectSerialize(S.number, Infinity);
     expectSerialize(S.number, -Infinity);
   });
@@ -96,29 +104,35 @@ describe('serializers', () => {
       ],
     });
   });
-  test('generic', () => {
-    expectSerialize(S.generic, 1);
-    expectSerialize(S.generic, -1);
-    expectSerialize(S.generic, 1.5);
-    expectSerialize(S.generic, -1.5);
-    expectSerialize(S.generic, Number.MAX_SAFE_INTEGER);
-    expectSerialize(S.generic, Number.MIN_SAFE_INTEGER);
-    expectSerialize(S.generic, 'test');
-    expectSerialize(S.generic, '💩');
-    expectSerialize(S.generic, true);
-    expectSerialize(S.generic, false);
-    expectSerialize(S.generic, new Date());
-    expectSerialize(S.generic, []);
-    expectSerialize(S.generic, [1, 2, 3]);
-    expectSerialize(S.generic, [1, null, true, { a: 1, b: 2 }]);
-    expectSerialize(S.generic, { a: 1, b: 2, null: null, undefined });
-    expectSerialize(S.generic, 5321n);
-    expectSerialize(S.generic, -53421n);
-    expectSerialize(S.generic, NaN);
-    expectSerialize(S.generic, Infinity);
-    expectSerialize(S.generic, -Infinity);
-    expectSerialize(S.generic, '244905301059436545');
-    expect(S.generic.encode('244905301059436545')).toHaveLength(9);
-    expect(S.generic.encode('aaaaaaaaaaaaaaaaaa')).toHaveLength(20);
+  describe('generic', () => {
+    let i = 0;
+    test(`#${++i}`, () => expectSerialize(S.generic, 1));
+    test(`#${++i}`, () => expectSerialize(S.generic, -1));
+    test(`#${++i}`, () => expectSerialize(S.generic, 1.5));
+    test(`#${++i}`, () => expectSerialize(S.generic, -1.5));
+    test(`#${++i}`, () => expectSerialize(S.generic, Number.MAX_SAFE_INTEGER));
+    test(`#${++i}`, () => expectSerialize(S.generic, Number.MIN_SAFE_INTEGER));
+    test(`#${++i}`, () => expectSerialize(S.generic, 'test'));
+    test(`#${++i}`, () => expectSerialize(S.generic, '💩'));
+    test(`#${++i}`, () => expectSerialize(S.generic, true));
+    test(`#${++i}`, () => expectSerialize(S.generic, false));
+    test(`#${++i}`, () => expectSerialize(S.generic, new Date()));
+    test(`#${++i}`, () => expectSerialize(S.generic, {}));
+    test(`#${++i}`, () => expectSerialize(S.generic, []));
+    test(`#${++i}`, () => expectSerialize(S.generic, { a: 1, b: 2, null: null, undefined }));
+    test(`#${++i}`, () => expectSerialize(S.generic, [1, 2, 3]));
+    test(`#${++i}`, () => expectSerialize(S.generic, [1, null, true, { a: 1, b: 2 }]));
+    test(`#${++i}`, () => expectSerialize(S.generic, 5321n));
+    test(`#${++i}`, () => expectSerialize(S.generic, -53421n));
+    test(`#${++i}`, () => expectSerialize(S.generic, NaN, isNaN));
+    test(`#${++i}`, () => expectSerialize(S.generic, Infinity));
+    test(`#${++i}`, () => expectSerialize(S.generic, -Infinity));
+    test(`#${++i}`, () => expectSerialize(S.generic, '244905301059436545'));
+    test(`#${++i}`, () => {
+      expect(S.generic.encode('244905301059436545').length).toBe(9);
+    });
+    test(`#${++i}`, () => {
+      expect(S.generic.encode('aaaaaaaaaaaaaaaaaa').length).toBe(20);
+    });
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@purplet/polyfill",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Polyfills for node.js and bun.js",
   "keywords": [
     "polyfill",
@@ -14,11 +14,15 @@
     "directory": "packages/polyfill"
   },
   "license": "Apache-2.0",
-  "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+  "author": "Dave Caruso <me@paperadve.net> (https://github.com/davecaruso)",
   "sideEffects": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.js"
+    ".": {
+      "browser": "./src/browser.mjs",
+      "import": "./src/index.mjs",
+      "require": "./src/index.cjs"
+    }
   },
   "main": "./src/index.js",
   "files": [
@@ -32,6 +36,9 @@
     "formdata-node": "^4.3.3",
     "undici": "^5.8.2",
     "ws": "^1.1.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.15.12"
   },
   "publishConfig": {
     "access": "public"

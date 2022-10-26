@@ -24,7 +24,7 @@ export type ApplicationCommand = RouteGroup<{
    * 
    * Creating a command with the same name as an existing command for your application will overwrite the old command.
    * 
-   * Create a new global command. Returns `201` and an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object.
+   * Create a new global command. Returns `201` if a command with the same name does not already exist, or a `200` if it does (in which case the previous command will be overwritten). Both responses include an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object.
    */
   createGlobalApplicationCommand: Route<{
     params: ["applicationId"],
@@ -90,7 +90,7 @@ export type ApplicationCommand = RouteGroup<{
    * 
    * Creating a command with the same name as an existing command for your application will overwrite the old command.
    * 
-   * Create a new guild command. New guild commands will be available in the guild immediately. Returns `201` and an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object. If the command did not already exist, it will count toward daily application command create limits.
+   * Create a new guild command. New guild commands will be available in the guild immediately. Returns `201` if a command with the same name does not already exist, or a `200` if it does (in which case the previous command will be overwritten). Both responses include an [application command](https://discordapp.com/developers/docs/interactions/application-commands#application-command-object) object.
    */
   createGuildApplicationCommand: Route<{
     params: ["applicationId", "guildId"],
@@ -162,7 +162,7 @@ export type ApplicationCommand = RouteGroup<{
    * 
    * This endpoint will overwrite existing permissions for the command in that guild
    * 
-   * Edits command permissions for a specific command for your application in a guild and returns a [guild application command permissions](https://discordapp.com/developers/docs/interactions/application-commands#application-command-permissions-object-guild-application-command-permissions-structure) object.
+   * Edits command permissions for a specific command for your application in a guild and returns a [guild application command permissions](https://discordapp.com/developers/docs/interactions/application-commands#application-command-permissions-object-guild-application-command-permissions-structure) object. Fires an [Application Command Permissions Update](#DOCS_TOPICS_GATEWAY_EVENTS/application-command-permissions-update) Gateway event.
    * 
    * You can add up to 100 permission overwrites for a command.
    * 
@@ -214,7 +214,7 @@ export type AutoModeration = RouteGroup<{
    */
   listAutoModerationRulesForGuild: Route<{
     params: ["guildId"],
-    result: Discord.RESTGetAPIGuildAutoModerationRulesResult,
+    result: Discord.RESTGetAPIAutoModerationRulesResult,
   }>,
   /**
    * ## [Get Auto Moderation Rule](https://discordapp.com/developers/docs/resources/auto-moderation#get-auto-moderation-rule)
@@ -225,25 +225,25 @@ export type AutoModeration = RouteGroup<{
    */
   getAutoModerationRule: Route<{
     params: ["guildId", "autoModerationRuleId"],
-    result: Discord.RESTGetAPIGuildAutoModerationRuleResult,
+    result: Discord.RESTGetAPIAutoModerationRuleResult,
   }>,
   /**
    * ## [Create Auto Moderation Rule](https://discordapp.com/developers/docs/resources/auto-moderation#create-auto-moderation-rule)
    * 
-   * Create a new rule. Returns an [auto moderation rule](https://discordapp.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object) on success.
+   * Create a new rule. Returns an [auto moderation rule](https://discordapp.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object) on success. Fires an [Auto Moderation Rule Create](#DOCS_TOPICS_GATEWAY_EVENTS/auto-moderation-rule-create) Gateway event.
    * 
    * This endpoint requires the `MANAGE_GUILD` [permission](#DOCS_RESOURCES_AUTO_MODERATION/auto-moderation-permission-requirements).
    */
   createAutoModerationRule: Route<{
     params: ["guildId"],
-    body: Discord.RESTPostAPIGuildAutoModerationRulesJSONBody,
-    result: Discord.RESTPostAPIGuildAutoModerationRulesResult,
+    body: Discord.RESTPostAPIAutoModerationRuleJSONBody,
+    result: Discord.RESTPostAPIAutoModerationRuleResult,
     reason: true,
   }>,
   /**
    * ## [Modify Auto Moderation Rule](https://discordapp.com/developers/docs/resources/auto-moderation#modify-auto-moderation-rule)
    * 
-   * Modify an existing rule. Returns an [auto moderation rule](https://discordapp.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object) on success.
+   * Modify an existing rule. Returns an [auto moderation rule](https://discordapp.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object) on success. Fires an [Auto Moderation Rule Update](#DOCS_TOPICS_GATEWAY_EVENTS/auto-moderation-rule-update) Gateway event.
    * 
    * Requires `MANAGE_GUILD` [permissions](#DOCS_RESOURCES_AUTO_MODERATION/auto-moderation-permission-requirements).
    * 
@@ -251,20 +251,20 @@ export type AutoModeration = RouteGroup<{
    */
   modifyAutoModerationRule: Route<{
     params: ["guildId", "autoModerationRuleId"],
-    body: Discord.RESTPatchAPIGuildAutoModerationRuleJSONBody,
-    result: Discord.RESTPatchAPIGuildAutoModerationRuleResult,
+    body: Discord.RESTPatchAPIAutoModerationRuleJSONBody,
+    result: Discord.RESTPatchAPIAutoModerationRuleResult,
     reason: true,
   }>,
   /**
    * ## [Delete Auto Moderation Rule](https://discordapp.com/developers/docs/resources/auto-moderation#delete-auto-moderation-rule)
    * 
-   * Delete a rule. Returns a `204` on success.
+   * Delete a rule. Returns a `204` on success. Fires an [Auto Moderation Rule Delete](https://discordapp.com/developers/docs/topics/gateway-events#auto-moderation-rule-delete) Gateway event.
    * 
-   * This endpoint requires the `MANAGE_GUILD` [permission](https://discordapp.com/developers/docs/resources/auto-moderation#auto-moderation-permission-requirements).
+   * This endpoint requires the `MANAGE_GUILD` [permission](#DOCS_RESOURCES_AUTO_MODERATION/auto-moderation-permission-requirements).
    */
   deleteAutoModerationRule: Route<{
     params: ["guildId", "autoModerationRuleId"],
-    result: Discord.RESTDeleteAPIGuildAutoModerationRuleResult,
+    result: Discord.RESTDeleteAPIAutoModerationRuleResult,
     reason: true,
   }>,
 }>;
@@ -295,7 +295,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Delete/Close Channel](https://discordapp.com/developers/docs/resources/channel#deleteclose-channel)
    * 
-   * Delete a channel, or close a private message. Requires the `MANAGE_CHANNELS` permission for the guild, or `MANAGE_THREADS` if the channel is a thread. Deleting a category does not delete its child channels; they will have their `parent_id` removed and a [Channel Update](https://discordapp.com/developers/docs/topics/gateway#channel-update) Gateway event will fire for each of them. Returns a [channel](#DOCS_RESOURCES_CHANNEL/channel-object) object on success. Fires a [Channel Delete](#DOCS_TOPICS_GATEWAY/channel-delete) Gateway event (or [Thread Delete](#DOCS_TOPICS_GATEWAY/thread-delete) if the channel was a thread).
+   * Delete a channel, or close a private message. Requires the `MANAGE_CHANNELS` permission for the guild, or `MANAGE_THREADS` if the channel is a thread. Deleting a category does not delete its child channels; they will have their `parent_id` removed and a [Channel Update](https://discordapp.com/developers/docs/topics/gateway-events#channel-update) Gateway event will fire for each of them. Returns a [channel](#DOCS_RESOURCES_CHANNEL/channel-object) object on success. Fires a [Channel Delete](#DOCS_TOPICS_GATEWAY_EVENTS/channel-delete) Gateway event (or [Thread Delete](#DOCS_TOPICS_GATEWAY_EVENTS/thread-delete) if the channel was a thread).
    * 
    * Deleting a guild channel cannot be undone. Use this with caution, as it is impossible to undo this action when performed on a guild channel. In contrast, when used with a private message, it is possible to undo the action by opening a private message with the recipient again.
    * 
@@ -332,7 +332,7 @@ export type Channel = RouteGroup<{
    * 
    * Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing `allowed_mentions` to prevent unexpected mentions.
    * 
-   * Post a message to a guild text or DM channel. Returns a [message](https://discordapp.com/developers/docs/resources/channel#message-object) object. Fires a [Message Create](#DOCS_TOPICS_GATEWAY/message-create) Gateway event. See [message formatting](#DOCS_REFERENCE/message-formatting) for more information on how to properly format messages.
+   * Post a message to a guild text or DM channel. Returns a [message](https://discordapp.com/developers/docs/resources/channel#message-object) object. Fires a [Message Create](#DOCS_TOPICS_GATEWAY_EVENTS/message-create) Gateway event. See [message formatting](#DOCS_REFERENCE/message-formatting) for more information on how to properly format messages.
    * 
    * To create a message as a reply to another message, apps can include a [`message_reference`](#DOCS_RESOURCES_CHANNEL/message-reference-object-message-reference-structure) with a `message_id`. The `channel_id` and `guild_id` in the `message_reference` are optional, but will be validated if provided.
    * 
@@ -358,7 +358,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Create Reaction](https://discordapp.com/developers/docs/resources/channel#create-reaction)
    * 
-   * Create a reaction for the message. This endpoint requires the `READ_MESSAGE_HISTORY` permission to be present on the current user. Additionally, if nobody else has reacted to the message using this emoji, this endpoint requires the `ADD_REACTIONS` permission to be present on the current user. Returns a 204 empty response on success.
+   * Create a reaction for the message. This endpoint requires the `READ_MESSAGE_HISTORY` permission to be present on the current user. Additionally, if nobody else has reacted to the message using this emoji, this endpoint requires the `ADD_REACTIONS` permission to be present on the current user. Returns a 204 empty response on success. Fires a [Message Reaction Add](https://discordapp.com/developers/docs/topics/gateway-events#message-reaction-add) Gateway event.
    * The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it in the format `name:id` with the emoji name and emoji id.
    */
   createReaction: Route<{
@@ -368,7 +368,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Delete Own Reaction](https://discordapp.com/developers/docs/resources/channel#delete-own-reaction)
    * 
-   * Delete a reaction the current user has made for the message. Returns a 204 empty response on success.
+   * Delete a reaction the current user has made for the message. Returns a 204 empty response on success. Fires a [Message Reaction Remove](https://discordapp.com/developers/docs/topics/gateway-events#message-reaction-remove) Gateway event.
    * The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it in the format `name:id` with the emoji name and emoji id.
    */
   deleteOwnReaction: Route<{
@@ -378,7 +378,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Delete User Reaction](https://discordapp.com/developers/docs/resources/channel#delete-user-reaction)
    * 
-   * Deletes another user's reaction. This endpoint requires the `MANAGE_MESSAGES` permission to be present on the current user. Returns a 204 empty response on success.
+   * Deletes another user's reaction. This endpoint requires the `MANAGE_MESSAGES` permission to be present on the current user. Returns a 204 empty response on success. Fires a [Message Reaction Remove](https://discordapp.com/developers/docs/topics/gateway-events#message-reaction-remove) Gateway event.
    * The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it in the format `name:id` with the emoji name and emoji id.
    */
   deleteUserReaction: Route<{
@@ -399,7 +399,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Delete All Reactions](https://discordapp.com/developers/docs/resources/channel#delete-all-reactions)
    * 
-   * Deletes all reactions on a message. This endpoint requires the `MANAGE_MESSAGES` permission to be present on the current user. Fires a [Message Reaction Remove All](https://discordapp.com/developers/docs/topics/gateway#message-reaction-remove-all) Gateway event.
+   * Deletes all reactions on a message. This endpoint requires the `MANAGE_MESSAGES` permission to be present on the current user. Fires a [Message Reaction Remove All](https://discordapp.com/developers/docs/topics/gateway-events#message-reaction-remove-all) Gateway event.
    */
   deleteAllReactions: Route<{
     params: ["channelId", "messageId"],
@@ -408,7 +408,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Delete All Reactions for Emoji](https://discordapp.com/developers/docs/resources/channel#delete-all-reactions-for-emoji)
    * 
-   * Deletes all the reactions for a given emoji on a message. This endpoint requires the `MANAGE_MESSAGES` permission to be present on the current user. Fires a [Message Reaction Remove Emoji](https://discordapp.com/developers/docs/topics/gateway#message-reaction-remove-emoji) Gateway event.
+   * Deletes all the reactions for a given emoji on a message. This endpoint requires the `MANAGE_MESSAGES` permission to be present on the current user. Fires a [Message Reaction Remove Emoji](https://discordapp.com/developers/docs/topics/gateway-events#message-reaction-remove-emoji) Gateway event.
    * The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding) or the request will fail with `10014: Unknown Emoji`. To use custom emoji, you must encode it in the format `name:id` with the emoji name and emoji id.
    */
   deleteAllReactionsForEmoji: Route<{
@@ -422,7 +422,7 @@ export type Channel = RouteGroup<{
    * 
    * When the `content` field is edited, the `mentions` array in the message object will be reconstructed from scratch based on the new content. The `allowed_mentions` field of the edit request controls how this happens. If there is no explicit `allowed_mentions` in the edit request, the content will be parsed with _default_ allowances, that is, without regard to whether or not an `allowed_mentions` was present in the request that originally created the message.
    * 
-   * Returns a [message](https://discordapp.com/developers/docs/resources/channel#message-object) object. Fires a [Message Update](#DOCS_TOPICS_GATEWAY/message-update) Gateway event.
+   * Returns a [message](https://discordapp.com/developers/docs/resources/channel#message-object) object. Fires a [Message Update](#DOCS_TOPICS_GATEWAY_EVENTS/message-update) Gateway event.
    * 
    * Refer to [Uploading Files](#DOCS_REFERENCE/uploading-files) for details on attachments and `multipart/form-data` requests.
    * Any provided files will be **appended** to the message. To remove or replace files you will have to supply the `attachments` field which specifies the files to retain on the message after edit.
@@ -440,7 +440,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Delete Message](https://discordapp.com/developers/docs/resources/channel#delete-message)
    * 
-   * Delete a message. If operating on a guild channel and trying to delete a message that was not sent by the current user, this endpoint requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success. Fires a [Message Delete](https://discordapp.com/developers/docs/topics/gateway#message-delete) Gateway event.
+   * Delete a message. If operating on a guild channel and trying to delete a message that was not sent by the current user, this endpoint requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success. Fires a [Message Delete](https://discordapp.com/developers/docs/topics/gateway-events#message-delete) Gateway event.
    */
   deleteMessage: Route<{
     params: ["channelId", "messageId"],
@@ -450,7 +450,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Bulk Delete Messages](https://discordapp.com/developers/docs/resources/channel#bulk-delete-messages)
    * 
-   * Delete multiple messages in a single request. This endpoint can only be used on guild channels and requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success. Fires a [Message Delete Bulk](https://discordapp.com/developers/docs/topics/gateway#message-delete-bulk) Gateway event.
+   * Delete multiple messages in a single request. This endpoint can only be used on guild channels and requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success. Fires a [Message Delete Bulk](https://discordapp.com/developers/docs/topics/gateway-events#message-delete-bulk) Gateway event.
    * 
    * Any message IDs given that do not exist or are invalid will count towards the minimum and maximum message count (currently 2 and 100 respectively).
    * 
@@ -465,7 +465,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Edit Channel Permissions](https://discordapp.com/developers/docs/resources/channel#edit-channel-permissions)
    * 
-   * Edit the channel permission overwrites for a user or role in a channel. Only usable for guild channels. Requires the `MANAGE_ROLES` permission. Only permissions your bot has in the guild or parent channel (if applicable) can be allowed/denied (unless your bot has a `MANAGE_ROLES` overwrite in the channel). Returns a 204 empty response on success. For more information about permissions, see [permissions](https://discordapp.com/developers/docs/topics/permissions#permissions).
+   * Edit the channel permission overwrites for a user or role in a channel. Only usable for guild channels. Requires the `MANAGE_ROLES` permission. Only permissions your bot has in the guild or parent channel (if applicable) can be allowed/denied (unless your bot has a `MANAGE_ROLES` overwrite in the channel). Returns a 204 empty response on success. Fires a [Channel Update](https://discordapp.com/developers/docs/topics/gateway-events#channel-update) Gateway event. For more information about permissions, see [permissions](#DOCS_TOPICS_PERMISSIONS/permissions).
    */
   editChannelPermissions: Route<{
     params: ["channelId", "overwriteId"],
@@ -485,7 +485,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Create Channel Invite](https://discordapp.com/developers/docs/resources/channel#create-channel-invite)
    * 
-   * Create a new [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) object for the channel. Only usable for guild channels. Requires the `CREATE_INSTANT_INVITE` permission. All JSON parameters for this route are optional, however the request body is not. If you are not sending any fields, you still have to send an empty JSON object (`{}`). Returns an [invite](#DOCS_RESOURCES_INVITE/invite-object) object. Fires an [Invite Create](#DOCS_TOPICS_GATEWAY/invite-create) Gateway event.
+   * Create a new [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) object for the channel. Only usable for guild channels. Requires the `CREATE_INSTANT_INVITE` permission. All JSON parameters for this route are optional, however the request body is not. If you are not sending any fields, you still have to send an empty JSON object (`{}`). Returns an [invite](#DOCS_RESOURCES_INVITE/invite-object) object. Fires an [Invite Create](#DOCS_TOPICS_GATEWAY_EVENTS/invite-create) Gateway event.
    */
   createChannelInvite: Route<{
     params: ["channelId"],
@@ -496,7 +496,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Delete Channel Permission](https://discordapp.com/developers/docs/resources/channel#delete-channel-permission)
    * 
-   * Delete a channel permission overwrite for a user or role in a channel. Only usable for guild channels. Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. For more information about permissions, see [permissions](https://discordapp.com/developers/docs/topics/permissions#permissions)
+   * Delete a channel permission overwrite for a user or role in a channel. Only usable for guild channels. Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Channel Update](https://discordapp.com/developers/docs/topics/gateway-events#channel-update) Gateway event. For more information about permissions, see [permissions](#DOCS_TOPICS_PERMISSIONS/permissions)
    */
   deleteChannelPermission: Route<{
     params: ["channelId", "overwriteId"],
@@ -506,7 +506,15 @@ export type Channel = RouteGroup<{
   /**
    * ## [Follow Announcement Channel](https://discordapp.com/developers/docs/resources/channel#follow-announcement-channel)
    * 
-   * Follow an Announcement Channel to send messages to a target channel. Requires the `MANAGE_WEBHOOKS` permission in the target channel. Returns a [followed channel](https://discordapp.com/developers/docs/resources/channel#followed-channel-object) object.
+   * Follow an Announcement Channel to send messages to a target channel. Requires the `MANAGE_WEBHOOKS` permission in the target channel. Returns a [followed channel](https://discordapp.com/developers/docs/resources/channel#followed-channel-object) object. Fires a [Webhooks Update](#DOCS_TOPICS_GATEWAY_EVENTS/webhooks-update) Gateway event for the target channel.
+   */
+  followAnnouncementChannel: Route<{
+    params: ["channelId"],
+    body: Discord.RESTPostAPIChannelFollowersJSONBody,
+    result: Discord.RESTPostAPIChannelFollowersResult,
+  }>,
+  /**
+   * @deprecated use `followAnnouncementChannel` instead
    */
   followAnnouncementChannel: Route<{
     params: ["channelId"],
@@ -516,7 +524,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Trigger Typing Indicator](https://discordapp.com/developers/docs/resources/channel#trigger-typing-indicator)
    * 
-   * Post a typing indicator for the specified channel. Generally bots should **not** implement this route. However, if a bot is responding to a command and expects the computation to take a few seconds, this endpoint may be called to let the user know that the bot is processing their message. Returns a 204 empty response on success. Fires a [Typing Start](https://discordapp.com/developers/docs/topics/gateway#typing-start) Gateway event.
+   * Post a typing indicator for the specified channel. Generally bots should **not** implement this route. However, if a bot is responding to a command and expects the computation to take a few seconds, this endpoint may be called to let the user know that the bot is processing their message. Returns a 204 empty response on success. Fires a [Typing Start](https://discordapp.com/developers/docs/topics/gateway-events#typing-start) Gateway event.
    */
   triggerTypingIndicator: Route<{
     params: ["channelId"],
@@ -534,7 +542,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Pin Message](https://discordapp.com/developers/docs/resources/channel#pin-message)
    * 
-   * Pin a message in a channel. Requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success.
+   * Pin a message in a channel. Requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success. Fires a [Channel Pins Update](https://discordapp.com/developers/docs/topics/gateway-events#channel-pins-update) Gateway event.
    * 
    * The max pinned messages is 50.
    */
@@ -546,7 +554,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Unpin Message](https://discordapp.com/developers/docs/resources/channel#unpin-message)
    * 
-   * Unpin a message in a channel. Requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success.
+   * Unpin a message in a channel. Requires the `MANAGE_MESSAGES` permission. Returns a 204 empty response on success. Fires a [Channel Pins Update](https://discordapp.com/developers/docs/topics/gateway-events#channel-pins-update) Gateway event.
    */
   unpinMessage: Route<{
     params: ["channelId", "messageId"],
@@ -575,7 +583,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Start Thread from Message](https://discordapp.com/developers/docs/resources/channel#start-thread-from-message)
    * 
-   * Creates a new thread from an existing message. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) on success, and a 400 BAD REQUEST on invalid parameters. Fires a [Thread Create](#DOCS_TOPICS_GATEWAY/thread-create) Gateway event.
+   * Creates a new thread from an existing message. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) on success, and a 400 BAD REQUEST on invalid parameters. Fires a [Thread Create](#DOCS_TOPICS_GATEWAY_EVENTS/thread-create) Gateway event.
    * 
    * When called on a `GUILD_TEXT` channel, creates a `PUBLIC_THREAD`. When called on a `GUILD_ANNOUNCEMENT` channel, creates a `ANNOUNCEMENT_THREAD`. Does not work on a [`GUILD_FORUM`](#DOCS_RESOURCES_CHANNEL/start-thread-in-forum-channel) channel. The id of the created thread will be the same as the id of the source message, and as such a message can only have a single thread created from it.
    */
@@ -588,7 +596,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Start Thread without Message](https://discordapp.com/developers/docs/resources/channel#start-thread-without-message)
    * 
-   * Creates a new thread that is not connected to an existing message. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) on success, and a 400 BAD REQUEST on invalid parameters. Fires a [Thread Create](#DOCS_TOPICS_GATEWAY/thread-create) Gateway event.
+   * Creates a new thread that is not connected to an existing message. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) on success, and a 400 BAD REQUEST on invalid parameters. Fires a [Thread Create](#DOCS_TOPICS_GATEWAY_EVENTS/thread-create) Gateway event.
    * 
    * Creating a private thread requires the server to be boosted. The [guild features](#DOCS_RESOURCES_GUILD/guild-object-guild-features) will indicate if that is possible for the guild.
    */
@@ -601,7 +609,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Start Thread in Forum Channel](https://discordapp.com/developers/docs/resources/channel#start-thread-in-forum-channel)
    * 
-   * Creates a new thread in a forum channel, and sends a message within the created thread. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object), with a nested [message](#DOCS_RESOURCES_CHANNEL/message-object) object, on success, and a 400 BAD REQUEST on invalid parameters. Fires a [Thread Create](#DOCS_TOPICS_GATEWAY/thread-create) and [Message Create](#DOCS_TOPICS_GATEWAY/message-create) Gateway event.
+   * Creates a new thread in a forum channel, and sends a message within the created thread. Returns a [channel](https://discordapp.com/developers/docs/resources/channel#channel-object), with a nested [message](#DOCS_RESOURCES_CHANNEL/message-object) object, on success, and a 400 BAD REQUEST on invalid parameters. Fires a [Thread Create](#DOCS_TOPICS_GATEWAY_EVENTS/thread-create) and [Message Create](#DOCS_TOPICS_GATEWAY_EVENTS/message-create) Gateway event.
    * 
    * - The type of the created thread is `PUBLIC_THREAD`.
    * - See [message formatting](#DOCS_REFERENCE/message-formatting) for more information on how to properly format messages.
@@ -610,7 +618,7 @@ export type Channel = RouteGroup<{
    * - For the embed object, you can set every field except `type` (it will be `rich` regardless of if you try to set it), `provider`, `video`, and any `height`, `width`, or `proxy_url` values for images.
    * - Examples for file uploads are available in [Uploading Files](#DOCS_REFERENCE/uploading-files).
    * - Files must be attached using a `multipart/form-data` body as described in [Uploading Files](#DOCS_REFERENCE/uploading-files).
-   * - Note that when sending a message, you must provide a value for at **least one of** `content`, `embeds`, or `files[n]`.
+   * - Note that when sending a message, you must provide a value for at **least one of** `content`, `embeds`, `sticker_ids`, `components`, or `files[n]`.
    * 
    * Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing `allowed_mentions` to prevent unexpected mentions.
    */
@@ -624,7 +632,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Join Thread](https://discordapp.com/developers/docs/resources/channel#join-thread)
    * 
-   * Adds the current user to a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway#thread-members-update) Gateway event.
+   * Adds the current user to a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway-events#thread-members-update) Gateway event.
    */
   joinThread: Route<{
     params: ["channelId"],
@@ -633,7 +641,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Add Thread Member](https://discordapp.com/developers/docs/resources/channel#add-thread-member)
    * 
-   * Adds another member to a thread. Requires the ability to send messages in the thread. Also requires the thread is not archived. Returns a 204 empty response if the member is successfully added or was already a member of the thread. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway#thread-members-update) Gateway event.
+   * Adds another member to a thread. Requires the ability to send messages in the thread. Also requires the thread is not archived. Returns a 204 empty response if the member is successfully added or was already a member of the thread. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway-events#thread-members-update) Gateway event.
    */
   addThreadMember: Route<{
     params: ["channelId", "userId"],
@@ -642,7 +650,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Leave Thread](https://discordapp.com/developers/docs/resources/channel#leave-thread)
    * 
-   * Removes the current user from a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway#thread-members-update) Gateway event.
+   * Removes the current user from a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway-events#thread-members-update) Gateway event.
    */
   leaveThread: Route<{
     params: ["channelId"],
@@ -651,7 +659,7 @@ export type Channel = RouteGroup<{
   /**
    * ## [Remove Thread Member](https://discordapp.com/developers/docs/resources/channel#remove-thread-member)
    * 
-   * Removes another member from a thread. Requires the `MANAGE_THREADS` permission, or the creator of the thread if it is a `GUILD_PRIVATE_THREAD`. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway#thread-members-update) Gateway event.
+   * Removes another member from a thread. Requires the `MANAGE_THREADS` permission, or the creator of the thread if it is a `GUILD_PRIVATE_THREAD`. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a [Thread Members Update](https://discordapp.com/developers/docs/topics/gateway-events#thread-members-update) Gateway event.
    */
   removeThreadMember: Route<{
     params: ["channelId", "userId"],
@@ -733,7 +741,7 @@ export type Emoji = RouteGroup<{
   /**
    * ## [Create Guild Emoji](https://discordapp.com/developers/docs/resources/emoji#create-guild-emoji)
    * 
-   * Create a new emoji for the guild. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns the new [emoji](https://discordapp.com/developers/docs/resources/emoji#emoji-object) object on success. Fires a [Guild Emojis Update](#DOCS_TOPICS_GATEWAY/guild-emojis-update) Gateway event.
+   * Create a new emoji for the guild. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns the new [emoji](https://discordapp.com/developers/docs/resources/emoji#emoji-object) object on success. Fires a [Guild Emojis Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-emojis-update) Gateway event.
    * 
    * Emojis and animated emojis have a maximum file size of 256kb. Attempting to upload an emoji larger than this limit will fail and return 400 Bad Request and an error message, but not a [JSON status code](#DOCS_TOPICS_OPCODES_AND_STATUS_CODES/json).
    */
@@ -746,7 +754,7 @@ export type Emoji = RouteGroup<{
   /**
    * ## [Modify Guild Emoji](https://discordapp.com/developers/docs/resources/emoji#modify-guild-emoji)
    * 
-   * Modify the given emoji. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns the updated [emoji](https://discordapp.com/developers/docs/resources/emoji#emoji-object) object on success. Fires a [Guild Emojis Update](#DOCS_TOPICS_GATEWAY/guild-emojis-update) Gateway event.
+   * Modify the given emoji. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns the updated [emoji](https://discordapp.com/developers/docs/resources/emoji#emoji-object) object on success. Fires a [Guild Emojis Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-emojis-update) Gateway event.
    * 
    * All parameters to this endpoint are optional.
    */
@@ -759,7 +767,7 @@ export type Emoji = RouteGroup<{
   /**
    * ## [Delete Guild Emoji](https://discordapp.com/developers/docs/resources/emoji#delete-guild-emoji)
    * 
-   * Delete the given emoji. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns `204 No Content` on success. Fires a [Guild Emojis Update](https://discordapp.com/developers/docs/topics/gateway#guild-emojis-update) Gateway event.
+   * Delete the given emoji. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns `204 No Content` on success. Fires a [Guild Emojis Update](https://discordapp.com/developers/docs/topics/gateway-events#guild-emojis-update) Gateway event.
    */
   deleteGuildEmoji: Route<{
     params: ["guildId", "emojiId"],
@@ -776,7 +784,7 @@ export type Gateway = RouteGroup<{
    * 
    * This endpoint does not require authentication.
    * 
-   * Returns an object with a single valid WSS URL, which the client can use for [Connecting](https://discordapp.com/developers/docs/topics/gateway#connecting). Clients **should** cache this value and only call this endpoint to retrieve a new URL if they are unable to properly establish a connection using the cached version of the URL.
+   * Returns an object with a valid WSS URL which the app can use when [Connecting](https://discordapp.com/developers/docs/topics/gateway#connecting) to the Gateway. Apps should cache this value and only call this endpoint to retrieve a new URL when they are unable to properly establish a connection using the cached one.
    */
   getGateway: Route<{
     result: Discord.RESTGetAPIGatewayResult,
@@ -799,7 +807,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Create Guild](https://discordapp.com/developers/docs/resources/guild#create-guild)
    * 
-   * Create a new guild. Returns a [guild](https://discordapp.com/developers/docs/resources/guild#guild-object) object on success. Fires a [Guild Create](#DOCS_TOPICS_GATEWAY/guild-create) Gateway event.
+   * Create a new guild. Returns a [guild](https://discordapp.com/developers/docs/resources/guild#guild-object) object on success. Fires a [Guild Create](#DOCS_TOPICS_GATEWAY_EVENTS/guild-create) Gateway event.
    * 
    * This endpoint can be used only by bots in less than 10 guilds.
    */
@@ -829,7 +837,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Modify Guild](https://discordapp.com/developers/docs/resources/guild#modify-guild)
    * 
-   * Modify a guild's settings. Requires the `MANAGE_GUILD` permission. Returns the updated [guild](https://discordapp.com/developers/docs/resources/guild#guild-object) object on success. Fires a [Guild Update](#DOCS_TOPICS_GATEWAY/guild-update) Gateway event.
+   * Modify a guild's settings. Requires the `MANAGE_GUILD` permission. Returns the updated [guild](https://discordapp.com/developers/docs/resources/guild#guild-object) object on success. Fires a [Guild Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-update) Gateway event.
    * 
    * All parameters to this endpoint are optional
    * 
@@ -844,7 +852,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Delete Guild](https://discordapp.com/developers/docs/resources/guild#delete-guild)
    * 
-   * Delete a guild permanently. User must be owner. Returns `204 No Content` on success. Fires a [Guild Delete](https://discordapp.com/developers/docs/topics/gateway#guild-delete) Gateway event.
+   * Delete a guild permanently. User must be owner. Returns `204 No Content` on success. Fires a [Guild Delete](https://discordapp.com/developers/docs/topics/gateway-events#guild-delete) Gateway event.
    */
   deleteGuild: Route<{
     params: ["guildId"],
@@ -862,7 +870,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Create Guild Channel](https://discordapp.com/developers/docs/resources/guild#create-guild-channel)
    * 
-   * Create a new [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) object for the guild. Requires the `MANAGE_CHANNELS` permission. If setting permission overwrites, only permissions your bot has in the guild can be allowed/denied. Setting `MANAGE_ROLES` permission in channels is only possible for guild administrators. Returns the new [channel](#DOCS_RESOURCES_CHANNEL/channel-object) object on success. Fires a [Channel Create](#DOCS_TOPICS_GATEWAY/channel-create) Gateway event.
+   * Create a new [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) object for the guild. Requires the `MANAGE_CHANNELS` permission. If setting permission overwrites, only permissions your bot has in the guild can be allowed/denied. Setting `MANAGE_ROLES` permission in channels is only possible for guild administrators. Returns the new [channel](#DOCS_RESOURCES_CHANNEL/channel-object) object on success. Fires a [Channel Create](#DOCS_TOPICS_GATEWAY_EVENTS/channel-create) Gateway event.
    * 
    * All parameters to this endpoint are optional and nullable excluding `name`
    */
@@ -875,7 +883,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Modify Guild Channel Positions](https://discordapp.com/developers/docs/resources/guild#modify-guild-channel-positions)
    * 
-   * Modify the positions of a set of [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) objects for the guild. Requires `MANAGE_CHANNELS` permission. Returns a 204 empty response on success. Fires multiple [Channel Update](#DOCS_TOPICS_GATEWAY/channel-update) Gateway events.
+   * Modify the positions of a set of [channel](https://discordapp.com/developers/docs/resources/channel#channel-object) objects for the guild. Requires `MANAGE_CHANNELS` permission. Returns a 204 empty response on success. Fires multiple [Channel Update](#DOCS_TOPICS_GATEWAY_EVENTS/channel-update) Gateway events.
    * 
    * Only channels to be modified are required.
    */
@@ -931,7 +939,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Add Guild Member](https://discordapp.com/developers/docs/resources/guild#add-guild-member)
    * 
-   * Adds a user to the guild, provided you have a valid oauth2 access token for the user with the `guilds.join` scope. Returns a 201 Created with the [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object) as the body, or 204 No Content if the user is already a member of the guild. Fires a [Guild Member Add](#DOCS_TOPICS_GATEWAY/guild-member-add) Gateway event.
+   * Adds a user to the guild, provided you have a valid oauth2 access token for the user with the `guilds.join` scope. Returns a 201 Created with the [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object) as the body, or 204 No Content if the user is already a member of the guild. Fires a [Guild Member Add](#DOCS_TOPICS_GATEWAY_EVENTS/guild-member-add) Gateway event.
    * 
    * For guilds with [Membership Screening](#DOCS_RESOURCES_GUILD/membership-screening-object) enabled, this endpoint will default to adding new members as `pending` in the [guild member object](#DOCS_RESOURCES_GUILD/guild-member-object). Members that are `pending` will have to complete membership screening before they become full members that can talk.
    * 
@@ -947,7 +955,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Modify Guild Member](https://discordapp.com/developers/docs/resources/guild#modify-guild-member)
    * 
-   * Modify attributes of a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object). Returns a 200 OK with the [guild member](#DOCS_RESOURCES_GUILD/guild-member-object) as the body. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY/guild-member-update) Gateway event. If the `channel_id` is set to null, this will force the target user to be disconnected from voice.
+   * Modify attributes of a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object). Returns a 200 OK with the [guild member](#DOCS_RESOURCES_GUILD/guild-member-object) as the body. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-member-update) Gateway event. If the `channel_id` is set to null, this will force the target user to be disconnected from voice.
    * 
    * All parameters to this endpoint are optional and nullable. When moving members to channels, the API user _must_ have permissions to both connect to the channel and have the `MOVE_MEMBERS` permission.
    */
@@ -960,7 +968,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Modify Current Member](https://discordapp.com/developers/docs/resources/guild#modify-current-member)
    * 
-   * Modifies the current member in a guild. Returns a 200 with the updated member object on success. Fires a [Guild Member Update](https://discordapp.com/developers/docs/topics/gateway#guild-member-update) Gateway event.
+   * Modifies the current member in a guild. Returns a 200 with the updated member object on success. Fires a [Guild Member Update](https://discordapp.com/developers/docs/topics/gateway-events#guild-member-update) Gateway event.
    */
   modifyCurrentMember: Route<{
     params: ["guildId"],
@@ -973,7 +981,7 @@ export type Guild = RouteGroup<{
    * 
    * ## [Modify Current User Nick](https://discordapp.com/developers/docs/resources/guild#modify-current-user-nick)
    * 
-   * Modifies the nickname of the current user in a guild. Returns a 200 with the nickname on success. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY/guild-member-update) Gateway event.
+   * Modifies the nickname of the current user in a guild. Returns a 200 with the nickname on success. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-member-update) Gateway event.
    */
   modifyCurrentUserNick: Route<{
     params: ["guildId"],
@@ -984,7 +992,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Add Guild Member Role](https://discordapp.com/developers/docs/resources/guild#add-guild-member-role)
    * 
-   * Adds a role to a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object). Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY/guild-member-update) Gateway event.
+   * Adds a role to a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object). Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-member-update) Gateway event.
    */
   addGuildMemberRole: Route<{
     params: ["guildId", "userId", "roleId"],
@@ -994,7 +1002,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Remove Guild Member Role](https://discordapp.com/developers/docs/resources/guild#remove-guild-member-role)
    * 
-   * Removes a role from a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object). Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY/guild-member-update) Gateway event.
+   * Removes a role from a [guild member](https://discordapp.com/developers/docs/resources/guild#guild-member-object). Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Guild Member Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-member-update) Gateway event.
    */
   removeGuildMemberRole: Route<{
     params: ["guildId", "userId", "roleId"],
@@ -1004,7 +1012,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Remove Guild Member](https://discordapp.com/developers/docs/resources/guild#remove-guild-member)
    * 
-   * Remove a member from a guild. Requires `KICK_MEMBERS` permission. Returns a 204 empty response on success. Fires a [Guild Member Remove](https://discordapp.com/developers/docs/topics/gateway#guild-member-remove) Gateway event.
+   * Remove a member from a guild. Requires `KICK_MEMBERS` permission. Returns a 204 empty response on success. Fires a [Guild Member Remove](https://discordapp.com/developers/docs/topics/gateway-events#guild-member-remove) Gateway event.
    */
   removeGuildMember: Route<{
     params: ["guildId", "userId"],
@@ -1033,7 +1041,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Create Guild Ban](https://discordapp.com/developers/docs/resources/guild#create-guild-ban)
    * 
-   * Create a guild ban, and optionally delete previous messages sent by the banned user. Requires the `BAN_MEMBERS` permission. Returns a 204 empty response on success. Fires a [Guild Ban Add](https://discordapp.com/developers/docs/topics/gateway#guild-ban-add) Gateway event.
+   * Create a guild ban, and optionally delete previous messages sent by the banned user. Requires the `BAN_MEMBERS` permission. Returns a 204 empty response on success. Fires a [Guild Ban Add](https://discordapp.com/developers/docs/topics/gateway-events#guild-ban-add) Gateway event.
    */
   createGuildBan: Route<{
     params: ["guildId", "userId"],
@@ -1044,7 +1052,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Remove Guild Ban](https://discordapp.com/developers/docs/resources/guild#remove-guild-ban)
    * 
-   * Remove the ban for a user. Requires the `BAN_MEMBERS` permissions. Returns a 204 empty response on success. Fires a [Guild Ban Remove](https://discordapp.com/developers/docs/topics/gateway#guild-ban-remove) Gateway event.
+   * Remove the ban for a user. Requires the `BAN_MEMBERS` permissions. Returns a 204 empty response on success. Fires a [Guild Ban Remove](https://discordapp.com/developers/docs/topics/gateway-events#guild-ban-remove) Gateway event.
    */
   removeGuildBan: Route<{
     params: ["guildId", "userId"],
@@ -1063,7 +1071,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Create Guild Role](https://discordapp.com/developers/docs/resources/guild#create-guild-role)
    * 
-   * Create a new [role](https://discordapp.com/developers/docs/topics/permissions#role-object) for the guild. Requires the `MANAGE_ROLES` permission. Returns the new [role](#DOCS_TOPICS_PERMISSIONS/role-object) object on success. Fires a [Guild Role Create](#DOCS_TOPICS_GATEWAY/guild-role-create) Gateway event. All JSON params are optional.
+   * Create a new [role](https://discordapp.com/developers/docs/topics/permissions#role-object) for the guild. Requires the `MANAGE_ROLES` permission. Returns the new [role](#DOCS_TOPICS_PERMISSIONS/role-object) object on success. Fires a [Guild Role Create](#DOCS_TOPICS_GATEWAY_EVENTS/guild-role-create) Gateway event. All JSON params are optional.
    */
   createGuildRole: Route<{
     params: ["guildId"],
@@ -1074,7 +1082,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Modify Guild Role Positions](https://discordapp.com/developers/docs/resources/guild#modify-guild-role-positions)
    * 
-   * Modify the positions of a set of [role](https://discordapp.com/developers/docs/topics/permissions#role-object) objects for the guild. Requires the `MANAGE_ROLES` permission. Returns a list of all of the guild's [role](#DOCS_TOPICS_PERMISSIONS/role-object) objects on success. Fires multiple [Guild Role Update](#DOCS_TOPICS_GATEWAY/guild-role-update) Gateway events.
+   * Modify the positions of a set of [role](https://discordapp.com/developers/docs/topics/permissions#role-object) objects for the guild. Requires the `MANAGE_ROLES` permission. Returns a list of all of the guild's [role](#DOCS_TOPICS_PERMISSIONS/role-object) objects on success. Fires multiple [Guild Role Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-role-update) Gateway events.
    */
   modifyGuildRolePositions: Route<{
     params: ["guildId"],
@@ -1085,7 +1093,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Modify Guild Role](https://discordapp.com/developers/docs/resources/guild#modify-guild-role)
    * 
-   * Modify a guild role. Requires the `MANAGE_ROLES` permission. Returns the updated [role](https://discordapp.com/developers/docs/topics/permissions#role-object) on success. Fires a [Guild Role Update](#DOCS_TOPICS_GATEWAY/guild-role-update) Gateway event.
+   * Modify a guild role. Requires the `MANAGE_ROLES` permission. Returns the updated [role](https://discordapp.com/developers/docs/topics/permissions#role-object) on success. Fires a [Guild Role Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-role-update) Gateway event.
    * 
    * All parameters to this endpoint are optional and nullable.
    */
@@ -1098,7 +1106,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Modify Guild MFA Level](https://discordapp.com/developers/docs/resources/guild#modify-guild-mfa-level)
    * 
-   * Modify a guild's MFA level. Requires guild ownership. Returns the updated [level](https://discordapp.com/developers/docs/resources/guild#guild-object-mfa-level) on success. Fires a [Guild Update](#DOCS_TOPICS_GATEWAY/guild-update) Gateway event.
+   * Modify a guild's MFA level. Requires guild ownership. Returns the updated [level](https://discordapp.com/developers/docs/resources/guild#guild-object-mfa-level) on success. Fires a [Guild Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-update) Gateway event.
    */
   modifyGuildMFALevel: Route<{
     params: ["guildId"],
@@ -1109,7 +1117,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Delete Guild Role](https://discordapp.com/developers/docs/resources/guild#delete-guild-role)
    * 
-   * Delete a guild role. Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Guild Role Delete](https://discordapp.com/developers/docs/topics/gateway#guild-role-delete) Gateway event.
+   * Delete a guild role. Requires the `MANAGE_ROLES` permission. Returns a 204 empty response on success. Fires a [Guild Role Delete](https://discordapp.com/developers/docs/topics/gateway-events#guild-role-delete) Gateway event.
    */
   deleteGuildRole: Route<{
     params: ["guildId", "roleId"],
@@ -1131,7 +1139,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Begin Guild Prune](https://discordapp.com/developers/docs/resources/guild#begin-guild-prune)
    * 
-   * Begin a prune operation. Requires the `KICK_MEMBERS` permission. Returns an object with one `pruned` key indicating the number of members that were removed in the prune operation. For large guilds it's recommended to set the `compute_prune_count` option to `false`, forcing `pruned` to `null`. Fires multiple [Guild Member Remove](https://discordapp.com/developers/docs/topics/gateway#guild-member-remove) Gateway events.
+   * Begin a prune operation. Requires the `KICK_MEMBERS` permission. Returns an object with one `pruned` key indicating the number of members that were removed in the prune operation. For large guilds it's recommended to set the `compute_prune_count` option to `false`, forcing `pruned` to `null`. Fires multiple [Guild Member Remove](https://discordapp.com/developers/docs/topics/gateway-events#guild-member-remove) Gateway events.
    * 
    * By default, prune will not remove users with roles. You can optionally include specific roles in your prune by providing the `include_roles` parameter. Any inactive user that has a subset of the provided role(s) will be included in the prune and users with additional roles will not.
    */
@@ -1171,7 +1179,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Delete Guild Integration](https://discordapp.com/developers/docs/resources/guild#delete-guild-integration)
    * 
-   * Delete the attached [integration](https://discordapp.com/developers/docs/resources/guild#integration-object) object for the guild. Deletes any associated webhooks and kicks the associated bot if there is one. Requires the `MANAGE_GUILD` permission. Returns a 204 empty response on success. Fires a [Guild Integrations Update](#DOCS_TOPICS_GATEWAY/guild-integrations-update) Gateway event.
+   * Delete the attached [integration](https://discordapp.com/developers/docs/resources/guild#integration-object) object for the guild. Deletes any associated webhooks and kicks the associated bot if there is one. Requires the `MANAGE_GUILD` permission. Returns a 204 empty response on success. Fires [Guild Integrations Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-integrations-update) and [Integration Delete](#DOCS_TOPICS_GATEWAY_EVENTS/integration-delete) Gateway events.
    */
   deleteGuildIntegration: Route<{
     params: ["guildId", "integrationId"],
@@ -1253,7 +1261,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Modify Current User Voice State](https://discordapp.com/developers/docs/resources/guild#modify-current-user-voice-state)
    * 
-   * Updates the current user's voice state. Returns `204 No Content` on success.
+   * Updates the current user's voice state. Returns `204 No Content` on success. Fires a [Voice State Update](https://discordapp.com/developers/docs/topics/gateway-events#voice-state-update) Gateway event.
    */
   modifyCurrentUserVoiceState: Route<{
     params: ["guildId"],
@@ -1263,7 +1271,7 @@ export type Guild = RouteGroup<{
   /**
    * ## [Modify User Voice State](https://discordapp.com/developers/docs/resources/guild#modify-user-voice-state)
    * 
-   * Updates another user's voice state.
+   * Updates another user's voice state. Fires a [Voice State Update](https://discordapp.com/developers/docs/topics/gateway-events#voice-state-update) Gateway event.
    */
   modifyUserVoiceState: Route<{
     params: ["guildId", "userId"],
@@ -1288,7 +1296,7 @@ export type GuildScheduledEvent = RouteGroup<{
   /**
    * ## [Create Guild Scheduled Event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#create-guild-scheduled-event)
    * 
-   * Create a guild scheduled event in the guild. Returns a [guild scheduled event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object) object on success.
+   * Create a guild scheduled event in the guild. Returns a [guild scheduled event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object) object on success. Fires a [Guild Scheduled Event Create](#DOCS_TOPICS_GATEWAY_EVENTS/guild-scheduled-event-create) Gateway event.
    * 
    * A guild can have a maximum of 100 events with `SCHEDULED` or `ACTIVE` status at any time.
    */
@@ -1311,7 +1319,7 @@ export type GuildScheduledEvent = RouteGroup<{
   /**
    * ## [Modify Guild Scheduled Event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#modify-guild-scheduled-event)
    * 
-   * Modify a guild scheduled event. Returns the modified [guild scheduled event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object) object on success.
+   * Modify a guild scheduled event. Returns the modified [guild scheduled event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#guild-scheduled-event-object) object on success. Fires a [Guild Scheduled Event Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-scheduled-event-update) Gateway event.
    * 
    * To start or end an event, use this endpoint to modify the event's [status](#DOCS_RESOURCES_GUILD_SCHEDULED_EVENT/guild-scheduled-event-object-guild-scheduled-event-status) field.
    * 
@@ -1326,7 +1334,7 @@ export type GuildScheduledEvent = RouteGroup<{
   /**
    * ## [Delete Guild Scheduled Event](https://discordapp.com/developers/docs/resources/guild-scheduled-event#delete-guild-scheduled-event)
    * 
-   * Delete a guild scheduled event. Returns a `204` on success.
+   * Delete a guild scheduled event. Returns a `204` on success. Fires a [Guild Scheduled Event Delete](https://discordapp.com/developers/docs/topics/gateway-events#guild-scheduled-event-delete) Gateway event.
    */
   deleteGuildScheduledEvent: Route<{
     params: ["guildId", "guildScheduledEventId"],
@@ -1359,7 +1367,7 @@ export type GuildTemplate = RouteGroup<{
   /**
    * ## [Create Guild from Guild Template](https://discordapp.com/developers/docs/resources/guild-template#create-guild-from-guild-template)
    * 
-   * Create a new guild based on a template. Returns a [guild](https://discordapp.com/developers/docs/resources/guild#guild-object) object on success. Fires a [Guild Create](#DOCS_TOPICS_GATEWAY/guild-create) Gateway event.
+   * Create a new guild based on a template. Returns a [guild](https://discordapp.com/developers/docs/resources/guild#guild-object) object on success. Fires a [Guild Create](#DOCS_TOPICS_GATEWAY_EVENTS/guild-create) Gateway event.
    * 
    * This endpoint can be used only by bots in less than 10 guilds.
    */
@@ -1521,7 +1529,7 @@ export type Invite = RouteGroup<{
   /**
    * ## [Delete Invite](https://discordapp.com/developers/docs/resources/invite#delete-invite)
    * 
-   * Delete an invite. Requires the `MANAGE_CHANNELS` permission on the channel this invite belongs to, or `MANAGE_GUILD` to remove any invite across the guild. Returns an [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) object on success. Fires a [Invite Delete](#DOCS_TOPICS_GATEWAY/invite-delete) Gateway event.
+   * Delete an invite. Requires the `MANAGE_CHANNELS` permission on the channel this invite belongs to, or `MANAGE_GUILD` to remove any invite across the guild. Returns an [invite](https://discordapp.com/developers/docs/resources/invite#invite-object) object on success. Fires an [Invite Delete](#DOCS_TOPICS_GATEWAY_EVENTS/invite-delete) Gateway event.
    */
   deleteInvite: Route<{
     params: ["inviteCode"],
@@ -1557,7 +1565,7 @@ export type StageInstance = RouteGroup<{
   /**
    * ## [Create Stage Instance](https://discordapp.com/developers/docs/resources/stage-instance#create-stage-instance)
    * 
-   * Creates a new Stage instance associated to a Stage channel. Returns that [Stage instance](https://discordapp.com/developers/docs/resources/stage-instance#stage-instance-object-stage-instance-structure).
+   * Creates a new Stage instance associated to a Stage channel. Returns that [Stage instance](https://discordapp.com/developers/docs/resources/stage-instance#stage-instance-object-stage-instance-structure). Fires a [Stage Instance Create](#DOCS_TOPICS_GATEWAY_EVENTS/stage-instance-create) Gateway event.
    * 
    * Requires the user to be a moderator of the Stage channel.
    */
@@ -1578,7 +1586,7 @@ export type StageInstance = RouteGroup<{
   /**
    * ## [Modify Stage Instance](https://discordapp.com/developers/docs/resources/stage-instance#modify-stage-instance)
    * 
-   * Updates fields of an existing Stage instance. Returns the updated [Stage instance](https://discordapp.com/developers/docs/resources/stage-instance#stage-instance-object-stage-instance-structure).
+   * Updates fields of an existing Stage instance. Returns the updated [Stage instance](https://discordapp.com/developers/docs/resources/stage-instance#stage-instance-object-stage-instance-structure). Fires a [Stage Instance Update](#DOCS_TOPICS_GATEWAY_EVENTS/stage-instance-update) Gateway event.
    * 
    * Requires the user to be a moderator of the Stage channel.
    */
@@ -1591,7 +1599,7 @@ export type StageInstance = RouteGroup<{
   /**
    * ## [Delete Stage Instance](https://discordapp.com/developers/docs/resources/stage-instance#delete-stage-instance)
    * 
-   * Deletes the Stage instance. Returns `204 No Content`.
+   * Deletes the Stage instance. Returns `204 No Content`. Fires a [Stage Instance Delete](https://discordapp.com/developers/docs/topics/gateway-events#stage-instance-delete) Gateway event.
    * 
    * Requires the user to be a moderator of the Stage channel.
    */
@@ -1643,7 +1651,7 @@ export type Sticker = RouteGroup<{
   /**
    * ## [Create Guild Sticker](https://discordapp.com/developers/docs/resources/sticker#create-guild-sticker)
    * 
-   * Create a new sticker for the guild. Send a `multipart/form-data` body. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns the new [sticker](https://discordapp.com/developers/docs/resources/sticker#sticker-object) object on success.
+   * Create a new sticker for the guild. Send a `multipart/form-data` body. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns the new [sticker](https://discordapp.com/developers/docs/resources/sticker#sticker-object) object on success. Fires a [Guild Stickers Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-stickers-update) Gateway event.
    * 
    * Every guilds has five free sticker slots by default, and each Boost level will grant access to more slots.
    * 
@@ -1658,7 +1666,7 @@ export type Sticker = RouteGroup<{
   /**
    * ## [Modify Guild Sticker](https://discordapp.com/developers/docs/resources/sticker#modify-guild-sticker)
    * 
-   * Modify the given sticker. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns the updated [sticker](https://discordapp.com/developers/docs/resources/sticker#sticker-object) object on success.
+   * Modify the given sticker. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns the updated [sticker](https://discordapp.com/developers/docs/resources/sticker#sticker-object) object on success. Fires a [Guild Stickers Update](#DOCS_TOPICS_GATEWAY_EVENTS/guild-stickers-update) Gateway event.
    * 
    * All parameters to this endpoint are optional.
    */
@@ -1671,7 +1679,7 @@ export type Sticker = RouteGroup<{
   /**
    * ## [Delete Guild Sticker](https://discordapp.com/developers/docs/resources/sticker#delete-guild-sticker)
    * 
-   * Delete the given sticker. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns `204 No Content` on success.
+   * Delete the given sticker. Requires the `MANAGE_EMOJIS_AND_STICKERS` permission. Returns `204 No Content` on success. Fires a [Guild Stickers Update](https://discordapp.com/developers/docs/topics/gateway-events#guild-stickers-update) Gateway event.
    */
   deleteGuildSticker: Route<{
     params: ["guildId", "stickerId"],
@@ -1703,7 +1711,7 @@ export type User = RouteGroup<{
   /**
    * ## [Modify Current User](https://discordapp.com/developers/docs/resources/user#modify-current-user)
    * 
-   * Modify the requester's user account settings. Returns a [user](https://discordapp.com/developers/docs/resources/user#user-object) object on success.
+   * Modify the requester's user account settings. Returns a [user](https://discordapp.com/developers/docs/resources/user#user-object) object on success. Fires a [User Update](#DOCS_TOPICS_GATEWAY_EVENTS/user-update) Gateway event.
    * 
    * All parameters to this endpoint are optional.
    */
@@ -1791,7 +1799,7 @@ export type Webhook = RouteGroup<{
   /**
    * ## [Create Webhook](https://discordapp.com/developers/docs/resources/webhook#create-webhook)
    * 
-   * Creates a new webhook and returns a [webhook](https://discordapp.com/developers/docs/resources/webhook#webhook-object) object on success. Requires the `MANAGE_WEBHOOKS` permission.
+   * Creates a new webhook and returns a [webhook](https://discordapp.com/developers/docs/resources/webhook#webhook-object) object on success. Requires the `MANAGE_WEBHOOKS` permission. Fires a [Webhooks Update](#DOCS_TOPICS_GATEWAY_EVENTS/webhooks-update) Gateway event.
    * 
    * An error will be returned if a webhook name (`name`) is not valid. A webhook name is valid if:
    * - It does not contain the substring '**clyde**' (case-insensitive)
@@ -1842,7 +1850,7 @@ export type Webhook = RouteGroup<{
   /**
    * ## [Modify Webhook](https://discordapp.com/developers/docs/resources/webhook#modify-webhook)
    * 
-   * Modify a webhook. Requires the `MANAGE_WEBHOOKS` permission. Returns the updated [webhook](https://discordapp.com/developers/docs/resources/webhook#webhook-object) object on success.
+   * Modify a webhook. Requires the `MANAGE_WEBHOOKS` permission. Returns the updated [webhook](https://discordapp.com/developers/docs/resources/webhook#webhook-object) object on success. Fires a [Webhooks Update](#DOCS_TOPICS_GATEWAY_EVENTS/webhooks-update) Gateway event.
    * 
    * All parameters to this endpoint are optional
    */
@@ -1865,7 +1873,7 @@ export type Webhook = RouteGroup<{
   /**
    * ## [Delete Webhook](https://discordapp.com/developers/docs/resources/webhook#delete-webhook)
    * 
-   * Delete a webhook permanently. Requires the `MANAGE_WEBHOOKS` permission. Returns a `204 No Content` response on success.
+   * Delete a webhook permanently. Requires the `MANAGE_WEBHOOKS` permission. Returns a `204 No Content` response on success. Fires a [Webhooks Update](https://discordapp.com/developers/docs/topics/gateway-events#webhooks-update) Gateway event.
    */
   deleteWebhook: Route<{
     params: ["webhookId"],
@@ -1886,7 +1894,7 @@ export type Webhook = RouteGroup<{
    * 
    * Refer to [Uploading Files](https://discordapp.com/developers/docs/reference/uploading-files/) for details on attachments and `multipart/form-data` requests. Returns a message or `204 No Content` depending on the `wait` query parameter.
    * 
-   * Note that when sending a message, you must provide a value for at **least one of** `content`, `embeds`, or `file`.
+   * Note that when sending a message, you must provide a value for at **least one of** `content`, `embeds`, `components`, or `file`.
    * 
    * If the webhook channel is a forum channel, you must provide either `thread_id` in the query string params, or `thread_name` in the JSON/form params. If `thread_id` is provided, the message will send in that thread. If `thread_name` is provided, a thread with that name will be created in the forum channel.
    */

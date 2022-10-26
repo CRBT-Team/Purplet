@@ -1,6 +1,6 @@
 import { Emitter } from '@paperdave/events';
+import { Logger } from '@paperdave/logger';
 import type {
-  GatewayIdentifyData,
   GatewayPresenceUpdateData,
   GatewayReceivePayload,
   GatewaySendPayload,
@@ -16,50 +16,12 @@ import type { Inflate } from 'zlib-sync';
 import type { GatewayEventMap } from './GatewayEventMap';
 import { GatewayExitError } from './GatewayExitError';
 import { Heartbeater } from './Heartbeater';
+import { getWSCodeDisplayName } from './status-code';
+import type { GatewayOptions } from './util';
+import { debug, decoder, erlpack, stripUndefined, zlib } from './util';
+import { version } from '../package.json';
 
-// zlib-sync is used for fast decompression of gzipped payloads.
-let zlib: typeof import('zlib-sync') | undefined;
-// Erlpack is used for payload compression.
-let erlpack: typeof import('erlpack') | undefined;
-
-// @ts-expect-error I cannot use bun-types or else the rest of the library gets type errors.
-if (typeof Bun === 'undefined') {
-  try {
-    zlib = (await import('zlib-sync')).default;
-  } catch {}
-
-  try {
-    erlpack = (await import('erlpack')).default;
-  } catch {}
-}
-
-const decoder = new TextDecoder();
-
-let gatewayURL: string | undefined;
-
-export interface GatewayOptions
-  extends Pick<GatewayIdentifyData, 'token' | 'shard' | 'presence' | 'intents'> {
-  gateway?: string;
-}
-
-function stripUndefined(obj: any): any {
-  if (Array.isArray(obj)) {
-    return obj.map(stripUndefined);
-  }
-  if (obj && typeof obj === 'object') {
-    const out: Record<PropertyKey, any> = {};
-    for (const [key, value] of Object.entries(obj)) {
-      if (value !== undefined) {
-        out[key] = stripUndefined(value);
-      }
-    }
-    return out;
-  }
-  return obj;
-}
-
-export const supportsZlib = typeof zlib !== 'undefined';
-export const supportsETF = typeof erlpack !== 'undefined';
+type GatewayState = 'connecting' | 'connected';
 
 /**
  * Implementation of a Discord gateway client. Supports etf and zlib, if installed.
@@ -80,26 +42,30 @@ export class Gateway extends Emitter<GatewayEventMap> {
   private hb?: Heartbeater;
   private sessionId: string | undefined;
   private inflate?: Inflate;
+  private gatewayURL?: string;
+  private state: GatewayState = 'connecting';
   options: GatewayOptions;
 
   constructor(options: GatewayOptions) {
     super();
     this.options = options;
+    if (!this.options.token) {
+      throw new Error('Empty token passed to new Gateway()');
+    }
+    if (this.options.intents === undefined) {
+      throw new Error('Empty intents passed to new Gateway()');
+    }
     this.connect();
   }
 
   /** Connects to the Gateway. */
   async connect() {
-    let urlString = this.options.gateway ?? gatewayURL;
+    let urlString = this.options.gatewayURL ?? this.gatewayURL;
 
     if (!urlString) {
       // TODO: in the future, use /gateway/bot and automatic sharding.
-      const { url } = await fetch(RouteBases.api + Routes.gateway()).then(x => x.json());
-      urlString = url;
-      // I honestly do not understand why this causes a race condition.
-      // I hope it is a false positive.
-      // eslint-disable-next-line require-atomic-updates
-      gatewayURL = urlString;
+      const { url } = (await fetch(RouteBases.api + Routes.gateway()).then(x => x.json())) as any;
+      urlString = this.gatewayURL = url;
     }
 
     if (zlib) {
@@ -115,8 +81,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
       url.searchParams.set('compress', 'zlib-stream');
     }
 
-    this.ws = new WebSocket(url);
-    // this.ws.binaryType = 'arraybuffer';
+    this.ws = new WebSocket(url.toString());
     this.ws.onmessage = event => this.onRawPacket(event.data);
     this.ws.onclose = event => this.onClose(event);
     this.ws.onerror = event => this.emit('error', new Error('WebSocket error: ' + event.target));
@@ -125,6 +90,37 @@ export class Gateway extends Emitter<GatewayEventMap> {
   /** Send a packet to the Gateway. */
   send(packet: GatewaySendPayload) {
     this.ws!.send((erlpack ? erlpack.pack : JSON.stringify)(stripUndefined(packet)));
+  }
+
+  private sendIdentify() {
+    if (this.sessionId) {
+      debug('sending resume, seq=%s', this.seq);
+      this.send({
+        op: GatewayOpcodes.Resume,
+        d: {
+          seq: this.seq,
+          session_id: this.sessionId,
+          token: this.options.token,
+        },
+      });
+    } else {
+      debug('sending identify, intents=%s', this.options.intents);
+      this.send({
+        op: GatewayOpcodes.Identify,
+        d: {
+          token: this.options.token,
+          shard: this.options.shard,
+          presence: this.options.presence,
+          intents: this.options.intents,
+          compress: !!zlib,
+          properties: {
+            os: typeof process !== 'undefined' ? process.platform : 'web',
+            browser: `@purplet/gateway ${version}`,
+            device: `@purplet/gateway ${version}`,
+          },
+        },
+      });
+    }
   }
 
   /** @internal handles raw packets, decoding etf and gz */
@@ -165,44 +161,47 @@ export class Gateway extends Emitter<GatewayEventMap> {
 
   /** @internal handles close */
   private onClose({ code }: CloseEvent) {
-    if (code >= 4000 && code <= 4999) {
-      let reconnect = false;
-      switch (code) {
-        case GatewayCloseCodes.UnknownError:
-          this.emit('debug', "WebSocket closed by Discord. We're not sure what went wrong.");
-          reconnect = true;
-          break;
-        case GatewayCloseCodes.UnknownOpcode:
-        case GatewayCloseCodes.DecodeError:
-        case GatewayCloseCodes.NotAuthenticated:
-        case GatewayCloseCodes.AlreadyAuthenticated:
-          reconnect = true;
-          break;
-        case GatewayCloseCodes.InvalidAPIVersion:
-        case GatewayCloseCodes.InvalidIntents:
-        case GatewayCloseCodes.InvalidShard:
-        case GatewayCloseCodes.AuthenticationFailed:
-        case GatewayCloseCodes.ShardingRequired:
-        case GatewayCloseCodes.DisallowedIntents:
-          break;
-        case GatewayCloseCodes.SessionTimedOut:
-          this.emit('debug', 'WebSocket closed by Discord. Attempting to reconnect...');
-          reconnect = true;
-          break;
-        case GatewayCloseCodes.InvalidSeq:
-          // Do not log for this one
-          this.sessionId = undefined;
-          reconnect = true;
-          break;
-        default:
-          break;
-      }
+    if (code === 1000) {
+      return;
+    }
 
-      if (!reconnect) {
-        this.emit('error', new GatewayExitError(code));
-      } else {
-        this.reconnect();
-      }
+    let reconnect = false;
+    debug(`WebSocket disconnected: ${getWSCodeDisplayName(code)} ${code}`);
+
+    switch (code) {
+      case 1015: // Failed Handshake
+      case GatewayCloseCodes.InvalidAPIVersion:
+      case GatewayCloseCodes.InvalidIntents:
+      case GatewayCloseCodes.InvalidShard:
+      case GatewayCloseCodes.AuthenticationFailed:
+      case GatewayCloseCodes.ShardingRequired:
+      case GatewayCloseCodes.DisallowedIntents:
+        break;
+      case 1001: // Server going down
+      case 1002: // Protocol Error
+      case 1006: // Network loss
+      case GatewayCloseCodes.UnknownError:
+      case GatewayCloseCodes.SessionTimedOut:
+      case GatewayCloseCodes.UnknownOpcode:
+      case GatewayCloseCodes.DecodeError:
+      case GatewayCloseCodes.NotAuthenticated:
+      case GatewayCloseCodes.AlreadyAuthenticated:
+        reconnect = true;
+        break;
+      case GatewayCloseCodes.InvalidSeq:
+        this.seq = 0;
+        this.sessionId = undefined;
+        reconnect = true;
+        break;
+      default:
+        Logger.error(`purplet gateway: unknown close code ${code}`);
+        break;
+    }
+
+    if (reconnect) {
+      this.reconnect();
+    } else {
+      this.emit('error', new GatewayExitError(code));
     }
   }
 
@@ -218,40 +217,28 @@ export class Gateway extends Emitter<GatewayEventMap> {
 
     switch (packet.op) {
       case GatewayOpcodes.Hello:
+        debug('Hello, heartbeat interval is %sms.', packet.d.heartbeat_interval);
         this.hb = new Heartbeater(packet.d.heartbeat_interval, () => this.onHeartbeat());
-
-        if (this.sessionId) {
-          this.send({
-            op: GatewayOpcodes.Resume,
-            d: {
-              seq: this.seq,
-              session_id: this.sessionId,
-              token: this.options.token,
-            },
-          });
-        } else {
-          this.send({
-            op: GatewayOpcodes.Identify,
-            d: {
-              token: this.options.token,
-              shard: this.options.shard,
-              presence: this.options.presence,
-              intents: this.options.intents,
-              compress: !!zlib,
-              properties: {
-                os: typeof process !== 'undefined' ? process.platform : 'web',
-                browser: 'purplet',
-                device: 'purplet',
-              },
-            },
-          });
-        }
+        this.sendIdentify();
         return;
       case GatewayOpcodes.HeartbeatAck:
+        debug('Recieved heartbeat ack');
         // TODO: implement zombie detection
         return;
       case GatewayOpcodes.InvalidSession:
-        this.emit('debug', 'Gateway Session Invalidated. Reconnecting.');
+        if (this.state === 'connecting') {
+          this.close();
+          this.onClose({ code: GatewayCloseCodes.AuthenticationFailed });
+          return;
+        }
+        debug('Session Invalidated. Attempting to reconnect.');
+        debug(packet);
+        if (packet.d) {
+          this.sendIdentify();
+          return;
+        }
+        this.seq = 0;
+        this.sessionId = undefined;
         this.reconnect();
         return;
       case GatewayOpcodes.Reconnect:
@@ -260,6 +247,7 @@ export class Gateway extends Emitter<GatewayEventMap> {
       case GatewayOpcodes.Dispatch:
         if (packet.t === GatewayDispatchEvents.Ready) {
           this.sessionId = packet.d.session_id;
+          this.gatewayURL = packet.d.resume_gateway_url ?? this.gatewayURL;
         }
         this.emit('*', packet);
         this.emit(packet.t, packet.d);

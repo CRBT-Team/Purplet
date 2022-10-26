@@ -1,4 +1,4 @@
-import { APIVersion, RouteBases } from 'discord-api-types/rest';
+import { API_BASE_URL, API_VERSION, toBlob } from '@purplet/utils';
 import { Fetcher } from './Fetcher';
 import {
   ApplicationCommand,
@@ -20,11 +20,9 @@ import {
   Webhook,
 } from './routes.generated';
 import type { RequestOptions, RequestOptionsWithMethod, RestOptions, TokenType } from './types';
-import { toBlob } from './utils';
 
 const sourceURL = 'https://github.com/CRBT-Team/Purplet/tree/main/packages/rest';
-// TODO: Add rollup define plugin for __VERSION__, like we have in main purplet package.
-const version = '1.0.0';
+const version = '__VERSION__';
 const defaultUserAgent = `DiscordBot (${sourceURL}, ${version})`;
 
 const methodsWithBody = new Set(['POST', 'PUT', 'PATCH']);
@@ -37,8 +35,8 @@ export class Rest {
 
   constructor(options: RestOptions) {
     this.options = {
-      version: APIVersion,
-      base: RouteBases.api,
+      version: API_VERSION,
+      base: API_BASE_URL,
       tokenType: 'Bot',
       userAgent: defaultUserAgent,
       ...options,
@@ -130,7 +128,7 @@ export class Rest {
       headers.set('X-Audit-Log-Reason', options.reason);
     }
 
-    return await this.fetcher.queue({
+    return this.fetcher.queue({
       url,
       init: {
         method: options.method,
@@ -143,22 +141,22 @@ export class Rest {
   // Useful method aliases
 
   async get<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return await this.request(endpoint, { method: 'GET', ...options });
+    return this.request(endpoint, { method: 'GET', ...options });
   }
 
   async post<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return await this.request(endpoint, { method: 'POST', ...options });
+    return this.request(endpoint, { method: 'POST', ...options });
   }
 
   async put<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return await this.request(endpoint, { method: 'PUT', ...options });
+    return this.request(endpoint, { method: 'PUT', ...options });
   }
 
   async delete<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return await this.request(endpoint, { method: 'DELETE', ...options });
+    return this.request(endpoint, { method: 'DELETE', ...options });
   }
 
   async patch<Output>(endpoint: string, options?: RequestOptions): Promise<Output> {
-    return await this.request<Output>(endpoint, { method: 'PATCH', ...options });
+    return this.request<Output>(endpoint, { method: 'PATCH', ...options });
   }
 }

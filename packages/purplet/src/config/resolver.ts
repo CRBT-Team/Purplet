@@ -55,6 +55,7 @@ const options = object({
     ),
   }),
   lang: string(def.lang, false),
+  injectLogger: boolean(def.injectLogger),
   paths: object({
     build: pathname(def.paths.build),
     features: pathname(def.paths.features),

@@ -1,6 +1,7 @@
 import type { Gateway } from '@purplet/gateway';
-import type { Rest } from '@purplet/rest';
-import type { ResolvedConfig } from '../config/types';
+import type { RestOptions } from '@purplet/rest';
+import { Rest } from '@purplet/rest';
+import type { RuntimeConfig } from '../config/types';
 import type { ApplicationFlagsBitfield, User } from '../structures';
 
 export interface GlobalEnv {
@@ -9,7 +10,7 @@ export interface GlobalEnv {
   env: any;
   gateway: Gateway;
   rest: Rest;
-  config: ResolvedConfig;
+  config: RuntimeConfig;
 }
 
 const globalEnv = {
@@ -18,12 +19,11 @@ const globalEnv = {
 
 export let application = globalEnv.application;
 export let botUser = globalEnv.botUser;
-export let config = globalEnv.config;
-export let env = globalEnv.env;
+export let config = globalEnv.config; // set internally
+export let env = globalEnv.env; // set internally
 export let gateway = globalEnv.gateway;
 export let rest = globalEnv.rest;
 
-/** @internal */
 export function setGlobalEnv(newEnv: Partial<GlobalEnv>): void {
   Object.assign(globalEnv, newEnv);
 
@@ -33,4 +33,8 @@ export function setGlobalEnv(newEnv: Partial<GlobalEnv>): void {
   env = globalEnv.env;
   gateway = globalEnv.gateway;
   rest = globalEnv.rest;
+}
+
+export function setRestOptions(opts: RestOptions) {
+  setGlobalEnv({ rest: new Rest(opts) });
 }

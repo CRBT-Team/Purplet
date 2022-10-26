@@ -30,9 +30,28 @@ export function moduleToFeatureArray(filename: string, module: Module) {
     });
 }
 
-export function markFeature(id: string, feat: UnmarkedFeature<any>): Feature {
+export function markFeatureInternal(id: string, feat: UnmarkedFeature<any>): Feature {
   feat.featureId = id;
   feat.exportId = 'unknown';
   feat.filename = 'unknown';
+  return feat;
+}
+
+export function markFeature(
+  filename: string,
+  exportId: string,
+  feat: UnmarkedFeature<any>
+): Feature {
+  feat.filename = filename;
+  feat.exportId = exportId;
+  const filenameWithoutExtension = filename.replace(/\.[^.]+$/, '');
+  feat.featureId = `${filenameWithoutExtension}#${exportId}`;
+  if (feat[FEATURE].hook.merge) {
+    (feat[FEATURE].data as Feature[]).forEach((subFeature, i) => {
+      subFeature.filename = filename;
+      subFeature.exportId = `${exportId}[${i}]`;
+      subFeature.featureId = `${feat.featureId}[${i}]`;
+    });
+  }
   return feat;
 }

@@ -1,6 +1,7 @@
 import type { Awaitable, DeepPartial, ForceSimplify } from '@paperdave/utils';
-import type { AllowedMentionsTypes } from 'purplet/types';
+import type { AllowedMentionsTypes } from 'discord-api-types/v10';
 import type { UserConfig as ViteConfig } from 'vite';
+import type { Adapter } from '../build/adapter';
 
 export interface ResolvedConfig {
   /** Not included in user configuration; This is the root directory of the project. */
@@ -8,11 +9,13 @@ export interface ResolvedConfig {
   /** Not included in user configuration; This is the `.purplet` directory of the project. */
   temp: string;
 
+  adapter: Adapter;
   alias: Record<string, string>;
   allowedMentions: {
     parse: Array<AllowedMentionsTypes | 'everyone' | 'roles' | 'users'>;
     repliedUser: boolean;
   };
+  injectLogger: boolean;
   lang: string;
   paths: {
     build: string;
@@ -22,4 +25,7 @@ export interface ResolvedConfig {
   vite: ViteConfig | (() => Awaitable<ViteConfig>);
 }
 
-export type Config = ForceSimplify<DeepPartial<Omit<ResolvedConfig, 'root'>>>;
+export const RUNTIME_CONFIG_KEYS = ['allowedMentions', 'lang', 'injectLogger'] as const;
+
+export type Config = ForceSimplify<DeepPartial<Omit<ResolvedConfig, 'root' | 'temp'>>>;
+export type RuntimeConfig = Pick<ResolvedConfig, typeof RUNTIME_CONFIG_KEYS[number]>;
