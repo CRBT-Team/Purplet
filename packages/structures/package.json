@@ -28,17 +28,13 @@
     "dev": "rollup -c --watch"
   },
   "dependencies": {
-    "@purplet/rest": "workspace:^1.1.0"
+    "@paperdave/utils": "^1.5.0",
+    "@purplet/rest": "workspace:*",
+    "@purplet/utils": "workspace:*",
+    "discord-api-types": "^0.37.14"
   },
   "devDependencies": {
-    "@paperdave/utils": "1.1.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "bun-types": "^0.1.8",
-    "discord-api-types": "^0.37.2",
-    "esbuild": "^0.14.54",
-    "rollup": "^2.78.0",
-    "rollup-plugin-esbuild": "^4.9.3",
-    "typescript": "^4.7.4"
+    "@purplet/shared-config": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
