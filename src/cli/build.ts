@@ -14,15 +14,15 @@ export async function build(args: Args) {
   const configFile = path.resolve(args.root, 'purplet.config.ts');
   const config = await loadConfig(args);
 
-  const modulePath = config.compiler?.modulesPath
-    ? path.resolve(args.root, config.compiler?.modulesPath)
+  const modulePath = config.compiler?.featuresPath
+    ? path.resolve(args.root, config.compiler?.featuresPath)
     : [
         //
-        path.resolve(args.root, 'src', 'modules'),
-        path.resolve(args.root, 'modules'),
+        path.resolve(args.root, 'src', 'features'),
+        path.resolve(args.root, 'features'),
       ].find((x) => fs.existsSync(x));
   if (!modulePath) {
-    throw new Error('No modules path found. Create a directory at ./src/modules');
+    throw new Error('No features path found. Create a directory at ./src/features');
   }
   const moduleList = (await pathExists(modulePath)) ? await readDirRecursive(modulePath) : [];
 
@@ -45,7 +45,7 @@ export async function build(args: Args) {
         return `import * as module_${moduleId} from "${moduleFile}";`;
       }),
       '',
-      `const modules = {`,
+      `const features = {`,
       ...moduleList.map((module, i) => {
         const relativePath = path.relative(modulePath, module);
         const moduleId = relativePath.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '_');
@@ -66,7 +66,7 @@ export async function build(args: Args) {
         (async() => {
           const conf = await config;
           global.purplet = new Purplet(conf);
-          for (const [moduleName, module] of Object.entries(modules)) {
+          for (const [moduleName, module] of Object.entries(features)) {
             purplet.registerModule(moduleName, module);
           }
           purplet.init();
@@ -91,7 +91,7 @@ export async function build(args: Args) {
     target: 'node16',
     format: 'esm',
     sourcemap: true,
-    external: ['purplet', 'discord.js', '@discordjs/rest', 'dotenv'].concat(deps),
+    external: ['purplet', 'discord.js', '@purplet/rest', 'dotenv'].concat(deps),
     ...(config.compiler?.esbuildOptions ?? {}),
     plugins: [
       // add plugins here

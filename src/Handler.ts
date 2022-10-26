@@ -1,4 +1,4 @@
-import { REST } from '@discordjs/rest';
+import { Rest } from '@purplet/rest';
 import { ApplicationCommandData, Client, IntentsString } from 'discord.js';
 import { Config } from './Config';
 import { Purplet } from './Purplet';
@@ -26,8 +26,8 @@ export abstract class Handler<T = unknown> {
   config!: Config;
   /** Reference to the Discord.js client. */
   client!: Client;
-  /** Reference to the Discord.js rest client. */
-  rest!: REST;
+  /** Reference to the @purplet/rest client. */
+  rest!: Rest;
   /** Reference to the Purplet class. */
   purplet!: Purplet;
 

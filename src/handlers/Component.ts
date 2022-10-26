@@ -125,7 +125,7 @@ function GenerateId<T extends Context>(
   return encoded;
 }
 
-export function BaseComponent<
+export function $messageComponent<
   I extends MessageComponentInteraction | ModalSubmitInteraction,
   T extends Context
 >(data: ComponentDataInput<I, T>) {
@@ -139,14 +139,14 @@ export function BaseComponent<
   return instance;
 }
 
-export function ButtonComponent<T extends Context>(
+export function $button<T extends Context>(
   data: ComponentDataInputNoContext<ButtonInteraction>
 ): ButtonComponentInstance<undefined>;
-export function ButtonComponent<T extends Context>(
+export function $button<T extends Context>(
   data: ComponentDataInput<ButtonInteraction, T>
 ): ButtonComponentInstance<T>;
-export function ButtonComponent<T extends Context>(data: ComponentDataInput) {
-  const instance = BaseComponent<ButtonInteraction, T>(data);
+export function $button<T extends Context>(data: ComponentDataInput) {
+  const instance = $messageComponent<ButtonInteraction, T>(data);
 
   return new Proxy(
     Object.assign(function () {}, instance),
@@ -159,14 +159,14 @@ export function ButtonComponent<T extends Context>(data: ComponentDataInput) {
   ) as unknown;
 }
 
-export function SelectMenuComponent<T extends Context>(
+export function $selectMenu<T extends Context>(
   data: ComponentDataInputNoContext<SelectMenuInteraction>
 ): SelectMenuComponentInstance<T>;
-export function SelectMenuComponent<T extends Context>(
+export function $selectMenu<T extends Context>(
   data: ComponentDataInput<SelectMenuInteraction, T>
 ): SelectMenuComponentInstance<T>;
-export function SelectMenuComponent<T extends Context>(data: ComponentDataInput) {
-  const instance = BaseComponent<SelectMenuInteraction, T>(data);
+export function $selectMenu<T extends Context>(data: ComponentDataInput) {
+  const instance = $messageComponent<SelectMenuInteraction, T>(data);
 
   return new Proxy(
     Object.assign(function () {}, instance),
@@ -179,14 +179,14 @@ export function SelectMenuComponent<T extends Context>(data: ComponentDataInput)
   ) as unknown;
 }
 
-export function ModalComponent<T extends Context>(
+export function $modal<T extends Context>(
   data: ComponentDataInputNoContext<ModalSubmitInteraction>
 ): ModalComponentInstance<T>;
-export function ModalComponent<T extends Context>(
+export function $modal<T extends Context>(
   data: ComponentDataInput<ModalSubmitInteraction, T>
 ): ModalComponentInstance<T>;
-export function ModalComponent<T extends Context>(data: ComponentDataInput) {
-  const instance = BaseComponent<ModalSubmitInteraction, T>(data);
+export function $modal<T extends Context>(data: ComponentDataInput) {
+  const instance = $messageComponent<ModalSubmitInteraction, T>(data);
 
   return new Proxy(
     Object.assign(function () {}, instance),

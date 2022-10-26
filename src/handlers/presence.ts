@@ -105,15 +105,15 @@ export class PresenceProviderHandler extends Handler<PresenceProviderData> {
   }
 }
 
-export function PresenceProvider(data: PresenceProviderData) {
+export function $presenceProvider(data: PresenceProviderData) {
   return createInstance(PresenceProviderHandler, {
     ...data,
     interval: data.interval ?? 1000 * 60 * 5,
   });
 }
 
-export function ActivityProvider(data: ActivityProviderData) {
-  return PresenceProvider({
+export function $activityProvider(data: ActivityProviderData) {
+  return $presenceProvider({
     interval: data.interval,
     async getPresence() {
       return {

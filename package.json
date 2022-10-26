@@ -1,22 +1,45 @@
 {
   "name": "purplet",
-  "version": "1.3.4",
-  "description": "A toolkit for building Discord bots that easily leverage interactions, used by CRBT.",
-  "scripts": {
-    "purplet": "node scripts/build-dev.mjs && node dist/index.mjs --root=sample",
-    "build": "node scripts/build-dev.mjs",
-    "prepack": "node scripts/package.mjs",
-    "lint": "prettier . --write && eslint . && tsc -p . --noEmit",
-    "tsc": "eslint types",
-    "prettier": "prettier --write .",
-    "eslint": "eslint ."
+  "version": "1.4.0",
+  "description": "Next-gen framework to build modern Discord bots.",
+  "keywords": [
+    "discord",
+    "bot",
+    "api",
+    "framework",
+    "discord.js",
+    "typescript"
+  ],
+  "homepage": "https://purplet.js.org",
+  "bugs": "https://github.com/CRBT-Team/Purplet/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CRBT-Team/Purplet"
   },
+  "license": "Apache-2.0",
+  "contributors": [
+    "Dave Caruso <me@paperdave.net> (https://github.com/paperdave)",
+    "Clembs <clembs@clembs.com> (https://github.com/Clembs)"
+  ],
+  "type": "module",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/purplet.d.ts",
   "bin": "./dist/index.mjs",
+  "scripts": {
+    "build": "node scripts/build-dev.mjs",
+    "eslint": "eslint .",
+    "lint": "prettier . --write && eslint . && tsc -p . --noEmit",
+    "prepack": "node scripts/package.mjs",
+    "prettier": "prettier --write .",
+    "purplet": "node scripts/build-dev.mjs && node dist/index.mjs --root=sample",
+    "tsc": "eslint types"
+  },
   "dependencies": {
     "@babel/code-frame": "^7.15.8",
+    "@purplet/rest": "^1.0.1",
+    "@purplet/serialize": "^2.0.0",
+    "@purplet/utils": "^1.0.0",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
     "dedent": "^0.7.0",
@@ -30,45 +53,22 @@
     "yargs": "^17.2.1"
   },
   "devDependencies": {
-    "@discordjs/rest": "^0.4.1",
     "@types/babel__code-frame": "^7.0.3",
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^9.0.13",
-    "@types/node-emoji": "^1.8.1",
     "@types/source-map-support": "^0.5.4",
     "@types/yargs": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "discord.js": "13.9.0",
+    "discord.js": "^13.11.0",
     "dts-bundle-generator": "^5.9.0",
     "esbuild-plugin-d.ts": "^1.0.6",
     "eslint": "^8.0.0",
-    "node-emoji": "^1.11.0",
     "prettier": "^2.4.1",
     "prettier-plugin-jsdoc": "^0.3.24",
     "prettier-plugin-organize-imports": "^2.3.4"
   },
   "peerDependencies": {
-    "@discordjs/rest": "^0.4.1",
-    "discord.js": "^13.6.0"
-  },
-  "author": {
-    "name": "CRBT Team",
-    "url": "https://github.com/CRBT-Team"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/CRBT-Team/Purplet"
-  },
-  "bugs": {
-    "url": "https://github.com/CRBT-Team/Purplet/issues"
-  },
-  "keywords": [
-    "discord",
-    "framework",
-    "bot",
-    "discord.js",
-    "purplet"
-  ],
-  "license": "Apache-2.0"
+    "discord.js": "^13.11.0"
+  }
 }

@@ -1,57 +1,47 @@
 <div align="center">
-  <img alt="Purplet" src="https://user-images.githubusercontent.com/67973777/169643730-2b03ecb8-3510-471f-8e3d-2c2485750962.png">
-
-  <h4>A simple framework to build modern Discord apps.</h4>
-  
+  <img alt="Purplet" src="https://github.com/CRBT-Team/Purplet/blob/main/sites/purplet.js.org/static/img/purplet-artwork.png?raw=true" >
+  <h1>Purplet</h1>
+  <h4>Next-gen framework to build modern Discord apps.</h4>
   <div>
-    <img src="https://img.shields.io/npm/v/purplet?color=F27187&label=version" alt="Version">
-    <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=F27187" alt="License">
-    <a href="https://npmjs.org/package/purplet"><img src="https://img.shields.io/npm/dt/purplet?color=CB0000&logo=npm&logoColor=white" alt="npm"></a>
-    <a href="https://discord.gg/AvwhNtsgAC"><img src="https://img.shields.io/discord/782584672298729473?color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
+    <img src="https://img.shields.io/badge/Discord_API-v10-c4aaff" alt="Discord API Version">
+    <img src="https://img.shields.io/npm/v/purplet?color=c4aaff&label=version" alt="Version">
+    <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=c4aaff" alt="License">
+    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet?color=c4aaff">
+    <a href="https://discord.gg/BFkHA8P7rh"><img src="https://img.shields.io/discord/995533040040292373?color=c4aaff&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
   </div>
 </div>
 
 ## About Purplet
 
-Built with [TypeScript](https://typescriptlang.org) and [Discord.js](https://discord.js.org/), this framework provides an easy way to build Discord applications that leverage Discord's interaction API.
+Built with [TypeScript](https://typescriptlang.org) and [Discord.js](https://discord.js.org/), this framework provides an easy way to build Discord applications that leverage Discord's interaction API. For example, all the code needed for a "Hello World" Slash Command is:
 
-⚠️ Purplet is still in development, so you may expect bugs and missing features.
-Encountered any? Open an [issue](https://github.com/CRBT-Team/Purplet/issues) or a pull request.
+```ts
+export const helloWorld = $slashCommand({
+  name: 'hello',
+  description: 'A simple "Hello, World" command.',
 
-> Purplet is not affiliated with Discord or Discord.js.
+  async handle() {
+    this.reply('Hello, World!');
+  },
+});
+```
 
-## Development
+> ⚠️ Purplet v1 is pretty stable but we do not recommend using it to build new apps as Purplet 2, more documented and featureful, is being developed. Support for v1 is guaranteed until Purplet 2 becomes stable and fully replaces it, at which point v1 will be deprecated.
 
-To install and get started, run
+## Getting Started
+
+The best way to get started is using `create-purplet` via your package manager's `create` command:
 
 ```
 npm init purplet
+# or
+yarn create purplet
+# or
+pnpm create purplet
 ```
 
-and follow the instructions.
-
-Part of Purplet is documented [here](/docs/), and we encourage devs to check the [sample project](https://github.com/CRBT-Team/Purplet/tree/main/sample) for inspiration and guidance.
+and follow the instructions it gives. Part of Purplet is documented [here](/docs/), and we encourage devs to check the [sample project](https://github.com/CRBT-Team/Purplet/tree/main/sample) for inspiration and guidance.
 
 ## License
 
 Purplet is licensed under the [Apache 2.0 license](/LICENSE).
-
-## Roadmap
-
-- [x] Chat/Slash command handler
-- [x] Context commands
-- [x] Chat subcommands
-- [x] Text command handler
-- [x] Event handler
-- [x] Configuration file
-- [x] Service Handler
-- [ ] Global Handler
-- [x] PresenceProvider Handler
-- [x] Component Handler
-- [x] Modals
-- [ ] Optimize cramming method
-- [ ] Dev mode
-- [ ] Revise configuration
-- [ ] Utils
-- [x] Init command to create a new project
-- [ ] Finish documentation

@@ -1,13 +1,8 @@
-import { defineConfig, TextCommandHandler } from 'purplet';
+import { $config, MentionCommandHandler } from 'purplet';
 
-export default defineConfig({
+const config = $config({
   // Pass extra handlers here (since 1.2 handlers auto-register when you create an instance)
-  discord: {
-    // commandGuilds: ['949329353047687189'],
-  },
-  handlers: [
-    new TextCommandHandler({
-      prefix: '!',
-    }),
-  ],
+  handlers: [new MentionCommandHandler()],
 });
+
+export default config;

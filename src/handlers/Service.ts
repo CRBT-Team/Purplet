@@ -1,4 +1,4 @@
-import { REST } from '@discordjs/rest';
+import { Rest } from '@purplet/rest';
 import { Awaitable, Client } from 'discord.js';
 import { Config, createInstance, Handler, HandlerInstance, IPurplet } from '..';
 
@@ -7,7 +7,7 @@ const INSTANCE_REF = Symbol('INSTANCE_REF');
 interface ServiceAPI {
   config: Config;
   client: Client;
-  rest: REST;
+  rest: Rest;
   purplet: IPurplet;
 }
 
@@ -60,7 +60,7 @@ export class ServiceHandler extends Handler<ServiceData<unknown>> {
   }
 }
 
-export function Service<T>(data: ServiceDataInput<T>): ServiceInstance<T> {
+export function $service<T>(data: ServiceDataInput<T>): ServiceInstance<T> {
   const i = createInstance(ServiceHandler, data) as ServiceInstance<T>;
   i.data[INSTANCE_REF] = i as ServiceInstance<T> & ServiceAPI;
   return i;

@@ -1,4 +1,4 @@
-import { RESTOptions } from '@discordjs/rest';
+import { RestOptions } from '@purplet/rest';
 import { ClientOptions } from 'discord.js';
 import { BuildOptions } from 'esbuild';
 import { Handler } from './Handler';
@@ -8,8 +8,8 @@ import { RecursivePartial } from './util/types';
 export interface Config {
   /** Compilation options */
   compiler: {
-    /** Specify the modules path, default "./modules" */
-    modulesPath: string;
+    /** Specify the features path, default "./features" */
+    featuresPath: string;
     /** Specify the output path, default "./dist/bot.mjs" */
     outputPath: string;
     /** Specify aliases */
@@ -25,13 +25,8 @@ export interface Config {
   discord: {
     /** Options passed to `discord.js` */
     clientOptions: ClientOptions;
-    /** Options passed to `@discordjs/rest` */
-    restOptions: RESTOptions;
-    /**
-     * List of guilds to post application commands to. if an empty array, posts commands to the
-     * global application. In development mode, having global app commands is not allowed.
-     */
-    commandGuilds: string[];
+    /** Options passed to `@purplet/rest` */
+    restOptions: RestOptions;
     /**
      * Token passed to `discord.Client.login`, defaults to searching process.env for one of these variables
      *
@@ -49,9 +44,6 @@ export interface Config {
 
 export type PartialConfig = RecursivePartial<Config>;
 
-export async function defineConfig(config: Resolvable<PartialConfig>): Promise<PartialConfig> {
-  if (typeof config === 'function') {
-    return config();
-  }
+export async function $config(config: PartialConfig): Promise<PartialConfig> {
   return config;
 }

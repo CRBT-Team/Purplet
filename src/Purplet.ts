@@ -1,4 +1,4 @@
-import { REST } from '@discordjs/rest';
+import { Rest } from '@purplet/rest';
 import {
   ApplicationCommandManager,
   Client,
@@ -13,7 +13,7 @@ export type CommandSource = GuildApplicationCommandManager | ApplicationCommandM
 
 export interface IPurplet {
   client: Client;
-  rest: REST;
+  rest: Rest;
   handlers: Handler[];
 }
 
@@ -22,7 +22,7 @@ export class Purplet implements IPurplet {
   running = false;
 
   client: Client;
-  rest: REST;
+  rest: Rest;
   handlers: Handler[] = [];
   preRegisteredHandlers: Handler[] = [];
 
@@ -33,7 +33,7 @@ export class Purplet implements IPurplet {
     if (!clientOptions.intents) clientOptions.intents = [];
 
     this.client = new Client(clientOptions as ClientOptions);
-    this.rest = new REST({ ...restOptions, version: '9' });
+    this.rest = new Rest(restOptions);
 
     this.preRegisteredHandlers = config.handlers.concat();
   }
@@ -54,7 +54,7 @@ export class Purplet implements IPurplet {
       : tokenUnresolved);
 
     this.client.token = token;
-    this.rest.setToken(token);
+    this.rest.setToken(token, 'Bot');
 
     const extraIntents = this.handlers.map((handler) => handler.getIntents());
 
@@ -70,9 +70,7 @@ export class Purplet implements IPurplet {
       });
     }
 
-    const guilds = (this.config.discord?.commandGuilds ?? []).concat(
-      (process.env.PURPLET_COMMAND_GUILDS ?? '').split(',').filter(Boolean)
-    );
+    const guilds = (process.env.PURPLET_INCLUDE_GUILDS ?? '').split(',').filter(Boolean);
 
     const applicationCommands = (
       await Promise.all(
@@ -101,7 +99,7 @@ export class Purplet implements IPurplet {
 
   public async registerHandler(handler: Handler) {
     if (handler.purplet) {
-      throw new Error('Handler already added to a purplet.');
+      throw new Error('Handler already added.');
     }
 
     this.preRegisteredHandlers.push(handler);

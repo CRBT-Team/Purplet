@@ -2,7 +2,6 @@ import path from 'path';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { build } from './build';
-import { dev } from './dev';
 import { run } from './run';
 
 const args = yargs(hideBin(process.argv))
@@ -32,7 +31,7 @@ const command = args._[0];
 args.root = path.join(process.cwd(), args.root);
 
 if (command === 'dev') {
-  dev(args);
+  console.log('lol rip');
 } else if (command === 'build') {
   build(args);
 } else if (!command || command === 'run') {

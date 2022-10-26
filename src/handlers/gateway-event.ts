@@ -2,7 +2,7 @@ import { ClientEvents, Intents, IntentsString } from 'discord.js';
 import { createInstance } from '..';
 import { Handler } from '../Handler';
 
-export interface OnEventData<K extends keyof ClientEvents = keyof ClientEvents> {
+export interface GatewayEventData<K extends keyof ClientEvents = keyof ClientEvents> {
   event: K;
   listener: (...args: ClientEvents[K]) => void;
 }
@@ -22,10 +22,10 @@ function getRequiredIntents(ev: keyof ClientEvents): IntentsString[] {
   return [];
 }
 
-export class OnEventHandler extends Handler<OnEventData> {
-  events = new Map<string, OnEventData>();
+export class GatewayEventHandler extends Handler<GatewayEventData> {
+  events = new Map<string, GatewayEventData>();
 
-  register(id: string, instance: OnEventData) {
+  register(id: string, instance: GatewayEventData) {
     if (this.events.has(id)) {
       this.unregister(id);
     }
@@ -38,7 +38,7 @@ export class OnEventHandler extends Handler<OnEventData> {
     for (const intent of required) {
       if (!intents.has(intent)) {
         console.warn(
-          `NOTICE: Your bot is missing the GUILD_MESSAGES intent. OnEvent("${instance.event}") will not recieve events.`
+          `NOTICE: Your bot is missing the GUILD_MESSAGES intent. $gatewayEvent("${instance.event}") will not recieve events.`
         );
       }
     }
@@ -53,12 +53,12 @@ export class OnEventHandler extends Handler<OnEventData> {
   }
 }
 
-export function OnEvent<K extends keyof ClientEvents>(
+export function $gatewayEvent<K extends keyof ClientEvents>(
   event: K,
   listener: (...args: ClientEvents[K]) => void
 ) {
-  return createInstance(OnEventHandler, {
+  return createInstance(GatewayEventHandler, {
     event,
     listener,
-  } as OnEventData);
+  } as GatewayEventData);
 }

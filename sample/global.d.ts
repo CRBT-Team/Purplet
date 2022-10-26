@@ -1,4 +1,4 @@
 declare module 'purplet' {
-  const crbt: typeof import('../src');
-  export = crbt;
+  const purplet: typeof import('../src');
+  export = purplet;
 }

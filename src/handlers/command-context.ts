@@ -93,19 +93,19 @@ export class ContextCommandHandler extends Handler<ContextCommandData> {
   }
 }
 
-export function ContextCommand(data: ContextCommandData) {
+export function $contextCommand(data: ContextCommandData) {
   return createInstance(ContextCommandHandler, data);
 }
 
-export function UserContextCommand(data: ContextCommandShorthandData<'USER'>) {
-  return ContextCommand({
+export function $userContextCommand(data: ContextCommandShorthandData<'USER'>) {
+  return $contextCommand({
     type: 'USER',
     ...data,
   });
 }
 
-export function MessageContextCommand(data: ContextCommandShorthandData<'MESSAGE'>) {
-  return ContextCommand({
+export function $messageContextCommand(data: ContextCommandShorthandData<'MESSAGE'>) {
+  return $contextCommand({
     type: 'MESSAGE',
     ...data,
   });

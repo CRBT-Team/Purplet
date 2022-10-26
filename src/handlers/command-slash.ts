@@ -18,7 +18,7 @@ import {
   IOptionBuilder,
 } from '../util/OptionBuilder';
 
-export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
+export interface SlashCommandData<O extends IOptionBuilder = IOptionBuilder> {
   /**
    * A 1-32 name for the command, not including the "/" character. You can include spaces to create
    * subcommands and subcommand groups, and Purplet will automatically combine commands for you.
@@ -29,9 +29,9 @@ export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
    * be rendered on the client-side depending on the user's Discord locale.
    *
    * @example
-   *   export default ChatCommand({
+   *   export default $slashCommand({
    *     name: 'coinflip',
-   *     name_localizations: {
+   *     nameLocalizations: {
    *       fr: 'pile-ou-face', // French
    *     },
    *     description: 'Flips a coin.',
@@ -47,10 +47,10 @@ export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
    * This will be rendered on the client-side depending on the user's Discord locale.
    *
    * @example
-   *   export default ChatCommand({
+   *   export default $slashCommand({
    *     name: 'coinflip',
    *     description: 'Flips a coin.',
-   *     description_localizations: {
+   *     descriptionLocalizations: {
    *       fr: 'Lance une pièce.', // French
    *     },
    *   });
@@ -79,7 +79,7 @@ export interface ChatCommandData<O extends IOptionBuilder = IOptionBuilder> {
   handle: (this: CommandInteraction, options: GetOptionsFromBuilder<O>) => void;
 }
 
-export interface ChatCommandGroupData {
+export interface SlashCommandGroupData {
   /** The name of the command group, not including the "/" character. */
   name: string;
   /**
@@ -93,13 +93,13 @@ export interface ChatCommandGroupData {
  * An internal type containing the user-provided data but some extra metadata. This could be done a
  * nicer way, but it's done like this to allow the same handler taking in two data types.
  */
-type ChatCommandHandlerData =
+type SlashCommandHandlerData =
   | {
       type: 'command';
-      data: ChatCommandData;
+      data: SlashCommandData;
       autocompleteData: Record<string, Autocomplete>;
     }
-  | { type: 'group'; data: ChatCommandGroupData };
+  | { type: 'group'; data: SlashCommandGroupData };
 
 /** Helper function for resolving a CommandInteractionOption to it's actual value (users and roles) */
 async function resolveOptionValue(
@@ -129,10 +129,10 @@ async function resolveOptionValue(
 
 /**
  * Handler for registering and responding to CHAT_INPUT Application Commands, aka "Slash Commands",
- * see ChatCommand() for creating handler modules.
+ * see SlashCommand() for creating handler modules.
  */
-export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
-  commands = new Map<string, ChatCommandHandlerData>();
+export class SlashCommandHandler extends Handler<SlashCommandHandlerData> {
+  commands = new Map<string, SlashCommandHandlerData>();
 
   handleInteraction = async (interaction: Interaction) => {
     // Two interaction types are listened for: command executions and autocomplete requests.
@@ -192,7 +192,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
     this.client.off('interactionCreate', this.handleInteraction);
   }
 
-  register(id: string, instance: ChatCommandHandlerData) {
+  register(id: string, instance: SlashCommandHandlerData) {
     if (this.commands.has(instance.data.name)) {
       // If register() throws, the framework will handle this and print
       // a nice message about a duplicate handler instance.
@@ -202,13 +202,13 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
     this.commands.set(instance.data.name, instance);
   }
 
-  unregister(id: string, instance: ChatCommandHandlerData) {
+  unregister(id: string, instance: SlashCommandHandlerData) {
     this.commands.delete(instance.data.name);
   }
 
   getApplicationCommands(): ApplicationCommandData[] {
     // TODO: clean up and explain how this works (it assembles a list of discord cmd objs)
-    const commandsParts: Record<string, ChatCommandHandlerData[]> = {};
+    const commandsParts: Record<string, SlashCommandHandlerData[]> = {};
 
     for (const [name, data] of this.commands) {
       const cmdName = name.split(' ')[0];
@@ -217,7 +217,7 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
     }
 
     return Object.values(commandsParts).map((subcommands) => {
-      const cmd = subcommands[0].data as ChatCommandData;
+      const cmd = subcommands[0].data as SlashCommandData;
       const discordCommand = {
         type: 'CHAT_INPUT',
         name: cmd.name.split(' ')[0],
@@ -311,11 +311,11 @@ export class ChatCommandHandler extends Handler<ChatCommandHandlerData> {
 }
 
 /**
- * Creates a "ChatCommand" module, allowing an easy way to create slash commands, see
- * ChatCommandData for options.
+ * Creates a "SlashCommand" module, allowing an easy way to create slash commands, see
+ * SlashCommandData for options.
  */
-export function ChatCommand<O extends IOptionBuilder>(data: ChatCommandData<O>) {
-  return createInstance(ChatCommandHandler, {
+export function $slashCommand<O extends IOptionBuilder>(data: SlashCommandData<O>) {
+  return createInstance(SlashCommandHandler, {
     type: 'command',
     autocompleteData: getAutoCompleteHandlersFromBuilder(data.options),
     data,
@@ -323,14 +323,14 @@ export function ChatCommand<O extends IOptionBuilder>(data: ChatCommandData<O>) 
 }
 
 /**
- * Creates a "ChatCommandGroup" module, allowing an easy way to create slash command groups, see
- * ChatCommandGroupData for options.
+ * Creates a "SlashCommandGroup" module, allowing an easy way to create slash command groups, see
+ * SlashCommandGroupData for options.
  *
  * Note: Groups aren't technically required, since all they do is provide descriptions for the
  * finalized command structure, and the current version of discord doesn't show them.
  */
-export function ChatCommandGroup(data: ChatCommandGroupData) {
-  return createInstance(ChatCommandHandler, {
+export function $slashCommandGroup(data: SlashCommandGroupData) {
+  return createInstance(SlashCommandHandler, {
     type: 'group',
     data,
   });
