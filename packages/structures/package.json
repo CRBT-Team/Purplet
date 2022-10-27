@@ -28,6 +28,7 @@
     "dev": "rollup -c --watch"
   },
   "dependencies": {
+    "@discordjs/collection": "^1.2.0",
     "@paperdave/utils": "^1.5.0",
     "@purplet/rest": "workspace:*",
     "@purplet/utils": "workspace:*",

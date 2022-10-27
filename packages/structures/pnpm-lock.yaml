@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@discordjs/collection': ^1.2.0
   '@paperdave/utils': ^1.5.0
   '@purplet/rest': workspace:*
   '@purplet/shared-config': workspace:*
@@ -8,6 +9,7 @@ specifiers:
   discord-api-types: ^0.37.14
 
 dependencies:
+  '@discordjs/collection': 1.2.0
   '@paperdave/utils': 1.5.0
   '@purplet/rest': link:../rest
   '@purplet/utils': link:../utils
@@ -17,6 +19,11 @@ devDependencies:
   '@purplet/shared-config': link:../shared-config
 
 packages:
+
+  /@discordjs/collection/1.2.0:
+    resolution: {integrity: sha512-VvrrtGb7vbfPHzbhGq9qZB5o8FOB+kfazrxdt0OtxzSkoBuw9dURMkCwWizZ00+rDpiK2HmLHBZX+y6JsG9khw==}
+    engines: {node: '>=16.9.0'}
+    dev: false
 
   /@paperdave/utils/1.5.0:
     resolution: {integrity: sha512-vj/dWH797+EqUZ6S8FoxzlPW7ZCwiJBwr5gR3XWH5RCM5FUybzLXj8J5a3vH7AskyYzdT6fKYt+8Q6U2FPgZDw==}

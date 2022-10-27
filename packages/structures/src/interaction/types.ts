@@ -1,7 +1,19 @@
+import type { Immutable } from '@paperdave/utils';
 import type { JSONResolvable } from '@purplet/utils';
 import type {
-  APICommandAutocompleteInteractionResponseCallbackData,
+  APIApplicationCommandAutocompleteInteraction,
+  APIApplicationCommandInteraction,
+  APIApplicationCommandOptionChoice,
+  APIChatInputApplicationCommandInteraction,
+  APIInteraction,
+  APIMessageApplicationCommandInteraction,
+  APIMessageComponentButtonInteraction,
+  APIMessageComponentInteraction,
+  APIMessageComponentSelectMenuInteraction,
   APIModalInteractionResponseCallbackData,
+  APIModalSubmitInteraction,
+  APIPingInteraction,
+  APIUserApplicationCommandInteraction,
   ApplicationCommandType,
   ComponentType,
   InteractionType,
@@ -19,7 +31,7 @@ import type { ReadonlyPermissionsBitfield } from '../bitfield';
  * able to use a heirarchy of "classes". The actual implementation is done in a single class
  * {@link ./interaction-impl.ts}, with these types acting as a giant type guard.
  */
-interface BaseInteraction {
+export interface BaseInteraction {
   /**
    * Type of interaction. Use this value to narrow the TS type via
    * {@link https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions Discriminated Unions}.
@@ -100,8 +112,18 @@ interface BaseInteraction {
   readonly user: never;
   /** Whether the interaction has been replied to already. */
   readonly replied: boolean;
+  /**
+   * The underlying
+   * {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-structure Interaction Object}.
+   */
+  readonly raw: Immutable<APIInteraction>;
 }
 
+/**
+ * Represents a
+ * {@link https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type Discord PING interaction}.
+ * The only valid response is to ACK the interaction with {@link pong()}.
+ */
 export interface PingInteraction extends BaseInteraction {
   readonly type: InteractionType.Ping;
 
@@ -111,6 +133,8 @@ export interface PingInteraction extends BaseInteraction {
    * **Response functions can only be called once per interaction.**
    */
   pong(): void;
+
+  readonly raw: Immutable<APIPingInteraction>;
 }
 
 export interface CommandResolvedClasses {
@@ -128,7 +152,7 @@ export interface CommandResolvedClasses {
   messages: never;
 }
 
-interface BaseCommandInteraction
+export interface BaseCommandInteraction
   extends BaseInteraction,
     ShowMessageResponseHandlers,
     ShowModalResponseHandlers {
@@ -143,9 +167,11 @@ interface BaseCommandInteraction
     type: T,
     id: Snowflake
   ): CommandResolvedClasses[T] | null;
+
+  readonly raw: Immutable<APIApplicationCommandInteraction>;
 }
 
-interface BaseContextCommandInteraction extends BaseCommandInteraction {
+export interface BaseContextCommandInteraction extends BaseCommandInteraction {
   readonly targetId: Snowflake;
 }
 
@@ -157,12 +183,16 @@ export interface UserCommandInteraction extends BaseContextCommandInteraction {
   readonly targetUser: never;
   /** TODO: Member. */
   readonly targetMember: never;
+
+  readonly raw: Immutable<APIUserApplicationCommandInteraction>;
 }
 
 export interface MessageCommandInteraction extends BaseContextCommandInteraction {
   readonly commandType: ApplicationCommandType.Message;
   /** TODO: Message. */
   readonly target: never;
+
+  readonly raw: Immutable<APIMessageApplicationCommandInteraction>;
 }
 
 export type ContextCommandInteraction = UserCommandInteraction | MessageCommandInteraction;
@@ -176,6 +206,8 @@ export interface SlashCommandInteraction extends BaseCommandInteraction {
   readonly subcommandName: string;
   readonly subcommandGroupName: string;
   readonly fullName: string;
+
+  readonly raw: Immutable<APIChatInputApplicationCommandInteraction>;
 }
 
 export type CommandInteraction = SlashCommandInteraction | ContextCommandInteraction;
@@ -202,9 +234,9 @@ export interface AutocompleteInteraction
    *
    * **Response functions can only be called once per interaction.**
    */
-  showAutocompleteResponse(
-    choices: JSONResolvable<APICommandAutocompleteInteractionResponseCallbackData>
-  ): Promise<void>;
+  showAutocompleteResponse(choices: JSONResolvable<APIApplicationCommandOptionChoice[]>): void;
+
+  readonly raw: Immutable<APIApplicationCommandAutocompleteInteraction>;
 }
 
 export interface BaseComponentInteraction
@@ -218,19 +250,25 @@ export interface BaseComponentInteraction
   /** TODO: Message. */
   readonly message: never;
   readonly customId: string;
+
+  readonly raw: Immutable<APIMessageComponentInteraction>;
 }
 
 export interface ButtonInteraction extends BaseComponentInteraction {
   readonly componentType: ComponentType.Button;
   /** TODO: ButtonComponent. */
   readonly component: never;
+
+  readonly raw: Immutable<APIMessageComponentButtonInteraction>;
 }
 
 export interface SelectMenuInteraction extends BaseComponentInteraction {
   readonly componentType: ComponentType.Button;
   /** TODO: SelectMenuComponent. */
   readonly component: never;
-  readonly values: string[];
+  readonly values: readonly string[];
+
+  readonly raw: Immutable<APIMessageComponentSelectMenuInteraction>;
 }
 
 export type ComponentInteraction = ButtonInteraction | SelectMenuInteraction;
@@ -246,6 +284,8 @@ export interface ModalSubmitInteraction
     UpdateMessageResponseHandlers {
   readonly type: InteractionType.ModalSubmit;
   readonly customId: string;
+
+  readonly raw: Immutable<APIModalSubmitInteraction>;
 }
 
 export type Interaction =
@@ -275,7 +315,7 @@ export interface DeferMessageOptions {
  * Oh also while im on the topic who came up with `DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE`? i mean it
  * makes sense, but that is a really long name lol.
  */
-interface ShowMessageResponseHandlers {
+export interface ShowMessageResponseHandlers {
   /**
    * Respond to this interaction with a message. Corresponds to the `CHANNEL_MESSAGE_WITH_SOURCE`
    * interaction response type.
@@ -283,7 +323,7 @@ interface ShowMessageResponseHandlers {
    * **Response functions can only be called once per interaction.**
    */
   // TODO: Message
-  showMessage(message: CreateInteractionMessageData): Promise<never>;
+  showMessage(message: CreateInteractionMessageData): never;
 
   /**
    * Defer the resposne to this interaction; sending a message with a loading indicator. Corresponds
@@ -293,9 +333,10 @@ interface ShowMessageResponseHandlers {
    * **Response functions can only be called once per interaction.**
    */
   // TODO: Message
-  deferMessage(options?: DeferMessageOptions): Promise<never>;
+  deferMessage(options?: DeferMessageOptions): never;
 }
-interface UpdateMessageResponseHandlers {
+
+export interface UpdateMessageResponseHandlers {
   /**
    * Respond to this interaction by updating the message that the targeted component is on.
    * Corresponds to the `UPDATE_MESSAGE` interaction response type. This is only valid for
@@ -304,7 +345,7 @@ interface UpdateMessageResponseHandlers {
    * **Response functions can only be called once per interaction.**
    */
   // TODO: Message
-  updateMessage(message: CreateInteractionMessageData): Promise<never>;
+  updateMessage(message: CreateInteractionMessageData): never;
 
   /**
    * Defer the resposne to this interaction; Does not show a loading indicator, but tells Discord
@@ -314,9 +355,10 @@ interface UpdateMessageResponseHandlers {
    * **Response functions can only be called once per interaction.**
    */
   // TODO: Message
-  deferUpdateMessage(options?: DeferMessageOptions): Promise<never>;
+  deferUpdateMessage(options?: DeferMessageOptions): never;
 }
-interface ShowModalResponseHandlers {
+
+export interface ShowModalResponseHandlers {
   /**
    * Shows a modal form to the user. Corresponds to the `MODAL` interaction response type. This does
    * not return any data, and the modal submit is handled as a separate interaction. If you need to
@@ -324,9 +366,5 @@ interface ShowModalResponseHandlers {
    *
    * **Response functions can only be called once per interaction.**
    */
-  showModal(modal: JSONResolvable<APIModalInteractionResponseCallbackData>): Promise<void>;
+  showModal(modal: JSONResolvable<APIModalInteractionResponseCallbackData>): void;
 }
-
-declare const x: Interaction;
-
-x.id;
