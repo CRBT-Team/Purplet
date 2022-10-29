@@ -14,7 +14,7 @@
  *   | { route: string; method: string }
  *   | { route: (...args: string[]) => string; params: string; method: string }
  * >} routes
- *   An mapping of route function names to route description objects. A description object has a
+ *   A mapping of route function names to route description objects. A description object has a
  *   `method` for the method, and then a `route` with the endpoint string. If `route` is a function,
  *   you must also specify a `params` property with a list of param names, which get passed to
  *   `route` in the order you specify.

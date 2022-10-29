@@ -55,7 +55,7 @@ bun add @purplet/rest discord-api-types
 
 ## Polyfills
 
-Until v18, node.js does not support `fetch`, and no version of node or bun has `FormData` built-in. We provide another package, `@purplet/polyfill` which polyfills these APIs for you:
+Until v18, node.js does not support `fetch` and `FormData`, and bun has yet to implement `FormData`. We provide another package, `@purplet/polyfill` which polyfills these APIs for you:
 
 ```ts
 import '@purplet/polyfill';
@@ -70,9 +70,4 @@ We generate most of our library's route metadata off of these GitHub repositorie
 - [discord-api-docs](https://github.com/discord/discord-api-docs)
 - [discord-api-types](https://github.com/discordjs/discord-api-types)
 
-We do apply some patches of our own, but missing types should be contributed to the above repositories instead of as extra overrides to us. The following routes have buggy or incorrect types:
-
-- Some thread actions are missing. ([types#526](https://github.com/discordjs/discord-api-types/issues/526)) / [purplet#50](https://github.com/CRBT-Team/Purplet/issues/50))
-
-  - `channel.listPublicArchivedThreads`
-  - `channel.listPrivateArchivedThreads`
+We do apply some patches of our own, but missing types should be contributed to the above repositories instead of as extra overrides to us.
