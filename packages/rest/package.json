@@ -35,10 +35,10 @@
   },
   "dependencies": {
     "@paperdave/utils": "1.5.0",
-    "@purplet/shared-config": "workspace:*",
     "@purplet/utils": "workspace:^1.0.0"
   },
   "devDependencies": {
+    "@purplet/shared-config": "workspace:*",
     "discord-api-types": "^0.37.14"
   },
   "peerDependencies": {
