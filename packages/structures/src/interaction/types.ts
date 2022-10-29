@@ -322,8 +322,8 @@ export interface ShowMessageResponseHandlers {
    *
    * **Response functions can only be called once per interaction.**
    */
-  // TODO: Message
-  showMessage(message: CreateInteractionMessageData): never;
+  // TODO: create message data and message
+  showMessage(message: never): never;
 
   /**
    * Defer the resposne to this interaction; sending a message with a loading indicator. Corresponds
@@ -344,8 +344,8 @@ export interface UpdateMessageResponseHandlers {
    *
    * **Response functions can only be called once per interaction.**
    */
-  // TODO: Message
-  updateMessage(message: CreateInteractionMessageData): never;
+  // TODO: update message data and message
+  updateMessage(message: never): never;
 
   /**
    * Defer the resposne to this interaction; Does not show a loading indicator, but tells Discord

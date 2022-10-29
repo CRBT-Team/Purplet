@@ -2,7 +2,7 @@
 
 i hope this file helps me out getting stuff to actually work
 
-- [ ] interaction
+- [x] interaction
 - [ ] channel
 - [ ] message
 - [ ] guild

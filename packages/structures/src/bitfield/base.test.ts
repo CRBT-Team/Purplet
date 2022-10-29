@@ -36,9 +36,9 @@ describe('Bitfield', () => {
 
   test('.remove', () => {
     const field = new Bitfield(0b100110);
-    field.remove(1);
+    field.delete(1);
     assert.strictEqual(field.bitfield, 0b100110);
-    field.remove(2);
+    field.delete(2);
     assert.strictEqual(field.bitfield, 0b100100);
   });
 

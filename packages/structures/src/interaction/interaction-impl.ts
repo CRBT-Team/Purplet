@@ -25,6 +25,7 @@ import {
 import type {
   AutocompleteInteraction,
   ButtonInteraction,
+  CommandResolvedClasses,
   DeferMessageOptions,
   Interaction as InteractionUnionType,
   MessageCommandInteraction,
@@ -34,8 +35,8 @@ import type {
   SlashCommandInteraction,
   UserCommandInteraction,
 } from './types';
-import { Base } from '../base';
 import { ReadonlyPermissionsBitfield } from '../bitfield';
+import { cached, todo } from '../shared';
 
 export type { RawFile };
 
@@ -59,7 +60,7 @@ type InteractionIntersection = ForceSimplify<
     OmitType<ModalSubmitInteraction>
 >;
 
-class InteractionImpl extends Base implements InteractionIntersection {
+class InteractionImpl implements InteractionIntersection {
   type: InteractionType;
   applicationId: Snowflake;
   guildLocale: string;
@@ -75,7 +76,6 @@ class InteractionImpl extends Base implements InteractionIntersection {
   values: string[];
 
   constructor(public raw: APIInteraction, private onRespond: InteractionResponseHandler) {
-    super();
     this.type = raw.type;
     this.applicationId = raw.application_id;
     this.guildLocale = raw.guild_locale!;
@@ -102,55 +102,59 @@ class InteractionImpl extends Base implements InteractionIntersection {
 
   /** Implementation of {@link BaseInteraction#appPermissions} */
   get appPermissions() {
-    return this.cached('appPermissions', new ReadonlyPermissionsBitfield(this.raw.app_permissions));
+    return cached(
+      this,
+      'appPermissions',
+      new ReadonlyPermissionsBitfield(this.raw.app_permissions)
+    );
   }
 
   /** Implementation of {@link BaseInteraction#guild}. */
   get guild() {
-    return this.todo('guild');
+    return todo('BaseInteraction#guild');
   }
 
   /** Implementation of {@link BaseInteraction#member}. */
   get member() {
-    return this.todo('member');
+    return todo('BaseInteraction#member');
   }
 
   /** Implementation of {@link BaseInteraction#user}. */
   get user() {
-    return this.todo('user');
+    return todo('BaseInteraction#user');
   }
 
   /** Implementation of {@link BaseCommandInteraction#channel}. */
   get channel() {
-    return this.todo('channel');
+    return todo('BaseCommandInteraction#channel');
   }
 
   /** Implementation of {@link UserCommandInteraction#target} and {@link MessageCommandInteraction#target}. */
   get target() {
     if (this.commandType === ApplicationCommandType.User) {
-      return this.todo('target as User|Member');
+      return todo('UserCommandInteraction#target');
     } else if (this.commandType === ApplicationCommandType.Message) {
-      return this.todo('target as Message');
+      return todo('MessageCommandInteraction#target');
     }
     throw new TypeError('target is only available on ContextCommandInteraction');
   }
 
   /** Implementation of {@link UserCommandInteraction#targetUser}. */
   get targetUser() {
-    return this.todo('targetUser');
+    return todo('UserCommandInteraction#targetUser');
   }
 
   /** Implementation of {@link UserCommandInteraction#targetUser}. */
   get targetMember() {
-    return this.todo('targetUser');
+    return todo('UserCommandInteraction#targetUser');
   }
 
   /** Implementation of {@link SlashCommandInteraction#options} and {@link AutocompleteInteraction#options}. */
   get options() {
     if (this.type === InteractionType.ApplicationCommand) {
-      return this.todo('options as SlashCommandInteractionOptions');
+      return todo('SlashCommandInteractionOptions#options');
     } else if (this.type === InteractionType.ApplicationCommandAutocomplete) {
-      return this.todo('options as AutocompleteInteractionOptions');
+      return todo('AutocompleteInteractionOptions#options');
     }
     throw new TypeError(
       'options is only available on SlashCommandInteraction and AutocompleteInteraction'
@@ -162,7 +166,8 @@ class InteractionImpl extends Base implements InteractionIntersection {
     const data = this.raw.data as APIChatInputApplicationCommandInteractionData;
 
     const type = data.options?.[0]?.type;
-    return this.cached(
+    return cached(
+      this,
       'subcommandName',
       type === ApplicationCommandOptionType.Subcommand
         ? data.options![0].name
@@ -175,7 +180,8 @@ class InteractionImpl extends Base implements InteractionIntersection {
   /** Implementation of {@link SlashCommandInteraction#subcommandGroupName}. */
   get subcommandGroupName() {
     const data = this.raw.data as APIChatInputApplicationCommandInteractionData;
-    return this.cached(
+    return cached(
+      this,
       'subcommandGroupName',
       (data.options &&
         data.options[0]?.type === ApplicationCommandOptionType.SubcommandGroup &&
@@ -184,8 +190,8 @@ class InteractionImpl extends Base implements InteractionIntersection {
     );
   }
 
-  /** Implementation of {@link SlashCommandInteraction#fullCommandName}. */
-  get fullCommandName() {
+  /** Implementation of {@link SlashCommandInteraction#fullName}. */
+  get fullName() {
     return [this.commandName, this.subcommandGroupName, this.subcommandName]
       .filter(Boolean)
       .join(' ');
@@ -193,7 +199,7 @@ class InteractionImpl extends Base implements InteractionIntersection {
 
   /** Implementation of {@link BaseComponentInteraction#message}. */
   get message() {
-    return this.todo('message');
+    return todo('Interaction#message');
   }
 
   /** Implementation of {@link BaseComponentInteraction#component}. */
@@ -202,11 +208,24 @@ class InteractionImpl extends Base implements InteractionIntersection {
     for (const row of raw.message.components!) {
       for (const component of row.components) {
         if ((component as any).custom_id === this.customId) {
-          return this.todo('convert APIComponent to a component class');
+          return todo('convert APIComponent to a component class');
         }
       }
     }
     throw new Error('Could not find Interacted Component in the message (should never happen)');
+  }
+
+  get focusedOption() {
+    return todo('focusedOption');
+  }
+
+  // Methods
+
+  getResolved<T extends keyof CommandResolvedClasses>(
+    type: T,
+    id: string
+  ): CommandResolvedClasses[T] | null {
+    throw new Error('Method not implemented.');
   }
 
   // Interaction Response Methods
@@ -219,7 +238,7 @@ class InteractionImpl extends Base implements InteractionIntersection {
     });
   }
 
-  showMessage(message: CreateInteractionMessageData) {
+  showMessage(message: never) {
     const { message: data, files } = resolveCreateInteractionMessageData(message);
     this._respond({
       json: {
@@ -244,7 +263,7 @@ class InteractionImpl extends Base implements InteractionIntersection {
     return null as never;
   }
 
-  updateMessage(message: CreateInteractionMessageData) {
+  updateMessage(message: never) {
     const { message: data, files } = resolveCreateInteractionMessageData(message);
     this._respond({
       json: {

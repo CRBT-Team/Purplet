@@ -29,7 +29,7 @@ export class Bitfield {
     return this;
   }
 
-  remove(...flag) {
+  delete(...flag) {
     this.bitfield &= ~toValue(flag);
     return this;
   }

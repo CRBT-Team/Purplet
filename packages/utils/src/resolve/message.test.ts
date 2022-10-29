@@ -1,5 +1,6 @@
 import { deepStrictEqual } from 'assert';
 import { describe, test } from 'bun:test';
+import { AllowedMentionsTypes } from 'discord-api-types/v10';
 import { resolveCreateMessageData } from './message';
 
 describe('resolveCreateMessageData', () => {
@@ -25,7 +26,7 @@ describe('resolveCreateMessageData', () => {
         tts: true,
         allowedMentions: {
           repliedUser: true,
-          parse: ['users'],
+          parse: [AllowedMentionsTypes.User, 'roles'],
           roles: ['123', '456'],
         },
       }),

@@ -25,7 +25,7 @@ export type Bitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Pick
     clone(): Bitfield<Enum>;
     has(bit: Value): boolean;
     add(bit: Value): this;
-    remove(bit: Value): this;
+    delete(bit: Value): this;
     filter(fn: (bit: Value) => boolean): Bitfield<Enum>;
     missing(bit: Value): Bitfield<Enum>;
     any(bit: Value): boolean;
@@ -39,7 +39,7 @@ export type Bitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Pick
  */
 export type ReadonlyBitfield<Enum extends BitfieldEnum, Value = Enum[keyof Enum]> = Omit<
   Bitfield<Enum, Value>,
-  'add' | 'remove' | 'freeze'
+  'add' | 'delete' | 'freeze'
 > & {
   [Key in Extract<keyof Enum, string> as `has${Capitalize<Key>}`]: boolean;
 };
