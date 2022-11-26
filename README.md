@@ -9,7 +9,9 @@
     <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet?color=c4aaff">
     <a href="https://discord.gg/BFkHA8P7rh"><img src="https://img.shields.io/discord/995533040040292373?color=c4aaff&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
   </div>
-</div>
+</div> 
+
+> **Warning**: Purplet is extremely experimental software with a rapidly changing API. We do not recommend using it in production at this point. When v2.0 is released, the API will be stable, but it will still be considered experimental until we can ensure it's stability.
 
 ## About Purplet
 
@@ -27,8 +29,6 @@ export const helloWorld = $slashCommand({
 ```
 
 Our suite of packages is built from the ground up on Web Standards like `fetch` and `WebSocket`, allowing your code to run locally in Node.js, but with the ability to deploy your interaction handlers to Cloudflare Workers, greatly reducing costs while increasing scalability.
-
-> ⚠️ Purplet is extremely experimental software with a rapidly changing API. We do not recommend using it in production at this point. When v2.0 is released, the API will be stable, but it will still be considered experimental until we can ensure it's stability.
 
 Full documentation on Purplet and how to get started is available at [purplet.js.org](https://purplet.js.org/docs/getting-started).
 
@@ -58,7 +58,7 @@ The `examples` folder contains one framework example as of right now:
 
 - [CRBT](https://crbt.app/) (closed source)
 
-> Have an open-source bot of your own you'd like to feature? [Open an GitHub issue](https://github.com/CRBT-Team/Purplet/issues) and we may add it here!
+> **Note**: Have an open-source bot of your own you'd like to feature? [Open an GitHub issue](https://github.com/CRBT-Team/Purplet/issues) and we may add it here!
 
 ## Contributing
 
@@ -66,4 +66,4 @@ See the [contributing guide](CONTRIBUTING.md) for information on how we accept c
 
 ## License
 
-Purplet is licensed under the [Apache License 2.0](https://github.com/CRBT-Team/Purplet/blob/main/LICENSE).
+Purplet is licensed under the Apache License 2.0. View the full file [here](https://github.com/CRBT-Team/Purplet/blob/main/LICENSE).
