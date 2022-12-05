@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { cached } from './shared';
+import { cached } from '../src/shared';
 
 test('cached()', () => {
   let i = 0;

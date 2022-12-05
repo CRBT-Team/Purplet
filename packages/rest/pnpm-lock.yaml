@@ -5,10 +5,12 @@ specifiers:
   '@purplet/shared-config': workspace:*
   '@purplet/utils': workspace:^1.0.0
   discord-api-types: ^0.37.14
+  utils:workspace: link:@purplet/utils:workspace
 
 dependencies:
   '@paperdave/utils': 1.5.0
   '@purplet/utils': link:../utils
+  utils:workspace: link:@purplet/utils:workspace
 
 devDependencies:
   '@purplet/shared-config': link:../shared-config

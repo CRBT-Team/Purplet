@@ -8,6 +8,6 @@
     "emitDeclarationOnly": true,
     "types": ["@purplet/shared-config"]
   },
-  "include": ["src/**/*.ts", "src/**/*.js"],
+  "include": ["src/**/*.ts", "src/**/*.js", "test/shared.test.ts", "test/bitfield.test.ts"],
   "exclude": ["**/node_modules", "**/dist"]
 }

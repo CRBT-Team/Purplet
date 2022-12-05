@@ -39,6 +39,7 @@ export class Rest {
       base: API_BASE_URL,
       tokenType: 'Bot',
       userAgent: defaultUserAgent,
+      fetch,
       ...options,
     };
 
@@ -47,7 +48,7 @@ export class Rest {
       this.options.base = this.options.base.slice(0, -versionSuffix.length);
     }
 
-    this.fetcher = new Fetcher();
+    this.fetcher = new Fetcher(this.options.fetch);
   }
 
   setToken(token: string, tokenType: TokenType = 'Bot') {

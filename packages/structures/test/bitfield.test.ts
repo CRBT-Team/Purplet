@@ -2,8 +2,8 @@
 import assert from 'assert';
 import { describe, test } from 'bun:test';
 import { UserFlags } from 'discord-api-types/v10';
-import { UserFlagsBitfield } from '.';
-import { Bitfield } from './base';
+import { UserFlagsBitfield } from '../src/bitfield';
+import { Bitfield } from '../src/bitfield/base';
 
 describe('Bitfield', () => {
   test('.has', () => {

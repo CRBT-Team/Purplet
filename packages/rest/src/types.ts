@@ -26,6 +26,8 @@ export interface RestOptions {
   tokenType?: TokenType;
   /** User agent, must be in the form of `DiscordBot ($url, $versionNumber)` */
   userAgent?: string;
+  /** Fetch function to use. */
+  fetch?: typeof fetch;
 }
 
 export interface RequestOptions<Body = unknown, Query = Record<never, never>> {

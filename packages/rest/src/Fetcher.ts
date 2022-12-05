@@ -41,6 +41,8 @@ export class Fetcher {
   #globalCount = 0;
   #globalRateLimited?: QueueEntry[];
 
+  constructor(private readonly fetch: typeof globalThis.fetch) {}
+
   async queue<Output>(request: RequestData) {
     const { endpointId, majorId } = classifyEndpoint(
       /^\/api(?:\/v\d+)?(\/.*)/.exec(request.url.pathname)![1],
@@ -77,7 +79,7 @@ export class Fetcher {
       this.runRequest(entry).catch(reject);
     }
 
-    return await promise;
+    return promise;
   }
 
   private setBucketTimer(bucket: Bucket, subBucket: SubBucket) {
@@ -136,7 +138,7 @@ export class Fetcher {
     const subBucket = bucket.sub.get(entry.majorId)!;
 
     const req = entry.request;
-    const response = await fetch(req.url.toString(), req.init);
+    const response = await this.fetch(req.url.toString(), req.init);
 
     const serverNow = response.headers.has('Date')
       ? new Date(response.headers.get('Date')!).getTime()
