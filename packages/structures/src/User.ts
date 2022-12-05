@@ -1,12 +1,26 @@
 import type { Collection } from '@discordjs/collection';
-import type { ImageURLOptions } from '@purplet/utils';
+import type { ImageURLOptions, JSONResolvable } from '@purplet/utils';
 import { formatUserBannerURL, resolveUserAvatarURL, snowflakeToDate } from '@purplet/utils';
-import type { APIUser, Snowflake, UserPremiumType } from 'discord-api-types/v10';
-import { ReadonlyUserFlagsBitfield } from '../bitfield';
-import type { Bitfield } from '../bitfield/base';
-import { Color } from '../color';
-import { rest } from '../global';
-import { cached } from '../shared';
+import type {
+  APIUser,
+  RESTPatchAPICurrentUserJSONBody,
+  Snowflake,
+  UserPremiumType,
+} from 'discord-api-types/v10';
+import { ReadonlyUserFlagsBitfield } from './bitfield';
+import type { Bitfield } from './bitfield/base';
+import { createCache } from './cache';
+import { Color } from './color';
+import { rest } from './global';
+import { cached } from './shared';
+
+export type ModifyCurrentUserData = JSONResolvable<RESTPatchAPICurrentUserJSONBody>;
+
+export const userCache = createCache(
+  'user',
+  async userId => new User(await rest.user.getUser({ userId })),
+  user => user.id
+);
 
 export class User {
   //#region Copied Properties
@@ -136,7 +150,11 @@ export class User {
    * {@link https://discord.com/developers/docs/resources/user#user-object-user-structure Raw User Object}
    */
   get accentColor(): Color | null {
-    return this.raw.accent_color != null ? new Color(this.raw.accent_color) : null;
+    return cached(
+      this,
+      'accentColor',
+      this.raw.accent_color != null ? new Color(this.raw.accent_color) : null
+    );
   }
 
   /**
@@ -193,6 +211,7 @@ export class User {
   avatarURL(options?: ImageURLOptions): string {
     return resolveUserAvatarURL(this.raw, options);
   }
+
   /**
    * Formats the user's banner URL.
    *
@@ -212,7 +231,7 @@ export class User {
    * {@link https://discord.com/developers/docs/resources/user#get-user rest.user.getUser} endpoint.
    */
   async fetch(): Promise<User> {
-    return new User(await rest.user.getUser({ userId: this.id }));
+    return userCache.fetch(this.id, true);
   }
   //#endregion
 
@@ -222,8 +241,8 @@ export class User {
    *
    * Uses the {@link https://discord.com/developers/docs/resources/user#get-user rest.user.getUser()} method.
    */
-  static async fetch(userId: Snowflake, cache?: boolean): Promise<User> {
-    throw new Error('Not implemented');
+  static async fetch(userId: Snowflake, force?: boolean): Promise<User> {
+    return userCache.fetch(userId, force);
   }
 
   /**
@@ -232,8 +251,8 @@ export class User {
    *
    * Uses the {@link https://discord.com/developers/docs/resources/user#get-user rest.user.getUser()} method.
    */
-  static async fetchCurrentUser(cache?: boolean): Promise<User> {
-    throw new Error('Not implemented');
+  static async fetchCurrentUser(force?: boolean): Promise<User> {
+    return userCache.fetch('@me', force);
   }
 
   // TODO: Connection
@@ -250,8 +269,14 @@ export class User {
    * {@link https://discord.com/developers/docs/resources/user#modify-current-user-json-params rest.user.modifyCurrentUser()}
    * method.
    */
-  static async modifyCurrentUser(data: ModifyCurrentUserData): Promise<User> {
-    throw new Error('Not implemented');
+  static async modifyCurrentUser(body: ModifyCurrentUserData): Promise<User> {
+    return userCache.insert(
+      new User(
+        await rest.user.modifyCurrentUser({
+          body,
+        })
+      )
+    );
   }
   //#endregion
 }
