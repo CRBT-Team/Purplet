@@ -6,8 +6,12 @@
     <img src="https://img.shields.io/badge/Discord_API-v10-c4aaff" alt="Discord API Version">
     <img src="https://img.shields.io/npm/v/purplet?color=c4aaff&label=version" alt="Version">
     <img src="https://img.shields.io/github/license/CRBT-Team/Purplet?color=c4aaff" alt="License">
-    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet?color=c4aaff">
     <a href="https://discord.gg/BFkHA8P7rh"><img src="https://img.shields.io/discord/995533040040292373?color=c4aaff&label=Discord&logo=discord&logoColor=white" alt="Discord"></a>
+  </div>
+  <div>
+    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/m/CRBT-Team/Purplet?color=c4aaff">
+    <a href="https://codeclimate.com/github/CRBT-Team/Purplet"><img alt="CodeClimate Maintainability" src="https://img.shields.io/codeclimate/maintainability/CRBT-Team/Purplet"></a>
+    <a href="https://codeclimate.com/github/CRBT-Team/Purplet/issues"><img alt="CodeClimate Issue Counter" src="https://img.shields.io/codeclimate/issues/CRBT-Team/Purplet?label=code%20climate%20issues"></a>
   </div>
 </div>
 
