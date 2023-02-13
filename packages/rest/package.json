@@ -1,6 +1,6 @@
 {
   "name": "@purplet/rest",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Cross-runtime Discord Rest client",
   "keywords": [
     "discord",
@@ -35,10 +35,11 @@
   },
   "dependencies": {
     "@paperdave/utils": "1.5.0",
-    "@purplet/shared-config": "workspace:*",
-    "@purplet/utils": "workspace:^1.0.0"
+    "@purplet/utils": "workspace:^1.0.0",
+    "utils:workspace": "link:@purplet/utils:workspace"
   },
   "devDependencies": {
+    "@purplet/shared-config": "workspace:*",
     "discord-api-types": "^0.37.14"
   },
   "peerDependencies": {

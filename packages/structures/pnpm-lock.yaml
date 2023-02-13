@@ -1,22 +1,29 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@paperdave/utils': 1.5.0
+  '@discordjs/collection': ^1.2.0
+  '@paperdave/utils': ^1.5.0
+  '@purplet/rest': workspace:*
   '@purplet/shared-config': workspace:*
-  '@purplet/utils': workspace:^1.0.0
+  '@purplet/utils': workspace:*
   discord-api-types: ^0.37.14
-  utils:workspace: link:@purplet/utils:workspace
 
 dependencies:
+  '@discordjs/collection': 1.2.0
   '@paperdave/utils': 1.5.0
+  '@purplet/rest': link:../rest
   '@purplet/utils': link:../utils
-  utils:workspace: link:@purplet/utils:workspace
+  discord-api-types: 0.37.14
 
 devDependencies:
   '@purplet/shared-config': link:../shared-config
-  discord-api-types: 0.37.14
 
 packages:
+
+  /@discordjs/collection/1.2.0:
+    resolution: {integrity: sha512-VvrrtGb7vbfPHzbhGq9qZB5o8FOB+kfazrxdt0OtxzSkoBuw9dURMkCwWizZ00+rDpiK2HmLHBZX+y6JsG9khw==}
+    engines: {node: '>=16.9.0'}
+    dev: false
 
   /@paperdave/utils/1.5.0:
     resolution: {integrity: sha512-vj/dWH797+EqUZ6S8FoxzlPW7ZCwiJBwr5gR3XWH5RCM5FUybzLXj8J5a3vH7AskyYzdT6fKYt+8Q6U2FPgZDw==}
@@ -27,7 +34,7 @@ packages:
 
   /discord-api-types/0.37.14:
     resolution: {integrity: sha512-byBH7SfDCMJwxdqeS8k5sihltH88/YPhuwx+vF2cftSxFLdxyHyU/ZxDL3bq+LB2c4ls/TymE76/ISlLfniUXg==}
-    dev: true
+    dev: false
 
   /utility-types/3.10.0:
     resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}

@@ -76,6 +76,8 @@ const overrides = {
     listVoiceRegions: 'Discord.RESTGetAPIGuildVoiceRegions',
     createWebhook: 'Discord.RESTPostAPIChannelWebhook',
     listJoinedPrivateArchivedThreads: 'Discord.RESTGetAPIChannelUsersThreadsArchived',
+    listPublicArchivedThreads: 'Discord.RESTGetAPIChannelUsersThreadsArchived',
+    listPrivateArchivedThreads: 'Discord.RESTGetAPIChannelUsersThreadsArchived',
     createAutoModerationRule: 'Discord.RESTPostAPIAutoModerationRule',
   },
   body: {
@@ -90,6 +92,8 @@ const overrides = {
     editWebhookMessage: '{ thread_id?: boolean }',
     deleteWebhookMessage: '{ thread_id?: boolean }',
     listJoinedPrivateArchivedThreads: '{ limit?: number; before?: string; }',
+    listPublicArchivedThreads: '{ limit?: number; before?: string; }',
+    listPrivateArchivedThreads: '{ limit?: number; before?: string; }',
   },
   result: {
     modifyCurrentMember: 'Discord.RESTGetAPIGuildMemberResult',

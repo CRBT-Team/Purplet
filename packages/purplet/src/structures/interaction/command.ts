@@ -5,17 +5,12 @@ import type {
   APIInteractionDataResolvedChannel,
   APIInteractionDataResolvedGuildMember,
   APIRole,
-  Snowflake} from 'purplet/types';
-import {
-  InteractionType
+  Snowflake,
 } from 'purplet/types';
+import { InteractionType } from 'purplet/types';
 import { Interaction } from './base';
-import type {
-  InteractionResponseMixin} from './response';
-import {
-  applyInteractionResponseMixins,
-  createInteractionMixinList
-} from './response';
+import type { InteractionResponseMixin } from './response';
+import { applyInteractionResponseMixins, createInteractionMixinList } from './response';
 import { EmptyTextChannel } from '../channel';
 import { Message } from '../message';
 import { PartialUser } from '../user';
@@ -79,4 +74,4 @@ const allowedMethods = createInteractionMixinList([
 ]);
 
 applyInteractionResponseMixins(CommandInteraction, allowedMethods);
-export type CommandInteraction = InteractionResponseMixin<typeof allowedMethods>
+export type CommandInteraction = InteractionResponseMixin<typeof allowedMethods>;

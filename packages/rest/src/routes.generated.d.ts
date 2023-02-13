@@ -516,7 +516,7 @@ export type Channel = RouteGroup<{
   /**
    * @deprecated use `followAnnouncementChannel` instead
    */
-  followNewsChannel: Route<{
+  followAnnouncementChannel: Route<{
     params: ["channelId"],
     body: Discord.RESTPostAPIChannelFollowersJSONBody,
     result: Discord.RESTPostAPIChannelFollowersResult,
@@ -692,8 +692,8 @@ export type Channel = RouteGroup<{
    */
   listPublicArchivedThreads: Route<{
     params: ["channelId"],
-    query: Discord.RESTGetAPIChannelThreadsArchivedPublicQuery,
-    result: Discord.RESTGetAPIChannelThreadsArchivedPublicResult,
+    query: { limit?: number; before?: string; },
+    result: Discord.RESTGetAPIChannelUsersThreadsArchivedResult,
   }>,
   /**
    * ## [List Private Archived Threads](https://discordapp.com/developers/docs/resources/channel#list-private-archived-threads)
@@ -702,8 +702,8 @@ export type Channel = RouteGroup<{
    */
   listPrivateArchivedThreads: Route<{
     params: ["channelId"],
-    query: Discord.RESTGetAPIChannelThreadsArchivedPrivateQuery,
-    result: Discord.RESTGetAPIChannelThreadsArchivedPrivateResult,
+    query: { limit?: number; before?: string; },
+    result: Discord.RESTGetAPIChannelUsersThreadsArchivedResult,
   }>,
   /**
    * ## [List Joined Private Archived Threads](https://discordapp.com/developers/docs/resources/channel#list-joined-private-archived-threads)

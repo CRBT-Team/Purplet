@@ -1,0 +1,43 @@
+{
+  "name": "@purplet/structures",
+  "version": "1.0.0",
+  "description": "Classes wrapping Discord API objects",
+  "keywords": [
+    "discord",
+    "purplet",
+    "api",
+    "bun"
+  ],
+  "homepage": "https://github.com/CRBT-Team/Purplet/tree/main/packages/structures",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CRBT-Team/Purplet.git",
+    "directory": "packages/structures"
+  },
+  "license": "Apache-2.0",
+  "author": "Dave Caruso <dave@davecode.net> (https://github.com/davecaruso)",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c && tsc -p . && echo Types Passing",
+    "dev": "rollup -c --watch"
+  },
+  "dependencies": {
+    "@discordjs/collection": "^1.2.0",
+    "@paperdave/utils": "^1.5.0",
+    "@purplet/rest": "workspace:*",
+    "@purplet/utils": "workspace:*",
+    "discord-api-types": "^0.37.14"
+  },
+  "devDependencies": {
+    "@purplet/shared-config": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
