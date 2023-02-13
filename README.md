@@ -1,3 +1,18 @@
+# PROJECT STATUS: ON HOLD
+
+**Purplet is on hold, probably forever.**
+
+As of 2023, this project is being placed on hold for an undetermined amout of time, probably forever. As unfortunate as it is, our interest in working on Discord bots as diminished alot, and the amount of work required to take this project to the usable v2.0 that we dreamed of is too much work for us right now. Maybe someday one or both of us (or someone else) will have the time and motivation to finish the framework. Theres about two to three months of hard work left, and it would definetly be worth it as this framework provides some powerful tools that are not seen much elsewhere, such as building gateway bots and cloud functions out of the same codebase.
+
+But me, Dave; I don't have a need for making Discord bots anymore. I don't have any large bot projects, and I've been drifting away from using Discord as a whole for the past few months. I'm no longer the target audience of my work, so it raises a huge question of "why am I doing this" if I'm never going to use it for anything.
+
+If you want to help bring this project to completion, and have a very very very strong knowledge of TypeScript and can somewhat understand whats going on in this codebase, feel free to reach out to `me@paperdave.net` for further explanations (I'd assume in that case you'll just for it and complete it or something).
+
+Thanks for your support,<br>
+Dave Caruso
+
+---
+
 <div align="center">
   <img alt="Purplet" src="sites/purplet.js.org/static/img/purplet-artwork.png" >
   <h1>Purplet</h1>
